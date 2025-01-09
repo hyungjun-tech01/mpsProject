@@ -15,12 +15,12 @@ interface IHeader {
     extendSideNav: () => void;
 }
 
-export default function Header( {extendSideNav}:IHeader ) {
+export default function Header({ extendSideNav }: IHeader) {
     const menuId = 'primary-search-account-menu';
     const mobileMenuId = 'primary-search-account-menu-mobile';
 
     return (
-        <Box sx={{ flexGrow: 0 }}>
+        <Box className="grow-0">
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
@@ -30,26 +30,26 @@ export default function Header( {extendSideNav}:IHeader ) {
                         aria-label="menu"
                         sx={{ mr: 2 }}
                     >
-                        <MenuIcon onClick={extendSideNav}/>
+                        <MenuIcon className="text-lime-100" onClick={extendSideNav} />
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" component="div" className="grow pl-1 text-lime-100">
                         MPS Next
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box className="grow" />
+                    <Box className="hidden gap-1 md:flex">
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="error">
-                            <MailIcon />
-                        </Badge>
+                            <Badge badgeContent={4} color="error">
+                                <MailIcon className="text-lime-100"/>
+                            </Badge>
                         </IconButton>
                         <IconButton
                             size="large"
                             aria-label="show 17 new notifications"
                             color="inherit"
                         >
-                        <Badge badgeContent={17} color="error">
-                            <NotificationsIcon />
-                        </Badge>
+                            <Badge badgeContent={17} color="error">
+                                <NotificationsIcon className="text-lime-100"/>
+                            </Badge>
                         </IconButton>
                         <IconButton
                             size="large"
@@ -60,19 +60,19 @@ export default function Header( {extendSideNav}:IHeader ) {
                             // onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                        <AccountCircle />
+                            <AccountCircle className="text-lime-100"/>
                         </IconButton>
                     </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                    <Box className="hidden md:flex">
                         <IconButton
-                        size="large"
-                        aria-label="show more"
-                        aria-controls={mobileMenuId}
-                        aria-haspopup="true"
-                        // onClick={handleMobileMenuOpen}
-                        color="inherit"
+                            size="large"
+                            aria-label="show more"
+                            aria-controls={mobileMenuId}
+                            aria-haspopup="true"
+                            // onClick={handleMobileMenuOpen}
+                            color="inherit"
                         >
-                        <MoreIcon />
+                            <MoreIcon className="text-lime-100"/>
                         </IconButton>
                     </Box>
                 </Toolbar>
