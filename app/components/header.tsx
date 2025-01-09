@@ -33,7 +33,7 @@ export default function Header( {extendSideNav}:IHeader ) {
                         <MenuIcon onClick={extendSideNav}/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        MPS Project
+                        MPS Next
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
