@@ -8,10 +8,10 @@ import {
 
 export const SideMenuList = [
     { name : 'Dashboard', href: '/dashboard', icon: SpaceDashboardOutlined },
-    { name : 'Users', href: '/users', icon: PersonOutlined },
-    { name : 'Devices', href: '/devices', icon: PrintOutlined },
-    { name : 'Groups', href: '/groups', icon: PeopleOutline },
-    { name : 'Audit Logs', href: '/auditlogs', icon: PlagiarismOutlined },
+    { name : 'Users', href: '/user', icon: PersonOutlined },
+    { name : 'Devices', href: '/device', icon: PrintOutlined },
+    { name : 'Groups', href: '/group', icon: PeopleOutline },
+    { name : 'Audit Logs', href: '/auditlog', icon: PlagiarismOutlined },
 ]
 
 export const BASE_PATH = `http://localhost:37000`;

@@ -27,13 +27,12 @@ export async function fetchFilteredUsers(
         const users = await client.query(`
         SELECT * FROM tbl_user_info
         WHERE
+          tbl_user_info.user_id ILIKE '${`%${query}%`}' OR
           tbl_user_info.user_name ILIKE '${`%${query}%`}' OR
-          tbl_user_info.user_name_en ILIKE '${`%${query}%`}' OR
-          tbl_user_info.homepage ILIKE '${`%${query}%`}' OR
-          tbl_user_info.sales_resource ILIKE '${`%${query}%`}' OR
-          tbl_user_info.region ILIKE '${`%${query}%`}' OR
-          tbl_user_info.memo ILIKE '${`%${query}%`}'
-        ORDER BY tbl_user_info.modify_date DESC
+          tbl_user_info.mobile_number ILIKE '${`%${query}%`}' OR
+          tbl_user_info.phone_number ILIKE '${`%${query}%`}' OR
+          tbl_user_info.email ILIKE '${`%${query}%`}'
+        ORDER BY tbl_user_info.user_name DESC
         LIMIT ${itemsPerPage} OFFSET ${offset}
       `);
 
@@ -52,12 +51,11 @@ export async function fetchUsersPages(
         const count = await client.query(`SELECT COUNT(*)
         FROM tbl_user_info
         WHERE
+          tbl_user_info.user_id ILIKE '${`%${query}%`}' OR
           tbl_user_info.user_name ILIKE '${`%${query}%`}' OR
-          tbl_user_info.user_name_en ILIKE '${`%${query}%`}' OR
-          tbl_user_info.homepage ILIKE '${`%${query}%`}' OR
-          tbl_user_info.sales_resource ILIKE '${`%${query}%`}' OR
-          tbl_user_info.region ILIKE '${`%${query}%`}' OR
-          tbl_user_info.memo ILIKE '${`%${query}%`}'
+          tbl_user_info.mobile_number ILIKE '${`%${query}%`}' OR
+          tbl_user_info.phone_number ILIKE '${`%${query}%`}' OR
+          tbl_user_info.email ILIKE '${`%${query}%`}'
       `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
@@ -100,7 +98,7 @@ export async function fetchCreateUser(
 
 
 // ----- Begin : Accounts ---------------------------------------//
-export async function fetchSalesPersions() {
+export async function fetchSalesPersons() {
     try {
         const response = await fetch(`${BASE_PATH}/getSalespersons`);
         return await response.json();

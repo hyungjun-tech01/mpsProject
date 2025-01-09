@@ -36,7 +36,7 @@ export default function Header({ extendSideNav }: IHeader) {
                         MPS Next
                     </Typography>
                     <Box className="grow" />
-                    <Box className="hidden gap-1 md:flex">
+                    <Box className="hidden gap-2 md:flex">
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={4} color="error">
                                 <MailIcon className="text-lime-100"/>

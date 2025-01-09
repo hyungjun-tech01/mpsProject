@@ -12,6 +12,9 @@ const theme = createTheme({
     secondary: {
       main: 'rgb(132 204 22)',
     },
+    action: {
+      hover: 'rgb(245 245 244)',
+    },
     error: {
       main: red.A200,
     },

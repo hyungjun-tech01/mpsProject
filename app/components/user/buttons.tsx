@@ -9,7 +9,7 @@ export function CreateUser() {
   return (
     <Link
       href="/user/create"
-      className="flex h-10 items-center rounded-lg bg-lime-1000 px-4 text-sm font-medium text-white transition-colors hover:bg-purple-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500"
+      className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-base font-medium text-white transition-colors hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
     >
       <span className="hidden md:block">Create User</span>{' '}
       <AddIcon className="h-5 md:ml-4" />

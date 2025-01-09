@@ -17,7 +17,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
             key={link.name}
             href={link.href}
             className={clsx(
-              "flex h-[48px] items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm  text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
+              "flex h-[48px] items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-base  text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
               {
                 'bg-lime-100 text-lime-700': pathname.includes(link.href),
                 'grow md:flex-none md:justify-start md:p-2 md:px-3': extended,

@@ -34,13 +34,11 @@ export default async function Page(props: {
         fetchFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     const columns: IColumnData[] = [
-        { name: 'user_name', title: t('user.user_name') },
-        { name: 'user_name_en', title: t('user.user_name_en') },
-        { name: 'ceo_name', title: t('user.ceo_name'), align: 'center' },
-        { name: 'user_address', title: t('user.address') },
-        { name: 'business_registration_code', title: t('user.business_registration_code'), align: 'center' },
-        { name: 'site_id', title: t('common.site_id'), align: 'center' },
-        { name: 'sales_resource', title: t('user.salesman'), align: 'center' },
+        { name: 'user_id', title: t('user.user_id') },
+        { name: 'user_name', title: t('user.user_name'), align: 'center' },
+        { name: 'is_work', title: t('user.limited'), align: 'center' },
+        { name: 'job_type', title: t('user.job') },
+        { name: 'memo', title: t('user.memo'), align: 'center' },
     ];
 
     return (

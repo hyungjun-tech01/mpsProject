@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 // import { signIn } from '@/auth';
 // import { AuthError } from 'next-auth';
-import { fetchCreateCompany } from '@/app/lib/fetchData';
+import { fetchCreateUser } from '@/app/lib/fetchData';
 
 
 export type State = {
@@ -62,11 +62,11 @@ const FormSchema = z.object({
     memo: z.union([z.string().nullish(), z.literal("")]),
 });
 
-// const CreateCompany = FormSchema.omit({ id: true, date: true });
-const CreateCompany = FormSchema;
+// const CreateUser = FormSchema.omit({ id: true, date: true });
+const CreateUser = FormSchema;
 
-export async function createCompany(prevState: State, formData: FormData) {
-    const validatedFields = CreateCompany.safeParse({
+export async function createUser(prevState: State, formData: FormData) {
+    const validatedFields = CreateUser.safeParse({
         companyName: formData.get('company_name'),
         companyNameEn: formData.get('company_name_en'),
         ceoName: formData.get('ceo_name'),
@@ -96,21 +96,21 @@ export async function createCompany(prevState: State, formData: FormData) {
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Company.',
+            message: 'Missing Fields. Failed to Create User.',
         };
     }
 
     // Prepare data for insertion into the database
     const newCompany = validatedFields.data;
 
-    const output = await fetchCreateCompany(newCompany);
+    const output = await fetchCreateUser(newCompany);
     if(!output.result) {
         return {
             errors: output.data,
-            message: 'Failed to Create Company',
+            message: 'Failed to Create User',
         }
     }
 
-    revalidatePath('/company');
-    redirect('/company');
+    revalidatePath('/user');
+    redirect('/user');
 }
