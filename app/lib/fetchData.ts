@@ -2,13 +2,14 @@ import pg from 'pg';
 import { BASE_PATH } from '@/constans';
 import { UserField } from '@/app/lib/definitions';
 
+
 const client = new pg.Client({
-    user: 'planka',
-    password: 'planka',
-    host: 'localhost',
-    port: 5432,
-    database: 'planka',
-    connectionTimeoutMillis: 15000
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
 });
 
 await client.connect();
