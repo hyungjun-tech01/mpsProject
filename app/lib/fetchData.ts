@@ -1,6 +1,6 @@
 import pg from 'pg';
 import { BASE_PATH } from '@/constans';
-import { UserField } from '@/app/lib/definitions';
+import { User } from '@/app/lib/definitions';
 
 
 const client = new pg.Client({
@@ -48,14 +48,14 @@ export async function fetchFilteredUsers(
             `)
         ;
         
-        const converted = users.rows.map((data:UserField) => ({
+        const converted = users.rows.map((data:User) => ({
             ...data,
             id: data.user_id,
         }));
         return converted;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch invoices.');
+        throw new Error('Failed to fetch users.');
     }
 }
 
@@ -93,6 +93,22 @@ export async function fetchUsersPages(
     }
 }
 
+export async function fetchUserById(
+    id: string,
+) {
+    try {
+        const user = await client.query(`
+            SELECT * FROM tbl_user
+            WHERE user_id='${id}'
+        `);
+        
+        return user.rows[0];
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to get user by id.');
+    }
+}
+
 export async function fetchCreateUser(
     newUser: object,
 ) {
@@ -124,14 +140,5 @@ export async function fetchCreateUser(
 // ----- End : User ------------------------------------------//
 
 
-// ----- Begin : Accounts ---------------------------------------//
-export async function fetchSalesPersons() {
-    try {
-        const response = await fetch(`${BASE_PATH}/getSalespersons`);
-        return await response.json();
-    } catch (error) {
-        console.error('Database Error:', error);
-        throw new Error('Failed to fetch salesperson data.');
-    }
-}
+
 // ----- End : Accounts -----------------------------------------//

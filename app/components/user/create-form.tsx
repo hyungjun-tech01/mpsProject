@@ -1,6 +1,5 @@
 'use client';
 
-import { SalespersonField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/CheckOutlined';
@@ -11,18 +10,24 @@ import { createUser, State } from './actions';
 import { useActionState } from 'react';
 
 
-export default function Form({
-  salespersons
-}: {
-  salespersons: SalespersonField[]
-}) {
+export default function Form() {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createUser, initialState);
 
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-
+        {/* User ID */}
+        <div className="mb-4">
+          <label htmlFor="title_user_id" className="mb-2 block text-sm font-medium">
+            User ID
+          </label>
+          <div className="relative">
+            <label htmlFor="value_user_id" className="mb-2 block text-sm font-medium">
+              User ID
+            </label>
+          </div>
+        </div>
         {/* Salesperson Name */}
         <div className="mb-4">
           <label htmlFor="salesperson" className="mb-2 block text-sm font-medium">

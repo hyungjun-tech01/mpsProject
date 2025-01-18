@@ -1,11 +1,8 @@
 import Form from '@/app/components/user/create-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
-import { fetchSalesPersons } from '@/app/lib/fetchData';
 
 
 export default async function Page() {
-    const salespersons = await fetchSalesPersons();
-
     return (
         <main>
             <Breadcrumbs
@@ -18,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <Form salespersons={salespersons} />
+            <Form />
         </main>
     );
 }

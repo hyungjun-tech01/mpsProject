@@ -23,8 +23,8 @@ await client.connect();
 export type State = {
     errors?: {
         action_type: 'ADD' | 'UPDATE' | 'DELETE';
-        company_code?: string[];
-        modify_user?: string[];
+        user_name?: string;
+        modify_user?: string;
     };
     message?: string | null;
 };

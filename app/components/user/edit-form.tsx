@@ -1,27 +1,182 @@
 'use client';
 
-import { CompanyField } from '@/app/lib/definitions';
+import { User } from '@/app/lib/definitions';
 import Link from 'next/link';
-import CheckIcon from '@mui/icons-material/CheckOutlined';
-import ClockIcon from '@mui/icons-material/ScheduleOutlined';
 import CurrencyDollarIcon from '@mui/icons-material/PaidOutlined';
 import UserCircleIcon from '@mui/icons-material/AccountCircleOutlined';
-import { CreateCompany,  UpdateCompany } from '@/app/components/company/buttons';
-import { createCompany, State } from '@/app/lib/actions';
+import { Button } from '@mui/material';
+import { createUser, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 
-export default function Form({ salespersons }: { salespersons: CompanyField[] }) {
+export default function EditUserForm({
+  user
+}: {
+  user: User;
+}) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createCompany, initialState);
+  const [state, formAction] = useActionState(createUser, initialState);
 
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
+        {/* User ID */}
         <div className="mb-4">
+          <label htmlFor="user_id" className="mb-2 block text-sm font-medium">
+            User ID
+          </label>
+          <div className="relative">
+          <label htmlFor="user_id" className="mb-2 block text-sm font-medium">
+            {user.user_id}
+          </label>
+          </div>
+        </div>
+
+        {/* User Name */}
+        <div className="mb-4">
+          <label htmlFor="user_name" className="mb-2 block text-sm font-medium">
+            User Name
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="user_name"
+                name="user_name"
+                type="text"
+                defaultValue={user.user_name || ''}
+                placeholder="Enter User's Name"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div id="fullname-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.user_name &&
+                state.errors.user_name.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* User Email */}
+        <div className="mb-4">
+          <label htmlFor="email" className="mb-2 block text-sm font-medium">
+            Email
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="email"
+                name="email"
+                type="text"
+                defaultValue={user.email || ''}
+                placeholder="Enter User's Email"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div id="fullname-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.email &&
+                state.errors.email.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Home Directory */}
+        <div className="mb-4">
+          <label htmlFor="home_directory" className="mb-2 block text-sm font-medium">
+            Home Directory
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="home_directory"
+                name="home_directory"
+                type="text"
+                defaultValue={user.email || ''}
+                placeholder="Enter User's Home Directory"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div id="fullname-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.home_directory &&
+                state.errors.home_directory.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* User Amount */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Choose an amount
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                step="0.01"
+                defaultValue={user.modified_ticks || 0}
+                placeholder="Enter USD amount"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+            <div id="customer-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.amount &&
+                state.errors.amount.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Home Directory */}
+        <div className="mb-4">
+          <label htmlFor="home_directory" className="mb-2 block text-sm font-medium">
+            Home Directory
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="home_directory"
+                name="home_directory"
+                type="text"
+                defaultValue={user.email || ''}
+                placeholder="Enter User's Home Directory"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                required
+              />
+            </div>
+            <div id="fullname-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.home_directory &&
+                state.errors.home_directory.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* User Full Name */}
+        {/* <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
-            Choose customer
+            User Name
           </label>
           <div className="relative">
             <select
@@ -50,39 +205,10 @@ export default function Form({ salespersons }: { salespersons: CompanyField[] })
                 </p>
               ))}
           </div>
-        </div>
-
-        {/* Company Amount */}
-        <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
-            Choose an amount
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="amount"
-                name="amount"
-                type="number"
-                step="0.01"
-                placeholder="Enter USD amount"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
-              />
-              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-            </div>
-            <div id="customer-error" aria-live="polite" aria-atomic="true">
-              {state?.errors?.amount &&
-                state.errors.amount.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
-          </div>
-        </div>
+        </div> */}
 
         {/* Company Status */}
-        <fieldset>
+        {/* <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Set the company status
           </legend>
@@ -128,7 +254,8 @@ export default function Form({ salespersons }: { salespersons: CompanyField[] })
                 </p>
               ))}
           </div>
-        </fieldset>
+        </fieldset> */}
+        
         <div id="customer-error" aria-live="polite" aria-atomic="true">
           {state?.message &&
             <p className="mt-2 text-sm text-red-500">
@@ -137,14 +264,15 @@ export default function Form({ salespersons }: { salespersons: CompanyField[] })
           }
         </div>
       </div>
+
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/companys"
+          href="/user"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
         </Link>
-        <Button type="submit">Create Company</Button>
+        <Button type="submit">Update User</Button>
       </div>
     </form>
   );

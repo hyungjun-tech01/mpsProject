@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from "next";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
-import { CreateUser } from '@/app/components/user/buttons';
+import { CreateButton } from '@/app/components/buttons';
 import { TableSkeleton } from '@/app/components/skeletons';
 import { IColumnData } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
@@ -50,7 +50,7 @@ export default async function Page(props: {
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="Search users..." />
-                <CreateUser />
+                <CreateButton link="/user/create" title="Create User"/>
             </div>
             <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
                 <Table
