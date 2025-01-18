@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { IColumnData } from '@/app/lib/definitions';
+import { UpdateButton, DeleteButtton } from './buttons';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,6 +41,8 @@ interface ITable<DataType> {
     rows: DataType[];
     currentPage: number;
     totalPages: number;
+    category?: string;
+    deleteAction?: (id: string) => void;
 }
 
 export default function CustomizedTable<DataType>({
@@ -47,6 +50,8 @@ export default function CustomizedTable<DataType>({
     rows,
     currentPage,
     totalPages,
+    category,
+    deleteAction,
 }: ITable<DataType>) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -68,6 +73,7 @@ export default function CustomizedTable<DataType>({
                                     {column.title}
                                 </StyledTableCell>
                             ))}
+                            <StyledTableCell align='center'>Edit</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -84,6 +90,16 @@ export default function CustomizedTable<DataType>({
                                             {row[column.name]}
                                         </StyledTableCell>
                                     ))}
+                                    <StyledTableCell
+                                        component="th"
+                                        align='center'
+                                        scope="row"
+                                    >
+                                        <div className="flex justify-center gap-3">
+                                            {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
+                                            {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
+                                        </div>
+                                    </StyledTableCell>
                                 </StyledTableRow>
                             )
                         })}

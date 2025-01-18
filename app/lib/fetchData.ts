@@ -25,19 +25,34 @@ export async function fetchFilteredUsers(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users = await client.query(`
-        SELECT * FROM tbl_user_info
-        WHERE
-          tbl_user_info.user_id ILIKE '${`%${query}%`}' OR
-          tbl_user_info.user_name ILIKE '${`%${query}%`}' OR
-          tbl_user_info.mobile_number ILIKE '${`%${query}%`}' OR
-          tbl_user_info.phone_number ILIKE '${`%${query}%`}' OR
-          tbl_user_info.email ILIKE '${`%${query}%`}'
-        ORDER BY tbl_user_info.user_name DESC
-        LIMIT ${itemsPerPage} OFFSET ${offset}
-      `);
-
-        return users.rows;
+        const users = query !== '' 
+            ? await client.query(`
+                SELECT * FROM tbl_user
+                WHERE
+                    tbl_user.deleted='N' AND
+                    (
+                        tbl_user.user_id ILIKE '${`%${query}%`}' OR
+                        tbl_user.user_name ILIKE '${`%${query}%`}' OR
+                        tbl_user.full_name ILIKE '${`%${query}%`}' OR
+                        tbl_user.email ILIKE '${`%${query}%`}'
+                    )
+                ORDER BY tbl_user.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+            : await client.query(`
+                SELECT * FROM tbl_user
+                WHERE
+                    tbl_user.deleted='N'
+                ORDER BY tbl_user.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+        ;
+        
+        const converted = users.rows.map((data:UserField) => ({
+            ...data,
+            id: data.user_id,
+        }));
+        return converted;
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch invoices.');
@@ -49,15 +64,26 @@ export async function fetchUsersPages(
     itemsPerPage: number,
 ) {
     try {
-        const count = await client.query(`SELECT COUNT(*)
-        FROM tbl_user_info
-        WHERE
-          tbl_user_info.user_id ILIKE '${`%${query}%`}' OR
-          tbl_user_info.user_name ILIKE '${`%${query}%`}' OR
-          tbl_user_info.mobile_number ILIKE '${`%${query}%`}' OR
-          tbl_user_info.phone_number ILIKE '${`%${query}%`}' OR
-          tbl_user_info.email ILIKE '${`%${query}%`}'
-      `);
+        const count = query !== '' 
+            ? await client.query(`
+                SELECT COUNT(*)
+                FROM tbl_user
+                WHERE
+                    tbl_user.deleted='N' AND
+                    (
+                        tbl_user.user_id ILIKE '${`%${query}%`}' OR
+                        tbl_user.user_name ILIKE '${`%${query}%`}' OR
+                        tbl_user.full_name ILIKE '${`%${query}%`}' OR
+                        tbl_user.email ILIKE '${`%${query}%`}'
+                    )
+            `)
+            : await client.query(`
+                SELECT COUNT(*)
+                FROM tbl_user
+                WHERE
+                    tbl_user.deleted='N'
+            `)
+        ;
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -87,7 +113,7 @@ export async function fetchCreateUser(
         if (data.message) {
             return { result: false, data: data.message };
         };
-        return { result: true};
+        return { result: true };
     } catch (error) {
         return {
             result: false,

@@ -5,6 +5,7 @@ import Table from '@/app/components/table';
 import { CreateUser } from '@/app/components/user/buttons';
 import { TableSkeleton } from '@/app/components/skeletons';
 import { IColumnData } from '@/app/lib/definitions';
+import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
 
@@ -35,10 +36,11 @@ export default async function Page(props: {
     ]);
     const columns: IColumnData[] = [
         { name: 'user_id', title: t('user.user_id') },
-        { name: 'user_name', title: t('user.user_name'), align: 'center' },
-        { name: 'is_work', title: t('user.limited'), align: 'center' },
-        { name: 'job_type', title: t('user.job') },
-        { name: 'memo', title: t('user.memo'), align: 'center' },
+        { name: 'full_name', title: t('user.user_name'), align: 'center' },
+        { name: 'net_total_megabytes', title: t('user.remain_amount'), align: 'center' },
+        { name: 'disabled_printing', title: t('user.limited'), align: 'center' },
+        { name: 'total_pages', title: t('user.page'), align: 'center' },
+        { name: 'total_jobs', title: t('user.job'), align: 'center' },
     ];
 
     return (
@@ -56,6 +58,8 @@ export default async function Page(props: {
                     rows={users}
                     currentPage={currentPage}
                     totalPages={totalPages}
+                    category='user'
+                    deleteAction={deleteUser}
                 />
             </Suspense>
         </div>

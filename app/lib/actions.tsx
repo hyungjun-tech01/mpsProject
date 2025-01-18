@@ -1,10 +1,23 @@
 'use server';
 
+import pg from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 // import { signIn } from '@/auth';
 // import { AuthError } from 'next-auth';
+
+
+const client = new pg.Client({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
+});
+
+await client.connect();
 
 
 export type State = {
@@ -31,7 +44,7 @@ const FormSchema = z.object({
 
 const CreateCompany = FormSchema.omit({ id: true, date: true });
 
-export async function createCompany(prevState: State, formData: FormData) {
+export async function createUser(prevState: State, formData: FormData) {
     const validatedFields = CreateCompany.safeParse({
         companyName: formData.get('companyName'),
         companyNameEn: formData.get('companyNameEn'),
@@ -57,6 +70,18 @@ export async function createCompany(prevState: State, formData: FormData) {
         };
     }
 
-    revalidatePath('/company');
-    redirect('/company');
+    revalidatePath('/user');
+    redirect('/user');
+}
+
+export async function deleteUser(id: string) {
+    try {
+        await client.query(`DELETE FROM tbl_user WHERE user_id = '${id}'`);
+    } catch (error) {
+        return {
+            message: 'Database Error: Failed to Delete selected user.',
+        };
+    }
+
+    revalidatePath('/user');
 }
