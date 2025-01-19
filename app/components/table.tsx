@@ -73,7 +73,7 @@ export default function CustomizedTable<DataType>({
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            <StyledTableCell align='center'>Edit</StyledTableCell>
+                            <StyledTableCell align='right'>{' '}</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -92,10 +92,10 @@ export default function CustomizedTable<DataType>({
                                     ))}
                                     <StyledTableCell
                                         component="th"
-                                        align='center'
+                                        align='right'
                                         scope="row"
                                     >
-                                        <div className="flex justify-center gap-3">
+                                        <div className="flex justify-end gap-3">
                                             {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
                                             {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
                                         </div>

@@ -22,7 +22,6 @@ await client.connect();
 
 export type State = {
     errors?: {
-        action_type: 'ADD' | 'UPDATE' | 'DELETE';
         user_name?: string;
         modify_user?: string;
     };
