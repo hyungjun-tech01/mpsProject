@@ -30,16 +30,16 @@ export default function Header({ extendSideNav }: IHeader) {
                         aria-label="menu"
                         sx={{ mr: 2 }}
                     >
-                        <MenuIcon className="text-lime-100" onClick={extendSideNav} />
+                        <MenuIcon className="text-lime-50" onClick={extendSideNav} />
                     </IconButton>
-                    <Typography variant="h6" component="div" className="grow pl-1 text-lime-100">
+                    <Typography variant="h6" component="div" className="grow pl-1 text-lime-50">
                         MPS Next
                     </Typography>
                     <Box className="grow" />
                     <Box className="hidden gap-2 md:flex">
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={4} color="error">
-                                <MailIcon className="text-lime-100"/>
+                                <MailIcon className="text-lime-50"/>
                             </Badge>
                         </IconButton>
                         <IconButton
@@ -48,7 +48,7 @@ export default function Header({ extendSideNav }: IHeader) {
                             color="inherit"
                         >
                             <Badge badgeContent={17} color="error">
-                                <NotificationsIcon className="text-lime-100"/>
+                                <NotificationsIcon className="text-lime-50"/>
                             </Badge>
                         </IconButton>
                         <IconButton
@@ -60,7 +60,7 @@ export default function Header({ extendSideNav }: IHeader) {
                             // onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            <AccountCircle className="text-lime-100"/>
+                            <AccountCircle className="text-lime-50"/>
                         </IconButton>
                     </Box>
                     <Box className="hidden md:flex">
@@ -72,7 +72,7 @@ export default function Header({ extendSideNav }: IHeader) {
                             // onClick={handleMobileMenuOpen}
                             color="inherit"
                         >
-                            <MoreIcon className="text-lime-100"/>
+                            <MoreIcon className="text-lime-50"/>
                         </IconButton>
                     </Box>
                 </Toolbar>

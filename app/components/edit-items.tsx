@@ -4,6 +4,7 @@ export interface IEditItem {
     title: string;
     type: 'label' | 'input' | 'select';
     defaultValue: string | number;
+    placeholder?: string;
     options?: { title: string, value: string | number }[] | null;
     error?: string[];
 }
@@ -13,6 +14,7 @@ export function EditItem({
     title,
     type,
     defaultValue,
+    placeholder,
     options,
     error,
 }: IEditItem
@@ -33,10 +35,11 @@ export function EditItem({
                 </div>
             );
         case 'input':
+            console.log('Check value :', defaultValue, placeholder);
             return (
                 <div className="mb-4">
                     <label htmlFor={name} className="mb-2 block text-sm font-medium">
-                        Full Name
+                        {title}
                     </label>
                     <div className="relative mt-2 rounded-md">
                         <div className="relative">
@@ -44,8 +47,8 @@ export function EditItem({
                                 id={name}
                                 name={name}
                                 type="text"
-                                defaultValue={defaultValue || ''}
-                                placeholder={`Enter ${title}`}
+                                defaultValue={defaultValue}
+                                placeholder={placeholder}
                                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                 required
                             />
@@ -60,26 +63,23 @@ export function EditItem({
                     </div>
                 </div>
             );
-        case 'label':
+        case 'select':
             return (
                 <div className="mb-4">
                     <label htmlFor={name} className="mb-2 block text-sm font-medium">
-                        Enable / Disable Printing
+                        {title}
                     </label>
                     <div className="relative">
                         <select
                             id={name}
                             name={name}
                             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                            defaultValue=""
+                            defaultValue={defaultValue}
                             aria-describedby="customer-error"
                         >
-                            {options && options.map(item => {
-                                return item.value === defaultValue
-                                    ? <option value={item.value} selected>{item.title}</option>
-                                    : <option value={item.value}>{item.title}</option>
-                            })
-                            }
+                            {options && options.map(item => (
+                                <option key={item.value} value={item.value}>{item.title}</option>
+                            ))}
                         </select>
                     </div>
                     <div id="customer-error" aria-live="polite" aria-atomic="true">

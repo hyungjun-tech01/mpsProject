@@ -45,16 +45,44 @@ const CreateCompany = FormSchema.omit({ id: true, date: true });
 
 export async function createUser(prevState: State, formData: FormData) {
     const validatedFields = CreateCompany.safeParse({
-        companyName: formData.get('companyName'),
-        companyNameEn: formData.get('companyNameEn'),
-        ceoName: formData.get('ceoName'),
+        userName: formData.get('user_name'),
+        userEmail: formData.get('email'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Company.',
+            message: 'Missing Fields. Failed to Create User.',
+        };
+    }
+
+    // Prepare data for insertion into the database
+    const { companyName, companyNameEn, ceoName } = validatedFields.data;
+
+    try {
+        fetch()
+    } catch (error) {
+        return {
+            message: 'Database Error: Failed to Create Invoice.',
+        };
+    }
+
+    revalidatePath('/user');
+    redirect('/user');
+}
+
+export async function modifyUser(prevState: State, formData: FormData) {
+    const validatedFields = CreateCompany.safeParse({
+        userName: formData.get('user_name'),
+        userEmail: formData.get('email'),
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create User.',
         };
     }
 

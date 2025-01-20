@@ -2,35 +2,51 @@
 
 import Link from 'next/link';
 import { Button } from '@mui/material';
-import { createUser, State } from '@/app/lib/actions';
+import { modifyUser, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
+import clsx from 'clsx';
 import { IEditItem, EditItem } from '../edit-items';
 
 
 export default function EditUserForm({
+  selectedIndex,
+  subTitles,
   items
 }: {
-  items: IEditItem[]
+  selectedIndex: number;
+  subTitles: {title: string, link: string}[];
+  items: IEditItem[];
 }) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createUser, initialState);
+  const [state, formAction] = useActionState(modifyUser, initialState);
 
   return (
     <form action={formAction}>
+      <div className='w-full pl-2 flex justify-start'>
+        {subTitles.map((item, idx) => {
+          return <Link key={idx} href={item.link}
+            className={clsx("w-auto px-2 py-1 h-auto border-2 rounded-t-lg border-solid bg-gray-50",
+              { "font-medium text-lime-900" : idx===selectedIndex },
+              { "text-gray-300" : idx!==selectedIndex },
+          )}>{item.title}</Link>;
+        })}
+      </div>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        { items.map((item:IEditItem) => {
+        {items.map((item: IEditItem) => {
           return (
-          <EditItem
-            key={item.name}
-            name={item.name}
-            title={item.title}
-            type={item.type}
-            defaultValue={item.defaultValue}
-            options={item.options}
-            error={state.errors[item.name]}
-          />
-        )})}
-        
+            <EditItem
+              key={item.name}
+              name={item.name}
+              title={item.title}
+              type={item.type}
+              defaultValue={item.defaultValue}
+              placeholder={item.placeholder}
+              options={item.options}
+              error={state.errors[item.name]}
+            />
+          )
+        })}
+
         <div id="user-error" aria-live="polite" aria-atomic="true">
           {state?.message &&
             <p className="mt-2 text-sm text-red-500">

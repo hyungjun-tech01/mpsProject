@@ -21,13 +21,6 @@ export default async function Page(
     }
     console.log('[User] value: ', user);
 
-    const subTitles = [
-        { title: t('user.subTitle_detail'), link: '/user/edit' },
-        { title: t('user.subTitle_budget'), link: '/user/charge' },
-        { title: t('user.subTitle_ProcessedLog'), link: '/user/processLog' },
-        { title: t('user.subTitle_jobLog'), link: '/user/jobLog'}
-    ];
-
     const items: IEditItem[] = [
         { name: 'user_name', title: t('user.user_name'), type: 'label', defaultValue: user.user_name },
         { name: 'full_name', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
@@ -54,7 +47,7 @@ export default async function Page(
                     },
                 ]}
             />
-            <EditUserForm selectedIndex={0} subTitles={subTitles} items={items} />
+            <EditUserForm items={items} />
         </main>
     );
 }
