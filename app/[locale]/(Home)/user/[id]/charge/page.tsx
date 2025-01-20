@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
-import Form from '@/app/components/user/edit-form';
+import EditUserForm from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import { fetchUserById } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
@@ -51,8 +51,8 @@ export default async function Page(
                 breadcrumbs={[
                     { label: t('common.user'), href: '/user' },
                     {
-                        label: t('user.edit_user'),
-                        href: `/user/${id}/edit`,
+                        label: t('user.subTitle_budget'),
+                        href: `/user/${id}/charge`,
                         active: true,
                     },
                 ]}
@@ -61,12 +61,12 @@ export default async function Page(
                 {subTitles.map((item, idx) => {
                     return <Link key={idx} href={item.link}
                         className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
-                            { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": idx === 0 },
-                            { "text-gray-300  bg-white border-2": idx !== 0 },
+                            { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": idx === 1 },
+                            { "text-gray-300  bg-white border-2": idx !== 1 },
                         )}>{item.title}</Link>;
                 })}
             </div>
-            <Form items={items} />
+            <EditUserForm items={items} />
         </main>
     );
 }

@@ -1,9 +1,12 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import clsx from 'clsx';
 import EditUserForm from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import { fetchUserById } from '@/app/lib/fetchData';
-import { notFound } from 'next/navigation';
 import getDictionary from '@/app/locales/dictionaries';
 import { IEditItem } from '@/app/components/edit-items';
+
 
 export default async function Page(
     props: { params: Promise<{ id: string, locale: "ko" | "en" }> }
@@ -20,6 +23,13 @@ export default async function Page(
         notFound();
     }
     console.log('[User] value: ', user);
+
+    const subTitles = [
+        { title: t('user.subTitle_detail'), link: `/user/${id}/edit` },
+        { title: t('user.subTitle_budget'), link: `/user/${id}/charge` },
+        { title: t('user.subTitle_ProcessedLog'), link: `/user/${id}/processLog` },
+        { title: t('user.subTitle_jobLog'), link: `/user/${id}/jobLog` }
+    ];
 
     const items: IEditItem[] = [
         { name: 'user_name', title: t('user.user_name'), type: 'label', defaultValue: user.user_name },
@@ -41,12 +51,21 @@ export default async function Page(
                 breadcrumbs={[
                     { label: t('common.user'), href: '/user' },
                     {
-                        label: t('user.edit_user'),
-                        href: `/user/${id}/edit`,
+                        label: t('user.subTitle_ProcessedLog'),
+                        href: `/user/${id}/processLog`,
                         active: true,
                     },
                 ]}
             />
+            <div className='w-full pl-2 flex justify-start'>
+                {subTitles.map((item, idx) => {
+                    return <Link key={idx} href={item.link}
+                        className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
+                            { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": idx === 2 },
+                            { "text-gray-300  bg-white border-2": idx !== 2 },
+                        )}>{item.title}</Link>;
+                })}
+            </div>
             <EditUserForm items={items} />
         </main>
     );
