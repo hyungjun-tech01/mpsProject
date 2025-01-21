@@ -4,34 +4,15 @@ import Link from 'next/link';
 import { Button } from '@mui/material';
 import { modifyUser, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
-import { IEditItem, EditItem } from '../edit-items';
 
 
-export default function EditForm({
-  items
-}: {
-  items: IEditItem[];
-}) {
+export default function TableForm() {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(modifyUser, initialState);
 
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {items.map((item: IEditItem) => {
-          return (
-            <EditItem
-              key={item.name}
-              name={item.name}
-              title={item.title}
-              type={item.type}
-              defaultValue={item.defaultValue}
-              placeholder={item.placeholder}
-              options={item.options}
-              error={state.errors[item.name]}
-            />
-          )
-        })}
 
         <div id="user-error" aria-live="polite" aria-atomic="true">
           {state?.message &&
