@@ -1,0 +1,1680 @@
+
+-- tbl_user definition
+
+-- Drop table
+
+DROP TABLE IF EXISTS tbl_user;
+DROP TABLE IF EXISTS tbl_user_temp;
+
+CREATE TABLE tbl_user (
+	user_id int8 NOT NULL,
+	user_name varchar(255) NOT NULL,
+	external_user_name varchar(255) NOT NULL,
+	full_name varchar(255) NULL,
+	email varchar(255) NULL,
+	notes varchar(2000) NULL,
+	total_jobs int4 NOT NULL,
+	total_pages int4 NOT NULL,
+	total_sheets int4 NOT NULL,
+	reset_by varchar(255) NULL,
+	reset_date timestamp NULL,
+	deleted bpchar(1) NOT NULL,
+	deleted_date timestamp NULL,
+	created_date timestamp NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date timestamp NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	department varchar(200) NULL,
+	office varchar(200) NULL,
+	card_number varchar(100) NULL,
+	disabled_printing bpchar(1) NOT NULL,
+	disabled_printing_until timestamp NULL,
+	net_reset_by varchar(255) NULL,
+	net_reset_date timestamp NULL,
+	net_total_megabytes float8 NOT NULL,
+	net_total_time_hours float8 NOT NULL,
+	disabled_net bpchar(1) NOT NULL,
+	disabled_net_until timestamp NULL,
+	internal bpchar(1) NOT NULL,
+	last_user_activity timestamp NULL,
+	card_number2 varchar(100) NULL,
+	secondary_user_name varchar(255) NULL,
+	modified_ticks int8 NOT NULL,
+	home_directory varchar(255) NULL,
+	primary_user_source_type varchar(30) NULL,
+	secondary_user_source_type varchar(30) NULL,
+	secondary_external_user_name varchar(255) NULL,
+	CONSTRAINT tbl_user_pkey PRIMARY KEY (user_id)
+);
+
+CREATE TABLE tbl_user_temp (
+	user_id varchar(20) NOT NULL,
+	user_name varchar(255) NOT NULL,
+	external_user_name varchar(255) NOT NULL,
+	full_name varchar(255) NULL,
+	email varchar(255) NULL,
+	notes varchar(2000) NULL,
+	total_jobs varchar(50) NOT NULL,
+	total_pages varchar(50) NOT NULL,
+	total_sheets varchar(50) NOT NULL,
+	reset_by varchar(255) NULL,
+	reset_date varchar(50) NULL,
+	deleted varchar(10) NOT NULL,
+	deleted_date varchar(50) NULL,
+	created_date varchar(50) NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date varchar(50) NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	department varchar(200) NULL,
+	office varchar(200) NULL,
+	card_number varchar(100) NULL,
+	disabled_printing varchar(20) NOT NULL,
+	disabled_printing_until varchar(50) NULL,
+	net_reset_by varchar(255) NULL,
+	net_reset_date varchar(50) NULL,
+	net_total_megabytes varchar(50) NOT NULL,
+	net_total_time_hours varchar(50) NOT NULL,
+	disabled_net varchar(20) NOT NULL,
+	disabled_net_until varchar(50) NULL,
+	internal varchar(20) NOT NULL,
+	last_user_activity varchar(50) NULL,
+	card_number2 varchar(100) NULL,
+	secondary_user_name varchar(255) NULL,
+	modified_ticks varchar(50) NOT NULL,
+	home_directory varchar(255) NULL,
+	primary_user_source_type varchar(30) NULL,
+	secondary_user_source_type varchar(30) NULL,
+	secondary_external_user_name varchar(255) NULL
+);
+
+COPY tbl_user_temp (
+	user_id,
+	user_name,
+	external_user_name,
+	full_name,
+	email,
+	notes,
+	total_jobs,
+	total_pages,
+	total_sheets,
+	reset_by,
+	reset_date,
+	deleted,
+	deleted_date,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	department,
+	office,
+	card_number,
+	disabled_printing,
+	disabled_printing_until,
+	net_reset_by,
+	net_reset_date,
+	net_total_megabytes,
+	net_total_time_hours,
+	disabled_net,
+	disabled_net_until,
+	internal,
+	last_user_activity,
+	card_number2,
+	secondary_user_name,
+	modified_ticks,
+	home_directory,
+	primary_user_source_type,
+	secondary_user_source_type,
+	secondary_external_user_name
+) FROM 'c:\path_to_db\tbl_user_202501091556.csv' csv;
+
+delete from tbl_user_temp t
+where t.user_id = 'user_id';
+
+INSERT INTO tbl_user(
+	user_id,
+	user_name,
+	external_user_name,
+	full_name,
+	email,
+	notes,
+	total_jobs,
+	total_pages,
+	total_sheets,
+	reset_by,
+	reset_date,
+	deleted,
+	deleted_date,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	department,
+	office,
+	card_number,
+	disabled_printing,
+	disabled_printing_until,
+	net_reset_by,
+	net_reset_date,
+	net_total_megabytes,
+	net_total_time_hours,
+	disabled_net,
+	disabled_net_until,
+	internal,
+	last_user_activity,
+	card_number2,
+	secondary_user_name,
+	modified_ticks,
+	home_directory,
+	primary_user_source_type,
+	secondary_user_source_type,
+	secondary_external_user_name
+) 
+SELECT 
+	user_id::int8,
+	user_name,
+	external_user_name,
+	full_name,
+	email,
+	notes,
+	total_jobs::int4,
+	total_pages::int4,
+	total_sheets::int4,
+	reset_by,
+	reset_date::timestamp,
+	deleted::bpchar(1),
+	deleted_date::timestamp,
+	created_date::timestamp,
+	created_by,
+	modified_date::timestamp,
+	modified_by,
+	department,
+	office,
+	card_number,
+	disabled_printing::bpchar(1),
+	disabled_printing_until::timestamp,
+	net_reset_by,
+	net_reset_date::timestamp,
+	net_total_megabytes::float,
+	net_total_time_hours::float,
+	disabled_net::bpchar(1),
+	disabled_net_until::timestamp,
+	internal::bpchar(1),
+	last_user_activity::timestamp,
+	card_number2,
+	secondary_user_name,
+	modified_ticks::int8,
+	home_directory,
+	primary_user_source_type,
+	secondary_user_source_type,
+	secondary_external_user_name
+FROM tbl_user_temp;
+
+DROP TABLE IF EXISTS tbl_user_temp;
+
+CREATE INDEX idx_external_user_name ON tbl_user USING btree (external_user_name);
+CREATE INDEX idx_sec_external_user_name ON tbl_user USING btree (secondary_external_user_name);
+CREATE INDEX ix_user_card_number ON tbl_user USING btree (card_number);
+CREATE INDEX ix_user_card_number2 ON tbl_user USING btree (card_number2);
+CREATE INDEX ix_user_email ON tbl_user USING btree (email);
+CREATE INDEX ix_user_modified ON tbl_user USING btree (modified_ticks);
+CREATE INDEX ix_user_secondary_user_name ON tbl_user USING btree (secondary_user_name);
+CREATE INDEX ix_user_user_name ON tbl_user USING btree (user_name);
+
+
+
+-- tbl_user_attribute definition
+
+-- Drop table
+
+DROP TABLE IF EXISTS tbl_user_attribute;
+DROP TABLE IF EXISTS tbl_user_attribute_temp;
+
+CREATE TABLE tbl_user_attribute (
+	user_id int8 NOT NULL,
+	attrib_value varchar(1000) NULL,
+	modified_ticks int8 NOT NULL,
+	propagate bpchar(1) NOT NULL,
+	attrib_name varchar(255) NOT NULL,
+	CONSTRAINT tbl_user_attribute_pkey PRIMARY KEY (user_id, attrib_name)
+);
+
+
+CREATE TABLE tbl_user_attribute_temp (
+	user_id varchar(50) NOT NULL,
+	attrib_value varchar(1000) NULL,
+	modified_ticks varchar(50) NOT NULL,
+	propagate varchar(10) NOT NULL,
+	attrib_name varchar(255) NOT NULL
+);
+
+COPY tbl_user_attribute_temp (
+	user_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+) FROM 'c:\path_to_db\tbl_user_attribute_202501091557.csv' csv;
+
+delete from tbl_user_attribute_temp t
+where t.user_id = 'user_id';
+
+INSERT INTO tbl_user_attribute(
+	user_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+) 
+SELECT 
+	user_id::int8,
+	attrib_value,
+	modified_ticks::int8,
+	propagate::bpchar(1),
+	attrib_name
+FROM tbl_user_attribute_temp;
+
+DROP TABLE IF EXISTS tbl_user_attribute_temp;
+
+CREATE INDEX ix_user_attribute_modified ON tbl_user_attribute USING btree (modified_ticks, propagate);
+
+-- tbl_user_attribute foreign keys
+
+ALTER TABLE tbl_user_attribute ADD CONSTRAINT fk_user_attribute FOREIGN KEY (user_id) REFERENCES tbl_user(user_id);
+
+
+-- tbl_printer definition
+
+-- Drop table
+
+DROP TABLE IF EXISTS tbl_printer;
+DROP TABLE IF EXISTS tbl_printer_temp;
+
+CREATE TABLE tbl_printer (
+	printer_id int8 NOT NULL,
+	server_name varchar(255) NULL,
+	printer_name varchar(255) NOT NULL,
+	display_name varchar(510) NOT NULL,
+	"location" varchar(255) NULL,
+	notes varchar(2000) NULL,
+	charge_type varchar(20) NOT NULL,
+	default_cost float8 NOT NULL,
+	deleted bpchar(1) NOT NULL,
+	deleted_date timestamp NULL,
+	disabled bpchar(1) NOT NULL,
+	disabled_until timestamp NULL,
+	total_jobs int4 NOT NULL,
+	total_pages int4 NOT NULL,
+	total_sheets int4 NOT NULL,
+	reset_by varchar(255) NULL,
+	reset_date timestamp NULL,
+	created_date timestamp NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date timestamp NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	color_detection_mode varchar(20) NOT NULL,
+	device_type varchar(100) NOT NULL,
+	ext_device_function varchar(30) NULL,
+	physical_printer_id varchar(100) NULL,
+	printer_type varchar(200) NULL,
+	serial_number varchar(100) NULL,
+	web_print_enabled bpchar(1) NOT NULL,
+	custom1 varchar(50) NULL,
+	custom2 varchar(50) NULL,
+	custom3 varchar(50) NULL,
+	custom4 varchar(50) NULL,
+	custom5 varchar(50) NULL,
+	custom6 varchar(50) NULL,
+	last_usage_date timestamp NULL,
+	gcp_printer_id varchar(100) NULL,
+	gcp_enabled bpchar(1) NOT NULL,
+	modified_ticks int8 NOT NULL,
+	server_uuid varchar(255) NULL,
+	parent_id int8 NULL,
+	CONSTRAINT tbl_printer_pkey PRIMARY KEY (printer_id),
+	CONSTRAINT fk_printer_parent_printer FOREIGN KEY (parent_id) REFERENCES tbl_printer(printer_id)
+);
+
+CREATE TABLE tbl_printer_temp (
+	printer_id varchar(20) NOT NULL,
+	server_name varchar(255) NULL,
+	printer_name varchar(255) NOT NULL,
+	display_name varchar(510) NOT NULL,
+	"location" varchar(255) NULL,
+	notes varchar(2000) NULL,
+	charge_type varchar(20) NOT NULL,
+	default_cost varchar(50) NOT NULL,
+	deleted varchar(10) NOT NULL,
+	deleted_date varchar(50) NULL,
+	disabled varchar(10) NOT NULL,
+	disabled_until varchar(50) NULL,
+	total_jobs varchar(30) NOT NULL,
+	total_pages varchar(30) NOT NULL,
+	total_sheets varchar(30) NOT NULL,
+	reset_by varchar(255) NULL,
+	reset_date varchar(50) NULL,
+	created_date varchar(50) NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date varchar(50) NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	color_detection_mode varchar(20) NOT NULL,
+	device_type varchar(100) NOT NULL,
+	ext_device_function varchar(30) NULL,
+	physical_printer_id varchar(100) NULL,
+	printer_type varchar(200) NULL,
+	serial_number varchar(100) NULL,
+	web_print_enabled varchar(20) NOT NULL,
+	custom1 varchar(50) NULL,
+	custom2 varchar(50) NULL,
+	custom3 varchar(50) NULL,
+	custom4 varchar(50) NULL,
+	custom5 varchar(50) NULL,
+	custom6 varchar(50) NULL,
+	last_usage_date varchar(50) NULL,
+	gcp_printer_id varchar(100) NULL,
+	gcp_enabled varchar(20) NOT NULL,
+	modified_ticks varchar(30) NOT NULL,
+	server_uuid varchar(255) NULL,
+	parent_id varchar(30) NULL
+);
+
+COPY tbl_printer_temp (
+	printer_id,
+	server_name,
+	printer_name,
+	display_name,
+	"location",
+	notes,
+	charge_type,
+	default_cost,
+	deleted,
+	deleted_date,
+	disabled,
+	disabled_until,
+	total_jobs,
+	total_pages,
+	total_sheets,
+	reset_by,
+	reset_date,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	color_detection_mode,
+	device_type,
+	ext_device_function,
+	physical_printer_id,
+	printer_type,
+	serial_number,
+	web_print_enabled,
+	custom1,
+	custom2,
+	custom3,
+	custom4,
+	custom5,
+	custom6,
+	last_usage_date,
+	gcp_printer_id,
+	gcp_enabled,
+	modified_ticks,
+	server_uuid,
+	parent_id
+) FROM 'c:\path_to_db\tbl_printer_202501091555.csv' csv;
+
+delete from tbl_printer_temp t
+where t.printer_id = 'printer_id';
+
+INSERT INTO tbl_printer (
+	printer_id,
+	server_name,
+	printer_name,
+	display_name,
+	"location",
+	notes,
+	charge_type,
+	default_cost,
+	deleted,
+	deleted_date,
+	disabled,
+	disabled_until,
+	total_jobs,
+	total_pages,
+	total_sheets,
+	reset_by,
+	reset_date,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	color_detection_mode,
+	device_type,
+	ext_device_function,
+	physical_printer_id,
+	printer_type,
+	serial_number,
+	web_print_enabled,
+	custom1,
+	custom2,
+	custom3,
+	custom4,
+	custom5,
+	custom6,
+	last_usage_date,
+	gcp_printer_id,
+	gcp_enabled,
+	modified_ticks,
+	server_uuid,
+	parent_id
+)
+SELECT
+	printer_id::int8,
+	server_name,
+	printer_name,
+	display_name,
+	"location",
+	notes,
+	charge_type,
+	default_cost::float8,
+	deleted::bpchar(1),
+	deleted_date::timestamp,
+	disabled::bpchar(1),
+	disabled_until::timestamp,
+	total_jobs::int4,
+	total_pages::int4,
+	total_sheets::int4,
+	reset_by,
+	reset_date::timestamp,
+	created_date::timestamp,
+	created_by,
+	modified_date::timestamp,
+	modified_by,
+	color_detection_mode,
+	device_type,
+	ext_device_function,
+	physical_printer_id,
+	printer_type,
+	serial_number,
+	web_print_enabled::bpchar(1),
+	custom1,
+	custom2,
+	custom3,
+	custom4,
+	custom5,
+	custom6,
+	last_usage_date::timestamp,
+	gcp_printer_id,
+	gcp_enabled::bpchar(1),
+	modified_ticks::int8,
+	server_uuid,
+	parent_id::int8
+FROM tbl_printer_temp;
+
+DROP TABLE IF EXISTS tbl_printer_temp;
+
+CREATE INDEX ix_gcp_printer_id ON tbl_printer USING btree (gcp_printer_id);
+CREATE INDEX ix_printer_modified ON tbl_printer USING btree (modified_ticks);
+CREATE INDEX ix_printer_physical_id ON tbl_printer USING btree (physical_printer_id);
+CREATE INDEX ix_printer_server_printer ON tbl_printer USING btree (server_name, printer_name);
+
+
+-- tbl_printer_attribute definition
+
+-- Drop table
+
+DROP TABLE IF EXISTS tbl_printer_attribute;
+DROP TABLE IF EXISTS tbl_printer_attribute_temp;
+
+CREATE TABLE tbl_printer_attribute (
+	printer_id int8 NOT NULL,
+	attrib_value varchar(1000) NULL,
+	modified_ticks int8 NOT NULL,
+	propagate bpchar(1) NOT NULL,
+	attrib_name varchar(255) NOT NULL,
+	CONSTRAINT tbl_printer_attribute_pkey PRIMARY KEY (printer_id, attrib_name)
+);
+
+CREATE TABLE tbl_printer_attribute_temp (
+	printer_id varchar(20) NOT NULL,
+	attrib_value varchar(1000) NULL,
+	modified_ticks varchar(30) NOT NULL,
+	propagate varchar(20) NOT NULL,
+	attrib_name varchar(255) NOT NULL
+);
+
+COPY tbl_printer_attribute_temp (
+	printer_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+) FROM 'c:\path_to_db\tbl_printer_attribute_202501091553.csv' csv;
+
+delete from tbl_printer_attribute_temp t
+where t.printer_id = 'printer_id';
+
+INSERT INTO tbl_printer_attribute (
+	printer_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+)
+SELECT 
+	printer_id::int8,
+	attrib_value,
+	modified_ticks::int8,
+	propagate::bpchar(1),
+	attrib_name
+FROM tbl_printer_attribute_temp;
+
+DROP TABLE IF EXISTS tbl_printer_attribute_temp;
+
+CREATE INDEX ix_printer_attribute_modified ON tbl_printer_attribute USING btree (modified_ticks, propagate);
+
+
+-- tbl_printer_attribute foreign keys
+
+ALTER TABLE tbl_printer_attribute ADD CONSTRAINT fk_printer_attribute FOREIGN KEY (printer_id) REFERENCES tbl_printer(printer_id);
+
+
+-- tbl_group definition
+
+-- Drop table
+
+
+DROP TABLE IF EXISTS tbl_group;
+DROP TABLE IF EXISTS tbl_group_temp;
+
+CREATE TABLE tbl_group (
+	group_id int8 NOT NULL,
+	group_name varchar(255) NOT NULL,
+	initial_credit float8 NOT NULL,
+	initially_restricted bpchar(1) NOT NULL,
+	schedule_period varchar(10) NOT NULL,
+	schedule_amount float8 NOT NULL,
+	allow_accum bpchar(1) NOT NULL,
+	max_accum_balance float8 NOT NULL,
+	reset_statistics bpchar(1) NOT NULL,
+	created_date timestamp NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date timestamp NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	initial_settings_enabled bpchar(1) NOT NULL,
+	modified_ticks int8 NOT NULL,
+	CONSTRAINT tbl_group_group_name_key UNIQUE (group_name),
+	CONSTRAINT tbl_group_pkey PRIMARY KEY (group_id)
+);
+
+CREATE TABLE tbl_group_temp (
+	group_id varchar(30) NOT NULL,
+	group_name varchar(255) NOT NULL,
+	initial_credit varchar(30) NOT NULL,
+	initially_restricted varchar(30) NOT NULL,
+	schedule_period varchar(20) NOT NULL,
+	schedule_amount varchar(30) NOT NULL,
+	allow_accum varchar(30) NOT NULL,
+	max_accum_balance varchar(30) NOT NULL,
+	reset_statistics varchar(30) NOT NULL,
+	created_date varchar(50) NOT NULL,
+	created_by varchar(255) NOT NULL,
+	modified_date varchar(50) NOT NULL,
+	modified_by varchar(255) NOT NULL,
+	initial_settings_enabled varchar(30) NOT NULL,
+	modified_ticks varchar(30) NOT NULL
+);
+
+COPY tbl_group_temp (
+	group_id,
+	group_name,
+	initial_credit,
+	initially_restricted,
+	schedule_period,
+	schedule_amount,
+	allow_accum,
+	max_accum_balance,
+	reset_statistics,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	initial_settings_enabled,
+	modified_ticks
+) FROM 'c:\path_to_db\tbl_group_202501091557.csv' csv;
+
+delete from tbl_group_temp t
+where t.group_id = 'group_id';
+
+INSERT INTO tbl_group (
+	group_id,
+	group_name,
+	initial_credit,
+	initially_restricted,
+	schedule_period,
+	schedule_amount,
+	allow_accum,
+	max_accum_balance,
+	reset_statistics,
+	created_date,
+	created_by,
+	modified_date,
+	modified_by,
+	initial_settings_enabled,
+	modified_ticks
+)
+SELECT 
+	group_id::int8,
+	group_name,
+	initial_credit::float8,
+	initially_restricted::bpchar(1),
+	schedule_period,
+	schedule_amount::float8,
+	allow_accum::bpchar(1),
+	max_accum_balance::float8,
+	reset_statistics::bpchar(1),
+	created_date::timestamp,
+	created_by,
+	modified_date::timestamp,
+	modified_by,
+	initial_settings_enabled::bpchar(1),
+	modified_ticks::int8
+FROM tbl_group_temp;
+
+DROP TABLE IF EXISTS tbl_group_temp;
+
+CREATE INDEX ix_group_modified ON tbl_group USING btree (modified_ticks);
+CREATE INDEX ix_group_name ON tbl_group USING btree (group_name);
+
+
+-- tbl_group_attribute definition
+
+-- Drop table
+
+DROP TABLE IF EXISTS tbl_group_attribute;
+DROP TABLE IF EXISTS tbl_group_attribute_temp;
+
+CREATE TABLE tbl_group_attribute (
+	group_id int8 NOT NULL,
+	attrib_value varchar(255) NULL,
+	modified_ticks int8 NOT NULL,
+	propagate bpchar(1) NOT NULL,
+	attrib_name varchar(255) NOT NULL,
+	CONSTRAINT tbl_group_attribute_pkey PRIMARY KEY (group_id, attrib_name)
+);
+
+CREATE TABLE tbl_group_attribute_temp (
+	group_id varchar(30) NOT NULL,
+	attrib_value varchar(255) NULL,
+	modified_ticks varchar(30) NOT NULL,
+	propagate varchar(20) NOT NULL,
+	attrib_name varchar(255) NOT NULL
+);
+
+COPY tbl_group_attribute_temp (
+	group_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+) FROM 'c:\path_to_db\tbl_group_attribute_202501091558.csv' csv;
+
+delete from tbl_group_attribute_temp t
+where t.group_id = 'group_id';
+
+INSERT INTO tbl_group_attribute (
+	group_id,
+	attrib_value,
+	modified_ticks,
+	propagate,
+	attrib_name
+)
+SELECT 
+	group_id::int8,
+	attrib_value,
+	modified_ticks::int8,
+	propagate::bpchar(1),
+	attrib_name
+FROM tbl_group_attribute_temp;
+
+DROP TABLE IF EXISTS tbl_group_attribute_temp;
+
+CREATE INDEX ix_group_attribute_modified ON tbl_group_attribute USING btree (modified_ticks, propagate);
+
+
+-- tbl_group_attribute foreign keys
+
+ALTER TABLE tbl_group_attribute ADD CONSTRAINT fk_group_attribute FOREIGN KEY (group_id) REFERENCES tbl_group(group_id);
+
+
+
+=================================== 2025.01.21 =================================================================
+
+
+-- Table: public.tbl_account
+
+-- DROP TABLE IF EXISTS public.tbl_account;
+
+CREATE TABLE IF NOT EXISTS public.tbl_account
+(
+    account_id bigint NOT NULL,
+    account_type character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    account_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    balance double precision NOT NULL,
+    restricted character(1) COLLATE pg_catalog."default" NOT NULL,
+    overdraft double precision NOT NULL,
+    pin character varying(50) COLLATE pg_catalog."default",
+    use_global_overdraft character(1) COLLATE pg_catalog."default" NOT NULL,
+    notes character varying(2000) COLLATE pg_catalog."default",
+    deleted character(1) COLLATE pg_catalog."default" NOT NULL,
+    deleted_date timestamp without time zone,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    parent_id bigint,
+    account_name_lower character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    sub_name character varying(255) COLLATE pg_catalog."default",
+    sub_name_lower character varying(255) COLLATE pg_catalog."default",
+    disabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    disabled_until timestamp without time zone,
+    comments character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    invoicing character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    sub_pin character varying(50) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_account_pkey PRIMARY KEY (account_id),
+    CONSTRAINT fk_account_parent_account FOREIGN KEY (parent_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_account_modified;
+
+CREATE INDEX IF NOT EXISTS ix_account_modified
+    ON public.tbl_account USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_name_type
+
+-- DROP INDEX IF EXISTS public.ix_account_name_type;
+
+CREATE INDEX IF NOT EXISTS ix_account_name_type
+    ON public.tbl_account USING btree
+    (account_type COLLATE pg_catalog."default" ASC NULLS LAST, account_name_lower COLLATE pg_catalog."default" ASC NULLS LAST, sub_name_lower COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_parent_account
+
+-- DROP INDEX IF EXISTS public.ix_account_parent_account;
+
+CREATE INDEX IF NOT EXISTS ix_account_parent_account
+    ON public.tbl_account USING btree
+    (parent_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_pin
+
+-- DROP INDEX IF EXISTS public.ix_account_pin;
+
+CREATE INDEX IF NOT EXISTS ix_account_pin
+    ON public.tbl_account USING btree
+    (pin COLLATE pg_catalog."default" ASC NULLS LAST, sub_pin COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+
+-- Table: public.tbl_account_attribute
+
+-- DROP TABLE IF EXISTS public.tbl_account_attribute;
+
+CREATE TABLE IF NOT EXISTS public.tbl_account_attribute
+(
+    account_id bigint NOT NULL,
+    attrib_value character varying(255) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    attrib_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_account_attribute_pkey PRIMARY KEY (account_id, attrib_name),
+    CONSTRAINT fk_account_attribute FOREIGN KEY (account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_account_attribute_modified;
+
+CREATE INDEX IF NOT EXISTS ix_account_attribute_modified
+    ON public.tbl_account_attribute USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_account_group
+
+-- DROP TABLE IF EXISTS public.tbl_account_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_account_group
+(
+    account_group_id bigint NOT NULL,
+    group_id bigint NOT NULL,
+    account_id bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_account_group_pkey PRIMARY KEY (account_group_id),
+    CONSTRAINT fk_account_group_account FOREIGN KEY (account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_account_group_group FOREIGN KEY (group_id)
+        REFERENCES public.tbl_group (group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_account_group_account;
+
+CREATE INDEX IF NOT EXISTS ix_account_group_account
+    ON public.tbl_account_group USING btree
+    (account_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_group_group
+
+-- DROP INDEX IF EXISTS public.ix_account_group_group;
+
+CREATE INDEX IF NOT EXISTS ix_account_group_group
+    ON public.tbl_account_group USING btree
+    (group_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_group_modified
+
+-- DROP INDEX IF EXISTS public.ix_account_group_modified;
+
+CREATE INDEX IF NOT EXISTS ix_account_group_modified
+    ON public.tbl_account_group USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_account_transaction
+
+-- DROP TABLE IF EXISTS public.tbl_account_transaction;
+
+CREATE TABLE IF NOT EXISTS public.tbl_account_transaction
+(
+    account_transaction_id bigint NOT NULL,
+    transaction_date timestamp without time zone NOT NULL,
+    transacted_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    account_id bigint NOT NULL,
+    usage_log_type character varying(20) COLLATE pg_catalog."default",
+    usage_log_id bigint,
+    amount double precision NOT NULL,
+    balance double precision NOT NULL,
+    txn_comment character varying(255) COLLATE pg_catalog."default",
+    is_credit character(1) COLLATE pg_catalog."default" NOT NULL,
+    transaction_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    ext_device_id bigint,
+    CONSTRAINT tbl_account_transaction_pkey PRIMARY KEY (account_transaction_id),
+    CONSTRAINT fk_account_ext_device FOREIGN KEY (ext_device_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_account_transaction_account FOREIGN KEY (account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_account_ext_device;
+
+CREATE INDEX IF NOT EXISTS ix_account_ext_device
+    ON public.tbl_account_transaction USING btree
+    (ext_device_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_transaction_account
+
+-- DROP INDEX IF EXISTS public.ix_account_transaction_account;
+
+CREATE INDEX IF NOT EXISTS ix_account_transaction_account
+    ON public.tbl_account_transaction USING btree
+    (account_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_transaction_date
+
+-- DROP INDEX IF EXISTS public.ix_account_transaction_date;
+
+CREATE INDEX IF NOT EXISTS ix_account_transaction_date
+    ON public.tbl_account_transaction USING btree
+    (transaction_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_account_transaction_usage
+
+-- DROP INDEX IF EXISTS public.ix_account_transaction_usage;
+
+CREATE INDEX IF NOT EXISTS ix_account_transaction_usage
+    ON public.tbl_account_transaction USING btree
+    (usage_log_type COLLATE pg_catalog."default" ASC NULLS LAST, usage_log_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_job_log_journal
+
+-- DROP TABLE IF EXISTS public.tbl_job_log_journal;
+
+CREATE TABLE IF NOT EXISTS public.tbl_job_log_journal
+(
+    log_id bigint NOT NULL,
+    method_name character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_job_log_journal_pkey PRIMARY KEY (log_id)
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_method_name;
+
+CREATE INDEX IF NOT EXISTS ix_method_name
+    ON public.tbl_job_log_journal USING btree
+    (method_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_job_log_journal_payload
+
+-- DROP TABLE IF EXISTS public.tbl_job_log_journal_payload;
+
+CREATE TABLE IF NOT EXISTS public.tbl_job_log_journal_payload
+(
+    log_id bigint NOT NULL,
+    segment integer NOT NULL,
+    payload character varying(4000) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_job_log_journal_payload_pkey PRIMARY KEY (log_id, segment),
+    CONSTRAINT fk_tbl_job_log_journal_payload FOREIGN KEY (log_id)
+        REFERENCES public.tbl_job_log_journal (log_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- Table: public.tbl_user_email_address
+
+-- DROP TABLE IF EXISTS public.tbl_user_email_address;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_email_address
+(
+    user_email_address_id bigint NOT NULL,
+    user_id bigint,
+    email_address character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    email_status character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    verification_sent_time timestamp without time zone,
+    verification_code character varying(20) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_user_email_address_pkey PRIMARY KEY (user_email_address_id),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_email_verification_code;
+
+CREATE INDEX IF NOT EXISTS ix_email_verification_code
+    ON public.tbl_user_email_address USING btree
+    (verification_code COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_email_address
+
+-- DROP INDEX IF EXISTS public.ix_user_email_address;
+
+CREATE INDEX IF NOT EXISTS ix_user_email_address
+    ON public.tbl_user_email_address USING btree
+    (email_address COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- Table: public.tbl_user_field_history
+
+-- DROP TABLE IF EXISTS public.tbl_user_field_history;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_field_history
+(
+    user_field_history_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    field_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    field_value character varying(200) COLLATE pg_catalog."default",
+    start_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone NOT NULL,
+    CONSTRAINT tbl_user_field_history_pkey PRIMARY KEY (user_field_history_id),
+    CONSTRAINT fk_user_field_history_user FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_user_field_history;
+
+CREATE INDEX IF NOT EXISTS ix_user_field_history
+    ON public.tbl_user_field_history USING btree
+    (user_id ASC NULLS LAST, field_type COLLATE pg_catalog."default" ASC NULLS LAST, field_value COLLATE pg_catalog."default" ASC NULLS LAST, start_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- Table: public.tbl_user_group
+
+-- DROP TABLE IF EXISTS public.tbl_user_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_group
+(
+    user_group_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    group_id bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_user_group_pkey PRIMARY KEY (user_group_id),
+    CONSTRAINT fk_user_group_group FOREIGN KEY (group_id)
+        REFERENCES public.tbl_group (group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_user_group_user FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_user_group_group;
+
+CREATE INDEX IF NOT EXISTS ix_user_group_group
+    ON public.tbl_user_group USING btree
+    (group_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_group_modified
+
+-- DROP INDEX IF EXISTS public.ix_user_group_modified;
+
+CREATE INDEX IF NOT EXISTS ix_user_group_modified
+    ON public.tbl_user_group USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_group_user
+
+-- DROP INDEX IF EXISTS public.ix_user_group_user;
+
+CREATE INDEX IF NOT EXISTS ix_user_group_user
+    ON public.tbl_user_group USING btree
+    (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_audit_log
+
+-- DROP TABLE IF EXISTS public.tbl_audit_log;
+
+CREATE TABLE IF NOT EXISTS public.tbl_audit_log
+(
+    audit_log_id bigint NOT NULL,
+    action character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    entity_type character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    entity_id bigint NOT NULL,
+    entity_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    property_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    previous_value character varying(1000) COLLATE pg_catalog."default",
+    modified_value character varying(1000) COLLATE pg_catalog."default",
+    modified_by_id bigint NOT NULL,
+    modified_by_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_audit_log_pkey PRIMARY KEY (audit_log_id)
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_audit_log_action;
+
+CREATE INDEX IF NOT EXISTS ix_audit_log_action
+    ON public.tbl_audit_log USING btree
+    (action COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_audit_log_date
+
+-- DROP INDEX IF EXISTS public.ix_audit_log_date;
+
+CREATE INDEX IF NOT EXISTS ix_audit_log_date
+    ON public.tbl_audit_log USING btree
+    (modified_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_printer_group
+
+-- DROP TABLE IF EXISTS public.tbl_printer_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_printer_group
+(
+    printer_group_id bigint NOT NULL,
+    group_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    display_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_printer_group_pkey PRIMARY KEY (printer_group_id),
+    CONSTRAINT tbl_printer_group_display_name_key UNIQUE (display_name),
+    CONSTRAINT tbl_printer_group_group_name_key UNIQUE (group_name)
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_printer_group_modified;
+
+CREATE INDEX IF NOT EXISTS ix_printer_group_modified
+    ON public.tbl_printer_group USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_group_name
+
+-- DROP INDEX IF EXISTS public.ix_printer_group_name;
+
+CREATE INDEX IF NOT EXISTS ix_printer_group_name
+    ON public.tbl_printer_group USING btree
+    (group_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_printer_printer_group
+
+-- DROP TABLE IF EXISTS public.tbl_printer_printer_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_printer_printer_group
+(
+    printer_id bigint NOT NULL,
+    printer_group_id bigint NOT NULL,
+    CONSTRAINT tbl_printer_printer_group_pkey PRIMARY KEY (printer_id, printer_group_id),
+    CONSTRAINT fk_printer_printer_group_grp FOREIGN KEY (printer_group_id)
+        REFERENCES public.tbl_printer_group (printer_group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_printer_group_prnt FOREIGN KEY (printer_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- Table: public.tbl_print_hardware_check
+
+-- DROP TABLE IF EXISTS public.tbl_print_hardware_check;
+
+CREATE TABLE IF NOT EXISTS public.tbl_print_hardware_check
+(
+    print_hardware_check_id bigint NOT NULL,
+    check_date timestamp without time zone NOT NULL,
+    status character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    check_method character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    check_message character varying(255) COLLATE pg_catalog."default",
+    check_total_pages integer NOT NULL,
+    check_color_pages integer NOT NULL,
+    check_cost double precision NOT NULL,
+    orig_total_pages integer NOT NULL,
+    orig_color_pages integer NOT NULL,
+    orig_color_pages_estimated character(1) COLLATE pg_catalog."default" NOT NULL,
+    orig_cost double precision NOT NULL,
+    adjustment_applied_date timestamp without time zone,
+    adjustment_applied_by character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_print_hardware_check_pkey PRIMARY KEY (print_hardware_check_id)
+)
+
+TABLESPACE pg_default;
+
+-- Table: public.tbl_refund_request
+
+-- DROP TABLE IF EXISTS public.tbl_refund_request;
+
+CREATE TABLE IF NOT EXISTS public.tbl_refund_request
+(
+    refund_request_id bigint NOT NULL,
+    request_date timestamp without time zone NOT NULL,
+    status character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    request_user_id bigint,
+    request_reason character varying(1000) COLLATE pg_catalog."default",
+    request_amount double precision NOT NULL,
+    response_date timestamp without time zone,
+    response_username character varying(255) COLLATE pg_catalog."default",
+    response_reason character varying(1000) COLLATE pg_catalog."default",
+    refunded_amount double precision,
+    CONSTRAINT tbl_refund_request_pkey PRIMARY KEY (refund_request_id),
+    CONSTRAINT fk_refund_request_user FOREIGN KEY (request_user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_refund_request_date;
+
+CREATE INDEX IF NOT EXISTS ix_refund_request_date
+    ON public.tbl_refund_request USING btree
+    (request_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_refund_request_status
+
+-- DROP INDEX IF EXISTS public.ix_refund_request_status;
+
+CREATE INDEX IF NOT EXISTS ix_refund_request_status
+    ON public.tbl_refund_request USING btree
+    (status COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_refund_request_user
+
+-- DROP INDEX IF EXISTS public.ix_refund_request_user;
+
+CREATE INDEX IF NOT EXISTS ix_refund_request_user
+    ON public.tbl_refund_request USING btree
+    (request_user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- Table: public.tbl_printer_usage_log
+
+-- DROP TABLE IF EXISTS public.tbl_printer_usage_log;
+
+CREATE TABLE IF NOT EXISTS public.tbl_printer_usage_log
+(
+    printer_usage_log_id bigint NOT NULL,
+    usage_date timestamp without time zone NOT NULL,
+    usage_day timestamp without time zone NOT NULL,
+    used_by_user_id bigint NOT NULL,
+    charged_to_account_id bigint NOT NULL,
+    usage_cost double precision NOT NULL,
+    usage_allowed character(1) COLLATE pg_catalog."default" NOT NULL,
+    printer_id bigint NOT NULL,
+    original_printer_id bigint,
+    job_id character varying(255) COLLATE pg_catalog."default",
+    document_name character varying(255) COLLATE pg_catalog."default",
+    client_machine character varying(255) COLLATE pg_catalog."default",
+    total_pages integer NOT NULL,
+    total_sheets integer NOT NULL,
+    copies integer NOT NULL,
+    paper_size character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    paper_height_mm integer NOT NULL,
+    paper_width_mm integer NOT NULL,
+    printer_language character varying(50) COLLATE pg_catalog."default",
+    document_size_kb integer NOT NULL,
+    denied_reason character varying(30) COLLATE pg_catalog."default",
+    duplex character(1) COLLATE pg_catalog."default" NOT NULL,
+    gray_scale character(1) COLLATE pg_catalog."default" NOT NULL,
+    printed character(1) COLLATE pg_catalog."default" NOT NULL,
+    cancelled character(1) COLLATE pg_catalog."default" NOT NULL,
+    refunded character(1) COLLATE pg_catalog."default" NOT NULL,
+    assoc_with_account_id bigint NOT NULL,
+    total_color_pages integer NOT NULL,
+    color_pages_estimated character(1) COLLATE pg_catalog."default" NOT NULL,
+    job_type character varying(10) COLLATE pg_catalog."default",
+    invoiced character(1) COLLATE pg_catalog."default" NOT NULL,
+    job_comment character varying(255) COLLATE pg_catalog."default",
+    protocol character varying(20) COLLATE pg_catalog."default",
+    original_usage_cost double precision NOT NULL,
+    refund_status character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    refund_request_id bigint,
+    replayed character(1) COLLATE pg_catalog."default" NOT NULL,
+    signature character varying(50) COLLATE pg_catalog."default",
+    hardware_check_status character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    hardware_check_id bigint,
+    job_uid character varying(40) COLLATE pg_catalog."default",
+    archive_path character varying(30) COLLATE pg_catalog."default",
+    duplex_pages integer NOT NULL,
+    offline_usage character(1) COLLATE pg_catalog."default" NOT NULL,
+    print_queue_id bigint,
+    scan_action_id bigint,
+    CONSTRAINT tbl_printer_usage_log_pkey PRIMARY KEY (printer_usage_log_id),
+    CONSTRAINT fk_printer_usage_log_account FOREIGN KEY (charged_to_account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_assoc_account FOREIGN KEY (assoc_with_account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_hw_check FOREIGN KEY (hardware_check_id)
+        REFERENCES public.tbl_print_hardware_check (print_hardware_check_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_ornl_pri FOREIGN KEY (original_printer_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_print_queue FOREIGN KEY (print_queue_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_printer FOREIGN KEY (printer_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_ref_req FOREIGN KEY (refund_request_id)
+        REFERENCES public.tbl_refund_request (refund_request_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_printer_usage_log_user FOREIGN KEY (used_by_user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_print_hw_check_status;
+
+CREATE INDEX IF NOT EXISTS ix_print_hw_check_status
+    ON public.tbl_printer_usage_log USING btree
+    (hardware_check_status COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_account
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_account;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_account
+    ON public.tbl_printer_usage_log USING btree
+    (charged_to_account_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_assoc_account
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_assoc_account;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_assoc_account
+    ON public.tbl_printer_usage_log USING btree
+    (assoc_with_account_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_date
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_date;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_date
+    ON public.tbl_printer_usage_log USING btree
+    (usage_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_hw_check
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_hw_check;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_hw_check
+    ON public.tbl_printer_usage_log USING btree
+    (hardware_check_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_job_id
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_job_id;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_job_id
+    ON public.tbl_printer_usage_log USING btree
+    (job_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_job_uid
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_job_uid;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_job_uid
+    ON public.tbl_printer_usage_log USING btree
+    (job_uid COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_print_queue
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_print_queue;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_print_queue
+    ON public.tbl_printer_usage_log USING btree
+    (print_queue_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_printer
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_printer;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_printer
+    ON public.tbl_printer_usage_log USING btree
+    (printer_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_ref_req
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_ref_req;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_ref_req
+    ON public.tbl_printer_usage_log USING btree
+    (refund_request_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_signature
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_signature;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_signature
+    ON public.tbl_printer_usage_log USING btree
+    (signature COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_usage_log_user
+
+-- DROP INDEX IF EXISTS public.ix_printer_usage_log_user;
+
+CREATE INDEX IF NOT EXISTS ix_printer_usage_log_user
+    ON public.tbl_printer_usage_log USING btree
+    (used_by_user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_net_usage_log
+
+-- DROP TABLE IF EXISTS public.tbl_net_usage_log;
+
+CREATE TABLE IF NOT EXISTS public.tbl_net_usage_log
+(
+    net_usage_log_id bigint NOT NULL,
+    usage_date timestamp without time zone NOT NULL,
+    usage_day timestamp without time zone NOT NULL,
+    used_by_user_id bigint NOT NULL,
+    usage_cost double precision NOT NULL,
+    hours_used double precision NOT NULL,
+    megabytes_received double precision NOT NULL,
+    megabytes_sent double precision NOT NULL,
+    cached_megabytes_received double precision NOT NULL,
+    CONSTRAINT tbl_net_usage_log_pkey PRIMARY KEY (net_usage_log_id),
+    CONSTRAINT fk_net_usage_log_user FOREIGN KEY (used_by_user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_net_usage_log_date;
+
+CREATE INDEX IF NOT EXISTS ix_net_usage_log_date
+    ON public.tbl_net_usage_log USING btree
+    (usage_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_net_usage_log_day
+
+-- DROP INDEX IF EXISTS public.ix_net_usage_log_day;
+
+CREATE INDEX IF NOT EXISTS ix_net_usage_log_day
+    ON public.tbl_net_usage_log USING btree
+    (usage_day ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_net_usage_log_user
+
+-- DROP INDEX IF EXISTS public.ix_net_usage_log_user;
+
+CREATE INDEX IF NOT EXISTS ix_net_usage_log_user
+    ON public.tbl_net_usage_log USING btree
+    (used_by_user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_application_log
+
+-- DROP TABLE IF EXISTS public.tbl_application_log;
+
+CREATE TABLE IF NOT EXISTS public.tbl_application_log
+(
+    application_log_id bigint NOT NULL,
+    log_date timestamp without time zone NOT NULL,
+    server_name character varying(255) COLLATE pg_catalog."default",
+    log_level character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    message character varying(2000) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_application_log_pkey PRIMARY KEY (application_log_id)
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_application_log_date;
+
+CREATE INDEX IF NOT EXISTS ix_application_log_date
+    ON public.tbl_application_log USING btree
+    (log_date ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_application_log_level
+
+-- DROP INDEX IF EXISTS public.ix_application_log_level;
+
+CREATE INDEX IF NOT EXISTS ix_application_log_level
+    ON public.tbl_application_log USING btree
+    (log_level COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_application_property
+
+-- DROP TABLE IF EXISTS public.tbl_application_property;
+
+CREATE TABLE IF NOT EXISTS public.tbl_application_property
+(
+    property_name character varying(190) COLLATE pg_catalog."default" NOT NULL,
+    property_value character varying(4000) COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.idx_property_name;
+
+CREATE INDEX IF NOT EXISTS idx_property_name
+    ON public.tbl_application_property USING btree
+    (property_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_config
+
+-- DROP TABLE IF EXISTS public.tbl_config;
+
+CREATE TABLE IF NOT EXISTS public.tbl_config
+(
+    property_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    property_value character varying(1000) COLLATE pg_catalog."default",
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_config_pkey PRIMARY KEY (property_name)
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_config_modified;
+
+CREATE INDEX IF NOT EXISTS ix_config_modified
+    ON public.tbl_config USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_databasechangelog
+
+-- DROP TABLE IF EXISTS public.tbl_databasechangelog;
+
+CREATE TABLE IF NOT EXISTS public.tbl_databasechangelog
+(
+    id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    author character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    filename character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    dateexecuted timestamp without time zone NOT NULL,
+    orderexecuted integer NOT NULL,
+    exectype character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    md5sum character varying(35) COLLATE pg_catalog."default",
+    description character varying(255) COLLATE pg_catalog."default",
+    comments character varying(255) COLLATE pg_catalog."default",
+    tag character varying(255) COLLATE pg_catalog."default",
+    liquibase character varying(20) COLLATE pg_catalog."default",
+    contexts character varying(255) COLLATE pg_catalog."default",
+    labels character varying(255) COLLATE pg_catalog."default",
+    deployment_id character varying(10) COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+
+-- Table: public.tbl_databasechangeloglock
+
+-- DROP TABLE IF EXISTS public.tbl_databasechangeloglock;
+
+CREATE TABLE IF NOT EXISTS public.tbl_databasechangeloglock
+(
+    id integer NOT NULL,
+    locked boolean NOT NULL,
+    lockgranted timestamp without time zone,
+    lockedby character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_databasechangeloglock_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+
+-- Table: public.tbl_dept_info
+
+-- DROP TABLE IF EXISTS public.tbl_dept_info;
+
+CREATE TABLE IF NOT EXISTS public.tbl_dept_info
+(
+    dept_id character varying(36) COLLATE pg_catalog."default" NOT NULL DEFAULT uuid_generate_v4(),
+    dept_name character varying(255) COLLATE pg_catalog."default",
+    security_group_name character varying(255) COLLATE pg_catalog."default" DEFAULT '일반'::character varying,
+    CONSTRAINT tbl_dept_info_pkey PRIMARY KEY (dept_id)
+)
+
+TABLESPACE pg_default;
+
+
+-- Table: public.tbl_ha_active_server
+
+-- DROP TABLE IF EXISTS public.tbl_ha_active_server;
+
+CREATE TABLE IF NOT EXISTS public.tbl_ha_active_server
+(
+    active character varying(256) COLLATE pg_catalog."default",
+    last_update timestamp without time zone
+)
+
+
+

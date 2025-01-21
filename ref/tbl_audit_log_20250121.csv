@@ -1,0 +1,64 @@
+9009,UPDATE,User,2202,d000019,2025-01-19 16:06:24.945,auto-release-jobs,"",N,0,admin
+9010,UPDATE,User,2202,d000019,2025-01-19 16:06:24.959,dont-apply-printer-filter-rules,"",N,0,admin
+9011,UPDATE,User,2202,d000019,2025-01-19 16:06:24.96,can-charge-printing-to-account-from-list,"",Y,0,admin
+9012,UPDATE,User,2202,d000019,2025-01-19 16:06:24.961,dont-hold-jobs-in-release-station,"",N,0,admin
+9013,UPDATE,User,2202,d000019,2025-01-19 16:06:24.962,card-pin,**********,**********,0,admin
+9014,UPDATE,User,2202,d000019,2025-01-19 16:06:24.962,apply-printer-cost-adjustment-rate,"",N,0,admin
+9015,UPDATE,User,2202,d000019,2025-01-19 16:06:24.963,can-charge-printing-to-account-with-pin,"",Y,0,admin
+9018,UPDATE,User,2202,d000019,2025-01-19 16:06:24.965,can-charge-printing-to-personal-account,"",Y,0,admin
+9016,UPDATE,User,2202,d000019,2025-01-19 16:06:24.963,dont-archive,"",N,0,admin
+9017,UPDATE,User,2202,d000019,2025-01-19 16:06:24.964,override-printer-level-settings,"",N,0,admin
+9019,UPDATE,User,2202,d000019,2025-01-19 16:06:24.966,printer-cost-adjustment-rate-percent,"",0.0,0,admin
+9020,UPDATE,User,2202,d000019,2025-01-19 16:06:24.966,unauthenticated,"",N,0,admin
+9021,UPDATE,User,2202,d000019,2025-01-19 16:06:24.967,can-charge-printing-to-other-users,"",N,0,admin
+9022,UPDATE,User,2202,d000019,2025-01-19 16:06:24.974,notes,"",참조,0,admin
+9023,UPDATE,User,2202,d000019,2025-01-19 16:06:24.974,office,"",사무실,0,admin
+9024,UPDATE,User,2202,d000019,2025-01-19 16:06:24.974,cardNumber,"",12345678,0,admin
+9025,UPDATE,User,2202,d000019,2025-01-19 16:06:24.974,cardNumber2,"",87654321,0,admin
+9026,UPDATE,User,2202,d000019,2025-01-19 16:40:09.262,balance,0.0,250.0,0,admin
+9027,UPDATE,User,2202,d000019,2025-01-19 16:40:16.376,balance,250.0,500.0,0,admin
+9028,UPDATE,User,1004,170321,2025-01-21 15:44:28.286,balance,0.0,1000.0,0,admin
+8421,CREATE,User,2402,d190896,2024-12-26 22:28:14.568,deleted,"",false,0,[system] (api)
+8422,CREATE,User,2402,d190896,2024-12-26 22:28:14.568,disabledPrinting,"",false,0,[system] (api)
+8423,CREATE,User,2402,d190896,2024-12-26 22:28:14.568,scanActionLinks,"",[],0,[system] (api)
+8424,UPDATE,User,2402,d190896,2024-12-26 22:28:16.433,internal-password,**********,**********,0,[system] (api)
+8425,CREATE,User,2402,d190896,2024-12-26 22:28:16.453,accountType,"",USER,0,[system] (api)
+8426,CREATE,User,2402,d190896,2024-12-26 22:28:16.453,balance,"",0.0,0,[system] (api)
+8427,CREATE,User,2402,d190896,2024-12-26 22:28:16.453,restricted,"",true,0,[system] (api)
+8428,CREATE,User,2402,d190896,2024-12-26 22:28:16.453,overdraft,"",0.0,0,[system] (api)
+8429,CREATE,User,2402,d190896,2024-12-26 22:28:16.453,useGlobalOverdraft,"",true,0,[system] (api)
+8430,UPDATE,User,2402,d190896,2024-12-26 22:28:16.458,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system] (api)
+8431,UPDATE,User,2402,d190896,2024-12-26 22:28:16.506,restricted,true,false,0,[system] (api)
+8432,UPDATE,User,2402,d190896,2024-12-26 22:28:16.527,fullName,"",박성태,0,[system] (api)
+8433,UPDATE,User,2402,d190896,2024-12-26 22:28:16.527,email,"",d190896@kbfg.com,0,[system] (api)
+8434,CREATE,User,2403,administrator,2025-01-08 00:55:00.396,deleted,"",false,0,[system]
+8435,CREATE,User,2403,administrator,2025-01-08 00:55:00.396,disabledPrinting,"",false,0,[system]
+8436,CREATE,User,2403,administrator,2025-01-08 00:55:00.396,scanActionLinks,"",[],0,[system]
+8437,CREATE,User,2403,administrator,2025-01-08 00:55:00.396,primaryUserSourceType,"",WIN_STD,0,[system]
+8438,CREATE,User,2404,defaultaccount,2025-01-08 00:55:00.551,deleted,"",false,0,[system]
+8439,CREATE,User,2404,defaultaccount,2025-01-08 00:55:00.551,disabledPrinting,"",false,0,[system]
+8440,CREATE,User,2404,defaultaccount,2025-01-08 00:55:00.551,scanActionLinks,"",[],0,[system]
+8441,CREATE,User,2404,defaultaccount,2025-01-08 00:55:00.551,primaryUserSourceType,"",WIN_STD,0,[system]
+8442,CREATE,User,2405,guest,2025-01-08 00:55:00.555,deleted,"",false,0,[system]
+8443,CREATE,User,2405,guest,2025-01-08 00:55:00.555,disabledPrinting,"",false,0,[system]
+8444,CREATE,User,2405,guest,2025-01-08 00:55:00.555,scanActionLinks,"",[],0,[system]
+8445,CREATE,User,2405,guest,2025-01-08 00:55:00.555,primaryUserSourceType,"",WIN_STD,0,[system]
+8446,CREATE,User,2406,spacesoft,2025-01-08 00:55:00.56,deleted,"",false,0,[system]
+8447,CREATE,User,2406,spacesoft,2025-01-08 00:55:00.56,disabledPrinting,"",false,0,[system]
+8448,CREATE,User,2406,spacesoft,2025-01-08 00:55:00.56,scanActionLinks,"",[],0,[system]
+8449,CREATE,User,2406,spacesoft,2025-01-08 00:55:00.56,primaryUserSourceType,"",WIN_STD,0,[system]
+8450,CREATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.564,deleted,"",false,0,[system]
+8451,CREATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.564,disabledPrinting,"",false,0,[system]
+8452,CREATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.564,scanActionLinks,"",[],0,[system]
+8453,CREATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.564,primaryUserSourceType,"",WIN_STD,0,[system]
+8454,UPDATE,User,2403,administrator,2025-01-08 00:55:00.715,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system]
+8455,UPDATE,User,2403,administrator,2025-01-08 00:55:00.757,restricted,true,false,0,[system]
+8456,UPDATE,User,2404,defaultaccount,2025-01-08 00:55:00.768,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system]
+8457,UPDATE,User,2404,defaultaccount,2025-01-08 00:55:00.771,restricted,true,false,0,[system]
+8458,UPDATE,User,2405,guest,2025-01-08 00:55:00.775,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system]
+8459,UPDATE,User,2405,guest,2025-01-08 00:55:00.801,unauthenticated,"",Y,0,[system]
+8460,UPDATE,User,2405,guest,2025-01-08 00:55:00.802,restricted,true,false,0,[system]
+8461,UPDATE,User,2406,spacesoft,2025-01-08 00:55:00.807,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system]
+8462,UPDATE,User,2406,spacesoft,2025-01-08 00:55:00.809,restricted,true,false,0,[system]
+8463,UPDATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.815,print-account-selection-mode,"",AUTO_CHARGE_TO_PERSONAL_ACCOUNT,0,[system]
+8464,UPDATE,User,2407,wdagutilityaccount,2025-01-08 00:55:00.817,restricted,true,false,0,[system]

@@ -1,0 +1,1029 @@
+system.schema-version,40,2024-10-19 12:32:47.684,[system],2024-12-08 17:09:32.651,[system],1733645372651,N
+license.install-datestamp,1733583600000:31929eda17c10f7a0961e567984716a0,2024-10-19 12:32:47.712,[system],2024-12-08 17:09:45.834,[system],1733645385834,N
+user.web.custom-links.enabled,N,2024-12-08 17:09:32.471,[system],2024-12-08 17:09:32.471,[system],1733645372471,Y
+system.scan.fax.contact.command-args,contact list --global-settings %settings% --contact-settings %contact_settings%,2024-12-08 17:09:32.478,[system],2024-12-08 17:09:32.478,[system],1733645372478,Y
+auth.account-api.enabled,N,2024-12-08 17:09:32.479,[system],2024-12-08 17:09:32.479,[system],1733645372479,Y
+reports.pdf-char-encoding,"",2024-12-08 17:09:32.479,[system],2024-12-08 17:09:32.479,[system],1733645372479,Y
+ldap.schema.user-full-name-field,"",2024-12-08 17:09:32.48,[system],2024-12-08 17:09:32.48,[system],1733645372480,Y
+system.log.default.keep-mb,100,2024-12-08 17:09:32.48,[system],2024-12-08 17:09:32.48,[system],1733645372480,Y
+internal-users.auto-gen-card-id-num-length,6,2024-12-08 17:09:32.48,[system],2024-12-08 17:09:32.48,[system],1733645372480,Y
+system.site.unknown-offline-username,unknown,2024-12-08 17:09:32.481,[system],2024-12-08 17:09:32.481,[system],1733645372481,Y
+fleet-deploy.app.devices,0,2024-12-08 17:09:32.481,[system],2024-12-08 17:09:32.481,[system],1733645372481,N
+web.error-page.include-diagnostics.system-info,N,2024-12-08 17:09:32.481,[system],2024-12-08 17:09:32.481,[system],1733645372481,Y
+system.site.register-http-timeout-secs,"",2024-12-08 17:09:32.481,[system],2024-12-08 17:09:32.481,[system],1733645372481,Y
+system.scan.delivery.custom-dispatcher.pool-size,24,2024-12-08 17:09:32.482,[system],2024-12-08 17:09:32.482,[system],1733645372482,Y
+ldap.2.admin-dn,"",2024-12-08 17:09:32.482,[system],2024-12-08 17:09:32.482,[system],1733645372482,Y
+ext-device.soap.ssl.bind-network-address,"",2024-12-08 17:09:32.484,[system],2024-12-08 17:09:32.484,[system],1733645372484,Y
+system.network-address,"",2024-12-08 17:09:32.487,[system],2024-12-08 17:09:32.487,[system],1733645372487,Y
+display.login-showing-forgot-link-text,Y,2024-12-08 17:09:32.489,[system],2024-12-08 17:09:32.489,[system],1733645372489,Y
+archiving.images.full-size.height-px,3000,2024-12-08 17:09:32.49,[system],2024-12-08 17:09:32.49,[system],1733645372490,Y
+release-station.released-job-processing-timeout-secs,DEFAULT,2024-12-08 17:09:32.491,[system],2024-12-08 17:09:32.491,[system],1733645372491,Y
+system.site.register-interval-secs,"",2024-12-08 17:09:32.491,[system],2024-12-08 17:09:32.491,[system],1733645372491,Y
+ldap.2.schema.user-name-search,"",2024-12-08 17:09:32.492,[system],2024-12-08 17:09:32.492,[system],1733645372492,Y
+mobile-release.max-popular-printers,3,2024-12-08 17:09:32.493,[system],2024-12-08 17:09:32.493,[system],1733645372493,Y
+ldap.schema.group-member-field,"",2024-12-08 17:09:32.493,[system],2024-12-08 17:09:32.493,[system],1733645372493,Y
+system.scan.cloud-max-job-size-kb,204800,2024-12-08 17:09:32.493,[system],2024-12-08 17:09:32.493,[system],1733645372493,Y
+system.scan.fax.test.options,-o count=3 -o name-length=13,2024-12-08 17:09:32.494,[system],2024-12-08 17:09:32.494,[system],1733645372494,Y
+account.sync.import-subdirectories,N,2024-12-08 17:09:32.494,[system],2024-12-08 17:09:32.494,[system],1733645372494,Y
+archiving.images.creator.pages-to-initially-image,4,2024-12-08 17:09:32.495,[system],2024-12-08 17:09:32.495,[system],1733645372495,Y
+web-login.admin.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.495,[system],2024-12-08 17:09:32.495,[system],1733645372495,Y
+email-printing.enabled,N,2024-12-08 17:09:32.495,[system],2024-12-08 17:09:32.495,[system],1733645372495,Y
+scan.stats.total.jobs,0,2024-12-08 17:09:32.496,[system],2024-12-08 17:09:32.496,[system],1733645372496,N
+system.log.keep-mb,2048,2024-12-08 17:09:32.496,[system],2024-12-08 17:09:32.496,[system],1733645372496,Y
+notify.smtp.outlook-has-admin-consent,N,2024-12-08 17:09:32.496,[system],2024-12-08 17:09:32.496,[system],1733645372496,Y
+ldap.schema.user-office-field,"",2024-12-08 17:09:32.496,[system],2024-12-08 17:09:32.496,[system],1733645372496,Y
+notify.smtp.port,25,2024-12-08 17:09:32.497,[system],2024-12-08 17:09:32.497,[system],1733645372497,Y
+internal-users.confirmation-email.enable,Y,2024-12-08 17:09:32.497,[system],2024-12-08 17:09:32.497,[system],1733645372497,Y
+webdav.server.password,Nu8RrQxYkIeXWaMKwN8oxsWKDI2HSHgKY9AEsFzt1gd8a5exr1uqtflV5kELY4u,2024-12-08 17:09:32.497,[system],2024-12-08 17:09:55.312,[system],1733645395312,Y
+ui-tour.print-deploy-hint.enabled,N,2024-12-08 17:09:32.497,[system],2024-12-08 17:09:32.497,[system],1733645372497,Y
+user.release-station.enable,Y,2024-12-08 17:09:32.498,[system],2024-12-08 17:09:32.498,[system],1733645372498,Y
+account.pin-search.allow-sub-pin-match,Y,2024-12-08 17:09:32.498,[system],2024-12-08 17:09:32.498,[system],1733645372498,Y
+ext-device.toshiba.eraser.total-reused-sheets,0,2024-12-08 17:09:32.498,[system],2024-12-08 17:09:32.498,[system],1733645372498,N
+user-auth-token.token-expiration-mins,DEFAULT,2024-12-08 17:09:32.499,[system],2024-12-08 17:09:32.499,[system],1733645372499,Y
+dashboard.gadget.whats-next.show,Y,2024-12-08 17:09:32.499,[system],2024-12-08 17:09:32.499,[system],1733645372499,Y
+print.signature.hmac-key,"",2024-12-08 17:09:32.499,[system],2024-12-08 17:09:32.499,[system],1733645372499,Y
+user-source.ad.group-ou-filter,"",2024-12-08 17:09:32.5,[system],2024-12-08 17:09:32.5,[system],1733645372500,Y
+user-source.2.update-user-details-card-id,N,2024-12-08 17:09:32.5,[system],2024-12-08 17:09:32.5,[system],1733645372500,Y
+virtual-queue.naming.keyword,virtual,2024-12-08 17:09:32.5,[system],2024-12-08 17:09:32.5,[system],1733645372500,Y
+email-printing.ms-imap-oauth.application-id,"",2024-12-08 17:09:32.5,[system],2024-12-08 17:09:32.5,[system],1733645372500,Y
+user-source.group-list-override-file,N,2024-12-08 17:09:32.501,[system],2024-12-08 17:09:32.501,[system],1733645372501,Y
+email-printing.ms-imap-oauth.refresh-token,"",2024-12-08 17:09:32.501,[system],2024-12-08 17:09:32.501,[system],1733645372501,Y
+print.long-hold-time-secs,-1,2024-12-08 17:09:32.501,[system],2024-12-08 17:09:32.501,[system],1733645372501,Y
+system.site.sync-client-timeout-secs,"",2024-12-08 17:09:32.502,[system],2024-12-08 17:09:32.502,[system],1733645372502,Y
+client.config.show-document-cost,Y,2024-12-08 17:09:32.502,[system],2024-12-08 17:09:32.502,[system],1733645372502,Y
+web-print.create-new-job-per-copy,DEFAULT,2024-12-08 17:09:32.502,[system],2024-12-08 17:09:32.502,[system],1733645372502,Y
+user.card-id-min-length,1,2024-12-08 17:09:32.502,[system],2024-12-08 17:09:32.502,[system],1733645372502,Y
+system.job-replay-use-pending-balances,Y,2024-12-08 17:09:32.503,[system],2024-12-08 17:09:32.503,[system],1733645372503,Y
+user.refund-request.policy,All refund requests may be reviewed by the administrator.,2024-12-08 17:09:32.494,[system],2025-01-07 14:41:12.573,admin,1736228472573,Y
+notify.refund-requests.action.user.subject,Printing refund request actioned,2024-12-08 17:09:32.478,[system],2025-01-07 14:41:12.576,admin,1736228472576,Y
+web-print.max-copies,10,2024-12-08 17:09:32.503,[system],2024-12-08 17:09:32.503,[system],1733645372503,Y
+system.job-replay-limit-synchronous,"",2024-12-08 17:09:32.503,[system],2024-12-08 17:09:32.503,[system],1733645372503,Y
+auth.web-login.start-page-override.user,"",2024-12-08 17:09:32.504,[system],2024-12-08 17:09:32.504,[system],1733645372504,Y
+print-provider.throttle-thread-db-ratio,DEFAULT,2024-12-08 17:09:32.504,[system],2024-12-08 17:09:32.504,[system],1733645372504,Y
+client.config.link-text,"",2024-12-08 17:09:32.504,[system],2024-12-08 17:09:32.504,[system],1733645372504,Y
+notify.secs-before-delete-held-job,300,2024-12-08 17:09:32.504,[system],2024-12-08 17:09:32.504,[system],1733645372504,Y
+ext-device.card-self-association.auth.allow-password-or-pin,N,2024-12-08 17:09:32.505,[system],2024-12-08 17:09:32.505,[system],1733645372505,Y
+auth.web-login.google-sign-in.enabled,N,2024-12-08 17:09:32.505,[system],2024-12-08 17:09:32.505,[system],1733645372505,Y
+email-printing.password,"",2024-12-08 17:09:32.505,[system],2024-12-08 17:09:32.505,[system],1733645372505,Y
+client.config.link-url,"",2024-12-08 17:09:32.506,[system],2024-12-08 17:09:32.506,[system],1733645372506,Y
+ext-device.konica-minolta.models-w-optional-username-field,"",2024-12-08 17:09:32.506,[system],2024-12-08 17:09:32.506,[system],1733645372506,Y
+email-printing.ms-imap-oauth.expires-in,0,2024-12-08 17:09:32.506,[system],2024-12-08 17:09:32.506,[system],1733645372506,Y
+user.security.ip-rate-limit-per-min,DEFAULT,2024-12-08 17:09:32.506,[system],2024-12-08 17:09:32.506,[system],1733645372506,Y
+environment.watt-hours-per-sheet,47.71,2024-12-08 17:09:32.507,[system],2024-12-08 17:09:32.507,[system],1733645372507,Y
+release-station.maintain-order-on-print,Y,2024-12-08 17:09:32.507,[system],2024-12-08 17:09:32.507,[system],1733645372507,Y
+printer.snmp.community,"",2024-12-08 17:09:32.507,[system],2024-12-08 17:09:32.507,[system],1733645372507,Y
+schedule.hourly,0 0 * * * ?,2024-12-08 17:09:32.507,[system],2024-12-08 17:09:32.507,[system],1733645372507,Y
+system.install-id,71489530-1c1f-4cd2-94bd-61b78b4e616f,2024-12-08 17:09:32.508,[system],2024-12-08 17:09:46.311,[system],1733645386311,N
+system.site.database-sync-ticks,0,2024-12-08 17:09:32.508,[system],2024-12-08 17:09:32.508,[system],1733645372508,N
+system.scan.docproc.deskew,N,2024-12-08 17:09:32.508,[system],2024-12-08 17:09:32.508,[system],1733645372508,Y
+system.site.last-non-propagate-upload-ticks,0,2024-12-08 17:09:32.508,[system],2024-12-08 17:09:32.508,[system],1733645372508,N
+user.refund-requests.enable,N,2024-12-08 17:09:32.509,[system],2024-12-08 17:09:32.509,[system],1733645372509,Y
+system.scan.template.created,Y,2024-12-08 17:09:32.509,[system],2024-12-08 17:14:19.385,[setup wizard],1733645659385,Y
+display.recent-printer-groups,10,2024-12-08 17:09:32.509,[system],2024-12-08 17:09:32.509,[system],1733645372509,Y
+auth.web-login.sso-enable.mobile-user,Y,2024-12-08 17:09:32.509,[system],2024-12-08 17:09:32.509,[system],1733645372509,Y
+user-source.2.auto-generate-second-card-id-length,"",2024-12-08 17:09:32.51,[system],2024-12-08 17:09:32.51,[system],1733645372510,Y
+schedule.subscriptions,DEFAULT,2024-12-08 17:09:32.51,[system],2024-12-08 17:09:32.51,[system],1733645372510,Y
+system.scan.cloud.client-upload-retries,"",2024-12-08 17:09:32.51,[system],2024-12-08 17:09:32.51,[system],1733645372510,Y
+release-station.allow-account-selection,DEFAULT,2024-12-08 17:09:32.511,[system],2024-12-08 17:09:32.511,[system],1733645372511,Y
+ext.acct-prov.class-name,"",2024-12-08 17:09:32.511,[system],2024-12-08 17:09:32.511,[system],1733645372511,Y
+spooled-jobs.cleanup-interval-mins,10,2024-12-08 17:09:32.511,[system],2024-12-08 17:09:32.511,[system],1733645372511,Y
+email-printing.google-api.access-token-expiry,0,2024-12-08 17:09:32.511,[system],2024-12-08 17:09:32.511,[system],1733645372511,Y
+email-printing.ignore-emails-older-than-hours,24.0,2024-12-08 17:09:32.512,[system],2024-12-08 17:09:32.512,[system],1733645372512,Y
+ext-device.escrow-timeout-mins,DEFAULT,2024-12-08 17:09:32.512,[system],2024-12-08 17:09:32.512,[system],1733645372512,Y
+account.security.applies-to,LIST,2024-12-08 17:09:32.512,[system],2024-12-08 17:09:32.512,[system],1733645372512,Y
+archiving.enabled,N,2024-12-08 17:09:32.513,[system],2024-12-08 17:09:32.513,[system],1733645372513,Y
+system.scan.docproc.blank-threshold,DEFAULT,2024-12-08 17:09:32.513,[system],2024-12-08 17:09:32.513,[system],1733645372513,Y
+central-reports.testing,OFF,2024-12-08 17:09:32.513,[system],2024-12-08 17:09:32.513,[system],1733645372513,Y
+ext-device.allow-new-pin-for-id-num,Y,2024-12-08 17:09:32.513,[system],2024-12-08 17:09:32.513,[system],1733645372513,Y
+ldap.2.host,"",2024-12-08 17:09:32.514,[system],2024-12-08 17:09:32.514,[system],1733645372514,Y
+ldap.base-dn,"",2024-12-08 17:09:32.514,[system],2024-12-08 17:09:32.514,[system],1733645372514,Y
+auth.admin-groups,"",2024-12-08 17:09:32.515,[system],2024-12-08 17:09:32.515,[system],1733645372515,Y
+universal-print.server.trusted-cert,N,2024-12-08 17:09:32.515,[system],2024-12-08 17:09:32.515,[system],1733645372515,Y
+ldap.2.skip-cert-check,Y,2024-12-08 17:09:32.515,[system],2024-12-08 17:09:32.515,[system],1733645372515,Y
+print-provider.push-events.enabled,Y,2024-12-08 17:09:32.516,[system],2024-12-08 17:09:32.516,[system],1733645372516,Y
+redact-document-information.enabled,N,2024-12-08 17:09:32.517,[system],2024-12-08 17:09:32.517,[system],1733645372517,Y
+notify.toner-level.show-printer-location,Y,2024-12-08 17:09:32.517,[system],2024-12-08 17:09:32.517,[system],1733645372517,Y
+print.stats.total.pages.converted.grayscale.settings,0,2024-12-08 17:09:32.517,[system],2024-12-08 17:09:32.517,[system],1733645372517,N
+mobile-release.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.518,[system],2024-12-08 17:09:32.518,[system],1733645372518,Y
+system.last-server.name,DESKTOP-E43B43B,2024-12-08 17:09:32.518,[system],2024-12-08 17:09:46.207,[system],1733645386207,N
+scheduled-reports.day-of-month,1,2024-12-08 17:09:32.519,[system],2024-12-08 17:09:32.519,[system],1733645372519,Y
+system.link-row-remove-ticks.user-account,0,2024-12-08 17:09:32.519,[system],2024-12-08 17:09:32.519,[system],1733645372519,Y
+email-printing.protocol,POP3,2024-12-08 17:09:32.519,[system],2024-12-08 17:09:32.519,[system],1733645372519,Y
+print.load-balancer.default.warn-up-time-secs,2,2024-12-08 17:09:32.519,[system],2024-12-08 17:09:32.519,[system],1733645372519,Y
+ldap.schema.user-search-ignored-error-codes,"",2024-12-08 17:09:32.52,[system],2024-12-08 17:09:32.52,[system],1733645372520,Y
+internal-users.verify-email.template,"",2024-12-08 17:09:32.52,[system],2024-12-08 17:09:32.52,[system],1733645372520,Y
+system.grows.icon-fetch-timeout-millis,5000,2024-12-08 17:09:32.52,[system],2024-12-08 17:09:32.52,[system],1733645372520,N
+notify.card-id-auto-generate.subject,New ID number,2024-12-08 17:09:32.515,[system],2025-01-07 14:43:51.746,admin,1736228631746,Y
+notify.smtp.username,webmaster@nodedata.com,2024-12-08 17:09:32.518,[system],2025-01-07 15:22:21.406,admin,1736230941406,Y
+notify.mail.from,webmaster@nodedata.com,2024-12-08 17:09:32.517,[system],2025-01-07 15:22:21.41,admin,1736230941410,Y
+user.release-station.limit-group,"",2024-12-08 17:09:32.52,[system],2024-12-08 17:09:32.52,[system],1733645372520,Y
+user.environmental-impact.enable,Y,2024-12-08 17:09:32.521,[system],2024-12-08 17:09:32.521,[system],1733645372521,Y
+system.scan.folder-max-job-size-kb,51200,2024-12-08 17:09:32.521,[system],2024-12-08 17:09:32.521,[system],1733645372521,Y
+client.spooled-job.requires-action.notify.delay-seconds,90,2024-12-08 17:09:32.521,[system],2024-12-08 17:09:32.521,[system],1733645372521,Y
+client.config.show-details-link,Y,2024-12-08 17:09:32.522,[system],2024-12-08 17:09:32.522,[system],1733645372522,Y
+system.scan.fax.info.command-args,info list --connector-only,2024-12-08 17:09:32.522,[system],2024-12-08 17:09:32.522,[system],1733645372522,Y
+subscriptions.gateway.trust-all-certs,N,2024-12-08 17:09:32.522,[system],2024-12-08 17:09:32.522,[system],1733645372522,Y
+notify.card-association.enabled,N,2024-12-08 17:09:32.522,[system],2024-12-08 17:09:32.522,[system],1733645372522,Y
+email-printing.google-api.refresh-token,"",2024-12-08 17:09:32.523,[system],2024-12-08 17:09:32.523,[system],1733645372523,Y
+hardware-check.adjustments.large-page-halving,DEFAULT,2024-12-08 17:09:32.523,[system],2024-12-08 17:09:32.523,[system],1733645372523,Y
+application.modules-enabled,PRINT,2024-12-08 17:09:32.523,[system],2024-12-08 17:09:32.523,[system],1733645372523,Y
+ext-device.allow-select-account-from-list,Y,2024-12-08 17:09:32.523,[system],2024-12-08 17:09:32.523,[system],1733645372523,Y
+email-printing.guest-printing.username,guest-user,2024-12-08 17:09:32.524,[system],2024-12-08 17:09:32.524,[system],1733645372524,Y
+display.forgot-login-details-title,"",2024-12-08 17:09:32.524,[system],2024-12-08 17:09:32.524,[system],1733645372524,Y
+ext-device.sharp-osa-n2.verify-device-compatibility,Y,2024-12-08 17:09:32.524,[system],2024-12-08 17:09:32.524,[system],1733645372524,Y
+system.scan.fax-max-job-size-kb,204800,2024-12-08 17:09:32.524,[system],2024-12-08 17:09:32.524,[system],1733645372524,Y
+find-my-mfd.publish-url-type,CLOUD_FUNCTION,2024-12-08 17:09:32.525,[system],2024-12-09 00:17:00.841,[system],1733671020841,Y
+system.site.offline-unauthenticated-user-policy,USE_OFFLINE_USER,2024-12-08 17:09:32.525,[system],2024-12-08 17:09:32.525,[system],1733645372525,Y
+user-source.ad.secondary-username-field,"",2024-12-08 17:09:32.525,[system],2024-12-08 17:09:32.525,[system],1733645372525,Y
+display.show-currency-sign,Y,2024-12-08 17:09:32.525,[system],2024-12-08 17:09:32.525,[system],1733645372525,Y
+printers.convert-to-grayscale-filter.force-grayscale,"",2024-12-08 17:09:32.526,[system],2024-12-08 17:09:32.526,[system],1733645372526,Y
+email-printing.gmail-oauth.testing,N,2024-12-08 17:09:32.526,[system],2024-12-08 17:09:32.526,[system],1733645372526,Y
+internal-users.self-registration.auto-assign-id,Y,2024-12-08 17:09:32.527,[system],2024-12-08 17:09:32.527,[system],1733645372527,Y
+system.scan.webdav-folder,scan/webdav,2024-12-08 17:09:32.527,[system],2024-12-08 17:09:32.527,[system],1733645372527,Y
+auth.web-login.sso-enable,N,2024-12-08 17:09:32.527,[system],2024-12-08 17:09:33.131,[system],1733645373131,Y
+azure-ad-sync-disabled-user,"",2024-12-08 17:09:32.527,[system],2024-12-08 17:09:32.527,[system],1733645372527,Y
+printers.path,"",2024-12-08 17:09:32.527,[system],2024-12-08 17:09:32.527,[system],1733645372527,Y
+client.use-ip-reported-by-client,N,2024-12-08 17:09:32.528,[system],2024-12-08 17:09:32.528,[system],1733645372528,Y
+notify.smtp.encryption-method,NONE,2024-12-08 17:09:32.528,[system],2024-12-08 17:09:32.528,[system],1733645372528,Y
+display.credit-decimals,-1,2024-12-08 17:09:32.528,[system],2024-12-08 17:09:32.528,[system],1733645372528,Y
+spooled-jobs.path,"",2024-12-08 17:09:32.528,[system],2024-12-08 17:09:32.528,[system],1733645372528,Y
+notify.refund-requests.action.user.enable,N,2024-12-08 17:09:32.529,[system],2024-12-08 17:09:32.529,[system],1733645372529,Y
+user.release-station.enable-limit-group,N,2024-12-08 17:09:32.529,[system],2024-12-08 17:09:32.529,[system],1733645372529,Y
+subscriptions.sfp-entitlement-consumption.enabled,Y,2024-12-08 17:09:32.529,[system],2024-12-08 17:09:32.529,[system],1733645372529,Y
+system.link-row-remove-ticks.scan-action-group,0,2024-12-08 17:09:32.529,[system],2024-12-08 17:09:32.529,[system],1733645372529,Y
+hook.create-new-user.post,"",2024-12-08 17:09:32.529,[system],2024-12-08 17:09:32.529,[system],1733645372529,Y
+print.release-ordering-gap-millis,DEFAULT,2024-12-08 17:09:32.53,[system],2024-12-08 17:09:32.53,[system],1733645372530,Y
+language.additional,"",2024-12-08 17:09:32.53,[system],2024-12-08 17:09:32.53,[system],1733645372530,Y
+system.default-length-unit-override,"",2024-12-08 17:09:32.53,[system],2024-12-08 17:09:32.53,[system],1733645372530,Y
+system.scan.ocr.on-prem.api-url,"",2024-12-08 17:09:32.53,[system],2024-12-08 17:09:32.53,[system],1733645372530,Y
+scan.archiving.path,"",2024-12-08 17:09:32.531,[system],2024-12-08 17:09:32.531,[system],1733645372531,Y
+print.stats.total.jobs.release-station-account-selection,0,2024-12-08 17:09:32.531,[system],2024-12-08 17:09:32.531,[system],1733645372531,N
+web-cashier.purchase-instructions,"",2024-12-08 17:09:32.531,[system],2024-12-08 17:09:32.531,[system],1733645372531,N
+auth.web-login.card-id.end-user-login-only,N,2024-12-08 17:09:32.532,[system],2024-12-08 17:09:32.532,[system],1733645372532,Y
+printer.snmp.enabled,Y,2024-12-08 17:09:32.532,[system],2024-12-08 17:09:32.532,[system],1733645372532,N
+user.job-ticketing.enabled,N,2024-12-08 17:09:32.532,[system],2024-12-08 17:09:32.532,[system],1733645372532,Y
+auth.web-login.user-pass.enabled,Y,2024-12-08 17:09:32.533,[system],2024-12-08 17:09:32.533,[system],1733645372533,Y
+print.load-balancer.default.reuse-printer-window-seconds,20,2024-12-08 17:09:32.533,[system],2024-12-08 17:09:32.533,[system],1733645372533,Y
+ldap.schema.posix-groups,"",2024-12-08 17:09:32.533,[system],2024-12-08 17:09:32.533,[system],1733645372533,Y
+scan.archiving.keep-files-for-days,30,2024-12-08 17:09:32.534,[system],2024-12-08 17:09:32.534,[system],1733645372534,Y
+user-source.update-user-details-card-id,N,2024-12-08 17:09:32.534,[system],2024-12-08 17:09:32.534,[system],1733645372534,Y
+multi-personal-accounts.payment-gateway-account-type,"",2024-12-08 17:09:32.534,[system],2024-12-08 17:09:32.534,[system],1733645372534,Y
+client.allow-match-on-machine,Y,2024-12-08 17:09:32.534,[system],2024-12-08 17:09:32.534,[system],1733645372534,Y
+user-source.2.group,"",2024-12-08 17:09:32.535,[system],2024-12-08 17:09:32.535,[system],1733645372535,Y
+reports.csv-disable-mimetype,N,2024-12-08 17:09:32.535,[system],2024-12-08 17:09:32.535,[system],1733645372535,Y
+ext-device.rpc.strict-user-checks,Y,2024-12-08 17:09:32.535,[system],2024-12-08 17:09:32.535,[system],1733645372535,Y
+print.stats.total.pages,27,2024-12-08 17:09:32.521,[system],2025-01-08 16:19:31.825,[system],1736320771825,N
+user.web.accessible,N,2024-12-08 17:09:32.535,[system],2024-12-08 17:09:32.535,[system],1733645372535,Y
+redact-document-information.older-than-months,6,2024-12-08 17:09:32.536,[system],2024-12-08 17:09:32.536,[system],1733645372536,Y
+auth.web-login.autocomplete,N,2024-12-08 17:09:32.536,[system],2024-12-08 17:09:32.536,[system],1733645372536,Y
+azure-ad-app-id-user-auth,"",2024-12-08 17:09:32.536,[system],2024-12-08 17:09:32.536,[system],1733645372536,Y
+auth.microsoft.region,global,2024-12-08 17:09:32.537,[system],2024-12-08 17:09:32.537,[system],1733645372537,Y
+ext-device.card-pin-exempt-groups,"",2024-12-08 17:09:32.537,[system],2024-12-08 17:09:32.537,[system],1733645372537,Y
+print.load-balancer.default.pages-per-min,40,2024-12-08 17:09:32.538,[system],2024-12-08 17:09:32.538,[system],1733645372538,Y
+auth.site.allowed-addresses,*,2024-12-08 17:09:32.538,[system],2024-12-08 17:09:32.538,[system],1733645372538,Y
+web-print.enable-openoffice-support,N,2024-12-08 17:09:32.539,[system],2024-12-08 17:09:32.539,[system],1733645372539,Y
+notify.smtp.outlook-tenant-id,"",2024-12-08 17:09:32.539,[system],2024-12-08 17:09:32.539,[system],1733645372539,Y
+system.scan.ocr.mode,CLOUD,2024-12-08 17:09:32.539,[system],2024-12-08 17:09:32.539,[system],1733645372539,Y
+archiving.images.creator.timeout.per-page-secs,"",2024-12-08 17:09:32.539,[system],2024-12-08 17:09:32.539,[system],1733645372539,Y
+account.pin-is-visible,N,2024-12-08 17:09:32.539,[system],2024-12-08 17:09:32.539,[system],1733645372539,Y
+user-source.env-vars,"",2024-12-08 17:09:32.54,[system],2024-12-08 17:09:32.54,[system],1733645372540,Y
+user.can-change-card-id-type,PRIMARY,2024-12-08 17:09:32.54,[system],2024-12-08 17:09:32.54,[system],1733645372540,Y
+archiving.images.creator.non-interactive.max-concurrent,1,2024-12-08 17:09:32.54,[system],2024-12-08 17:09:32.54,[system],1733645372540,Y
+release-station.denied-job-expiry-mins,15,2024-12-08 17:09:32.54,[system],2024-12-08 17:09:32.54,[system],1733645372540,Y
+internal-users.self-registration.email-required,Y,2024-12-08 17:09:32.541,[system],2024-12-08 17:09:32.541,[system],1733645372541,Y
+client.config.auth.id-regex,"",2024-12-08 17:09:32.541,[system],2024-12-08 17:09:32.541,[system],1733645372541,Y
+system.scan.fax.info.timeout-secs,30,2024-12-08 17:09:32.541,[system],2024-12-08 17:09:32.541,[system],1733645372541,Y
+devices.path,"",2024-12-08 17:09:32.542,[system],2024-12-08 17:09:32.542,[system],1733645372542,Y
+azure-ad-client-secret-user-sync,"",2024-12-08 17:09:32.542,[system],2024-12-08 17:09:32.542,[system],1733645372542,Y
+system.site.sync-retain-days,DEFAULT,2024-12-08 17:09:32.542,[system],2024-12-08 17:09:32.542,[system],1733645372542,N
+web-cashier.deposit-instructions,"",2024-12-08 17:09:32.542,[system],2024-12-08 17:09:32.542,[system],1733645372542,N
+system.scan.delivery.custom-dispatcher.enabled,N,2024-12-08 17:09:32.542,[system],2024-12-08 17:09:32.542,[system],1733645372542,Y
+user.card-id-is-visible,Y,2024-12-08 17:09:32.543,[system],2024-12-08 17:09:32.543,[system],1733645372543,Y
+auth.admin.allowed-addresses,*,2024-12-08 17:09:32.543,[system],2024-12-08 17:09:32.543,[system],1733645372543,Y
+cost.model.per-page-color.enabled,"",2024-12-08 17:09:32.543,[system],2024-12-08 17:09:32.543,[system],1733645372543,Y
+ext-device.card-no-converter,"",2024-12-08 17:09:32.543,[system],2024-12-08 17:09:32.543,[system],1733645372543,Y
+auth.release-station.allowed-addresses,*,2024-12-08 17:09:32.544,[system],2024-12-08 17:09:32.544,[system],1733645372544,Y
+user-source.2.card-id-regex,"",2024-12-08 17:09:32.545,[system],2024-12-08 17:09:32.545,[system],1733645372545,Y
+scan.stats.total.jobs.settings.paper-size.auto,0,2024-12-08 17:09:32.545,[system],2024-12-08 17:09:32.545,[system],1733645372545,N
+client.spooled-job.requires-action.notify.title,"",2024-12-08 17:09:32.545,[system],2024-12-08 17:09:32.545,[system],1733645372545,Y
+user-lookup.db-password,"",2024-12-08 17:09:32.545,[system],2024-12-08 17:09:32.545,[system],1733645372545,Y
+system.site.keepalive-successes-before-online,"",2024-12-08 17:09:32.546,[system],2024-12-08 17:09:32.546,[system],1733645372546,Y
+user-source.2.enabled,N,2024-12-08 17:09:32.546,[system],2024-12-08 17:09:32.546,[system],1733645372546,Y
+ext-device.escrow-enabled,Y,2024-12-08 17:09:32.546,[system],2024-12-08 17:09:32.546,[system],1733645372546,Y
+ldap.2.schema.posix-groups,"",2024-12-08 17:09:32.547,[system],2024-12-08 17:09:32.547,[system],1733645372547,Y
+printer.snmp.retries,4,2024-12-08 17:09:32.547,[system],2024-12-08 17:09:32.547,[system],1733645372547,Y
+ext-device.hp-oxpd.enhanced-mode,DEFAULT,2024-12-08 17:09:32.547,[system],2024-12-08 17:09:32.547,[system],1733645372547,Y
+client.spooled-job.requires-action.notify.enabled,Y,2024-12-08 17:09:32.547,[system],2024-12-08 17:09:32.547,[system],1733645372547,Y
+dashboard.gadget.printer-status.max-printers,500,2024-12-08 17:09:32.547,[system],2024-12-08 17:09:32.547,[system],1733645372547,Y
+auth.auth-api.rate-limit-per-sec,DEFAULT,2024-12-08 17:09:32.548,[system],2024-12-08 17:09:32.548,[system],1733645372548,Y
+payment-gateway.stats.on-demand.request.top-up,0,2024-12-08 17:09:32.548,[system],2024-12-08 17:09:32.548,[system],1733645372548,N
+ldap.2.dereference-aliases,always,2024-12-08 17:09:32.548,[system],2024-12-08 17:09:32.548,[system],1733645372548,Y
+ext-device.home-screen.show-balance,N,2024-12-08 17:09:32.548,[system],2024-12-08 17:09:32.548,[system],1733645372548,Y
+user-lookup.custom-program.show,N,2024-12-08 17:09:32.549,[system],2024-12-08 17:09:32.549,[system],1733645372549,Y
+client.config.balance-refresh-reset-on-notify,DEFAULT,2024-12-08 17:09:32.549,[system],2024-12-08 17:09:32.549,[system],1733645372549,Y
+async.logger.ring.buffer.size,524288,2024-12-08 17:09:32.549,[system],2024-12-08 17:09:32.549,[system],1733645372549,Y
+system.scan.home-sub-folder,Scans,2024-12-08 17:09:32.549,[system],2024-12-08 17:09:32.549,[system],1733645372549,Y
+environment.co2-grams-per-sheet,12.7,2024-12-08 17:09:32.55,[system],2024-12-08 17:09:32.55,[system],1733645372550,Y
+auth.clients.allowed-addresses,"",2024-12-08 17:09:32.55,[system],2024-12-08 17:09:32.55,[system],1733645372550,Y
+scan.archiving.min-free-space-mb,2000,2024-12-08 17:09:32.55,[system],2024-12-08 17:09:32.55,[system],1733645372550,Y
+client.config.upn-search-enabled,N,2024-12-08 17:09:32.55,[system],2024-12-08 17:09:32.55,[system],1733645372550,Y
+email-printing.verification-template,"",2024-12-08 17:09:32.55,[system],2024-12-08 17:09:32.55,[system],1733645372550,Y
+analytics.enabled,Y,2024-12-08 17:09:32.551,[system],2024-12-08 17:09:46.314,[system],1733645386314,Y
+internal-users.self-registration.link-text,Register as a New User,2024-12-08 17:09:32.541,[system],2025-01-07 14:44:19.184,admin,1736228659184,Y
+notify.smtp.server,smtp.nodedata.com,2024-12-08 17:09:32.546,[system],2025-01-07 15:22:21.4,admin,1736230941400,Y
+system.backup.last-run-time,1737213600865,2024-12-08 17:09:32.544,[system],2025-01-19 00:20:00.877,[system],1737213600877,Y
+db-stats.last-updated,1737215701298,2024-12-08 17:09:32.543,[system],2025-01-19 00:55:01.299,[system],1737215701299,N
+client.config.balance-refresh-mins,120,2024-12-08 17:09:32.551,[system],2024-12-08 17:09:32.551,[system],1733645372551,Y
+payment-gateway.stats.on-demand.plugin,"",2024-12-08 17:09:32.551,[system],2024-12-08 17:09:32.551,[system],1733645372551,N
+ext-device.card-no-regex.applies-to-registration,Y,2024-12-08 17:09:32.551,[system],2024-12-08 17:09:32.551,[system],1733645372551,Y
+azure-ad-tenant-id-user-auth,"",2024-12-08 17:09:32.551,[system],2024-12-08 17:09:32.551,[system],1733645372551,Y
+display.custom-currency-sign,"",2024-12-08 17:09:32.551,[system],2024-12-08 17:09:32.551,[system],1733645372551,Y
+ldap.2.schema.user-office-field,"",2024-12-08 17:09:32.552,[system],2024-12-08 17:09:32.552,[system],1733645372552,Y
+ldap.schema.user-second-card-id-field,"",2024-12-08 17:09:32.552,[system],2024-12-08 17:09:32.552,[system],1733645372552,Y
+payments-quota-includes-negative-user-balance,N,2024-12-08 17:09:32.552,[system],2024-12-08 17:09:32.552,[system],1733645372552,Y
+spooled-jobs.rendering-timeout-mins,120,2024-12-08 17:09:32.552,[system],2024-12-08 17:09:32.552,[system],1733645372552,Y
+ext-device.xerox.periodic-re-init-delay-minutes,120,2024-12-08 17:09:32.552,[system],2024-12-08 17:09:32.552,[system],1733645372552,Y
+account.sync.interval,"",2024-12-08 17:09:32.553,[system],2024-12-08 17:09:32.553,[system],1733645372553,Y
+auth.web-login.sso-user-verification,Y,2024-12-08 17:09:32.553,[system],2024-12-08 17:09:32.553,[system],1733645372553,Y
+system.db-upgrade-in-progress,N,2024-12-08 17:09:32.553,[system],2024-12-08 17:09:32.553,[system],1733645372553,N
+system.network-proxy-user,"",2024-12-08 17:09:32.553,[system],2024-12-08 17:09:32.553,[system],1733645372553,Y
+admin.show-highlight-devices-window,Y,2024-12-08 17:09:32.553,[system],2024-12-08 17:09:32.553,[system],1733645372553,Y
+topup-cards.enable,N,2024-12-08 17:09:32.554,[system],2024-12-08 17:14:19.171,[setup wizard],1733645659171,Y
+ldap.2.use-ssl,N,2024-12-08 17:09:32.554,[system],2024-12-08 17:09:32.554,[system],1733645372554,Y
+reports.pdf-locale,DEFAULT,2024-12-08 17:09:32.554,[system],2024-12-08 17:09:32.554,[system],1733645372554,Y
+system.scan.failed-maintenance-enabled,DEFAULT,2024-12-08 17:09:32.554,[system],2024-12-08 17:09:32.554,[system],1733645372554,Y
+ldap.schema.other-emails-field,"",2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,Y
+email-printing.google-api.client-id,"",2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,Y
+user.can-change-card-id.num-times-per-day,3,2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,Y
+print-provider.throttle-requests-under-load,DEFAULT,2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,Y
+schedule.auto-sync.user,Y,2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,Y
+system.grows.icon-cache-seconds,86400,2024-12-08 17:09:32.555,[system],2024-12-08 17:09:32.555,[system],1733645372555,N
+logging.reassign-user-when-job-complete,N,2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,Y
+email-verification.continue-to-user-web-interface,Y,2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,Y
+fleet-deploy.wizard.csv-upload,0,2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,N
+ext-device.max-accounts-returned,-1,2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,Y
+system.scan.cloud.use-custom-api-url,"",2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,Y
+subscriptions.server-uuid-ha,"",2024-12-08 17:09:32.556,[system],2024-12-08 17:09:32.556,[system],1733645372556,Y
+email-printing.host,"",2024-12-08 17:09:32.557,[system],2024-12-08 17:09:32.557,[system],1733645372557,Y
+ldap.2.authenticate-duplicate-users,Y,2024-12-08 17:09:32.557,[system],2024-12-08 17:09:32.557,[system],1733645372557,Y
+client.session-expiry-mins,3,2024-12-08 17:09:32.557,[system],2024-12-08 17:09:32.557,[system],1733645372557,Y
+user.job-ticketing.override-button-display-name,"",2024-12-08 17:09:32.557,[system],2024-12-08 17:09:32.557,[system],1733645372557,Y
+system.scan.ocr.api-url,https://ocr.cloud.papercut.com,2024-12-08 17:09:32.557,[system],2024-12-08 17:09:32.557,[system],1733645372557,Y
+setup.account-selection.test-username,"",2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,Y
+display.cost-setting-decimals,-1,2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,Y
+reports.print-usage-logs.mssql-millis-accuracy,DEFAULT,2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,Y
+email-printing.guest-printing.instructions.email-subject,"",2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,Y
+password-caching.configs.enabled,"",2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,N
+user-lookup.id-to-username-sql,select user_name from users_table where card_number = {cardnumber},2024-12-08 17:09:32.558,[system],2024-12-08 17:09:32.558,[system],1733645372558,Y
+user.release-station.can-release,Y,2024-12-08 17:09:32.559,[system],2024-12-08 17:09:32.559,[system],1733645372559,Y
+encrypt.properties-files.enabled,Y,2024-12-08 17:09:32.559,[system],2024-12-08 17:09:32.559,[system],1733645372559,Y
+ext-device.change-print-job-settings.account.enabled,Y,2024-12-08 17:09:32.559,[system],2024-12-08 17:09:46.71,[system],1733645386710,Y
+logging.reassign-user-when-job-complete.username,anonymous,2024-12-08 17:09:32.559,[system],2024-12-08 17:09:32.559,[system],1733645372559,Y
+web.error-page.include-diagnostics.request-context,N,2024-12-08 17:09:32.559,[system],2024-12-08 17:09:32.559,[system],1733645372559,Y
+user.transfers.limit-group,"",2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+print.stats.total.sheets.saved.duplex.settings.chps,0,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,N
+ldap.2.schema.other-emails-field,"",2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+hardware-check.adjustments.remove-extra-duplex-page,Y,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+multi-personal-accounts.transfer-type,"",2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+auth.web-login.sso-header,"",2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+auth.web-login.sso-allow-guest,N,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+internal-users.username-counter,1,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+email-printing.ms-imap-oauth.waiting,N,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+user-source.ad.user-second-card-id-field,"",2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+user.can-view-card-id,N,2024-12-08 17:09:32.56,[system],2024-12-08 17:09:32.56,[system],1733645372560,Y
+user.web-print.enable,Y,2024-12-08 17:09:32.561,[system],2024-12-08 17:09:32.561,[system],1733645372561,Y
+user-source.2.type,"",2024-12-08 17:09:32.561,[system],2024-12-08 17:09:32.561,[system],1733645372561,Y
+email-printing.security-scheme,SSL,2024-12-08 17:09:32.561,[system],2024-12-08 17:09:32.561,[system],1733645372561,Y
+ldap.schema.type,"",2024-12-08 17:09:32.561,[system],2024-12-08 17:09:32.561,[system],1733645372561,Y
+web-cashier.auto-email-receipt-users,N,2024-12-08 17:09:32.561,[system],2024-12-08 17:09:32.561,[system],1733645372561,N
+ext-device.rpc.throttle-begin-session-under-load,DEFAULT,2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+email-printing.block-email-list,"",2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+spooled-jobs.new-job-from-unknown-email.option,CANCEL_AND_NOTIFY,2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+user.balance-info.enable,Y,2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+archiving.min-free-space-mb,2000,2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+client.config.minimize-balance-window-on-startup,N,2024-12-08 17:09:32.562,[system],2024-12-08 17:09:32.562,[system],1733645372562,Y
+system.scan.delivery.exp-backoff,3,2024-12-08 17:09:32.563,[system],2024-12-08 17:09:32.563,[system],1733645372563,Y
+auth.allow-iframe-embed,N,2024-12-08 17:09:32.563,[system],2024-12-08 17:09:32.563,[system],1733645372563,Y
+ldap.2.schema.group-name-field,"",2024-12-08 17:09:32.563,[system],2024-12-08 17:09:32.563,[system],1733645372563,Y
+system.scan.backup-folder,scan/backup,2024-12-08 17:09:32.563,[system],2024-12-08 17:09:32.563,[system],1733645372563,Y
+ext-device.card-no-regex.applies-to-association,Y,2024-12-08 17:09:32.563,[system],2024-12-08 17:09:32.563,[system],1733645372563,Y
+license.support-reminders,Y,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,N
+email-printing.verify-email,Y,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,Y
+fleet-deploy.direct-deployed.devices,0,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,N
+print.stats.total.pages.converted.grayscale.settings.chps,0,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,N
+notify.pending-refund-requests.daily-hour-of-day,7,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,Y
+print.stats.total.sheets.saved.duplex.settings,0,2024-12-08 17:09:32.564,[system],2024-12-08 17:09:32.564,[system],1733645372564,N
+archiving.built-in-admin-default-print-logs-view,"",2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,Y
+user.web-print.max-upload-mb,100,2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,Y
+license.warn-devices-datestamp,"",2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,N
+email-printing.debug,N,2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,Y
+system.job-replay-max-job-uploads,"",2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,Y
+ext-device.id-number.label,"",2024-12-08 17:09:32.565,[system],2024-12-08 17:09:32.565,[system],1733645372565,Y
+system.site.sync-update-interval-secs,"",2024-12-08 17:09:32.566,[system],2024-12-08 17:09:32.566,[system],1733645372566,N
+ldap.2.schema.user-second-card-id-field,"",2024-12-08 17:09:32.566,[system],2024-12-08 17:09:32.566,[system],1733645372566,Y
+ldap.2.schema.user-name-field,"",2024-12-08 17:09:32.566,[system],2024-12-08 17:09:32.566,[system],1733645372566,Y
+ext-device.show-print-job-account-balance,Y,2024-12-08 17:09:32.566,[system],2024-12-08 17:09:32.566,[system],1733645372566,Y
+display.forgot-login-details-show-logo,N,2024-12-08 17:09:32.566,[system],2024-12-08 17:09:32.566,[system],1733645372566,Y
+ldap.port,0,2024-12-08 17:09:32.567,[system],2024-12-08 17:09:32.567,[system],1733645372567,Y
+system.normalize-network-username-regex,"",2024-12-08 17:09:32.567,[system],2024-12-08 17:09:32.567,[system],1733645372567,Y
+display.forgot-login-details-content,"",2024-12-08 17:09:32.567,[system],2024-12-08 17:09:32.567,[system],1733645372567,Y
+backup.enable-automatic-backups,Y,2024-12-08 17:09:32.567,[system],2024-12-08 17:09:32.567,[system],1733645372567,Y
+account.sync.source-type,NONE,2024-12-08 17:09:32.567,[system],2024-12-08 17:09:32.567,[system],1733645372567,Y
+notify.mail.addr-suffix,"",2024-12-08 17:09:32.568,[system],2024-12-08 17:09:32.568,[system],1733645372568,Y
+schedule.monthly,0 30 0 1 * ?,2024-12-08 17:09:32.568,[system],2024-12-08 17:09:32.568,[system],1733645372568,Y
+system.scan.cloud.enabled,N,2024-12-08 17:09:32.568,[system],2024-12-08 17:09:32.568,[system],1733645372568,Y
+user-lookup.db-username,"",2024-12-08 17:09:32.568,[system],2024-12-08 17:09:32.568,[system],1733645372568,Y
+printers.device-api.hw-check.enabled,DEFAULT,2024-12-08 17:09:32.568,[system],2024-12-08 17:09:32.568,[system],1733645372568,Y
+mobility-print.sign-in-with-google.enabled,DEFAULT,2024-12-08 17:09:32.569,[system],2024-12-08 17:09:32.569,[system],1733645372569,Y
+delete.print-log.days,-1,2024-12-08 17:09:32.569,[system],2024-12-08 17:09:32.569,[system],1733645372569,Y
+async.logger.wait.strategy,Sleep,2024-12-08 17:09:32.569,[system],2024-12-08 17:09:32.569,[system],1733645372569,Y
+system.network-address.user-facing,"",2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+ext-device.id-number.mask,N,2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+user-source.2.auto-generate-card-id-length,"",2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+client.config.show-balance,Y,2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+scheduled-reports.day-of-week,Sun,2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+delete.print-log.delete-associated-data,N,2024-12-08 17:09:32.57,[system],2024-12-08 17:09:32.57,[system],1733645372570,Y
+client.config.default-advanced-tab,DEFAULT,2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+remote-support.web.ca-signed-cert,"",2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+ext-device.card-self-association.default-on,N,2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+user-lookup.db-url,"",2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+ext-device.unknown-offline-username,unknown,2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+notify.refund-requests.action.user.approved,%refund.refund-amount% has been credited to your account.,2024-12-08 17:09:32.569,[system],2025-01-07 14:41:12.58,admin,1736228472580,Y
+user-source.group,"",2024-12-08 17:09:32.566,[system],2025-01-07 14:44:33.108,admin,1736228673108,Y
+db-stats.print-log-count,29,2024-12-08 17:09:32.568,[system],2025-01-12 00:55:01.315,[system],1736610901315,N
+auth.providers.allowed-addresses,ALL_PRIVATE_IP_RANGES,2024-12-08 17:09:32.571,[system],2024-12-08 17:09:32.571,[system],1733645372571,Y
+auth.web-login.sso-mode.other,OFF,2024-12-08 17:09:32.572,[system],2024-12-08 17:09:33.165,[system],1733645373165,Y
+archiving.path,"",2024-12-08 17:09:32.572,[system],2024-12-08 17:09:32.572,[system],1733645372572,Y
+logging.audit-logging-max-days,30,2024-12-08 17:09:32.572,[system],2024-12-08 17:09:32.572,[system],1733645372572,Y
+web-cashier.deposit-receipt-header,"",2024-12-08 17:09:32.572,[system],2024-12-08 17:09:32.572,[system],1733645372572,N
+support-info.cached-order-no,"",2024-12-08 17:09:32.572,[system],2024-12-08 17:09:32.572,[system],1733645372572,Y
+system.site.keepalive-http-timeout-secs,"",2024-12-08 17:09:32.573,[system],2024-12-08 17:09:32.573,[system],1733645372573,Y
+ldap.admin-dn,"",2024-12-08 17:09:32.573,[system],2024-12-08 17:09:32.573,[system],1733645372573,Y
+system.site.keepalive-failures-before-offline,"",2024-12-08 17:09:32.573,[system],2024-12-08 17:09:32.573,[system],1733645372573,Y
+security-properties-migration.show-message.enabled,N,2024-12-08 17:09:32.573,[system],2024-12-08 17:09:46.216,[system],1733645386216,Y
+user-source.update-user-details,Y,2024-12-08 17:09:32.573,[system],2024-12-08 17:09:32.573,[system],1733645372573,Y
+db-stats.account-trans-count,0,2024-12-08 17:09:32.573,[system],2024-12-15 00:55:01.679,[system],1734191701679,N
+fleet-deploy.server-command.csv-upload,0,2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,N
+user.transfers.enable,Y,2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,Y
+ldap.2.schema.group-member-field,"",2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,Y
+reports.use-conditional-joins,DEFAULT,2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,Y
+print.charge-rates,"",2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,Y
+job-ticketing.port,DEFAULT,2024-12-08 17:09:32.574,[system],2024-12-08 17:09:32.574,[system],1733645372574,Y
+email-printing.google-api.client-secret,"",2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,Y
+support-info.cached-time,-1,2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,Y
+system.grows.enable-device-login-icon,Y,2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,N
+system.scan.fax.send.command-args,fax create --job-settings %job% --global-settings %settings%,2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,Y
+system.scan.default-locale,"",2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,Y
+user.web-print.intro-msg-template,DEFAULT,2024-12-08 17:09:32.575,[system],2024-12-08 17:09:32.575,[system],1733645372575,Y
+ldap.2.follow-referrals,N,2024-12-08 17:09:32.576,[system],2024-12-08 17:09:32.576,[system],1733645372576,Y
+ldap.schema.user-pin-field,"",2024-12-08 17:09:32.576,[system],2024-12-08 17:09:32.576,[system],1733645372576,Y
+system.scan.delivery.default-filename,scan,2024-12-08 17:09:32.576,[system],2024-12-08 17:09:32.576,[system],1733645372576,Y
+user.can-change-card-id,N,2024-12-08 17:09:32.576,[system],2024-12-08 17:09:32.576,[system],1733645372576,Y
+ext-device.release-any-as-anonymous,DEFAULT,2024-12-08 17:09:32.576,[system],2024-12-08 17:09:32.576,[system],1733645372576,Y
+ext-device.change-print-job-settings.copies.enabled,Y,2024-12-08 17:09:32.576,[system],2024-12-08 17:09:46.714,[system],1733645386714,Y
+ldap.2.max-batch-size,500,2024-12-08 17:09:32.577,[system],2024-12-08 17:09:32.577,[system],1733645372577,Y
+auth.web-login.sso-ip-whitelist,"",2024-12-08 17:09:32.577,[system],2024-12-08 17:09:32.577,[system],1733645372577,Y
+system.site.last-online-ticks,0,2024-12-08 17:09:32.577,[system],2024-12-08 17:09:32.577,[system],1733645372577,N
+find-my-mfd.publish-url,https://us-central1-find-my-mfd-prod.cloudfunctions.net/findMyMFD,2024-12-08 17:09:32.577,[system],2024-12-09 00:17:00.836,[system],1733671020836,Y
+ldap.follow-referrals,N,2024-12-08 17:09:32.577,[system],2024-12-08 17:09:32.577,[system],1733645372577,Y
+client.print-job-timeout-mins,10,2024-12-08 17:09:32.577,[system],2024-12-08 17:09:32.577,[system],1733645372577,Y
+user-source.2.gsuite.use-qualified-group-names,DEFAULT,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+admin.release-station.can-release-cancel-all,Y,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+client.config.auth.ttl-default-minutes,5,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+ldap.schema.user-email-field,"",2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+system.normalize-network-username,Y,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+system.network-address.user-facing.use-for-job-ticketing,DEFAULT,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+email-printing.imap-read-folder,INBOX,2024-12-08 17:09:32.578,[system],2024-12-08 17:09:32.578,[system],1733645372578,Y
+email-printing.user,"",2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+reports.csv-charset,"",2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+system.scan.cloud.client-protocols,"",2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+ldap.2.schema.user-card-id-field,"",2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+user-lookup.custom-program,"",2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+reports.top-x-rows,100,2024-12-08 17:09:32.579,[system],2024-12-08 17:09:32.579,[system],1733645372579,Y
+notify.smtp.gmail-oauth-client-details-ok,N,2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+web-client.config.auth.ttl-default-mins,60,2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+release-station.block-web-release-on-printer-error,N,2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+client.client-session-batch-size,10,2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+email-verification.verify-email-success,"",2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+user.refunds.limit-group,"",2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+schedule.auto-sync,Y,2024-12-08 17:09:32.58,[system],2024-12-08 17:09:32.58,[system],1733645372580,Y
+system.site.sync-delay-secs,"",2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,N
+display.custom-currency-sign-start,Y,2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+print.script.max-run-time-secs,-1,2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+notify.low-balance-limit,0.0,2024-12-08 17:09:32.572,[system],2025-01-07 15:22:21.418,admin,1736230941418,Y
+notify.custom-program,"",2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+internal-users.self-registration.auto-assign-pin,Y,2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+user-source.config-arg,"",2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+client.config.auth.popup-on-startup-if-unauthenticated,Y,2024-12-08 17:09:32.581,[system],2024-12-08 17:09:32.581,[system],1733645372581,Y
+fleet-deploy.app.deploy,0,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,N
+ldap.2.schema.user-pin-field,"",2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,Y
+downloads.max-concurrent,4,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,Y
+fleet-deploy.staged.devices,0,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,N
+system.site.create-full-sync-period-days,1,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,N
+email-printing.job-timeout-hours,24,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,Y
+system.scan.fax.ping.timeout-secs,10,2024-12-08 17:09:32.582,[system],2024-12-08 17:09:32.582,[system],1733645372582,Y
+ext-device.toshiba.eraser.total-rejected-sheets,0,2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,N
+reports.custom-ids,"",2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,Y
+web-login.release.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,Y
+system.scan.docproc.despeckle,N,2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,Y
+system.row-remove-ticks.group-attribute,0,2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,Y
+email-printing.reject-untrusted-certificates,DEFAULT,2024-12-08 17:09:32.583,[system],2024-12-08 17:09:32.583,[system],1733645372583,Y
+email-printing.gmail-oauth.waiting,N,2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+ldap.schema.group-search,"",2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+print.signature.bates-counter-last,0,2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+ext-device.snmpv3.template.context,"",2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+internal-users.self-registration.min-user-id-length,6,2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+archiving.images.full-size.width-px,900,2024-12-08 17:09:32.584,[system],2024-12-08 17:09:32.584,[system],1733645372584,Y
+user.creation.scheme,CREATE,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+system.scan.failed-folder,scan/failed,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+email-printing.guest-printing.enabled,N,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+user.refund-requests.enable-reason,Y,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+user.shared-accounts.recent-accounts-to-list-first,2,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+user-source.auto-generate-card-id-length,"",2024-12-08 17:09:32.585,[system],2024-12-08 17:09:32.585,[system],1733645372585,Y
+auth.web-login.sso-mode.user,OFF,2024-12-08 17:09:32.585,[system],2024-12-08 17:09:33.161,[system],1733645373161,Y
+ext-device.id-pin-exempt-groups,"",2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+print-job.offline-if-no-contact-seconds,DEFAULT,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+display.device-list.show-site-server-status,Y,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+health.api.key,Gni0uHHcmSRgkBHH3whoGdDaVvU8MRRb,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:46.771,[system],1733645386771,Y
+display.device-list.show-site-servers,Y,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+notify.errors.printer.enable,N,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+user.refunds.enable,N,2024-12-08 17:09:32.586,[system],2024-12-08 17:09:32.586,[system],1733645372586,Y
+release-station.forced-job-expiry-mins,DEFAULT,2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+snmp.trap.listener-port,-1,2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+auth.devices.allowed-addresses,ALL_PRIVATE_IP_RANGES,2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+remote-support.web.url,"",2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+archiving.images.creator.interactive.max-concurrent,2,2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+print.fixed-hold-time-secs,-1,2024-12-08 17:09:32.587,[system],2024-12-08 17:09:32.587,[system],1733645372587,Y
+user-source.type,WIN_STD,2024-12-08 17:09:32.587,[system],2024-12-08 17:14:21.636,[setup wizard],1733645661636,Y
+auth.web-login.sso-mode.admin,OFF,2024-12-08 17:09:32.588,[system],2024-12-08 17:09:33.145,[system],1733645373145,Y
+email-printing.imap-fetchsize-bytes,1048576,2024-12-08 17:09:32.588,[system],2024-12-08 17:09:32.588,[system],1733645372588,Y
+web-client.enabled,Y,2024-12-08 17:09:32.588,[system],2024-12-08 17:09:32.588,[system],1733645372588,Y
+web-print.hot-folder,"",2024-12-08 17:09:32.588,[system],2024-12-08 17:09:32.588,[system],1733645372588,Y
+auth.web-login.sso-logout-url,"",2024-12-08 17:09:32.588,[system],2024-12-08 17:09:32.588,[system],1733645372588,Y
+system.network-port-https.user-facing,"",2024-12-08 17:09:32.589,[system],2024-12-08 17:09:32.589,[system],1733645372589,Y
+system.scan.fax.contact.max-limit,50,2024-12-08 17:09:32.589,[system],2024-12-08 17:09:32.589,[system],1733645372589,Y
+auth.web-login.sso-method,WINDOWSAUTH,2024-12-08 17:09:32.589,[system],2024-12-08 17:09:33.138,[system],1733645373138,Y
+multi-personal-accounts.enable,N,2024-12-08 17:09:32.589,[system],2024-12-08 17:09:32.589,[system],1733645372589,Y
+email-verification.expiry-hours,24,2024-12-08 17:09:32.589,[system],2024-12-08 17:09:32.589,[system],1733645372589,Y
+user-source.group-list-override,"",2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+archiving.images.creator.timeout.base-secs,"",2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+system.network-proxy-password,"",2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+user-source.ad.user-pin-field,"",2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+user-lookup.id-to-username-sql.user-mapping,USERNAME,2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+azure-ad-app-id-user-sync,"",2024-12-08 17:09:32.59,[system],2024-12-08 17:09:32.59,[system],1733645372590,Y
+spooled-jobs.unauthenticated-job-timeout-mins,30,2024-12-08 17:09:32.591,[system],2024-12-08 17:09:32.591,[system],1733645372591,Y
+spooled-jobs.new-job-from-unknown-email.canceled-notification.title,"",2024-12-08 17:09:32.591,[system],2024-12-08 17:09:32.591,[system],1733645372591,Y
+web.product-integrations.enabled,DEFAULT,2024-12-08 17:09:32.591,[system],2024-12-08 17:09:32.591,[system],1733645372591,Y
+toner.low-threshold,0.30,2024-12-08 17:09:32.591,[system],2024-12-08 17:09:32.591,[system],1733645372591,Y
+ldap.authenticate-duplicate-users,Y,2024-12-08 17:09:32.591,[system],2024-12-08 17:09:32.591,[system],1733645372591,Y
+user-lookup.enabled,N,2024-12-08 17:09:32.592,[system],2024-12-08 17:09:32.592,[system],1733645372592,Y
+user.transfers.enable-limit-group,N,2024-12-08 17:09:32.592,[system],2024-12-08 17:09:32.592,[system],1733645372592,Y
+web-cashier.payment-methods,default,2024-12-08 17:09:32.592,[system],2024-12-08 17:09:32.592,[system],1733645372592,N
+system.grows.connect-timeout-millis,DEFAULT,2024-12-08 17:09:32.592,[system],2024-12-08 17:09:32.592,[system],1733645372592,N
+client.config.auth.require-pin,Y,2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+web-login.web-cashier.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+system.scan.ocr.processing-timeout-mins,60,2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+web-print.job-idle-timeout-mins,20,2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+notify.errors.printer.recipients,"",2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+user.auto-generate-card-id.length,8,2024-12-08 17:09:32.593,[system],2024-12-08 17:09:32.593,[system],1733645372593,Y
+internal-users.user-can-change-password,Y,2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,Y
+fleet-deploy.site.devices,0,2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,N
+internal-users.self-registration.instructions,"",2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,Y
+print.paper-size-tolerance-percent,3.0,2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,Y
+account.global-overdraft,0.0,2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,Y
+multi-personal-accounts.definitions,"",2024-12-08 17:09:32.594,[system],2024-12-08 17:09:32.594,[system],1733645372594,Y
+ext-device.change-print-job-settings.grayscale.enabled,Y,2024-12-08 17:09:32.595,[system],2024-12-08 17:09:46.719,[system],1733645386719,Y
+user.show-multiple-balances,N,2024-12-08 17:09:32.595,[system],2024-12-08 17:09:32.595,[system],1733645372595,Y
+encryption.enabled,N,2024-12-08 17:09:32.595,[system],2024-12-08 17:09:32.595,[system],1733645372595,Y
+job-ticketing.http-client-timeout-seconds,35,2024-12-08 17:09:32.595,[system],2024-12-08 17:09:32.595,[system],1733645372595,Y
+archiving.images.creator.timeout.per-mb-secs,"",2024-12-08 17:09:32.596,[system],2024-12-08 17:09:32.596,[system],1733645372596,Y
+ext-device.max-escrow,-1,2024-12-08 17:09:32.596,[system],2024-12-08 17:09:32.596,[system],1733645372596,Y
+ldap.schema.user-name-search,"",2024-12-08 17:09:32.596,[system],2024-12-08 17:09:32.596,[system],1733645372596,Y
+notify.mail.addr-suffix.enabled,N,2024-12-08 17:09:32.596,[system],2024-12-08 17:09:32.596,[system],1733645372596,Y
+ext-device.id-number.in-prompt,"",2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+system.site.offline.change-print-job-settings.enabled,DEFAULT,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+system.grows.service-url,DEFAULT,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,N
+email-verification.rate-limit-mins,5,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+system.network-proxy-address,"",2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+user.web-print.enable-limit-groups,N,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+logging.print-log.archive-days,31,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+ext-device.show-print-job-account,Y,2024-12-08 17:09:32.597,[system],2024-12-08 17:09:32.597,[system],1733645372597,Y
+user-list.quick-find-mode,0,2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+ext-device.home-screen.force-show,N,2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+auth.source.custom-program,"",2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+notify.smtp.outlook-app-id,"",2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+display.records-per-page,25,2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+system.cloud.notice.api.url,DEFAULT,2024-12-08 17:09:32.598,[system],2024-12-08 17:09:32.598,[system],1733645372598,Y
+ext-device.integration-enabled,Y,2024-12-08 17:09:32.598,[system],2024-12-08 17:14:19.148,[setup wizard],1733645659148,Y
+scheduled-reports.quarterly-start-month,Jan,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+job.privacy.redact-timestamp.enabled,DEFAULT,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+system.link-row-remove-ticks.scan-action-user,0,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+user-source.gsuite.use-qualified-group-names,DEFAULT,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+system.site.offline-account-policy,USE_OFFLINE_ACCOUNT_IF_SELECTION_REQUIRED,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+system.scan.fax.phonebook.cache.expiry-secs,DEFAULT,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+ldap.2.base-dn,"",2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+system.scan.delivery.default-email-subject,Your scan,2024-12-08 17:09:32.599,[system],2024-12-08 17:09:32.599,[system],1733645372599,Y
+notify.smtp.azure-oauth-access-token,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+system.scan.delivery.email-body,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+notify.smtp.outlook-client-secret,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+ldap.2.schema.home-directory-field,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+system.scan.fax.manual.counts,0,2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+system.scan.fax.settings.timeout-secs,30,2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+notify.smtp.reject-untrusted-certificates,N,2024-12-08 17:09:32.592,[system],2025-01-07 15:22:21.404,admin,1736230941404,Y
+license.warn-datestamp,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,N
+auth.admin-users,"",2024-12-08 17:09:32.6,[system],2024-12-08 17:09:32.6,[system],1733645372600,Y
+internal-users.enable,N,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:32.601,[system],1733645372601,Y
+user.can-only-auto-generate-card-id,Y,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:33.173,[system],1733645373173,Y
+ldap.max-batch-size,500,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:32.601,[system],1733645372601,Y
+user.rates.enable,Y,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:32.601,[system],1733645372601,Y
+user.shared-accounts.enable,Y,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:32.601,[system],1733645372601,Y
+web.error-page.include-diagnostics,Y,2024-12-08 17:09:32.601,[system],2024-12-08 17:09:32.601,[system],1733645372601,Y
+system.default-locale,"",2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+web-print.consecutive-error-threshold,3,2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+ext-device.escrow-enabled.shared-accounts,N,2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+central-reports.data-timeout-secs,660,2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+user.release-station.can-release-any,N,2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+multi-personal-accounts.payment-topup-card-account-type,"",2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+email-printing.guest-printing.instructions.email-body,"",2024-12-08 17:09:32.602,[system],2024-12-08 17:09:32.602,[system],1733645372602,Y
+schedule.weekly,0 20 0 ? * 1,2024-12-08 17:09:32.603,[system],2024-12-08 17:09:32.603,[system],1733645372603,Y
+system.enable-debug,N,2024-12-08 17:09:32.603,[system],2024-12-08 17:09:32.603,[system],1733645372603,Y
+system.scan.fax.settings.command-args,settings list,2024-12-08 17:09:32.603,[system],2024-12-08 17:09:32.603,[system],1733645372603,Y
+system.scan.ocr.client-read-timeout-secs,30,2024-12-08 17:09:32.603,[system],2024-12-08 17:09:32.603,[system],1733645372603,Y
+user-source.second-card-id-sync-method,"",2024-12-08 17:09:32.603,[system],2024-12-08 17:09:32.603,[system],1733645372603,Y
+reports.csv-display-comment-headers,Y,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+release-station.can-close-full-screen,"",2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+ext-device.toshiba.eraser.total-erased-sheets,0,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,N
+dashboard.gadget.printer-status.refresh-seconds,DEFAULT,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+system.grows.icon-error-cache-seconds,3600,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,N
+auth.account-api.allowed-addresses,"",2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+schedule.daily-maintenence,0 55 0 * * ?,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+universal-print.proxy.timeout-seconds,30,2024-12-08 17:09:32.604,[system],2024-12-08 17:09:32.604,[system],1733645372604,Y
+print-deploy.proxy.timeout-seconds,30,2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+print-deploy.server.ca-signed-cert,"",2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+setup.account-selection.show-setup-msg,N,2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+universal-print.enabled,N,2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+user.transfers.min-amount,0.01,2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+user-source.2.user-second-card-id-sync-method,"",2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+auth.web-login.card-id.pin-required,N,2024-12-08 17:09:32.605,[system],2024-12-08 17:09:32.605,[system],1733645372605,Y
+user-source.card-id-regex,"",2024-12-08 17:09:32.606,[system],2024-12-08 17:09:32.606,[system],1733645372606,Y
+system.scan.failed-days,30,2024-12-08 17:09:32.606,[system],2024-12-08 17:09:32.606,[system],1733645372606,Y
+logging.print-log.store-document-name,Y,2024-12-08 17:09:32.606,[system],2024-12-08 17:09:32.606,[system],1733645372606,Y
+auth.source.env-vars,"",2024-12-08 17:09:32.607,[system],2024-12-08 17:09:32.607,[system],1733645372607,Y
+release-station.block-release-on-printer-error.error-list,DEFAULT,2024-12-08 17:09:32.607,[system],2024-12-08 17:09:32.607,[system],1733645372607,Y
+internal-users.self-registration.advertise-links,Y,2024-12-08 17:09:32.607,[system],2024-12-08 17:09:32.607,[system],1733645372607,Y
+user.release-station.can-release-all,Y,2024-12-08 17:09:32.607,[system],2024-12-08 17:09:32.607,[system],1733645372607,Y
+reports.max-rows,10000,2024-12-08 17:09:32.608,[system],2024-12-08 17:09:32.608,[system],1733645372608,Y
+web-login.user.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.608,[system],2024-12-08 17:09:32.608,[system],1733645372608,Y
+release-station.managers,"",2024-12-08 17:09:32.608,[system],2024-12-08 17:09:32.608,[system],1733645372608,Y
+user-source.custom-program,"",2024-12-08 17:09:32.608,[system],2024-12-08 17:09:32.608,[system],1733645372608,Y
+ext-device.card-no-regex,"",2024-12-08 17:09:32.609,[system],2024-12-08 17:09:32.609,[system],1733645372609,Y
+client.allow-match-on-user-only,N,2024-12-08 17:09:32.609,[system],2024-12-08 17:09:32.609,[system],1733645372609,Y
+display.forgot-login-details-back-button-text,"",2024-12-08 17:09:32.609,[system],2024-12-08 17:09:32.609,[system],1733645372609,Y
+system.network-port-http.user-facing,"",2024-12-08 17:09:32.609,[system],2024-12-08 17:09:32.609,[system],1733645372609,Y
+client.config.show-link,N,2024-12-08 17:09:32.609,[system],2024-12-08 17:09:32.609,[system],1733645372609,Y
+fleet-deploy.site.deploy,0,2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,N
+client.config.auth.ttl-values,"1,5,15,30,60,-1",2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,Y
+reports.pdf-font,"",2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,Y
+secondary-user-name.enabled,N,2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,Y
+user-source.update-user-details-during-on-demand-creation,Y,2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,Y
+spooled-jobs.new-job-from-unknown-email.canceled-notification.message,"",2024-12-08 17:09:32.61,[system],2024-12-08 17:09:32.61,[system],1733645372610,Y
+scheduled-reports.yearly-date,Jan-01,2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,Y
+print.stats.rolling-week.pages,"1736262000000,2,0,3,0,22",2024-12-08 17:09:32.601,[system],2025-01-08 16:19:31.821,[system],1736320771821,N
+db-stats.print-log-count.last-week,0,2024-12-08 17:09:32.602,[system],2025-01-19 00:55:01.356,[system],1737215701356,N
+client.client-session-batch-wait-period-in-millis,100,2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,Y
+email-verification.verify-email.subject,"",2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,Y
+ldap.schema.secondary-username-field,"",2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,Y
+web-cashier.receipt-number,0,2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,N
+notify.errors.printer.msg,"",2024-12-08 17:09:32.611,[system],2024-12-08 17:09:32.611,[system],1733645372611,Y
+email-verification.verify-email.body,"",2024-12-08 17:09:32.612,[system],2024-12-08 17:09:32.612,[system],1733645372612,Y
+web-print.job-rendering-timeout-mins,5,2024-12-08 17:09:32.612,[system],2024-12-08 17:09:32.612,[system],1733645372612,Y
+client.config.use-ssl,N,2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+user-source.test-sync.max-pending-deletion-entries-displayed,100,2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+print-deploy.server.url,"",2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+system.scan.fax.contact.timeout-secs,30,2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+notify.mail.addr-suffix.override-user,N,2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+backup.days-to-keep,30,2024-12-08 17:09:32.613,[system],2024-12-08 17:09:32.613,[system],1733645372613,Y
+client.config.auth.by-id-number,N,2024-12-08 17:09:32.615,[system],2024-12-08 17:09:32.615,[system],1733645372615,Y
+user.web-print.limit-groups,"",2024-12-08 17:09:32.615,[system],2024-12-08 17:09:32.615,[system],1733645372615,Y
+internal-users.prefix-for-usernames,guest-,2024-12-08 17:09:32.615,[system],2024-12-08 17:09:32.615,[system],1733645372615,Y
+ext-device.card-self-association.use-secondary-card-number,N,2024-12-08 17:09:32.616,[system],2024-12-08 17:09:32.616,[system],1733645372616,Y
+client.show-unreachable-warning,DEFAULT,2024-12-08 17:09:32.616,[system],2024-12-08 17:09:32.616,[system],1733645372616,Y
+notify.show-custom-notifications,N,2024-12-08 17:09:32.616,[system],2024-12-08 17:09:32.616,[system],1733645372616,Y
+archiving.keep-files-for-days,30,2024-12-08 17:09:32.616,[system],2024-12-08 17:09:32.616,[system],1733645372616,Y
+notify.smtp.gmail-oauth-client-id,"",2024-12-08 17:09:32.616,[system],2024-12-08 17:09:32.616,[system],1733645372616,Y
+ldap.host,"",2024-12-08 17:09:32.617,[system],2024-12-08 17:09:32.617,[system],1733645372617,Y
+ldap.2.schema.user-department-field,"",2024-12-08 17:09:32.617,[system],2024-12-08 17:09:32.617,[system],1733645372617,Y
+config.hash,70e7241e97332f7202844ad147ed5912,2024-12-08 17:09:32.618,[system],2024-12-08 17:14:37.418,admin,1733645677418,N
+system.scan.ocr.selected-languages,"",2024-12-08 17:09:32.618,[system],2024-12-08 17:09:32.618,[system],1733645372618,Y
+client.allow-match-on-machine-or-ip-only,Y,2024-12-08 17:09:32.619,[system],2024-12-08 17:09:32.619,[system],1733645372619,Y
+ldap.2.schema.secondary-username-field,"",2024-12-08 17:09:32.619,[system],2024-12-08 17:09:32.619,[system],1733645372619,Y
+system.scan.email.max-message-size-kb,"",2024-12-08 17:09:32.619,[system],2024-12-08 17:09:32.619,[system],1733645372619,Y
+auth.source.config-arg,"",2024-12-08 17:09:32.619,[system],2024-12-08 17:09:32.619,[system],1733645372619,Y
+ext-device.snmpv3.template.privacy-password,"",2024-12-08 17:09:32.619,[system],2024-12-08 17:09:32.619,[system],1733645372619,Y
+system.scan.jobs-folder,scan/jobs,2024-12-08 17:09:32.62,[system],2024-12-08 17:09:32.62,[system],1733645372620,Y
+schedule.daily-maintenence-reports,DEFAULT,2024-12-08 17:09:32.62,[system],2024-12-08 17:09:32.62,[system],1733645372620,Y
+enable.test.tips.url,N,2024-12-08 17:09:32.62,[system],2024-12-08 17:09:32.62,[system],1733645372620,Y
+system.last-server.ip-addresses,"192.168.2.248,fe80:0:0:0:4c:19c3:5d98:5407%eth2",2024-12-08 17:09:32.62,[system],2024-12-11 17:32:29.18,[system],1733905949180,N
+auth.web-login.card-id.enable,N,2024-12-08 17:09:32.62,[system],2024-12-08 17:09:32.62,[system],1733645372620,Y
+user.web-print.limit-ip-addresses,*,2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+ext-device.snmpv3.template.username,admin,2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+system.link-row-remove-ticks.account-group,0,2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+system.site.service-http-timeout-secs,"",2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+email-printing.attachment-error-template,"",2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+support-info.cached,"",2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+system.scan.backup-days,0,2024-12-08 17:09:32.621,[system],2024-12-08 17:09:32.621,[system],1733645372621,Y
+user-source.ad.upn-as-username,N,2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+user-lookup.db-driver,"",2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+user.transfers.max-amount,999999999.99,2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+system.scan.ocr.transfer-retry-timeout-mins,30,2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+subscriptions.gateway.http-client-timeout-seconds,30,2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+system.job-replay-limit-rate,"",2024-12-08 17:09:32.622,[system],2024-12-08 17:09:32.622,[system],1733645372622,Y
+system.last-server.unique-id,33bb3fe4-59d3-490a-91e0-539c7ebb9e7c,2024-12-08 17:09:32.622,[system],2024-12-08 17:09:45.836,[system],1733645385836,N
+system.current-build-no,70499,2024-12-08 17:09:32.623,[system],2024-12-08 17:09:46.641,[system],1733645386641,Y
+printer.snmp.timeout-millis,5000,2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+notify.winpopup-to-computer,N,2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+notify.smtp.is-oauth,N,2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+auth.web-cashier-interface.card-id.card-regex,"",2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+cost.model.enable-last-as-duplex,"",2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+display.login-forgot-link-text,"",2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+ext.acct-prov.user-account-type,"",2024-12-08 17:09:32.623,[system],2024-12-08 17:09:32.623,[system],1733645372623,Y
+display.login-instructions,"",2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+email-printing.attachment-min-image-bytes,20000,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+delete.acct-txn-log.days,-1,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+internal-users.self-registration.enable,N,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+system.scan.max-thread-for-delivery,DEFAULT,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+remote-support.proxy.timeout-seconds,30,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+system.scan.email.split-attachments.enabled,DEFAULT,2024-12-08 17:09:32.624,[system],2024-12-08 17:09:32.624,[system],1733645372624,Y
+system.scan.cloud.client-max-uploads,"",2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+email-printing.confirmation-template,"",2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+user-source.auto-generate-user-details-card-id,N,2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+ldap.schema.home-directory-field,"",2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+ext-device.snmpv3.template.auth-password,"",2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+release-station.auto-refresh-secs,60,2024-12-08 17:09:32.625,[system],2024-12-08 17:09:32.625,[system],1733645372625,Y
+ldap.use-ssl,N,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,Y
+system.site.offline-credit-policy,USE_LOCAL_BALANCE,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,Y
+multi-personal-accounts.cash-account-type,USER,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,Y
+find-my-mfd.testing,N,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,Y
+system.grows.enable-reporting,Y,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,N
+web-print.disable-macros,DEFAULT,2024-12-08 17:09:32.626,[system],2024-12-08 17:09:32.626,[system],1733645372626,Y
+user.edit-card-no-1-msg,"",2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,Y
+auth.web-login.sso-welcome-show-switch-user,N,2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,Y
+print.stats.total.jobs.release-station-account-selection.mobility,0,2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,N
+client.config.recent-accounts-to-remember,20,2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,N
+mobile-release.enable,Y,2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,Y
+ext-device.snmpv3.template.privacy-protocol,DES,2024-12-08 17:09:32.627,[system],2024-12-08 17:09:32.627,[system],1733645372627,Y
+ldap.schema.user-card-id-field,"",2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,Y
+release-station.job-expiry-mins,240,2024-12-08 17:09:32.628,[system],2024-12-08 17:14:19.178,[setup wizard],1733645659178,Y
+user-source.ad.email-address-field,"",2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,Y
+mobile-release.max-recent-printers,4,2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,Y
+notify.smtp.google-oauth-access-token-expiry,0,2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,Y
+web-cashier.enable,N,2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,N
+notify.smtp.gmail-oauth-client-secret,"",2024-12-08 17:09:32.628,[system],2024-12-08 17:09:32.628,[system],1733645372628,Y
+display.job.show-job-id,N,2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+user.can-change-card-pin,N,2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+printer.custom-field-name.3,"",2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+auth.webservices.auth-token,"",2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+print.paper-size-tolerance-percent.hpgl,DEFAULT,2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+printer.custom-field-name.2,"",2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+auth.trusted-proxy-addresses,"",2024-12-08 17:09:32.629,[system],2024-12-08 17:09:32.629,[system],1733645372629,Y
+printer.custom-field-name.1,"",2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+ldap.skip-cert-check,Y,2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+printer.custom-field-name.6,"",2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+user.release-station.admin-force-filter,N,2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+printer.custom-field-name.5,"",2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+print.auto-refund-cancelled-jobs,Y,2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+printer.custom-field-name.4,"",2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+system.scan.ocr.on-prem.trust-all-certs,Y,2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+system.scan.fax.send.timeout-secs,30,2024-12-08 17:09:32.63,[system],2024-12-08 17:09:32.63,[system],1733645372630,Y
+system.site.offline-overdraft-limit,0.0,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+system.scan.delivery.allow-overwrite,N,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+auth.webservices.allowed-addresses,127.0.0.1,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+printer.custom-fields.enable,N,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+system.site.verbose-proxy-logging,DEFAULT,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+system.site.enable-user-directory,Y,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+ext-device.change-print-job-settings.duplex.enabled,Y,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:46.716,[system],1733645386716,Y
+system.log.debug.sql,N,2024-12-08 17:09:32.631,[system],2024-12-08 17:09:32.631,[system],1733645372631,Y
+ldap.2.schema.type,"",2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+toner.minimum-check-period-mins,240,2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+ldap.schema.user-department-field,"",2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+toner.fetch-public-mib-then-private,DEFAULT,2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+notify.card-association.subject,PaperCut: Finish associating your card for printing,2024-12-08 17:09:32.627,[system],2025-01-07 14:43:51.749,admin,1736228631749,Y
+system.site.unknown-offline-shared-account,Offline Account,2024-12-08 17:09:32.632,[system],2024-12-08 17:09:34.072,[system],1733645374072,Y
+dashboard.gadget.custom.title,"",2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+system.link-row-remove-ticks.user-group,0,2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+user-source.gsuite.username-with-domain,N,2024-12-08 17:09:32.632,[system],2024-12-08 17:09:32.632,[system],1733645372632,Y
+system.org-type,Commercial,2024-12-08 17:09:32.632,[system],2024-12-08 17:14:19.142,[setup wizard],1733645659142,Y
+toner.very-low-threshold,0.10,2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+ldap.dereference-aliases,always,2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+ldap.2.schema.user-email-field,"",2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+ext-device.snmpv3.template.auth-protocol,MD5,2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+user.edit-card-no-2-msg,"",2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+user.job-ticketing.limit-access-to-groups,"",2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+email-printing.general-error-template,"",2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+system.scan.email-max-job-size-kb,20480,2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+user-source.ad.other-emails-field,"",2024-12-08 17:09:32.633,[system],2024-12-08 17:09:32.633,[system],1733645372633,Y
+printer.detect.grayscale.printers,Y,2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+system.scan.cloud.api-url,https://scan.cloud.papercut.com,2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+user.refund-requests.reason-required,N,2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+scan.archiving.enabled,N,2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+system.setup-completed,Y,2024-12-08 17:09:32.634,[system],2024-12-08 17:14:21.661,[setup wizard],1733645661661,N
+email-printing.ms-imap-oauth.directory-id,"",2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+notify.card-id-auto-generate.enable,N,2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+auth.web-login.card-id.card-regex,"",2024-12-08 17:09:32.634,[system],2024-12-08 17:09:32.634,[system],1733645372634,Y
+notify.smtp.azure-access-token-expected-expiry,0,2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+system.site.keepalive-interval-secs,"",2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+schedule.grows,"58 30 6,18 * * ?",2024-12-08 17:09:32.635,[system],2024-12-08 17:09:50.38,[system],1733645390380,Y
+system.row-remove-ticks.group,0,2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+web-client.config.recent-jobs-mins,30,2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+notify.smtp.debug,N,2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+notify.smtp.oauth-refresh-token,"",2024-12-08 17:09:32.635,[system],2024-12-08 17:09:32.635,[system],1733645372635,Y
+system.scan.root-home-folder,"",2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+user.can-view-card-id-type,PRIMARY,2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+azure-ad-tenant-id-user-sync,"",2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+user.web.custom-links,"",2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+account.sync.path,"",2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+client.allow-match-on-truncated-netbios-machine,Y,2024-12-08 17:09:32.636,[system],2024-12-08 17:09:32.636,[system],1733645372636,Y
+web-cashier.purchase-receipt-header,"",2024-12-08 17:09:32.637,[system],2024-12-08 17:09:32.637,[system],1733645372637,N
+environment.sheets-per-tree,8333.3,2024-12-08 17:09:32.637,[system],2024-12-08 17:09:32.637,[system],1733645372637,Y
+subscriptions.gateway.api-url,DEFAULT,2024-12-08 17:09:32.637,[system],2024-12-08 17:09:32.637,[system],1733645372637,Y
+notify.errors.printer.secs-before-notify,600,2024-12-08 17:09:32.637,[system],2024-12-08 17:09:32.637,[system],1733645372637,Y
+ldap.2.schema.group-search,"",2024-12-08 17:09:32.637,[system],2024-12-08 17:09:32.637,[system],1733645372637,Y
+email-printing.service-freq-secs,20,2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+release-station.auth-token,"",2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+ext-device.toshiba.ldaps-port,10636,2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+ldap.2.admin-password,"",2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+schedule.daily,0 10 0 * * ?,2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+logging.audit-logging-enabled,Y,2024-12-08 17:09:32.638,[system],2024-12-08 17:09:32.638,[system],1733645372638,Y
+mobile-release.remember-me,Y,2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+internal-users.self-registration.min-password-length,8,2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+system.save-state.interval-seconds,"",2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+ldap.schema.group-name-field,"",2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+ext-device.snmpv3.template.enable,N,2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+analytics.admin-notified,Y,2024-12-08 17:09:32.639,[system],2024-12-08 17:14:32.918,[setup wizard],1733645672918,Y
+language.available,"",2024-12-08 17:09:32.639,[system],2024-12-08 17:09:32.639,[system],1733645372639,Y
+user-source.2.auto-generate-user-details-card-id,N,2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+ldap.admin-password,"",2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+archiving.images.viewer.max-pages,"",2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+system.update-check.last-reminder,0,2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+ldap.schema.user-name-field,"",2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+user-lookup.custom-program.max-parallel,DEFAULT,2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+notify.smtp.type,7,2024-12-08 17:09:32.636,[system],2025-01-07 15:22:21.395,admin,1736230941395,Y
+notify.smtp.password,Nodedata_4450,2024-12-08 17:09:32.639,[system],2025-01-07 15:22:21.415,admin,1736230941415,Y
+delete.app-log.days,-1,2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+print.auto-refund-cancelled-jobs-timeout-mins,1440,2024-12-08 17:09:32.64,[system],2024-12-08 17:09:32.64,[system],1733645372640,Y
+system.scan.fax.ping.command-args,info list --global-settings %settings% --ping,2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+web-login.central-reports.session-timeout-mins,DEFAULT,2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+ldap.2.schema.user-full-name-field,"",2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+user.transfers.enable-comments,Y,2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+system.network-proxy-port,"",2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+display.default-log-days-to-display,14,2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+email-printing.port,"",2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+system.scan.fax.fixed.counts,0,2024-12-08 17:09:32.641,[system],2024-12-08 17:09:32.641,[system],1733645372641,Y
+ldap.2.port,0,2024-12-08 17:09:32.642,[system],2024-12-08 17:09:32.642,[system],1733645372642,Y
+notify.partial-translations,DEFAULT,2024-12-08 17:09:32.642,[system],2024-12-08 17:09:32.642,[system],1733645372642,Y
+client.spooled-job.requires-action.notify.message,"",2024-12-08 17:09:32.642,[system],2024-12-08 17:09:32.642,[system],1733645372642,Y
+user-source.auto-generate-second-card-id-length,"",2024-12-08 17:09:32.642,[system],2024-12-08 17:09:32.642,[system],1733645372642,Y
+user-source.ignored-users,"_nearbyd,_driverkit,_analyticsd,_applepay,_appstore,_captiveagent,_cmiodalassistants,_ctkd,_datadetectors,_findmydevice,_fpsd,_gamecontrollerd,_hidd,_mbsetupuser,_mobileasset,_ondemand,_reportmemoryexception,_timed,_wwwproxy,_xserverdocs,___vmware_conv_sa___,_avbdeviced,_appleevents,_assetcache,_astris,_ces,_coreaudiod,_coremediaiod,_cvmsroot,_devicemgr,_displaypolicyd,_distnote,_dovecot,_dovenull,_dpaudio,_ftp,_geod,_iconservices,_installassistant,_kadmin_admin,_kadmin_changepw,_krb_anonymous,_krb_changepw,_krb_kadmin,_krb_kerberos,_krb_krbtgt,_krbfast,_krbtgt,_launchservicesd,_lda,_locationd,_netbios,_netstatistics,_networkd,_nsurlsessiond,_nsurlstoraged,_pcastlibrary,_postgres,_screensaver,_scsd,_softwareupdate,_spotlight,_sshd,_svn,_taskgated,_teamsserver,_timezone,_tokend,_trustevaluationagent,_unknown,_update_sharing,_usbmuxd,_uucp,_warmd,_webauthserver,_windowserver,_www,_xcsbuildagent,_xcscredserver,_xgridagent,_xgridcontroller,amavisd,appowner,appserver,ard,atsserver,avahi,ava",2024-12-08 17:09:32.642,[system],2024-12-08 17:09:32.642,[system],1733645372642,Y
+user-source.ignored-users.1,"hi-autoipd,backup,bin,calendar,clamav,colord,cvs,cyrus,cyrusimap,daemon,devdocs,eppc,games,gnats,hplip,installer,irc,jabber,kernoops,libuuid,lightdm,list,lp,mail,mailman,man,mcxalr,mdnsresponder,messagebus,mysql,news,nobody,pcastagent,pcastserver,postfix,proxy,pulse,qtss,rtkit,sandbox,saned,securityagent,serialnumberd,speech-dispatcher,spotlight,sshd,svn,sync,sys,syslog,teamsserver,tokend,unknown,update_sharing,usbmux,uucp,whoopsie,windowserver,www,www-data,xgridagent,xgridcontroller,/.*\$/",2024-12-08 17:09:32.643,[system],2024-12-08 17:09:32.643,[system],1733645372643,Y
+universal-print.server.url,"",2024-12-08 17:09:32.643,[system],2024-12-08 17:09:32.643,[system],1733645372643,Y
+auth.web-login.microsoft-sign-in.enabled,N,2024-12-08 17:09:32.643,[system],2024-12-08 17:09:32.643,[system],1733645372643,Y
+email-printing.guest-printing.instructions.enabled,N,2024-12-08 17:09:32.643,[system],2024-12-08 17:09:32.643,[system],1733645372643,Y
+license.install-datestamp.v24,1733645385711:1913eb74d4f41ead686eb9df3b79d38e,2024-12-08 17:09:45.718,[system],2024-12-08 17:09:45.718,[system],1733645385718,Y
+notify.low-credit.enabled,N,2024-12-08 17:14:18.638,[setup wizard],2024-12-08 17:14:18.638,[setup wizard],1733645658638,Y
+notify.low-credit.method.client,Y,2024-12-08 17:14:18.657,[setup wizard],2024-12-08 17:14:18.657,[setup wizard],1733645658657,Y
+notify.release-held-manager.enabled,Y,2024-12-08 17:14:18.665,[setup wizard],2024-12-08 17:14:18.665,[setup wizard],1733645658665,Y
+notify.release-held-manager.message,"주의
+
+문서가 해제스테이션에 걸려있습니다. 해제를 위해 매니저/관리자의 허가가 필요합니다. 해제스테이션 관리자에게 연락하십시오.",2024-12-08 17:14:18.672,[setup wizard],2024-12-08 17:14:18.672,[setup wizard],1733645658672,Y
+notify.release-held-manager.method.client,Y,2024-12-08 17:14:18.678,[setup wizard],2024-12-08 17:14:18.678,[setup wizard],1733645658678,Y
+notify.release-held-user.enabled,Y,2024-12-08 17:14:18.694,[setup wizard],2024-12-08 17:14:18.694,[setup wizard],1733645658694,Y
+notify.release-held-user.message,"주의
+
+문서가 해제스테이션에 걸려있습니다. 문서가 출력되려면 먼저 해제스테이션에 로그인 하시고 문서를 해제하십시오.",2024-12-08 17:14:18.696,[setup wizard],2024-12-08 17:14:18.696,[setup wizard],1733645658696,Y
+notify.release-held-user.method.client,Y,2024-12-08 17:14:18.698,[setup wizard],2024-12-08 17:14:18.698,[setup wizard],1733645658698,Y
+notify.held-job-before-deletion.enabled,Y,2024-12-08 17:14:18.715,[setup wizard],2024-12-08 17:14:18.715,[setup wizard],1733645658715,Y
+notify.held-job-before-deletion.message,"ATTENTION
+
+Your document '"%document%'" is held for printing and is due to time out if not collected in %minutes% minutes.
+
+Your job was sent and held at %date%.",2024-12-08 17:14:18.723,[setup wizard],2024-12-08 17:14:18.723,[setup wizard],1733645658723,Y
+notify.held-job-before-deletion.method.client,Y,2024-12-08 17:14:18.729,[setup wizard],2024-12-08 17:14:18.729,[setup wizard],1733645658729,Y
+notify.held-job-after-deletion.enabled,N,2024-12-08 17:14:18.742,[setup wizard],2024-12-08 17:14:18.742,[setup wizard],1733645658742,Y
+notify.held-job-after-deletion.message,"ATTENTION
+
+Your document '"%document%'", held for printing, was not collected and has timed out.
+
+If you wish to print this document you will need to re-submit it.",2024-12-08 17:14:18.744,[setup wizard],2024-12-08 17:14:18.744,[setup wizard],1733645658744,Y
+notify.held-job-after-deletion.method.client,Y,2024-12-08 17:14:18.747,[setup wizard],2024-12-08 17:14:18.747,[setup wizard],1733645658747,Y
+notify.cancel-job.enabled,N,2024-12-08 17:14:18.767,[setup wizard],2024-12-08 17:14:18.767,[setup wizard],1733645658767,Y
+notify.cancel-job.message,"ATTENTION
+
+Your document '"%document%'" has been cancelled on printer '"%printer%'". The cancellation is usually as a result of an administrator deleting the job from the print queue.",2024-12-08 17:14:18.775,[setup wizard],2024-12-08 17:14:18.775,[setup wizard],1733645658775,Y
+notify.cancel-job.method.client,Y,2024-12-08 17:14:18.778,[setup wizard],2024-12-08 17:14:18.778,[setup wizard],1733645658778,Y
+notify.scan-delivery-completed.enabled,Y,2024-12-08 17:14:18.787,[setup wizard],2024-12-08 17:14:18.787,[setup wizard],1733645658787,Y
+notify.scan-delivery-completed.message,"Your scanned document has been delivered:
+
+%files%",2024-12-08 17:14:18.795,[setup wizard],2024-12-08 17:14:18.795,[setup wizard],1733645658795,Y
+notify.scan-delivery-completed.subject,Successful delivery,2024-12-08 17:14:18.799,[setup wizard],2024-12-08 17:14:18.799,[setup wizard],1733645658799,Y
+notify.scan-delivery-completed.method.client,Y,2024-12-08 17:14:18.801,[setup wizard],2024-12-08 17:14:18.801,[setup wizard],1733645658801,Y
+notify.scan-delivery-completed.method.email,Y,2024-12-08 17:14:18.81,[setup wizard],2024-12-08 17:14:18.81,[setup wizard],1733645658810,Y
+notify.scan-fax-delivery-completed.enabled,Y,2024-12-08 17:14:18.82,[setup wizard],2024-12-08 17:14:18.82,[setup wizard],1733645658820,Y
+notify.scan-fax-delivery-completed.message,Your scanned document has been delivered to the fax provider and queued successfully.,2024-12-08 17:14:18.822,[setup wizard],2024-12-08 17:14:18.822,[setup wizard],1733645658822,Y
+notify.scan-fax-delivery-completed.subject,Successful fax delivery,2024-12-08 17:14:18.825,[setup wizard],2024-12-08 17:14:18.825,[setup wizard],1733645658825,Y
+notify.scan-fax-delivery-completed.method.client,Y,2024-12-08 17:14:18.831,[setup wizard],2024-12-08 17:14:18.831,[setup wizard],1733645658831,Y
+notify.scan-fax-delivery-completed.method.email,Y,2024-12-08 17:14:18.834,[setup wizard],2024-12-08 17:14:18.834,[setup wizard],1733645658834,Y
+notify.scan-delivery-first-retry.enabled,Y,2024-12-08 17:14:18.843,[setup wizard],2024-12-08 17:14:18.843,[setup wizard],1733645658843,Y
+notify.scan-delivery-first-retry.message,Your scanned document is on its way.,2024-12-08 17:14:18.847,[setup wizard],2024-12-08 17:14:18.847,[setup wizard],1733645658847,Y
+notify.scan-delivery-first-retry.subject,Sending your scanned document,2024-12-08 17:14:18.853,[setup wizard],2024-12-08 17:14:18.853,[setup wizard],1733645658853,Y
+notify.scan-delivery-first-retry.method.client,Y,2024-12-08 17:14:18.858,[setup wizard],2024-12-08 17:14:18.858,[setup wizard],1733645658858,Y
+notify.scan-delivery-first-retry.method.email,Y,2024-12-08 17:14:18.864,[setup wizard],2024-12-08 17:14:18.864,[setup wizard],1733645658864,Y
+notify.scan-fax-delivery-first-retry.enabled,Y,2024-12-08 17:14:18.873,[setup wizard],2024-12-08 17:14:18.873,[setup wizard],1733645658873,Y
+notify.scan-fax-delivery-first-retry.message,Your scanned fax document is on its way.,2024-12-08 17:14:18.876,[setup wizard],2024-12-08 17:14:18.876,[setup wizard],1733645658876,Y
+notify.scan-fax-delivery-first-retry.subject,Sending your scanned fax document,2024-12-08 17:14:18.878,[setup wizard],2024-12-08 17:14:18.878,[setup wizard],1733645658878,Y
+notify.scan-fax-delivery-first-retry.method.client,Y,2024-12-08 17:14:18.881,[setup wizard],2024-12-08 17:14:18.881,[setup wizard],1733645658881,Y
+notify.scan-fax-delivery-first-retry.method.email,Y,2024-12-08 17:14:18.883,[setup wizard],2024-12-08 17:14:18.883,[setup wizard],1733645658883,Y
+notify.scan-delivery-failed.enabled,Y,2024-12-08 17:14:18.885,[setup wizard],2024-12-08 17:14:18.885,[setup wizard],1733645658885,Y
+notify.scan-delivery-failed.message,"There seems to be a problem sending your scanned document:
+
+%files%
+
+If this persists, please contact your system administrator.",2024-12-08 17:14:18.886,[setup wizard],2024-12-08 17:14:18.886,[setup wizard],1733645658886,Y
+notify.scan-delivery-failed.subject,Failure to send your scanned document,2024-12-08 17:14:18.889,[setup wizard],2024-12-08 17:14:18.889,[setup wizard],1733645658889,Y
+notify.scan-delivery-failed.method.client,Y,2024-12-08 17:14:18.89,[setup wizard],2024-12-08 17:14:18.89,[setup wizard],1733645658890,Y
+notify.scan-delivery-failed.method.email,Y,2024-12-08 17:14:18.895,[setup wizard],2024-12-08 17:14:18.895,[setup wizard],1733645658895,Y
+notify.scan-fax-delivery-failed.enabled,Y,2024-12-08 17:14:18.897,[setup wizard],2024-12-08 17:14:18.897,[setup wizard],1733645658897,Y
+notify.scan-fax-delivery-failed.message,"There seems to be a problem sending your fax scanned document.
+If this persists, please contact your system administrator.",2024-12-08 17:14:18.899,[setup wizard],2024-12-08 17:14:18.899,[setup wizard],1733645658899,Y
+notify.scan-fax-delivery-failed.subject,Failure to send your scanned fax document,2024-12-08 17:14:18.901,[setup wizard],2024-12-08 17:14:18.901,[setup wizard],1733645658901,Y
+notify.scan-fax-delivery-failed.method.client,Y,2024-12-08 17:14:18.906,[setup wizard],2024-12-08 17:14:18.906,[setup wizard],1733645658906,Y
+notify.scan-fax-delivery-failed.method.email,Y,2024-12-08 17:14:18.913,[setup wizard],2024-12-08 17:14:18.913,[setup wizard],1733645658913,Y
+notify.scan-max-job-size-exceeded.enabled,Y,2024-12-08 17:14:18.918,[setup wizard],2024-12-08 17:14:18.918,[setup wizard],1733645658918,Y
+notify.scan-max-job-size-exceeded.message,"Your scanned document is too big:
+
+%files%
+
+You can try reducing the scanned document size by using a lower resolution, or switching color mode to grayscale or black and white. Alternatively, you can try splitting your job.
+
+If you need to send a larger scanned document, please contact your system administrator.",2024-12-08 17:14:18.921,[setup wizard],2024-12-08 17:14:18.921,[setup wizard],1733645658921,Y
+notify.scan-max-job-size-exceeded.subject,Failed to send your scanned document,2024-12-08 17:14:18.926,[setup wizard],2024-12-08 17:14:18.926,[setup wizard],1733645658926,Y
+notify.scan-max-job-size-exceeded.method.client,Y,2024-12-08 17:14:18.928,[setup wizard],2024-12-08 17:14:18.928,[setup wizard],1733645658928,Y
+notify.scan-max-job-size-exceeded.method.email,Y,2024-12-08 17:14:18.935,[setup wizard],2024-12-08 17:14:18.935,[setup wizard],1733645658935,Y
+notify.scan-fax-max-job-size-exceeded.enabled,Y,2024-12-08 17:14:18.937,[setup wizard],2024-12-08 17:14:18.937,[setup wizard],1733645658937,Y
+notify.scan-fax-max-job-size-exceeded.message,"Your scanned fax document is too big.
+You can try reducing the scanned document size by using a lower resolution.
+
+If you need to fax a larger scanned document, please contact your system administrator.",2024-12-08 17:14:18.939,[setup wizard],2024-12-08 17:14:18.939,[setup wizard],1733645658939,Y
+notify.scan-fax-max-job-size-exceeded.subject,Failed to send your scanned fax document,2024-12-08 17:14:18.941,[setup wizard],2024-12-08 17:14:18.941,[setup wizard],1733645658941,Y
+notify.scan-fax-max-job-size-exceeded.method.client,Y,2024-12-08 17:14:18.942,[setup wizard],2024-12-08 17:14:18.942,[setup wizard],1733645658942,Y
+notify.scan-fax-max-job-size-exceeded.method.email,Y,2024-12-08 17:14:18.944,[setup wizard],2024-12-08 17:14:18.944,[setup wizard],1733645658944,Y
+notify.pdr.no_credit.enabled,Y,2024-12-08 17:14:18.947,[setup wizard],2024-12-08 17:14:18.947,[setup wizard],1733645658947,Y
+notify.pdr.no_credit.message,"출력 거부
+
+크레딧이 모자랍니다-%pages%를 프린트하려면 %cost%의 비용이 들며 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:18.949,[setup wizard],2024-12-08 17:14:18.949,[setup wizard],1733645658949,Y
+notify.pdr.no_credit.method.client,Y,2024-12-08 17:14:18.951,[setup wizard],2024-12-08 17:14:18.951,[setup wizard],1733645658951,Y
+notify.pdr.external_system.enabled,Y,2024-12-08 17:14:18.955,[setup wizard],2024-12-08 17:14:18.955,[setup wizard],1733645658955,Y
+notify.pdr.external_system.message,"PRINTING DENIED
+
+An external account source has denied your print job.",2024-12-08 17:14:18.957,[setup wizard],2024-12-08 17:14:18.957,[setup wizard],1733645658957,Y
+notify.pdr.external_system.method.client,Y,2024-12-08 17:14:18.958,[setup wizard],2024-12-08 17:14:18.958,[setup wizard],1733645658958,Y
+notify.pdr.user_printing_disabled.enabled,Y,2024-12-08 17:14:18.963,[setup wizard],2024-12-08 17:14:18.963,[setup wizard],1733645658963,Y
+notify.pdr.user_printing_disabled.message,"출력 거부
+
+사용자'"%user%'"는 프린트를 할 수 없는 사용자입니다.",2024-12-08 17:14:18.965,[setup wizard],2024-12-08 17:14:18.965,[setup wizard],1733645658965,Y
+notify.pdr.user_printing_disabled.method.client,Y,2024-12-08 17:14:18.966,[setup wizard],2024-12-08 17:14:18.966,[setup wizard],1733645658966,Y
+notify.pdr.group_no_access.enabled,Y,2024-12-08 17:14:18.969,[setup wizard],2024-12-08 17:14:18.969,[setup wizard],1733645658969,Y
+notify.pdr.group_no_access.message,"PRINTING DENIED
+
+You do not have permission to print on '"%printer%'".",2024-12-08 17:14:18.973,[setup wizard],2024-12-08 17:14:18.973,[setup wizard],1733645658973,Y
+notify.pdr.group_no_access.method.client,Y,2024-12-08 17:14:18.976,[setup wizard],2024-12-08 17:14:18.976,[setup wizard],1733645658976,Y
+notify.pdr.group_no_color_access.enabled,Y,2024-12-08 17:14:18.982,[setup wizard],2024-12-08 17:14:18.982,[setup wizard],1733645658982,Y
+notify.pdr.group_no_color_access.message,"PRINTING DENIED
+
+You do not have permission to print in color on '"%printer%'".",2024-12-08 17:14:18.983,[setup wizard],2024-12-08 17:14:18.983,[setup wizard],1733645658983,Y
+notify.pdr.group_no_color_access.method.client,Y,2024-12-08 17:14:18.984,[setup wizard],2024-12-08 17:14:18.984,[setup wizard],1733645658984,Y
+notify.pdr.too_few_pages.enabled,Y,2024-12-08 17:14:18.986,[setup wizard],2024-12-08 17:14:18.986,[setup wizard],1733645658986,Y
+notify.pdr.too_few_pages.message,"출력 거부
+
+문서가 현재 프린터를 사용할 만한 분량이 아닙니다. 현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:18.987,[setup wizard],2024-12-08 17:14:18.987,[setup wizard],1733645658987,Y
+notify.pdr.too_few_pages.method.client,Y,2024-12-08 17:14:18.988,[setup wizard],2024-12-08 17:14:18.988,[setup wizard],1733645658988,Y
+notify.pdr.too_many_pages.enabled,Y,2024-12-08 17:14:18.998,[setup wizard],2024-12-08 17:14:18.998,[setup wizard],1733645658998,Y
+notify.pdr.too_many_pages.message,"출력 거부
+
+문서의 페이지가 너무 많습니다-작업량을 몇차례로 나워 진행하십시오. 현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19,[setup wizard],2024-12-08 17:14:19,[setup wizard],1733645659000,Y
+notify.pdr.too_many_pages.method.client,Y,2024-12-08 17:14:19.001,[setup wizard],2024-12-08 17:14:19.001,[setup wizard],1733645659001,Y
+notify.pdr.too_many_copies.enabled,Y,2024-12-08 17:14:19.007,[setup wizard],2024-12-08 17:14:19.007,[setup wizard],1733645659007,Y
+notify.pdr.too_many_copies.message,"PRINTING DENIED
+
+The document exceeds the maximum copy count - You have tried to print a total of %pages% pages (%copies% copies).",2024-12-08 17:14:19.009,[setup wizard],2024-12-08 17:14:19.009,[setup wizard],1733645659009,Y
+notify.pdr.too_many_copies.method.client,Y,2024-12-08 17:14:19.012,[setup wizard],2024-12-08 17:14:19.012,[setup wizard],1733645659012,Y
+notify.pdr.too_expensive.enabled,Y,2024-12-08 17:14:19.017,[setup wizard],2024-12-08 17:14:19.017,[setup wizard],1733645659017,Y
+notify.pdr.too_expensive.message,"출력 거부
+
+비용이 너무 비쌉니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.02,[setup wizard],2024-12-08 17:14:19.02,[setup wizard],1733645659020,Y
+notify.pdr.too_expensive.method.client,Y,2024-12-08 17:14:19.021,[setup wizard],2024-12-08 17:14:19.021,[setup wizard],1733645659021,Y
+notify.pdr.disallowed_doc_name.enabled,Y,2024-12-08 17:14:19.023,[setup wizard],2024-12-08 17:14:19.023,[setup wizard],1733645659023,Y
+notify.pdr.disallowed_doc_name.message,"출력 거부
+
+허락되지 않은 문서이름입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.024,[setup wizard],2024-12-08 17:14:19.024,[setup wizard],1733645659024,Y
+notify.pdr.disallowed_doc_name.method.client,Y,2024-12-08 17:14:19.026,[setup wizard],2024-12-08 17:14:19.026,[setup wizard],1733645659026,Y
+notify.pdr.disallowed_paper_size.enabled,Y,2024-12-08 17:14:19.03,[setup wizard],2024-12-08 17:14:19.03,[setup wizard],1733645659030,Y
+notify.pdr.disallowed_paper_size.message,"출력 거부
+
+허락되지 않은 종이크기입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.031,[setup wizard],2024-12-08 17:14:19.031,[setup wizard],1733645659031,Y
+notify.pdr.disallowed_paper_size.method.client,Y,2024-12-08 17:14:19.032,[setup wizard],2024-12-08 17:14:19.032,[setup wizard],1733645659032,Y
+notify.pdr.disallowed_color_mode.enabled,Y,2024-12-08 17:14:19.042,[setup wizard],2024-12-08 17:14:19.042,[setup wizard],1733645659042,Y
+notify.pdr.disallowed_color_mode.message,"출력 거부
+
+허락되지 않은 컬러모드입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.046,[setup wizard],2024-12-08 17:14:19.046,[setup wizard],1733645659046,Y
+notify.pdr.disallowed_color_mode.method.client,Y,2024-12-08 17:14:19.049,[setup wizard],2024-12-08 17:14:19.049,[setup wizard],1733645659049,Y
+notify.pdr.disallowed_duplex_mode.enabled,Y,2024-12-08 17:14:19.057,[setup wizard],2024-12-08 17:14:19.057,[setup wizard],1733645659057,Y
+notify.pdr.disallowed_duplex_mode.message,"출력 거부
+
+양면출력 불가입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.06,[setup wizard],2024-12-08 17:14:19.06,[setup wizard],1733645659060,Y
+notify.pdr.disallowed_duplex_mode.method.client,Y,2024-12-08 17:14:19.061,[setup wizard],2024-12-08 17:14:19.061,[setup wizard],1733645659061,Y
+notify.pdr.document_too_large.enabled,Y,2024-12-08 17:14:19.066,[setup wizard],2024-12-08 17:14:19.066,[setup wizard],1733645659066,Y
+notify.pdr.document_too_large.message,"출력 거부
+
+문서크기가 너무 큽니다. 현재 프린터는 문서크기에 제한이 있습니다. 문서크기를 줄여서 사용하십시오. 현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.07,[setup wizard],2024-12-08 17:14:19.07,[setup wizard],1733645659070,Y
+notify.pdr.document_too_large.method.client,Y,2024-12-08 17:14:19.072,[setup wizard],2024-12-08 17:14:19.072,[setup wizard],1733645659072,Y
+notify.pdr.duplicate_document.enabled,Y,2024-12-08 17:14:19.084,[setup wizard],2024-12-08 17:14:19.084,[setup wizard],1733645659084,Y
+notify.pdr.duplicate_document.message,"출력 거부
+
+반복된 문서입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.089,[setup wizard],2024-12-08 17:14:19.089,[setup wizard],1733645659089,Y
+notify.pdr.duplicate_document.method.client,Y,2024-12-08 17:14:19.093,[setup wizard],2024-12-08 17:14:19.093,[setup wizard],1733645659093,Y
+notify.pdr.printer_disabled.enabled,Y,2024-12-08 17:14:19.096,[setup wizard],2024-12-08 17:14:19.096,[setup wizard],1733645659096,Y
+notify.pdr.printer_disabled.message,"출력 거부
+
+프린터 %printer%가 현재 사용불가입니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.097,[setup wizard],2024-12-08 17:14:19.097,[setup wizard],1733645659097,Y
+notify.pdr.printer_disabled.method.client,Y,2024-12-08 17:14:19.099,[setup wizard],2024-12-08 17:14:19.099,[setup wizard],1733645659099,Y
+notify.pdr.account_not_permitted.enabled,Y,2024-12-08 17:14:19.102,[setup wizard],2024-12-08 17:14:19.102,[setup wizard],1733645659102,Y
+notify.pdr.account_not_permitted.message,"출력 거부
+
+현재 사용중인 계정으로 과금시킬 수 없습니다-현재 요청한 %pages%페이지의 비용은 %cost%가 듭니다. 현재 %balance%의 잔액이 남아있습니다.",2024-12-08 17:14:19.103,[setup wizard],2024-12-08 17:14:19.103,[setup wizard],1733645659103,Y
+notify.pdr.account_not_permitted.method.client,Y,2024-12-08 17:14:19.104,[setup wizard],2024-12-08 17:14:19.104,[setup wizard],1733645659104,Y
+notify.pdr.release_station_timeout.enabled,Y,2024-12-08 17:14:19.106,[setup wizard],2024-12-08 17:14:19.106,[setup wizard],1733645659106,Y
+notify.pdr.release_station_timeout.message,"ATTENTION
+
+Your document '"%document%'" has been canceled because it was not released in time.",2024-12-08 17:14:19.106,[setup wizard],2024-12-08 17:14:19.106,[setup wizard],1733645659106,Y
+notify.pdr.release_station_timeout.method.client,Y,2024-12-08 17:14:19.108,[setup wizard],2024-12-08 17:14:19.108,[setup wizard],1733645659108,Y
+notify.pdr.release_station_cancelled.enabled,Y,2024-12-08 17:14:19.114,[setup wizard],2024-12-08 17:14:19.114,[setup wizard],1733645659114,Y
+notify.pdr.release_station_cancelled.message,"ATTENTION
+
+Your document '"%document%'" has been canceled.",2024-12-08 17:14:19.116,[setup wizard],2024-12-08 17:14:19.116,[setup wizard],1733645659116,Y
+notify.pdr.release_station_cancelled.method.client,Y,2024-12-08 17:14:19.117,[setup wizard],2024-12-08 17:14:19.117,[setup wizard],1733645659117,Y
+notify.pdr.cancelled_from_os_queue.enabled,Y,2024-12-08 17:14:19.12,[setup wizard],2024-12-08 17:14:19.12,[setup wizard],1733645659120,Y
+notify.pdr.cancelled_from_os_queue.message,"ATTENTION
+
+Your document '"%document%'" has been canceled.",2024-12-08 17:14:19.121,[setup wizard],2024-12-08 17:14:19.121,[setup wizard],1733645659121,Y
+notify.pdr.cancelled_from_os_queue.method.client,Y,2024-12-08 17:14:19.122,[setup wizard],2024-12-08 17:14:19.122,[setup wizard],1733645659122,Y
+notify.pdr.script_cancelled.enabled,Y,2024-12-08 17:14:19.124,[setup wizard],2024-12-08 17:14:19.124,[setup wizard],1733645659124,Y
+notify.pdr.script_cancelled.message,"ATTENTION
+
+Your document '"%document%'" has been canceled due to a print policy on printer '"%printer%'".",2024-12-08 17:14:19.126,[setup wizard],2024-12-08 17:14:19.126,[setup wizard],1733645659126,Y
+notify.pdr.script_cancelled.method.client,Y,2024-12-08 17:14:19.128,[setup wizard],2024-12-08 17:14:19.128,[setup wizard],1733645659128,Y
+notify.pdr.allowed.enabled,N,2024-12-08 17:14:19.131,[setup wizard],2024-12-08 17:14:19.131,[setup wizard],1733645659131,Y
+notify.pdr.allowed.message,"PRINTED
+
+You have printed %pages% pages on '"%printer%'" costing %cost%.  There is %balance% in the account.",2024-12-08 17:14:19.132,[setup wizard],2024-12-08 17:14:19.132,[setup wizard],1733645659132,Y
+notify.pdr.allowed.method.client,Y,2024-12-08 17:14:19.133,[setup wizard],2024-12-08 17:14:19.133,[setup wizard],1733645659133,Y
+subscriptions.activation-date,DNPlBL3F5TfgYrQUj7biB6V+/YcJEsr7bObPghqt96+Dvlz3MbkhN7mdLwRwRPoC,2024-12-15 11:49:52.851,[system],2025-01-07 11:33:30.963,admin,1736217210963,Y
+notify.refund-requests.action.user.body,"Your printing refund request has been %approved-or-denied%.
+
+%refund.response-reason%
+
+%approved-or-denied-message%
+
+The details of your refund request were as follows:
+Date: %job.date%
+Document: %job.document%
+Printer: %job.printer%
+Cost: %job.cost%
+Pages: %job.pages%",2024-12-08 17:09:32.636,[system],2025-01-07 14:41:12.577,admin,1736228472577,Y
+notify.refund-requests.action.user.denied,If you would like to discuss this issue further please contact your system administrator.,2024-12-08 17:09:32.612,[system],2025-01-07 14:41:12.582,admin,1736228472582,Y
+notify.toner-level.schedule,0 30 10 ? * MON-FRI,2025-01-07 14:43:51.687,admin,2025-01-07 14:43:51.687,admin,1736228631687,Y
+stats.user-count,217,2024-12-08 17:09:32.548,[system],2025-01-08 00:55:00.839,[system],1736265300839,Y
+print.stats.rolling-month.cost,"1736262000000,0.0,0.0",2024-12-08 17:09:32.592,[system],2025-01-08 16:15:51.756,[system],1736320551756,N
+print.stats.rolling-day.pages,"1736262000000,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,1,5,0,0,1,15",2024-12-08 17:09:32.51,[system],2025-01-08 16:19:31.817,[system],1736320771817,N
+print.stats.rolling-month.pages,"1736262000000,2,25",2024-12-08 17:09:32.595,[system],2025-01-08 16:19:31.821,[system],1736320771821,N
+print.stats.rolling-week.sheets,"1736262000000,2,0,2,0,22",2024-12-08 17:09:32.628,[system],2025-01-08 16:19:31.822,[system],1736320771822,N
+print.stats.rolling-month.sheets,"1736262000000,2,24",2024-12-08 17:09:32.546,[system],2025-01-08 16:19:31.823,[system],1736320771823,N
+print.stats.total.sheets,26,2024-12-08 17:09:32.569,[system],2025-01-08 16:19:31.826,[system],1736320771826,N
+system.last-server.time,1736929917009,2024-12-08 17:09:32.532,[system],2025-01-15 17:31:57.198,[system],1736929917198,N
+account.last-modified-time,1737388500308,2024-12-08 17:09:32.526,[system],2025-01-21 00:55:00.346,[system],1737388500346,Y
+subscriptions.refresh-token,eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0YWxsSWQiOiIzM2JiM2ZlNC01OWQzLTQ5MGEtOTFlMC01MzljN2ViYjllN2MiLCJjcm4iOiJORlItNjEwMyIsImlzcyI6InBhcGVyY3V0LmNvbSIsInN1YiI6IjMzYmIzZmU0LTU5ZDMtNDkwYS05MWUwLTUzOWM3ZWJiOWU3YyIsIm5iZiI6MTczNzQyODQwMSwiaWF0IjoxNzM3NDI4NDAxLCJqdGkiOiJiNTNjOWNlNC1lZTg3LTQ0MDAtOWEwYS03ZjU4Y2MyYmU4ZDIiLCJWZXJzaW9uIjoidjIifQ.6Rwq1bWBdpmqhQ9iki42OUk-HQ4HAiGOceiZQaCNBuI,2024-12-08 17:09:32.626,[system],2025-01-21 12:00:01.864,[system],1737428401864,Y
+notify.card-id-auto-generate.msg,Your new ID number for printing/copying is %id_number%. Please keep this number confidential.,2024-12-08 17:09:32.567,[system],2025-01-07 14:43:51.742,admin,1736228631742,Y
+internal-users.confirmation-email.template,"Thank you for registering.  Your details are:
+  Full Name: %full_name%
+  Username: %username%
+  Password: %password%
+  Identity Number: %id_num%
+  ID PIN: %id_pin%
+
+The identity number and PIN may be required to log into some devices.
+
+Please print or take note of this information, and keep the password and PIN private.",2024-12-08 17:09:32.627,[system],2025-01-07 14:44:19.187,admin,1736228659187,Y
+notify.card-association.msg,You've requested associating a card to your PaperCut printing account. %startlink%Finish setting up your card.%endlink% (This link expires in two hours.),2024-12-08 17:09:32.56,[system],2025-01-07 14:43:51.747,admin,1736228631747,Y
+notify.mail.subject,Notification-,2024-12-08 17:09:32.577,[system],2025-01-07 15:22:21.415,admin,1736230941415,Y
+notify.low-credit.message,"낮은 잔액
+
+잔액이 %balance%만큼 내려갔습니다.",2024-12-08 17:14:18.649,[setup wizard],2025-01-07 15:22:21.42,admin,1736230941420,Y

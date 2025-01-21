@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 import EditForm from '@/app/components/user/edit-form';
-import TableForm from '@/app/components/user/table-form';
+import ProcessLog from '@/app/components/user/processLogTable';
+import JobLog from '@/app/components/user/jobLogTable';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import { fetchUserById } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
@@ -79,7 +80,8 @@ export default async function Page(
                 })}
             </div>
             {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} />}
-            {(job === 'processLog' || job === 'jobLog') && <TableForm />}
+            {job === 'processLog' && <ProcessLog id={id}/>}
+            {job === 'jobLog' && <JobLog id={id}/>}
         </main>
     );
 }
