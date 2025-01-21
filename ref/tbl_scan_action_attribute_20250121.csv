@@ -1,0 +1,22 @@
+1001,Y,1733645659338,Y,type-field.subject.canEdit
+1001,COLOR,1733645659341,Y,scan-color-mode
+1001,Y,1733645659341,Y,scan-paper-size.canEdit
+1001,PORTRAIT,1733645659341,Y,scan-orientation
+1001,Scan to the user's primary email address,1733645659341,Y,notes
+1001,DISABLED,1733645659340,Y,scan-duplex
+1001,NONE,1733645659341,Y,scan-clockwise-rotation
+1001,Y,1733645659341,Y,scan-color-mode.canEdit
+1001,Y,1733645659341,Y,scan-single-pdf.canEdit
+1001,Y,1733645659341,Y,scan-file-type.canEdit
+1001,scan_%user%_%date%,1733645659338,Y,type-field.filename.value
+1001,PDF,1733645659341,Y,scan-file-type
+1001,Y,1733645659341,Y,scan-clockwise-rotation.canEdit
+1001,Y,1733645659341,Y,scan-dpi.canEdit
+1001,N,1733645659338,Y,include.metadata
+1001,Your scan (%label%),1733645659338,Y,type-field.subject.value
+1001,Y,1733645659341,Y,scan-duplex.canEdit
+1001,A4,1733645659341,Y,scan-paper-size
+1001,300,1733645659341,Y,scan-dpi
+1001,Y,1733645659338,Y,type-field.filename.canEdit
+1001,Y,1733645659341,Y,scan-orientation.canEdit
+1001,FALSE,1733645659341,Y,scan-single-pdf

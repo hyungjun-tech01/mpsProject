@@ -43,6 +43,7 @@ interface ITable<DataType> {
     totalPages: number;
     category?: string;
     deleteAction?: (id: string) => void;
+    editable?: boolean;
 }
 
 export default function CustomizedTable<DataType>({
@@ -52,6 +53,7 @@ export default function CustomizedTable<DataType>({
     totalPages,
     category,
     deleteAction,
+    editable = true,
 }: ITable<DataType>) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -73,7 +75,7 @@ export default function CustomizedTable<DataType>({
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            <StyledTableCell align='right'>{' '}</StyledTableCell>
+                            { editable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -90,16 +92,18 @@ export default function CustomizedTable<DataType>({
                                             {row[column.name]}
                                         </StyledTableCell>
                                     ))}
-                                    <StyledTableCell
-                                        component="th"
-                                        align='right'
-                                        scope="row"
-                                    >
-                                        <div className="flex justify-end gap-3">
-                                            {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
-                                            {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
-                                        </div>
-                                    </StyledTableCell>
+                                    { editable && 
+                                        <StyledTableCell
+                                            component="th"
+                                            align='right'
+                                            scope="row"
+                                        >
+                                            <div className="flex justify-end gap-3">
+                                                {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
+                                                {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
+                                            </div>
+                                        </StyledTableCell>
+                                    }
                                 </StyledTableRow>
                             )
                         })}

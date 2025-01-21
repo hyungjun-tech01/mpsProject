@@ -15,7 +15,7 @@ const client = new pg.Client({
 await client.connect();
 
 
-// ----- Begin : User ----------------------------------------//
+// ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredUsers(
     query: string,
@@ -25,7 +25,7 @@ export async function fetchFilteredUsers(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users = query !== '' 
+        const users = query !== ''
             ? await client.query(`
                 SELECT * FROM tbl_user
                 WHERE
@@ -46,9 +46,9 @@ export async function fetchFilteredUsers(
                 ORDER BY tbl_user.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
-        ;
-        
-        const converted = users.rows.map((data:User) => ({
+            ;
+
+        const converted = users.rows.map((data: User) => ({
             ...data,
             id: data.user_id,
         }));
@@ -64,7 +64,7 @@ export async function fetchUsersPages(
     itemsPerPage: number,
 ) {
     try {
-        const count = query !== '' 
+        const count = query !== ''
             ? await client.query(`
                 SELECT COUNT(*)
                 FROM tbl_user
@@ -83,7 +83,7 @@ export async function fetchUsersPages(
                 WHERE
                     tbl_user.deleted='N'
             `)
-        ;
+            ;
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -101,7 +101,7 @@ export async function fetchUserById(
             SELECT * FROM tbl_user
             WHERE user_id='${id}'
         `);
-        
+
         return user.rows[0];
     } catch (error) {
         console.error('Database Error:', error);
@@ -137,8 +137,28 @@ export async function fetchCreateUser(
         };
     }
 }
-// ----- End : User ------------------------------------------//
+
+export async function fetchProcessLogByUserId(
+    id: string,
+) {
+    try {
+        const processlog = await client.query(`
+                SELECT * FROM tbl_audit_log
+                WHERE
+                    tbl_audit_log.entity_id=${id}
+                ORDER BY tbl_audit_log.modified_date DESC
+            `);
+
+        return processlog.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch process log by user.');
+    }
+}
+// ----- End : User ---------------------------------------------------------//
 
 
+// ----- Begin : Audit Log --------------------------------------------------//
 
-// ----- End : Accounts -----------------------------------------//
+
+// ----- End : Audit Log ----------------------------------------------------//

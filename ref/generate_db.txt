@@ -1677,4 +1677,436 @@ CREATE TABLE IF NOT EXISTS public.tbl_ha_active_server
 )
 
 
+-- Table: public.tbl_notification_settings
 
+-- DROP TABLE IF EXISTS public.tbl_notification_settings;
+
+CREATE TABLE IF NOT EXISTS public.tbl_notification_settings
+(
+    id bigint NOT NULL,
+    type_name character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    message_template character varying(1000) COLLATE pg_catalog."default",
+    threshold integer,
+    max_age_days integer,
+    only_send_if_new character(1) COLLATE pg_catalog."default",
+    schedule_type character varying(8) COLLATE pg_catalog."default",
+    enabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_notification_settings_pkey PRIMARY KEY (id),
+    CONSTRAINT uk_type_name UNIQUE (type_name)
+)
+
+-- Table: public.tbl_notification_subscription
+
+-- DROP TABLE IF EXISTS public.tbl_notification_subscription;
+
+CREATE TABLE IF NOT EXISTS public.tbl_notification_subscription
+(
+    id bigint NOT NULL,
+    notification_settings_id bigint NOT NULL,
+    printer_group_id bigint,
+    CONSTRAINT tbl_notification_subscription_pkey PRIMARY KEY (id),
+    CONSTRAINT uk_subscription_group_setting UNIQUE (notification_settings_id, printer_group_id),
+    CONSTRAINT fk_subscription_printer_group FOREIGN KEY (printer_group_id)
+        REFERENCES public.tbl_printer_group (printer_group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_subscription_settings FOREIGN KEY (notification_settings_id)
+        REFERENCES public.tbl_notification_settings (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_subscription_settings;
+
+CREATE INDEX IF NOT EXISTS ix_subscription_settings
+    ON public.tbl_notification_subscription USING btree
+    (notification_settings_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+	-- Table: public.tbl_notification_subscriber
+
+-- DROP TABLE IF EXISTS public.tbl_notification_subscriber;
+
+CREATE TABLE IF NOT EXISTS public.tbl_notification_subscriber
+(
+    subscription_id bigint NOT NULL,
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_notification_subscriber_pkey PRIMARY KEY (subscription_id, email),
+    CONSTRAINT fk_subscriber_subscription FOREIGN KEY (subscription_id)
+        REFERENCES public.tbl_notification_subscription (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_subscriber_subscription;
+
+CREATE INDEX IF NOT EXISTS ix_subscriber_subscription
+    ON public.tbl_notification_subscriber USING btree
+    (subscription_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_scan_action
+
+-- DROP TABLE IF EXISTS public.tbl_scan_action;
+
+CREATE TABLE IF NOT EXISTS public.tbl_scan_action
+(
+    scan_action_id bigint NOT NULL,
+    action_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    label character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    target character varying(1000) COLLATE pg_catalog."default" NOT NULL,
+    deleted character(1) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    deleted_date timestamp without time zone,
+    CONSTRAINT tbl_scan_action_pkey PRIMARY KEY (scan_action_id)
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_modified;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_modified
+    ON public.tbl_scan_action USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.tbl_scan_action_attribute
+
+-- DROP TABLE IF EXISTS public.tbl_scan_action_attribute;
+
+CREATE TABLE IF NOT EXISTS public.tbl_scan_action_attribute
+(
+    scan_action_id bigint NOT NULL,
+    attrib_value character varying(1000) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    attrib_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_scan_action_attribute_pkey PRIMARY KEY (scan_action_id, attrib_name),
+    CONSTRAINT fk_scan_action_attribute FOREIGN KEY (scan_action_id)
+        REFERENCES public.tbl_scan_action (scan_action_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_attr_modified;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_attr_modified
+    ON public.tbl_scan_action_attribute USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_scan_action_group ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_scan_action_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_scan_action_group
+(
+    scan_action_group_id bigint NOT NULL,
+    group_id bigint NOT NULL,
+    scan_action_id bigint NOT NULL,
+    modified_ticks bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_scan_action_group_pkey PRIMARY KEY (scan_action_group_id),
+    CONSTRAINT fk_scan_action_group_group FOREIGN KEY (group_id)
+        REFERENCES public.tbl_group (group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_scan_action_group_scan_action FOREIGN KEY (scan_action_id)
+        REFERENCES public.tbl_scan_action (scan_action_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_group_group;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_group_group
+    ON public.tbl_scan_action_group USING btree
+    (group_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_scan_action_group_modified
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_group_modified;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_group_modified
+    ON public.tbl_scan_action_group USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_scan_action_group_sa
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_group_sa;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_group_sa
+    ON public.tbl_scan_action_group USING btree
+    (scan_action_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_scan_action_user ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_scan_action_user;
+
+CREATE TABLE IF NOT EXISTS public.tbl_scan_action_user
+(
+    scan_action_user_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    scan_action_id bigint NOT NULL,
+    modified_ticks bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_scan_action_user_pkey PRIMARY KEY (scan_action_user_id),
+    CONSTRAINT fk_scan_action_user_scan_action FOREIGN KEY (scan_action_id)
+        REFERENCES public.tbl_scan_action (scan_action_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_scan_action_user_user FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_user_modified;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_user_modified
+    ON public.tbl_scan_action_user USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_scan_action_user_sa
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_user_sa;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_user_sa
+    ON public.tbl_scan_action_user USING btree
+    (scan_action_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_scan_action_user_user
+
+-- DROP INDEX IF EXISTS public.ix_scan_action_user_user;
+
+CREATE INDEX IF NOT EXISTS ix_scan_action_user_user
+    ON public.tbl_scan_action_user USING btree
+    (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_scheduled_report ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_scheduled_report;
+
+CREATE TABLE IF NOT EXISTS public.tbl_scheduled_report
+(
+    scheduled_report_id bigint NOT NULL,
+    report_identifier character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    title character varying(100) COLLATE pg_catalog."default",
+    data_params character varying(2000) COLLATE pg_catalog."default",
+    schedule_period character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    export_type character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    recipients character varying(1000) COLLATE pg_catalog."default",
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    delivery_method character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    append_datestamp character(1) COLLATE pg_catalog."default" NOT NULL,
+    file_name character varying(100) COLLATE pg_catalog."default",
+    centralized character(1) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    custom_report_identifier character varying(200) COLLATE pg_catalog."default",
+    locale character varying(16) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_scheduled_report_pkey PRIMARY KEY (scheduled_report_id)
+)
+
+TABLESPACE pg_default;
+
+
+-- DROP INDEX IF EXISTS public.ix_scheduled_report_modified;
+
+CREATE INDEX IF NOT EXISTS ix_scheduled_report_modified
+    ON public.tbl_scheduled_report USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_sequences ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_sequences;
+
+CREATE TABLE IF NOT EXISTS public.tbl_sequences
+(
+    sequence_name character varying(255) COLLATE pg_catalog."default",
+    sequence_next_hi_value integer
+)
+
+
+
+-- Table: public.tbl_server ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_server;
+
+CREATE TABLE IF NOT EXISTS public.tbl_server
+(
+    server_id bigint NOT NULL,
+    uuid character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    enabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    deleted character(1) COLLATE pg_catalog."default" NOT NULL,
+    deleted_date timestamp without time zone,
+    server_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    server_type character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    server_state character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    location character varying(200) COLLATE pg_catalog."default",
+    notes character varying(2000) COLLATE pg_catalog."default",
+    major_version integer NOT NULL,
+    minor_version integer NOT NULL,
+    build_id character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    sync_ticks bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    display_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    network_address character varying(255) COLLATE pg_catalog."default",
+    patch_version bigint,
+    CONSTRAINT tbl_server_pkey PRIMARY KEY (server_id)
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_server_modified
+
+-- DROP INDEX IF EXISTS public.ix_server_modified;
+
+CREATE INDEX IF NOT EXISTS ix_server_modified
+    ON public.tbl_server USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_topup_card ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_topup_card;
+
+CREATE TABLE IF NOT EXISTS public.tbl_topup_card
+(
+    topup_card_id bigint NOT NULL,
+    batch_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    card_number character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    date_used timestamp without time zone,
+    date_loaded timestamp without time zone NOT NULL,
+    expiry_date timestamp without time zone NOT NULL,
+    value double precision NOT NULL,
+    used_by_user_id bigint,
+    CONSTRAINT tbl_topup_card_pkey PRIMARY KEY (topup_card_id),
+    CONSTRAINT fk_topup_card_user FOREIGN KEY (used_by_user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_topup_card_batch_id
+
+-- DROP INDEX IF EXISTS public.ix_topup_card_batch_id;
+
+CREATE INDEX IF NOT EXISTS ix_topup_card_batch_id
+    ON public.tbl_topup_card USING btree
+    (batch_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_topup_card_number
+
+-- DROP INDEX IF EXISTS public.ix_topup_card_number;
+
+CREATE INDEX IF NOT EXISTS ix_topup_card_number
+    ON public.tbl_topup_card USING btree
+    (card_number COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_topup_card_user
+
+-- DROP INDEX IF EXISTS public.ix_topup_card_user;
+
+CREATE INDEX IF NOT EXISTS ix_topup_card_user
+    ON public.tbl_topup_card USING btree
+    (used_by_user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+-- Table: public.tbl_user_account ------------------------------------------
+
+-- DROP TABLE IF EXISTS public.tbl_user_account;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_account
+(
+    user_account_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    account_id bigint NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_user_account_pkey PRIMARY KEY (user_account_id),
+    CONSTRAINT fk_user_account_account FOREIGN KEY (account_id)
+        REFERENCES public.tbl_account (account_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_user_account_user FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_user_account_account
+
+-- DROP INDEX IF EXISTS public.ix_user_account_account;
+
+CREATE INDEX IF NOT EXISTS ix_user_account_account
+    ON public.tbl_user_account USING btree
+    (account_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_account_modified
+
+-- DROP INDEX IF EXISTS public.ix_user_account_modified;
+
+CREATE INDEX IF NOT EXISTS ix_user_account_modified
+    ON public.tbl_user_account USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_account_user
+
+-- DROP INDEX IF EXISTS public.ix_user_account_user;
+
+CREATE INDEX IF NOT EXISTS ix_user_account_user
+    ON public.tbl_user_account USING btree
+    (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
