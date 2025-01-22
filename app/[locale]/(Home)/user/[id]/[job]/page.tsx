@@ -2,16 +2,16 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 
-import EditForm from '@/app/components/user/edit-form';
+import { EditForm, ISection } from '@/app/components/user/edit-form';
 import JobLog from '@/app/components/user/jobLogTable';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
-import { IEditItem } from '@/app/components/edit-items';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
 import { IColumnData } from '@/app/lib/definitions';
 import { fetchUserById, fetchTransactionsByAccountId, fetchTransactionsPagesByAccountId } from '@/app/lib/fetchData';
 import { formatCurrency } from "@/app/lib/utils";
+
 
 export default async function Page(
     props: { params: Promise<{ id: string, job: string, locale: "ko" | "en" }> }
@@ -29,7 +29,7 @@ export default async function Page(
         notFound();
     }
 
-    if(!['edit', 'charge', 'transaction', 'jobLog'].includes(job)){
+    if (!['edit', 'charge', 'transaction', 'jobLog'].includes(job)) {
         notFound();
     }
 
@@ -47,35 +47,59 @@ export default async function Page(
         { category: 'jobLog', title: t('user.subTitle_jobLog'), link: `/user/${id}/jobLog` }
     ];
 
-    const items: { edit: IEditItem[], charge: IEditItem[] } = {
+    const items: { edit: ISection[], charge: ISection[] } = {
         edit: [
-            { name: 'user_name', title: t('user.user_name'), type: 'label', defaultValue: user.user_name },
-            { name: 'full_name', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
-            { name: 'email', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
-            { name: 'home_directory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
             {
-                name: 'disabled_printing', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
-                    { title: t('user.enable_printing'), value: 'N' },
-                    { title: t('user.disable_printing'), value: 'Y' }
+                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
+                    { name: 'user_name', title: t('user.user_name'), type: 'label', defaultValue: user.user_name },
+                    { name: 'full_name', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
+                    { name: 'email', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
+                    { name: 'home_directory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
+                    {
+                        name: 'disabled_printing', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
+                            { title: t('user.enable_printing'), value: 'N' },
+                            { title: t('user.disable_printing'), value: 'Y' }
+                        ]
+                    },
                 ]
             },
-            { name: 'department', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
+            {
+                title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
+                    { name: 'balance_current', title: t('account.balance_current'), type: 'currency', defaultValue: user.balance, placeholder: t('user.placeholder_department') },
+                    { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restriced },
+                ]
+            },
+            {
+                title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
+                ]
+            },
+            {
+                title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
+                    { name: 'department', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
+                    { name: 'card_number', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
+                    { name: 'card_number2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
+                ]
+            },
         ],
         charge: [
-            { name: 'balance_current', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale) },
-            { name: 'balance_new', title: t('account.balance_new'), type: 'currency', defaultValue: 0, locale: locale },
-            { name: 'txn_comment', title: t('common.explanation'), type: 'input', defaultValue: "" },
+            {
+                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
+                    { name: 'balance_current', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale) },
+                    { name: 'balance_new', title: t('account.balance_new'), type: 'currency', defaultValue: 0, locale: locale },
+                    { name: 'txn_comment', title: t('common.explanation'), type: 'input', defaultValue: "" },
+                ]
+            },
         ],
     };
 
     const transactionColumns: IColumnData[] = [
-            { name: 'transaction_date', title: t('account.transaction_date'), type: 'date' },
-            { name: 'transacted_by', title: t('account.transaction_by'), align: 'center' },
-            { name: 'amount', title: t('common.price_1'), align: 'center', type: 'currency' },
-            { name: 'balance', title: t('account.balance'), align: 'center' },
-            { name: 'transaction_type', title: t('account.transaction_type'), align: 'center' },
-            { name: 'txn_comment', title: t('common.explanation'), align: 'center' },
-        ];
+        { name: 'transaction_date', title: t('account.transaction_date'), type: 'date' },
+        { name: 'transacted_by', title: t('account.transaction_by'), align: 'center' },
+        { name: 'amount', title: t('common.price_1'), align: 'center', type: 'currency' },
+        { name: 'balance', title: t('account.balance'), align: 'center' },
+        { name: 'transaction_type', title: t('account.transaction_type'), align: 'center' },
+        { name: 'txn_comment', title: t('common.explanation'), align: 'center' },
+    ];
 
     return (
         <main>
@@ -83,7 +107,7 @@ export default async function Page(
                 breadcrumbs={[
                     { label: t('common.user'), href: '/user' },
                     {
-                        label: t('user.edit_user'),
+                        label: `${t('user.edit_user')} : ${user.full_name}(${user.user_name})`,
                         href: `/user/${id}/${job}`,
                         active: true,
                     },
@@ -110,7 +134,7 @@ export default async function Page(
                     />
                 </div>
             }
-            {job === 'jobLog' && <JobLog id={id}/>}
+            {job === 'jobLog' && <JobLog id={id} />}
         </main>
     );
 }

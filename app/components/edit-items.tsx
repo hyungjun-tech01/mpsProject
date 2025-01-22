@@ -1,10 +1,13 @@
+'use client';
+
+import { ChangeEvent, useState } from 'react';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import { formatCurrency } from "../lib/utils";
 
 export interface IEditItem {
     name: string;
     title: string;
-    type: 'label' | 'input' | 'currency' | 'select';
+    type: 'label' | 'input' | 'currency' | 'select' | 'checked';
     defaultValue: string | number;
     placeholder?: string;
     options?: { title: string, value: string | number }[] | null;
@@ -23,12 +26,13 @@ export function EditItem({
     error,
 }: IEditItem
 ) {
+    const [checked, setChecked] = useState(defaultValue === 'Y');
 
     switch (type) {
         case 'label':
             return (
                 <div className="mb-4">
-                    <label htmlFor={name} className="mb-2 block text-sm font-medium">
+                    <label htmlFor={name} className="mb-2 block text-sm font-semibold">
                         {title}
                     </label>
                     <div className="relative">
@@ -41,7 +45,7 @@ export function EditItem({
         case 'input':
             return (
                 <div className="mb-4">
-                    <label htmlFor={name} className="mb-2 block text-sm font-medium">
+                    <label htmlFor={name} className="mb-2 block text-sm font-semibold">
                         {title}
                     </label>
                     <div className="relative mt-2 rounded-md">
@@ -69,7 +73,7 @@ export function EditItem({
         case 'currency':
             return (
                 <div className="mb-4">
-                    <label htmlFor={name} className="mb-2 block text-sm font-medium">
+                    <label htmlFor={name} className="mb-2 block text-sm font-semibold">
                         {title}
                     </label>
                     <div className="relative mt-2 rounded-md">
@@ -96,10 +100,36 @@ export function EditItem({
                     </div>
                 </div>
             );
+        case 'checked':
+            return (
+                <div className="mb-4">
+                    <div className="relative mt-2 rounded-md">
+                        <div className="relative flex">
+                            <input
+                                id={name}
+                                name={name}
+                                type="checkbox"
+                                checked={checked}
+                                onChange={(e:ChangeEvent)=>setChecked(!checked)}
+                            />
+                            <label htmlFor={name} className="ml-2 block text-sm font-medium">
+                                {title}
+                            </label>
+                        </div>
+                        <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
+                            {error && error.map((error: string) => (
+                                <p className="mt-2 text-sm text-red-500" key={error}>
+                                    {error}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
         case 'select':
             return (
                 <div className="mb-4">
-                    <label htmlFor={name} className="mb-2 block text-sm font-medium">
+                    <label htmlFor={name} className="mb-2 block text-sm font-semibold">
                         {title}
                     </label>
                     <div className="relative">

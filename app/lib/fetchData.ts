@@ -41,7 +41,8 @@ export async function fetchFilteredUsers(
                     a.balance,
                     a.restricted
                 FROM tbl_user u
-                JOIN tbl_account a ON u.user_name = a.account_name
+                JOIN tbl_user_account ua ON u.user_id = ua.user_id
+                JOIN tbl_account a ON a.account_id = ua.account_id
                 WHERE
                     u.deleted='N' AND
                     (
@@ -68,7 +69,8 @@ export async function fetchFilteredUsers(
                     a.balance,
                     a.restricted
                 FROM tbl_user u
-                JOIN tbl_account a ON u.user_name = a.account_name
+                JOIN tbl_user_account ua ON u.user_id = ua.user_id
+                JOIN tbl_account a ON a.account_id = ua.account_id
                 WHERE
                     u.deleted='N'
                 ORDER BY u.modified_date DESC
@@ -133,11 +135,14 @@ export async function fetchUserById(
                 u.home_directory,
                 u.disabled_printing,
                 u.department,
+                u.card_number,
+                u.card_number2,
                 a.account_id,
                 a.balance
             FROM tbl_user u
-            JOIN tbl_account a ON u.user_name = a.account_name
-            WHERE user_id='${id}'
+            JOIN tbl_user_account ua ON u.user_id = ua.user_id
+            JOIN tbl_account a ON a.account_id = ua.account_id
+            WHERE u.user_id='${id}'
         `);
 
         return user.rows[0];
