@@ -1,13 +1,17 @@
 // import { Revenue } from './definitions';
 
-export const formatCurrency = (amount: number, locale: string) => {
+export const formatCurrency = (
+  amount: number | string,
+  locale: string = 'ko',
+) => {
   let currency = "KRW";
-  let check_locale = locale;
+  let check_locale = "";
 
   switch(locale) 
   {
-    case 'en-US':
+    case 'en':
       currency = "USD";
+      check_locale = "en-US";
       break;
     default:
       check_locale = "ko-KR";
@@ -22,15 +26,50 @@ export const formatCurrency = (amount: number, locale: string) => {
 
 export const formatDateToLocal = (
   dateStr: string,
-  locale: string = 'en-US',
+  locale: string = 'ko',
 ) => {
+  let check_locale = '';
+  switch(locale){
+    case 'en':
+      check_locale = 'en-US';
+      break;
+    default:
+      check_locale = 'ko-KR';
+      break;
+  }
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   };
-  const formatter = new Intl.DateTimeFormat(locale, options);
+  const formatter = new Intl.DateTimeFormat(check_locale, options);
+  return formatter.format(date);
+};
+
+export const formatTimeToLocal = (
+  dateStr: string,
+  locale: string = 'ko',
+) => {
+  let check_locale = '';
+  switch(locale){
+    case 'en':
+      check_locale = 'en-US';
+      break;
+    default:
+      check_locale = 'ko-KR';
+      break;
+  }
+  const date = new Date(dateStr);
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  };
+  const formatter = new Intl.DateTimeFormat(check_locale, options);
   return formatter.format(date);
 };
 

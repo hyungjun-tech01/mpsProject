@@ -378,8 +378,6 @@ const koResource = {
             msg_delete_confirm:'삭제하시겠습니까?',
         },
         user :{
-            balance_current: '현재 잔액',
-            balance_new: '변경 잔액',
             department:'부서',
             disable_printing: '사용 불가',
             edit_user: '사용자 편집',
@@ -404,7 +402,6 @@ const koResource = {
             placeholder_home_directory: '사용자 홈디렉토리를 입력하세요',
             position:'직급',
             private_group:'그룹',
-            remain_amount:'잔액',
             subTitle_budget: '조절 및 과금',
             subTitle_detail: '상세내역',
             subTitle_ProcessedLog: '처리업무 기록',
@@ -416,6 +413,14 @@ const koResource = {
             change_password_same:'변경 비밀번호 확인과 변경 비밀번호는 같아야 합니다.',
             miss_password_item :'입력항목이 누락되었습니다.',
             min_password_length:'password 는 5자리 이상이어야 합니다.',
+        },
+        account: {
+            balance:'잔액',
+            balance_current: '현재 잔액',
+            balance_new: '변경 잔액',
+            transaction_by: '진행자',
+            transaction_date: '진행일자',
+            transaction_type: '처리방식'
         }
     },
 }

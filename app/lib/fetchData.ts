@@ -98,7 +98,17 @@ export async function fetchUserById(
 ) {
     try {
         const user = await client.query(`
-            SELECT * FROM tbl_user
+            SELECT
+                u.user_name,
+                u.full_name,
+                u.email,
+                u.home_directory,
+                u.disabled_printing,
+                u.department,
+                a.account_id,
+                a.balance
+            FROM tbl_user u
+            JOIN tbl_account a ON u.user_name = a.account_name
             WHERE user_id='${id}'
         `);
 
@@ -135,6 +145,42 @@ export async function fetchCreateUser(
             result: false,
             data: 'Database Error: Failed to Create User'
         };
+    }
+}
+
+export async function fetchTransactionsByAccountId(
+    account_id: string,
+) {
+    try {
+        const transactionInfo = await client.query(`
+                SELECT * FROM tbl_account_transaction
+                WHERE
+                    account_id='${account_id}'
+            `);
+
+        return transactionInfo.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch transaction by account id.');
+    }
+}
+
+export async function fetchTransactionsPagesByAccountId(
+    account_id: string,
+    itemsPerPage: number,
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_account_transaction
+                WHERE
+                    account_id='${account_id}'
+            `);
+
+            const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+            return totalPages;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch transaction by account id.');
     }
 }
 
