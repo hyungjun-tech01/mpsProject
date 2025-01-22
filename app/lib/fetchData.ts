@@ -27,23 +27,51 @@ export async function fetchFilteredUsers(
     try {
         const users = query !== ''
             ? await client.query(`
-                SELECT * FROM tbl_user
+                SELECT
+                    u.user_id,
+                    u.user_name,
+                    u.full_name,
+                    u.email,
+                    u.home_directory,
+                    u.disabled_printing,
+                    u.department,
+                    u.total_pages,
+                    u.total_jobs,
+                    a.account_id,
+                    a.balance,
+                    a.restricted
+                FROM tbl_user u
+                JOIN tbl_account a ON u.user_name = a.account_name
                 WHERE
-                    tbl_user.deleted='N' AND
+                    u.deleted='N' AND
                     (
-                        tbl_user.user_id ILIKE '${`%${query}%`}' OR
-                        tbl_user.user_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.full_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.email ILIKE '${`%${query}%`}'
+                        u.user_id ILIKE '${`%${query}%`}' OR
+                        u.user_name ILIKE '${`%${query}%`}' OR
+                        u.full_name ILIKE '${`%${query}%`}' OR
+                        u.email ILIKE '${`%${query}%`}'
                     )
-                ORDER BY tbl_user.modified_date DESC
+                ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * FROM tbl_user
+                SELECT
+                    u.user_id,
+                    u.user_name,
+                    u.full_name,
+                    u.email,
+                    u.home_directory,
+                    u.disabled_printing,
+                    u.department,
+                    u.total_pages,
+                    u.total_jobs,
+                    a.account_id,
+                    a.balance,
+                    a.restricted
+                FROM tbl_user u
+                JOIN tbl_account a ON u.user_name = a.account_name
                 WHERE
-                    tbl_user.deleted='N'
-                ORDER BY tbl_user.modified_date DESC
+                    u.deleted='N'
+                ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             ;
