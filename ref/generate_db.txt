@@ -745,8 +745,11 @@ ALTER TABLE tbl_group_attribute ADD CONSTRAINT fk_group_attribute FOREIGN KEY (g
 
 
 
+================================================================================================================
 =================================== 2025.01.21 =================================================================
+================================================================================================================
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Table: public.tbl_account
 
@@ -1676,6 +1679,7 @@ CREATE TABLE IF NOT EXISTS public.tbl_ha_active_server
     last_update timestamp without time zone
 )
 
+TABLESPACE pg_default;
 
 -- Table: public.tbl_notification_settings
 
@@ -1694,6 +1698,8 @@ CREATE TABLE IF NOT EXISTS public.tbl_notification_settings
     CONSTRAINT tbl_notification_settings_pkey PRIMARY KEY (id),
     CONSTRAINT uk_type_name UNIQUE (type_name)
 )
+
+TABLESPACE pg_default;
 
 -- Table: public.tbl_notification_subscription
 
@@ -1963,7 +1969,7 @@ CREATE TABLE IF NOT EXISTS public.tbl_sequences
     sequence_next_hi_value integer
 )
 
-
+TABLESPACE pg_default;
 
 -- Table: public.tbl_server ------------------------------------------
 
