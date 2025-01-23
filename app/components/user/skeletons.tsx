@@ -1,27 +1,31 @@
+import AddIcon from '@mui/icons-material/Add';
 
 export function TableRowSkeleton() {
     return (
         <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
-            {/* Customer Name and Image */}
+            {/* User ID */}
             <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
                 <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-gray-100"></div>
-                    <div className="h-6 w-24 rounded bg-gray-100"></div>
+                    <div className="h-6 w-32 rounded bg-gray-100"></div>
                 </div>
             </td>
-            {/* Email */}
+            {/* User Name */}
             <td className="whitespace-nowrap px-3 py-3">
                 <div className="h-6 w-32 rounded bg-gray-100"></div>
             </td>
-            {/* Amount */}
+            {/* Balance */}
             <td className="whitespace-nowrap px-3 py-3">
                 <div className="h-6 w-16 rounded bg-gray-100"></div>
             </td>
-            {/* Date */}
+            {/* Restricted */}
             <td className="whitespace-nowrap px-3 py-3">
                 <div className="h-6 w-16 rounded bg-gray-100"></div>
             </td>
-            {/* Status */}
+            {/* Pages */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Jobs */}
             <td className="whitespace-nowrap px-3 py-3">
                 <div className="h-6 w-16 rounded bg-gray-100"></div>
             </td>
@@ -77,19 +81,22 @@ export function TableSkeleton() {
                         <thead className="rounded-lg text-left text-sm font-normal">
                             <tr>
                                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                                    Customer
+                                    User ID
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium">
-                                    Email
+                                    User Name
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium">
-                                    Amount
+                                    Balance
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium">
-                                    Date
+                                    Restricted
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium">
-                                    Status
+                                    Pages
+                                </th>
+                                <th scope="col" className="px-3 py-5 font-medium">
+                                    Jobs
                                 </th>
                                 <th
                                     scope="col"
@@ -112,4 +119,27 @@ export function TableSkeleton() {
             </div>
         </div>
     )
+}
+
+export default function UserTableSkeleton() {
+    return (
+        <div className="w-full">
+            <div className="flex w-full items-center justify-between">
+                <h1 className="text-2xl">Users</h1>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                <div className="relative flex flex-1 flex-shrink-0">
+                    <label htmlFor="search" className="sr-only">
+                        Search
+                    </label>
+                    <div className="peer block h-10 w-full bg-gray-50 rounded-md border border-gray-200 outline-2"></div>
+                </div >
+                <div className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-base font-medium text-white transition-colors hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500">
+                    <span className="hidden md:block">Create User</span>{' '}
+                    <AddIcon className="h-5 md:ml-4" />
+                </div>
+            </div>
+            <TableSkeleton />
+        </div>
+    );
 }
