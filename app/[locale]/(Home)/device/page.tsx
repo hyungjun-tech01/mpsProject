@@ -61,7 +61,7 @@ export default async function Device(
         ],
     }
     const columns: IColumnData[] = [
-        { name: 'display_name', title: t('device.display_name') },
+        { name: 'printer_name', title: t('device.printer_name') },
         { name: 'device_type', title: t('device.device_type'), align: 'center' },
         { name: 'ext_device_function', title: t('device.ext_device_function'), align: 'center' },
         { name: 'server_name', title: t('device.server_name'), align: 'center' },

@@ -436,7 +436,7 @@ const enResource = {
             transaction_type: 'Transaction Type'
         },
         device :{
-            display_name:'Device Name',
+            printer_name:'Device Name',
             device_type: 'Device Type',
             ext_device_function:'Functions',
             server_name:'Host Name',

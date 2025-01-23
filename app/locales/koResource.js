@@ -434,7 +434,7 @@ const koResource = {
             transaction_type: '처리방식'
         },        
         device :{
-            display_name:'장비이름',
+            printer_name:'장비이름',
             device_type: '장비타입',
             ext_device_function:'기능',
             server_name:'호스트 이름',
