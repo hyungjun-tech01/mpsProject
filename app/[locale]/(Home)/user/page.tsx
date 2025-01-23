@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
-import { TableSkeleton } from '@/app/components/skeletons';
+import { TableSkeleton } from '@/app/components/user/skeletons';
 import { IColumnData } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
@@ -35,6 +35,7 @@ export default async function Page(props: {
         fetchFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     const columns: IColumnData[] = [
+        { name: 'user_name', title: t('user.user_id'), align: 'center' },
         { name: 'full_name', title: t('user.user_name'), align: 'center' },
         { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
         { name: 'restricted', title: t('user.limited'), align: 'center' },

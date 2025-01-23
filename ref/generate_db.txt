@@ -749,6 +749,7 @@ ALTER TABLE tbl_group_attribute ADD CONSTRAINT fk_group_attribute FOREIGN KEY (g
 =================================== 2025.01.21 =================================================================
 ================================================================================================================
 
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Table: public.tbl_account
@@ -2115,4 +2116,358 @@ CREATE INDEX IF NOT EXISTS ix_user_account_modified
 CREATE INDEX IF NOT EXISTS ix_user_account_user
     ON public.tbl_user_account USING btree
     (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+================================================================================================================
+=================================== 2025.01.23 =================================================================
+================================================================================================================
+
+
+
+-- Table: public.tbl_user
+
+-- DROP TABLE IF EXISTS public.tbl_user;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user
+(
+    user_id bigint NOT NULL,
+    user_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    external_user_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    full_name character varying(255) COLLATE pg_catalog."default",
+    email character varying(255) COLLATE pg_catalog."default",
+    notes character varying(2000) COLLATE pg_catalog."default",
+    total_jobs integer NOT NULL,
+    total_pages integer NOT NULL,
+    total_sheets integer NOT NULL,
+    reset_by character varying(255) COLLATE pg_catalog."default",
+    reset_date timestamp without time zone,
+    deleted character(1) COLLATE pg_catalog."default" NOT NULL,
+    deleted_date timestamp without time zone,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    department character varying(200) COLLATE pg_catalog."default",
+    office character varying(200) COLLATE pg_catalog."default",
+    card_number character varying(100) COLLATE pg_catalog."default",
+    disabled_printing character(1) COLLATE pg_catalog."default" NOT NULL,
+    disabled_printing_until timestamp without time zone,
+    net_reset_by character varying(255) COLLATE pg_catalog."default",
+    net_reset_date timestamp without time zone,
+    net_total_megabytes double precision NOT NULL,
+    net_total_time_hours double precision NOT NULL,
+    disabled_net character(1) COLLATE pg_catalog."default" NOT NULL,
+    disabled_net_until timestamp without time zone,
+    internal character(1) COLLATE pg_catalog."default" NOT NULL,
+    last_user_activity timestamp without time zone,
+    card_number2 character varying(100) COLLATE pg_catalog."default",
+    secondary_user_name character varying(255) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    home_directory character varying(255) COLLATE pg_catalog."default",
+    primary_user_source_type character varying(30) COLLATE pg_catalog."default",
+    secondary_user_source_type character varying(30) COLLATE pg_catalog."default",
+    secondary_external_user_name character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT tbl_user_pkey PRIMARY KEY (user_id)
+)
+
+TABLESPACE pg_default;
+
+-- Index: idx_external_user_name
+
+-- DROP INDEX IF EXISTS public.idx_external_user_name;
+
+CREATE INDEX IF NOT EXISTS idx_external_user_name
+    ON public.tbl_user USING btree
+    (external_user_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: idx_sec_external_user_name
+
+-- DROP INDEX IF EXISTS public.idx_sec_external_user_name;
+
+CREATE INDEX IF NOT EXISTS idx_sec_external_user_name
+    ON public.tbl_user USING btree
+    (secondary_external_user_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_card_number
+
+-- DROP INDEX IF EXISTS public.ix_user_card_number;
+
+CREATE INDEX IF NOT EXISTS ix_user_card_number
+    ON public.tbl_user USING btree
+    (card_number COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_card_number2
+
+-- DROP INDEX IF EXISTS public.ix_user_card_number2;
+
+CREATE INDEX IF NOT EXISTS ix_user_card_number2
+    ON public.tbl_user USING btree
+    (card_number2 COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_email
+
+-- DROP INDEX IF EXISTS public.ix_user_email;
+
+CREATE INDEX IF NOT EXISTS ix_user_email
+    ON public.tbl_user USING btree
+    (email COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_modified
+
+-- DROP INDEX IF EXISTS public.ix_user_modified;
+
+CREATE INDEX IF NOT EXISTS ix_user_modified
+    ON public.tbl_user USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_secondary_user_name
+
+-- DROP INDEX IF EXISTS public.ix_user_secondary_user_name;
+
+CREATE INDEX IF NOT EXISTS ix_user_secondary_user_name
+    ON public.tbl_user USING btree
+    (secondary_user_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_user_user_name
+
+-- DROP INDEX IF EXISTS public.ix_user_user_name;
+
+CREATE INDEX IF NOT EXISTS ix_user_user_name
+    ON public.tbl_user USING btree
+    (user_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.tbl_user_attribute
+
+-- DROP TABLE IF EXISTS public.tbl_user_attribute;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_attribute
+(
+    user_id bigint NOT NULL,
+    attrib_value character varying(1000) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    attrib_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_user_attribute_pkey PRIMARY KEY (user_id, attrib_name),
+    CONSTRAINT fk_user_attribute FOREIGN KEY (user_id)
+        REFERENCES public.tbl_user (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_user_attribute_modified
+
+-- DROP INDEX IF EXISTS public.ix_user_attribute_modified;
+
+CREATE INDEX IF NOT EXISTS ix_user_attribute_modified
+    ON public.tbl_user_attribute USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.tbl_group
+
+-- DROP TABLE IF EXISTS public.tbl_group;
+
+CREATE TABLE IF NOT EXISTS public.tbl_group
+(
+    group_id bigint NOT NULL,
+    group_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    initial_credit double precision NOT NULL,
+    initially_restricted character(1) COLLATE pg_catalog."default" NOT NULL,
+    schedule_period character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    schedule_amount double precision NOT NULL,
+    allow_accum character(1) COLLATE pg_catalog."default" NOT NULL,
+    max_accum_balance double precision NOT NULL,
+    reset_statistics character(1) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    initial_settings_enabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    CONSTRAINT tbl_group_pkey PRIMARY KEY (group_id),
+    CONSTRAINT tbl_group_group_name_key UNIQUE (group_name)
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_group_modified
+
+-- DROP INDEX IF EXISTS public.ix_group_modified;
+
+CREATE INDEX IF NOT EXISTS ix_group_modified
+    ON public.tbl_group USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_group_name
+
+-- DROP INDEX IF EXISTS public.ix_group_name;
+
+CREATE INDEX IF NOT EXISTS ix_group_name
+    ON public.tbl_group USING btree
+    (group_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.tbl_group_attribute
+
+-- DROP TABLE IF EXISTS public.tbl_group_attribute;
+
+CREATE TABLE IF NOT EXISTS public.tbl_group_attribute
+(
+    group_id bigint NOT NULL,
+    attrib_value character varying(255) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    attrib_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_group_attribute_pkey PRIMARY KEY (group_id, attrib_name),
+    CONSTRAINT fk_group_attribute FOREIGN KEY (group_id)
+        REFERENCES public.tbl_group (group_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_group_attribute_modified
+
+-- DROP INDEX IF EXISTS public.ix_group_attribute_modified;
+
+CREATE INDEX IF NOT EXISTS ix_group_attribute_modified
+    ON public.tbl_group_attribute USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.tbl_printer
+
+-- DROP TABLE IF EXISTS public.tbl_printer;
+
+CREATE TABLE IF NOT EXISTS public.tbl_printer
+(
+    printer_id bigint NOT NULL,
+    server_name character varying(255) COLLATE pg_catalog."default",
+    printer_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    display_name character varying(510) COLLATE pg_catalog."default" NOT NULL,
+    location character varying(255) COLLATE pg_catalog."default",
+    notes character varying(2000) COLLATE pg_catalog."default",
+    charge_type character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    default_cost double precision NOT NULL,
+    deleted character(1) COLLATE pg_catalog."default" NOT NULL,
+    deleted_date timestamp without time zone,
+    disabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    disabled_until timestamp without time zone,
+    total_jobs integer NOT NULL,
+    total_pages integer NOT NULL,
+    total_sheets integer NOT NULL,
+    reset_by character varying(255) COLLATE pg_catalog."default",
+    reset_date timestamp without time zone,
+    created_date timestamp without time zone NOT NULL,
+    created_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    color_detection_mode character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    device_type character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    ext_device_function character varying(30) COLLATE pg_catalog."default",
+    physical_printer_id character varying(100) COLLATE pg_catalog."default",
+    printer_type character varying(200) COLLATE pg_catalog."default",
+    serial_number character varying(100) COLLATE pg_catalog."default",
+    web_print_enabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    custom1 character varying(50) COLLATE pg_catalog."default",
+    custom2 character varying(50) COLLATE pg_catalog."default",
+    custom3 character varying(50) COLLATE pg_catalog."default",
+    custom4 character varying(50) COLLATE pg_catalog."default",
+    custom5 character varying(50) COLLATE pg_catalog."default",
+    custom6 character varying(50) COLLATE pg_catalog."default",
+    last_usage_date timestamp without time zone,
+    gcp_printer_id character varying(100) COLLATE pg_catalog."default",
+    gcp_enabled character(1) COLLATE pg_catalog."default" NOT NULL,
+    modified_ticks bigint NOT NULL,
+    server_uuid character varying(255) COLLATE pg_catalog."default",
+    parent_id bigint,
+    CONSTRAINT tbl_printer_pkey PRIMARY KEY (printer_id),
+    CONSTRAINT fk_printer_parent_printer FOREIGN KEY (parent_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_gcp_printer_id
+
+-- DROP INDEX IF EXISTS public.ix_gcp_printer_id;
+
+CREATE INDEX IF NOT EXISTS ix_gcp_printer_id
+    ON public.tbl_printer USING btree
+    (gcp_printer_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_modified
+
+-- DROP INDEX IF EXISTS public.ix_printer_modified;
+
+CREATE INDEX IF NOT EXISTS ix_printer_modified
+    ON public.tbl_printer USING btree
+    (modified_ticks ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_physical_id
+
+-- DROP INDEX IF EXISTS public.ix_printer_physical_id;
+
+CREATE INDEX IF NOT EXISTS ix_printer_physical_id
+    ON public.tbl_printer USING btree
+    (physical_printer_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: ix_printer_server_printer
+
+-- DROP INDEX IF EXISTS public.ix_printer_server_printer;
+
+CREATE INDEX IF NOT EXISTS ix_printer_server_printer
+    ON public.tbl_printer USING btree
+    (server_name COLLATE pg_catalog."default" ASC NULLS LAST, printer_name COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.tbl_printer_attribute
+
+-- DROP TABLE IF EXISTS public.tbl_printer_attribute;
+
+CREATE TABLE IF NOT EXISTS public.tbl_printer_attribute
+(
+    printer_id bigint NOT NULL,
+    attrib_value character varying(1000) COLLATE pg_catalog."default",
+    modified_ticks bigint NOT NULL,
+    propagate character(1) COLLATE pg_catalog."default" NOT NULL,
+    attrib_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tbl_printer_attribute_pkey PRIMARY KEY (printer_id, attrib_name),
+    CONSTRAINT fk_printer_attribute FOREIGN KEY (printer_id)
+        REFERENCES public.tbl_printer (printer_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- Index: ix_printer_attribute_modified
+
+-- DROP INDEX IF EXISTS public.ix_printer_attribute_modified;
+
+CREATE INDEX IF NOT EXISTS ix_printer_attribute_modified
+    ON public.tbl_printer_attribute USING btree
+    (modified_ticks ASC NULLS LAST, propagate COLLATE pg_catalog."default" ASC NULLS LAST)
     TABLESPACE pg_default;
