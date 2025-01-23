@@ -1,6 +1,7 @@
+import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import AddIcon from '@mui/icons-material/Add';
 
-export function TableRowSkeleton() {
+function TableRowSkeleton() {
     return (
         <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
             {/* User ID */}
@@ -40,7 +41,7 @@ export function TableRowSkeleton() {
     );
 }
 
-export function MobileSkeleton() {
+function MobileSkeleton() {
     return (
         <div className="mb-2 w-full rounded-md bg-white p-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-8">
@@ -64,7 +65,7 @@ export function MobileSkeleton() {
     );
 }
 
-export function TableSkeleton() {
+function TableSkeleton() {
     return (
         <div className="mt-6 flow-root">
             <div className="inline-block min-w-full align-middle">
@@ -121,7 +122,7 @@ export function TableSkeleton() {
     )
 }
 
-export default function UserTableSkeleton() {
+export function UserTableSkeleton() {
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
@@ -142,4 +143,28 @@ export default function UserTableSkeleton() {
             <TableSkeleton />
         </div>
     );
+}
+
+export function UserEditSkeleton() {
+    return (
+        <main>
+            <Breadcrumbs
+                breadcrumbs={[
+                    { label: 'User', href: '/user' },
+                    {
+                        label: `Edit User :  (  )`,
+                        href: `/user/error`,
+                        active: true,
+                    },
+                ]}
+            />
+            <div className='w-full pl-2 flex justify-start'>
+                <div className="w-24 h-9 rounded-t-lg border-solid font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+            </div>
+            <div className="h-80 rounded-md bg-gray-50"/>
+        </main>
+    )
 }

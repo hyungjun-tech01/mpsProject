@@ -1,9 +1,7 @@
-import { Suspense } from 'react';
 import type { Metadata } from "next";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
-import { TableSkeleton } from '@/app/components/user/skeletons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
@@ -45,19 +43,17 @@ export default async function Page(props: {
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="Search users..." />
-                <CreateButton link="/user/create" title="Create User"/>
+                <CreateButton link="/user/create" title="Create User" />
             </div>
-            <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
-                <Table
-                    columns={columns}
-                    rows={users}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    category='user'
-                    locale={locale}
-                    deleteAction={deleteUser}
-                />
-            </Suspense>
+            <Table
+                columns={columns}
+                rows={users}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                category='user'
+                locale={locale}
+                deleteAction={deleteUser}
+            />
         </div>
     );
 }
