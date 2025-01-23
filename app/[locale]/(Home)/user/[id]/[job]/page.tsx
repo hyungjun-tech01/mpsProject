@@ -3,12 +3,11 @@ import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 
 import { EditForm, ISection } from '@/app/components/user/edit-form';
-import JobLog from '@/app/components/user/jobLogTable';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
-import { IColumnData } from '@/app/lib/definitions';
+import { IColumnData, ISearch } from '@/app/lib/definitions';
 import {
     fetchUserById,
     fetchTransactionsByAccountId,
@@ -19,13 +18,18 @@ import {
 import { formatCurrency } from "@/app/lib/utils";
 
 
-export default async function Page(
-    props: { params: Promise<{ id: string, job: string, locale: "ko" | "en" }> }
+export default async function Page(props: {
+    searchParams?: Promise<ISearch>;
+    params: Promise<{ id: string, job: string, locale: "ko" | "en" }> }
 ) {
     const params = await props.params;
     const id = params.id;
     const job = params.job;
     const locale = params.locale;
+    const searchParams = await props.searchParams;
+    // const query = searchParams?.query || '';
+    const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
+    const currentPage = Number(searchParams?.page) || 1;
     const [t, user] = await Promise.all([
         getDictionary(locale),
         fetchUserById(id)
@@ -40,10 +44,10 @@ export default async function Page(
     }
 
     const [transactionInfo, transcationCount, printerUsageInfo, printerUsageCount] = await Promise.all([
-        fetchTransactionsByAccountId(user.account_id, 10, 1),
-        fetchTransactionsPagesByAccountId(user.account_id, 10),
-        fetchPrinterUsageLogByUserId(id, 10, 1),
-        fetchPrinterUsageLogPagesByUserId(id, 10)
+        fetchTransactionsByAccountId(user.account_id, itemsPerPage, currentPage),
+        fetchTransactionsPagesByAccountId(user.account_id, itemsPerPage),
+        fetchPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
+        fetchPrinterUsageLogPagesByUserId(id, itemsPerPage)
     ]);
 
     const subTitles = [
@@ -144,7 +148,7 @@ export default async function Page(
                     <LogTable
                         columns={transactionColumns}
                         rows={transactionInfo}
-                        currentPage={0}
+                        currentPage={currentPage}
                         totalPages={transcationCount}
                         editable={false}
                     />
@@ -155,7 +159,7 @@ export default async function Page(
                     <LogTable
                         columns={printerUsageColumns}
                         rows={printerUsageInfo}
-                        currentPage={0}
+                        currentPage={currentPage}
                         totalPages={printerUsageCount}
                         editable={false}
                     />

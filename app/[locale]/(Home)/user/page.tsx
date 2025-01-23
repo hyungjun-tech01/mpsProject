@@ -4,7 +4,7 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { TableSkeleton } from '@/app/components/user/skeletons';
-import { IColumnData } from '@/app/lib/definitions';
+import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
@@ -14,14 +14,9 @@ export const metadata: Metadata = {
     title: 'Users',
 }
 
-interface ISearchUser {
-    query?: string;
-    itemsPerPage?: string;
-    page?: string;
-}
 
 export default async function Page(props: {
-    searchParams?: Promise<ISearchUser>;
+    searchParams?: Promise<ISearch>;
     params: Promise<{ locale: "ko" | "en" }>;
 }) {
     const locale = (await props.params).locale;
