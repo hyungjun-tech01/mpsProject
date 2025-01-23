@@ -46,7 +46,6 @@ export async function fetchFilteredUsers(
                 WHERE
                     u.deleted='N' AND
                     (
-                        u.user_id ILIKE '${`%${query}%`}' OR
                         u.user_name ILIKE '${`%${query}%`}' OR
                         u.full_name ILIKE '${`%${query}%`}' OR
                         u.email ILIKE '${`%${query}%`}'
@@ -101,7 +100,6 @@ export async function fetchUsersPages(
                 WHERE
                     tbl_user.deleted='N' AND
                     (
-                        tbl_user.user_id ILIKE '${`%${query}%`}' OR
                         tbl_user.user_name ILIKE '${`%${query}%`}' OR
                         tbl_user.full_name ILIKE '${`%${query}%`}' OR
                         tbl_user.email ILIKE '${`%${query}%`}'
@@ -183,12 +181,17 @@ export async function fetchCreateUser(
 
 export async function fetchTransactionsByAccountId(
     account_id: string,
+    itemsPerPage: number,
+    currentPage: number,
 ) {
+    const offset = (currentPage - 1) * itemsPerPage;
     try {
         const transactionInfo = await client.query(`
                 SELECT * FROM tbl_account_transaction
                 WHERE
                     account_id='${account_id}'
+                ORDER BY transaction_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
 
         return transactionInfo.rows;
@@ -217,27 +220,61 @@ export async function fetchTransactionsPagesByAccountId(
     }
 }
 
-export async function fetchProcessLogByUserId(
-    id: string,
+export async function fetchPrinterUsageLogByUserId(
+    user_id: string,
+    itemsPerPage: number,
+    currentPage: number,
 ) {
+    const offset = (currentPage - 1) * itemsPerPage;
     try {
-        const processlog = await client.query(`
-                SELECT * FROM tbl_audit_log
+        const response = await client.query(`
+                SELECT * FROM tbl_printer_usage_log pul
+                JOIN tbl_printer p
+                    ON p.printer_id = pul.printer_id
                 WHERE
-                    tbl_audit_log.entity_id=${id}
-                ORDER BY tbl_audit_log.modified_date DESC
+                    pul.used_by_user_id='${user_id}'
+                ORDER BY usage_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
+        
+        const printerUsageLogs = response.rows.map(row => {
+            const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
+            const properties = `${row.paper_size} Duplex:${row.duplex} GrayScale:${row.gray_scale} ${row.document_size_kb} kB ${row.client_machine} ${row.printer_language}`;
+            let status = "";
+            if(row.usage_allowed === 'N') status += `Denied: ${row.denied_reason}`;
+            if(row.printed==='Y') status += ' Printed';
+            if(row.cancelled==='Y') status += ' Cancelled';
+            if(row.refunded==='Y') status += ' Refunded';
 
-        return processlog.rows;
+            return {
+                ...row,
+                page: pages,
+                property: properties,
+                status: status
+            }
+        })
+        return printerUsageLogs;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch process log by user.');
+        throw new Error('Failed to fetch transaction by account id.');
     }
 }
-// ----- End : User ---------------------------------------------------------//
 
+export async function fetchPrinterUsageLogPagesByUserId(
+    user_id: string,
+    itemsPerPage: number,
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_printer_usage_log
+                WHERE
+                    used_by_user_id='${user_id}'
+            `);
 
-// ----- Begin : Audit Log --------------------------------------------------//
-
-
-// ----- End : Audit Log ----------------------------------------------------//
+            const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+            return totalPages;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch transaction by account id.');
+    }
+}

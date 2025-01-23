@@ -38,7 +38,7 @@ export default async function Page(props: {
         { name: 'full_name', title: t('user.user_name'), align: 'center' },
         { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
         { name: 'restricted', title: t('user.limited'), align: 'center' },
-        { name: 'total_pages', title: t('user.page'), align: 'center' },
+        { name: 'total_pages', title: t('common.page'), align: 'center' },
         { name: 'total_jobs', title: t('user.job'), align: 'center' },
     ];
 

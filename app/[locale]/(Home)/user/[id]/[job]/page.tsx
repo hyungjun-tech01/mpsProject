@@ -9,7 +9,13 @@ import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
 import { IColumnData } from '@/app/lib/definitions';
-import { fetchUserById, fetchTransactionsByAccountId, fetchTransactionsPagesByAccountId } from '@/app/lib/fetchData';
+import {
+    fetchUserById,
+    fetchTransactionsByAccountId,
+    fetchTransactionsPagesByAccountId,
+    fetchPrinterUsageLogByUserId,
+    fetchPrinterUsageLogPagesByUserId
+} from '@/app/lib/fetchData';
 import { formatCurrency } from "@/app/lib/utils";
 
 
@@ -33,12 +39,12 @@ export default async function Page(
         notFound();
     }
 
-    const [transactionInfo, transcationCount] = await Promise.all([
-        fetchTransactionsByAccountId(user.account_id),
+    const [transactionInfo, transcationCount, printerUsageInfo, printerUsageCount] = await Promise.all([
+        fetchTransactionsByAccountId(user.account_id, 10, 1),
         fetchTransactionsPagesByAccountId(user.account_id, 10),
+        fetchPrinterUsageLogByUserId(id, 10, 1),
+        fetchPrinterUsageLogPagesByUserId(id, 10)
     ]);
-
-    console.log('Check : ', transactionInfo);
 
     const subTitles = [
         { category: 'edit', title: t('user.subTitle_detail'), link: `/user/${id}/edit` },
@@ -101,6 +107,16 @@ export default async function Page(
         { name: 'txn_comment', title: t('common.explanation'), align: 'center' },
     ];
 
+    const printerUsageColumns: IColumnData[] = [
+        { name: 'usage_date', title: t('printer.usage_date'), type: 'date' },
+        { name: 'display_name', title: t('printer.printer') },
+        { name: 'page', title: t('common.page'), align: 'center' },
+        { name: 'usage_cost', title: t('printer.usage_cost'), align: 'center', type: 'currency' },
+        { name: 'document_name', title: t('printer.document_name'), align: 'center' },
+        { name: 'property', title: t('printer.property'), align: 'center' },
+        { name: 'status', title: t('printer.status'), align: 'center' },
+    ];
+
     return (
         <main>
             <Breadcrumbs
@@ -134,7 +150,17 @@ export default async function Page(
                     />
                 </div>
             }
-            {job === 'jobLog' && <JobLog id={id} />}
+            {job === 'jobLog' &&
+                <div className="rounded-md bg-gray-50 p-4 md:p-6">
+                    <LogTable
+                        columns={printerUsageColumns}
+                        rows={printerUsageInfo}
+                        currentPage={0}
+                        totalPages={printerUsageCount}
+                        editable={false}
+                    />
+                </div>
+            }
         </main>
     );
 }

@@ -329,6 +329,7 @@ const koResource = {
             next: '다음',
             no: 'No',
             note: '비고',
+            page:'페이지',
             phone_no: '전화번호',
             previous: '이전',
             preview: '미리보기',
@@ -396,7 +397,6 @@ const koResource = {
             memo:'메모',
             mobile:'휴대전화',
             new_user:'사용자등록',
-            page:'페이지',
             password:'비밀번호',
             password_change:'변경 비밀번호',
             password_change_confirm:'변경 비밀번호 학인',
@@ -432,6 +432,14 @@ const koResource = {
             transaction_by: '진행자',
             transaction_date: '진행일자',
             transaction_type: '처리방식'
+        },
+        printer: {
+            document_name: '문서명',
+            printer: '프린터',
+            property: '속성',
+            status: '상태',
+            usage_cost: '사용비용',
+            usage_date: '사용날짜',
         }
     },
 }

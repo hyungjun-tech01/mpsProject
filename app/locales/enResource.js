@@ -330,6 +330,7 @@ const enResource = {
             name2: 'Name',
             next: 'Next',
             note: 'Note',
+            page:'Page',
             phone_no: 'Phone No.',
             previous: 'Previous',
             preview: 'Preview',
@@ -397,7 +398,6 @@ const enResource = {
             memo:'Memo',
             mobile:'Mobile Phone',
             new_user:'New User',
-            page:'Page',
             password:'Password',
             password_change: 'Change Password',
             password_change_confirm: 'Change Password Confirm',
@@ -434,6 +434,14 @@ const enResource = {
             transaction_by: 'Transaction By',
             transaction_date: 'Transaction Date',
             transaction_type: 'Transaction Type'
+        },
+        printer: {
+            document_name: 'Document Name',
+            printer: 'Printer',
+            property: 'Property',
+            status: 'Status',
+            usage_cost: 'Usage Const',
+            usage_date: 'Usage Date',
         }
     },
 }
