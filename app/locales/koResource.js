@@ -432,7 +432,7 @@ const koResource = {
             transaction_by: '진행자',
             transaction_date: '진행일자',
             transaction_type: '처리방식'
-        }        
+        },        
         device :{
             display_name:'장비이름',
             device_type: '장비타입',
