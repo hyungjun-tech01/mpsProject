@@ -413,6 +413,13 @@ const koResource = {
             change_password_same:'변경 비밀번호 확인과 변경 비밀번호는 같아야 합니다.',
             miss_password_item :'입력항목이 누락되었습니다.',
             min_password_length:'password 는 5자리 이상이어야 합니다.',
+        },
+        device :{
+            display_name:'장비이름',
+            device_type: '장비타입',
+            ext_device_function:'기능',
+            server_name:'호스트 이름',
+            status:'삭제여부'
         }
     },
 }

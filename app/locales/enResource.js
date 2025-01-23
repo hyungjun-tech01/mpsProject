@@ -415,7 +415,15 @@ const enResource = {
             miss_password_item :'Some missing input items.',
             min_password_length:'Password must be at least 5 characters long.',
             change_password_same:'Confirm Change Password and Change Password must be the same.',
+        },
+        device :{
+            display_name:'Device Name',
+            device_type: 'Device Type',
+            ext_device_function:'Functions',
+            server_name:'Host Name',
+            status:'Deleted'
         }
+
     },
 }
 export default enResource;
