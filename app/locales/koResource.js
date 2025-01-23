@@ -440,6 +440,13 @@ const koResource = {
             status: '상태',
             usage_cost: '사용비용',
             usage_date: '사용날짜',
+        },        
+        device :{
+            printer_name:'장비이름',
+            device_type: '장비타입',
+            ext_device_function:'기능',
+            server_name:'호스트 이름',
+            status:'삭제여부'
         }
     },
 }

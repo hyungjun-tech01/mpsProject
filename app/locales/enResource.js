@@ -442,7 +442,14 @@ const enResource = {
             status: 'Status',
             usage_cost: 'Usage Const',
             usage_date: 'Usage Date',
-        }
+        },
+        device :{
+            printer_name:'Device Name',
+            device_type: 'Device Type',
+            ext_device_function:'Functions',
+            server_name:'Host Name',
+            status:'Deleted'
+        },
     },
 }
 export default enResource;
