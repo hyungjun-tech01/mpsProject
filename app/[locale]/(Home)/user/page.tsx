@@ -35,10 +35,9 @@ export default async function Page(props: {
         fetchFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     const columns: IColumnData[] = [
-        { name: 'user_id', title: t('user.user_id') },
         { name: 'full_name', title: t('user.user_name'), align: 'center' },
-        { name: 'net_total_megabytes', title: t('user.remain_amount'), align: 'center' },
-        { name: 'disabled_printing', title: t('user.limited'), align: 'center' },
+        { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
+        { name: 'restricted', title: t('user.limited'), align: 'center' },
         { name: 'total_pages', title: t('user.page'), align: 'center' },
         { name: 'total_jobs', title: t('user.job'), align: 'center' },
     ];
@@ -59,6 +58,7 @@ export default async function Page(props: {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     category='user'
+                    locale={locale}
                     deleteAction={deleteUser}
                 />
             </Suspense>

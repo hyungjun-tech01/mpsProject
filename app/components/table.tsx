@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,8 +11,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { IColumnData } from '@/app/lib/definitions';
+import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 
 
@@ -42,7 +43,9 @@ interface ITable<DataType> {
     currentPage: number;
     totalPages: number;
     category?: string;
+    locale?: string;
     deleteAction?: (id: string) => void;
+    editable?: boolean;
 }
 
 export default function CustomizedTable<DataType>({
@@ -51,7 +54,9 @@ export default function CustomizedTable<DataType>({
     currentPage,
     totalPages,
     category,
+    locale,
     deleteAction,
+    editable = true,
 }: ITable<DataType>) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -73,7 +78,7 @@ export default function CustomizedTable<DataType>({
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            <StyledTableCell align='right'>{' '}</StyledTableCell>
+                            { editable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -87,19 +92,23 @@ export default function CustomizedTable<DataType>({
                                             align={column.align}
                                             scope="row"
                                         >
-                                            {row[column.name]}
+                                            { !column.type && row[column.name]}
+                                            { !!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                            { !!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                         </StyledTableCell>
                                     ))}
-                                    <StyledTableCell
-                                        component="th"
-                                        align='right'
-                                        scope="row"
-                                    >
-                                        <div className="flex justify-end gap-3">
-                                            {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
-                                            {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
-                                        </div>
-                                    </StyledTableCell>
+                                    { editable && 
+                                        <StyledTableCell
+                                            component="th"
+                                            align='right'
+                                            scope="row"
+                                        >
+                                            <div className="flex justify-end gap-3">
+                                                {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
+                                                {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
+                                            </div>
+                                        </StyledTableCell>
+                                    }
                                 </StyledTableRow>
                             )
                         })}

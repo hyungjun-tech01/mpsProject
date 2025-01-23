@@ -1,6 +1,7 @@
 export type IColumnData = {
   name: string;
   title: string;
+  type?: string;
   align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
 }
 

@@ -1,0 +1,13 @@
+-47,LowToner,Low toner detected on:,10,30,N,,N
+-46,PrinterError,"A printer error was detected at %time%:
+
+  Printer: %printer%
+  Location: %location%
+  Error Type: %error%
+  Jobs in queue: %num_jobs%",60,,,,N
+-45,AppLogError,"An application error was reported. Further action may be required:
+
+  %error%",60,,,,N
+-44,LicenseError,,,,,,N
+-43,PendingRefund,"There are %num_requests% pending refund requests.
+Please login to the admin interface to action them via Printers -> Refunds.",,,,DAILY,N

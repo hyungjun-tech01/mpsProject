@@ -1,0 +1,495 @@
+1001,2024-12-08 17:09:52.851,"",INFO,어플리케이션 서버가 시작중입니다. 버전:24.0.5 (Build 70499)
+1002,2024-12-08 17:14:19.313,"",INFO,"신규생성 공유계정'"[템플릿 계정]'""
+1003,2024-12-08 17:14:19.373,"",INFO,"Created a new scan action '"Scan to My Email'"."
+1004,2024-12-08 17:14:22.179,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+1005,2024-12-08 17:14:23.693,"",INFO,"서버'"desktop-e43b43b'"에 새 프린터'"find-me-que'"가 추가되었습니다."
+1006,2024-12-08 17:14:23.886,"",INFO,"서버'"desktop-e43b43b'"에 새 프린터'"D450_HQ'"가 추가되었습니다."
+1007,2024-12-08 17:14:24.071,"",INFO,"서버'"desktop-e43b43b'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+1008,2024-12-08 17:14:32.945,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: [0:0:0:0:0:0:0:1])"
+1009,2024-12-08 17:25:36.563,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+1010,2024-12-08 17:36:02.546,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+1011,2024-12-08 17:37:27.73,"",INFO,"프린터 '"device\D420_1810'"가 '"admin'"로/으로 수동 변경되었습니다."
+1012,2024-12-08 17:42:22.41,device\D420_1810,INFO,"User '"test1'" logged in."
+1013,2024-12-08 17:49:49.503,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"desktop-e43b43b'""
+1014,2024-12-08 18:05:47.494,"",INFO,"서버'"desktop-e43b43b'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+1015,2024-12-08 18:20:31.777,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"desktop-e43b43b'""
+1016,2024-12-08 18:21:51.359,"",INFO,"서버'"desktop-e43b43b'"에 새 프린터'"D420'"가 추가되었습니다."
+1017,2024-12-08 19:31:17.021,desktop-e43b43b,INFO,Stopped print monitor service on desktop-e43b43b.
+1018,2024-12-08 19:31:21.248,desktop-e43b43b,INFO,Starting print monitor service (111.0.18.8236-8B72F34) on desktop-e43b43b.
+1019,2024-12-08 20:20:53.547,desktop-e43b43b,INFO,Stopped print monitor service on desktop-e43b43b.
+1020,2024-12-08 20:21:01.179,desktop-e43b43b,INFO,Starting print monitor service (111.0.18.8236-8B72F34) on desktop-e43b43b.
+1021,2024-12-08 20:43:04.375,desktop-e43b43b,INFO,Stopped print monitor service on desktop-e43b43b.
+1022,2024-12-08 20:43:08.093,desktop-e43b43b,INFO,Starting print monitor service (111.0.18.8236-8B72F34) on desktop-e43b43b.
+1023,2024-12-08 20:45:49.379,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+1024,2024-12-08 20:46:14.011,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+1025,2024-12-08 21:10:21.448,"",INFO,"User '"admin'" logged out from the administration site."
+1026,2024-12-08 21:19:47.674,desktop-e43b43b,INFO,Stopped print monitor service on desktop-e43b43b.
+1027,2024-12-08 21:19:48.357,"",INFO,어플리케이션 서버가 중지중입니다. 버전:24.0.5 (Build 70499)
+2002,2024-12-08 21:40:19.433,"",INFO,어플리케이션 서버가 시작중입니다. 버전:24.0.5 (Build 70499)
+2003,2024-12-09 00:55:00.037,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+2004,2024-12-09 20:13:24.554,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+2005,2024-12-09 20:14:08.193,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+2006,2024-12-09 20:15:36.512,"",INFO,"프린터 '"device\D420_1810'"가 '"admin'"로/으로 수동 변경되었습니다."
+2007,2024-12-10 00:55:00.01,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+2008,2024-12-11 00:55:00.056,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+2009,2024-12-11 17:30:18.462,desktop-e43b43b,INFO,Stopped print monitor service on desktop-e43b43b.
+2010,2024-12-11 17:30:19.155,"",INFO,어플리케이션 서버가 중지중입니다. 버전:24.0.5 (Build 70499)
+3003,2024-12-11 17:32:34.374,"",INFO,어플리케이션 서버가 시작중입니다. 버전:24.0.5 (Build 70499)
+3004,2024-12-12 00:55:00.03,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+3005,2024-12-12 10:17:02.739,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+3006,2024-12-13 00:55:00.017,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+3007,2024-12-14 00:55:00.059,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+3008,2024-12-15 00:20:02.924,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2024-12-15T00-20-00.zip'"에 기록되었습니다."
+3009,2024-12-15 00:55:00.056,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+3010,2024-12-15 08:29:09.74,"",INFO,어플리케이션 서버가 중지중입니다. 버전:24.0.5 (Build 70499)
+4004,2024-12-15 11:50:04.933,"",INFO,어플리케이션 서버가 시작중입니다. 버전:24.0.5 (Build 70499)
+4005,2024-12-15 20:10:18.613,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4006,2024-12-15 20:11:53.247,"",INFO,"사용자 계정 '"170321'"이 '"admin'"로/으로 수동 변경되었습니다."
+4007,2024-12-15 20:11:57.725,"",INFO,"사용자 계정 '"170321'"이 '"admin'"로/으로 수동 변경되었습니다."
+4008,2024-12-15 21:00:16.26,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4009,2024-12-16 00:55:00.076,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4010,2024-12-17 00:55:00.06,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4011,2024-12-18 00:55:00.035,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4012,2024-12-19 00:55:00.012,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4013,2024-12-20 00:55:00.045,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4014,2024-12-21 00:55:00.025,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4015,2024-12-22 00:20:01.023,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2024-12-22T00-20-00.zip'"에 기록되었습니다."
+4016,2024-12-22 00:55:00.001,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4017,2024-12-23 00:55:00.12,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4018,2024-12-24 00:55:00.071,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4019,2024-12-25 00:55:00.048,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4020,2024-12-26 00:55:00.02,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4021,2024-12-27 00:55:00.04,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4022,2024-12-28 00:55:00.253,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4023,2024-12-29 00:20:00.971,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2024-12-29T00-20-00.zip'"에 기록되었습니다."
+4024,2024-12-29 00:55:00.002,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4025,2024-12-30 00:55:00.037,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4026,2024-12-31 00:55:00.023,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4027,2025-01-01 00:55:00.048,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4028,2025-01-02 00:55:00.04,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4029,2025-01-02 19:49:34.787,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4030,2025-01-02 19:52:19.584,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+4031,2025-01-02 19:53:16.261,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4032,2025-01-03 00:55:00.031,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4033,2025-01-04 00:55:00.039,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4034,2025-01-05 00:20:00.896,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2025-01-05T00-20-00.zip'"에 기록되었습니다."
+4035,2025-01-05 00:55:00.002,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4036,2025-01-06 00:55:00.004,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4037,2025-01-06 08:10:22.139,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4038,2025-01-06 13:17:33.293,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.111)"
+4039,2025-01-06 13:27:20.602,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4040,2025-01-07 00:55:00.032,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4041,2025-01-07 11:29:01.334,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4042,2025-01-07 11:33:32.26,"",INFO,License successfully installed.
+4043,2025-01-07 12:00:18.92,"",INFO,Background entitlements sync successful
+4044,2025-01-07 13:00:21.363,"",INFO,Background entitlements sync successful
+4045,2025-01-07 14:00:31.306,"",WARN,Background entitlements sync failed. Reason: timeout
+4046,2025-01-07 14:00:31.384,"",WARN,Restoring last saved subscription information
+4047,2025-01-07 14:12:48.923,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+4048,2025-01-07 14:14:35.842,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4049,2025-01-07 14:36:39.771,"",INFO,"신규 그룹'"없음'"가 추가되었습니다."
+4050,2025-01-07 14:36:40.323,"",INFO,다음의 그룹을 운영시스템에 맞게 동기화시켰습니다:'없음' .
+4051,2025-01-07 14:36:40.441,"",INFO,0 new users added (group sync only).
+4052,2025-01-07 14:46:02.844,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4053,2025-01-07 14:54:02.411,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4054,2025-01-07 15:00:08.492,"",INFO,Background entitlements sync successful
+4055,2025-01-07 15:01:32.356,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 192.168.2.94)"
+4056,2025-01-07 15:23:53.421,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+4057,2025-01-07 15:25:03.908,"",INFO,"프린터 '"device\D420_1810'"가 '"admin'"로/으로 수동 변경되었습니다."
+4058,2025-01-07 16:00:18.788,"",INFO,Background entitlements sync successful
+4059,2025-01-07 17:00:22.319,"",INFO,Background entitlements sync successful
+4060,2025-01-07 18:00:12.566,"",INFO,Background entitlements sync successful
+4061,2025-01-07 18:23:04.427,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 14.52.139.193)"
+4062,2025-01-07 19:00:21.286,"",INFO,Background entitlements sync successful
+4063,2025-01-07 19:40:50.095,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 14.52.139.193)"
+4064,2025-01-07 20:00:20.564,"",INFO,Background entitlements sync successful
+4065,2025-01-07 21:00:13.438,"",INFO,Background entitlements sync successful
+4066,2025-01-07 22:00:16.955,"",INFO,Background entitlements sync successful
+4067,2025-01-07 23:00:20.949,"",INFO,Background entitlements sync successful
+4068,2025-01-08 00:00:14.61,"",INFO,Background entitlements sync successful
+4069,2025-01-08 00:55:00.073,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4070,2025-01-08 00:55:00.94,"",INFO,Deleted 115 audit logs that were more than 30 days old
+4071,2025-01-08 01:00:07.606,"",INFO,Background entitlements sync successful
+4072,2025-01-08 02:00:21.239,"",INFO,Background entitlements sync successful
+4073,2025-01-08 03:00:21.461,"",INFO,Background entitlements sync successful
+4074,2025-01-08 04:00:20.988,"",INFO,Background entitlements sync successful
+4075,2025-01-08 05:00:19.163,"",INFO,Background entitlements sync successful
+4076,2025-01-08 06:00:15.055,"",INFO,Background entitlements sync successful
+4077,2025-01-08 07:00:19.385,"",INFO,Background entitlements sync successful
+4078,2025-01-08 08:00:25.954,"",INFO,Background entitlements sync successful
+4079,2025-01-08 09:00:16.563,"",INFO,Background entitlements sync successful
+4080,2025-01-08 09:03:40.468,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4081,2025-01-08 10:00:21.284,"",INFO,Background entitlements sync successful
+4082,2025-01-08 11:00:13.689,"",INFO,Background entitlements sync successful
+4083,2025-01-08 12:00:17.45,"",INFO,Background entitlements sync successful
+4084,2025-01-08 13:00:16.678,"",INFO,Background entitlements sync successful
+4085,2025-01-08 14:00:26.368,"",INFO,Background entitlements sync successful
+4086,2025-01-08 15:00:26.369,"",INFO,Background entitlements sync successful
+4087,2025-01-08 16:00:16.816,"",INFO,Background entitlements sync successful
+4088,2025-01-08 16:16:47.606,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4089,2025-01-08 16:17:20.546,"",INFO,"서버'"device'"에 새 프린터'"D420_1810'"가 추가되었습니다."
+4090,2025-01-08 16:18:02.936,"",INFO,"User '"admin'" deleted printer '"d420_1810'" on server '"device'""
+4091,2025-01-08 17:00:23.671,"",INFO,Background entitlements sync successful
+4092,2025-01-08 18:00:13.712,"",INFO,Background entitlements sync successful
+4093,2025-01-08 19:00:20.528,"",INFO,Background entitlements sync successful
+4094,2025-01-08 20:00:11.976,"",INFO,Background entitlements sync successful
+4095,2025-01-08 21:00:19.732,"",INFO,Background entitlements sync successful
+4096,2025-01-08 22:00:15.646,"",INFO,Background entitlements sync successful
+4097,2025-01-08 23:00:23.291,"",INFO,Background entitlements sync successful
+4098,2025-01-09 00:00:18.602,"",INFO,Background entitlements sync successful
+4099,2025-01-09 00:55:00.038,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4100,2025-01-09 01:00:13.132,"",INFO,Background entitlements sync successful
+4101,2025-01-09 02:00:13.278,"",INFO,Background entitlements sync successful
+4102,2025-01-09 03:00:17.209,"",INFO,Background entitlements sync successful
+4103,2025-01-09 04:00:21.978,"",INFO,Background entitlements sync successful
+4104,2025-01-09 05:00:20.344,"",INFO,Background entitlements sync successful
+4105,2025-01-09 06:00:16.438,"",INFO,Background entitlements sync successful
+4106,2025-01-09 07:00:19.18,"",INFO,Background entitlements sync successful
+4107,2025-01-09 08:00:19.321,"",INFO,Background entitlements sync successful
+4108,2025-01-09 09:00:08.189,"",INFO,Background entitlements sync successful
+4109,2025-01-09 10:00:29.209,"",INFO,Background entitlements sync successful
+4110,2025-01-09 11:00:24.11,"",INFO,Background entitlements sync successful
+4111,2025-01-09 12:00:22.733,"",INFO,Background entitlements sync successful
+4112,2025-01-09 13:00:24.158,"",INFO,Background entitlements sync successful
+4113,2025-01-09 14:00:20.691,"",INFO,Background entitlements sync successful
+4114,2025-01-09 15:00:19.97,"",INFO,Background entitlements sync successful
+4115,2025-01-09 16:00:15.068,"",INFO,Background entitlements sync successful
+4116,2025-01-09 17:00:23.358,"",INFO,Background entitlements sync successful
+4117,2025-01-09 18:00:10.218,"",INFO,Background entitlements sync successful
+4118,2025-01-09 19:00:25.666,"",INFO,Background entitlements sync successful
+4119,2025-01-09 20:00:21.188,"",INFO,Background entitlements sync successful
+4120,2025-01-09 21:00:27.545,"",INFO,Background entitlements sync successful
+4121,2025-01-09 22:00:12.711,"",INFO,Background entitlements sync successful
+4122,2025-01-09 23:00:34.581,"",INFO,Background entitlements sync successful
+4123,2025-01-10 00:00:28.914,"",INFO,Background entitlements sync successful
+4124,2025-01-10 00:55:00.035,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4125,2025-01-10 01:00:24.448,"",INFO,Background entitlements sync successful
+4126,2025-01-10 02:00:14.012,"",INFO,Background entitlements sync successful
+4127,2025-01-10 03:00:18.661,"",INFO,Background entitlements sync successful
+4128,2025-01-10 04:00:14.863,"",INFO,Background entitlements sync successful
+4129,2025-01-10 05:00:22.578,"",INFO,Background entitlements sync successful
+4130,2025-01-10 06:00:26.024,"",INFO,Background entitlements sync successful
+4131,2025-01-10 07:00:23.771,"",INFO,Background entitlements sync successful
+4132,2025-01-10 08:00:31.498,"",INFO,Background entitlements sync successful
+4133,2025-01-10 09:00:23.538,"",INFO,Background entitlements sync successful
+4134,2025-01-10 10:00:09.031,"",INFO,Background entitlements sync successful
+4135,2025-01-10 11:00:12.042,"",INFO,Background entitlements sync successful
+4136,2025-01-10 12:00:16.598,"",INFO,Background entitlements sync successful
+4137,2025-01-10 13:00:10.77,"",INFO,Background entitlements sync successful
+4138,2025-01-10 14:00:24.548,"",INFO,Background entitlements sync successful
+4139,2025-01-10 15:00:19.687,"",INFO,Background entitlements sync successful
+4140,2025-01-10 16:00:16.745,"",INFO,Background entitlements sync successful
+4141,2025-01-10 17:00:18.946,"",INFO,Background entitlements sync successful
+4142,2025-01-10 18:00:23.891,"",INFO,Background entitlements sync successful
+4143,2025-01-10 19:00:24.394,"",INFO,Background entitlements sync successful
+4144,2025-01-10 20:00:22.707,"",INFO,Background entitlements sync successful
+4145,2025-01-10 21:00:27.751,"",INFO,Background entitlements sync successful
+4146,2025-01-10 22:00:22.106,"",INFO,Background entitlements sync successful
+4147,2025-01-10 23:00:15.189,"",INFO,Background entitlements sync successful
+4148,2025-01-11 00:00:09.833,"",INFO,Background entitlements sync successful
+4149,2025-01-11 00:55:00.051,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4150,2025-01-11 01:00:12.995,"",INFO,Background entitlements sync successful
+4151,2025-01-11 02:00:25.335,"",INFO,Background entitlements sync successful
+4152,2025-01-11 03:00:10.732,"",INFO,Background entitlements sync successful
+4153,2025-01-11 04:00:20.428,"",INFO,Background entitlements sync successful
+4154,2025-01-11 05:00:15.093,"",INFO,Background entitlements sync successful
+4155,2025-01-11 06:00:17.421,"",INFO,Background entitlements sync successful
+4156,2025-01-11 07:00:12.643,"",INFO,Background entitlements sync successful
+4157,2025-01-11 08:00:23.982,"",INFO,Background entitlements sync successful
+4158,2025-01-11 09:00:17.822,"",INFO,Background entitlements sync successful
+4159,2025-01-11 10:00:12.426,"",INFO,Background entitlements sync successful
+4160,2025-01-11 11:00:12.111,"",INFO,Background entitlements sync successful
+4161,2025-01-11 12:00:17.054,"",INFO,Background entitlements sync successful
+4162,2025-01-11 13:00:17.853,"",INFO,Background entitlements sync successful
+4163,2025-01-11 14:00:19.034,"",INFO,Background entitlements sync successful
+4164,2025-01-11 15:00:24.862,"",INFO,Background entitlements sync successful
+4165,2025-01-11 16:00:12.755,"",INFO,Background entitlements sync successful
+4166,2025-01-11 17:00:13.377,"",INFO,Background entitlements sync successful
+4167,2025-01-11 18:00:17.631,"",INFO,Background entitlements sync successful
+4168,2025-01-11 19:00:15.541,"",INFO,Background entitlements sync successful
+4169,2025-01-11 20:00:16.794,"",INFO,Background entitlements sync successful
+4170,2025-01-11 21:00:11.401,"",INFO,Background entitlements sync successful
+4171,2025-01-11 22:00:15.206,"",INFO,Background entitlements sync successful
+4172,2025-01-11 23:00:19.891,"",INFO,Background entitlements sync successful
+4173,2025-01-12 00:00:23.315,"",INFO,Background entitlements sync successful
+4174,2025-01-12 00:20:00.91,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2025-01-12T00-20-00.zip'"에 기록되었습니다."
+4175,2025-01-12 00:55:00.004,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4176,2025-01-12 01:00:21.298,"",INFO,Background entitlements sync successful
+4177,2025-01-12 02:00:21.068,"",INFO,Background entitlements sync successful
+4178,2025-01-12 03:00:13.768,"",INFO,Background entitlements sync successful
+4179,2025-01-12 04:00:12.664,"",INFO,Background entitlements sync successful
+4180,2025-01-12 05:00:13.735,"",INFO,Background entitlements sync successful
+4181,2025-01-12 06:00:20.543,"",INFO,Background entitlements sync successful
+4182,2025-01-12 07:00:14.876,"",INFO,Background entitlements sync successful
+4183,2025-01-12 08:00:18.313,"",INFO,Background entitlements sync successful
+4184,2025-01-12 09:00:21.432,"",INFO,Background entitlements sync successful
+4185,2025-01-12 10:00:22.128,"",INFO,Background entitlements sync successful
+4186,2025-01-12 11:00:11.014,"",INFO,Background entitlements sync successful
+4187,2025-01-12 12:00:24.03,"",INFO,Background entitlements sync successful
+4188,2025-01-12 13:00:11.055,"",INFO,Background entitlements sync successful
+4189,2025-01-12 14:00:25.178,"",INFO,Background entitlements sync successful
+4190,2025-01-12 15:00:31.246,"",INFO,Background entitlements sync successful
+4191,2025-01-12 16:00:19.125,"",INFO,Background entitlements sync successful
+4192,2025-01-12 17:00:13.474,"",INFO,Background entitlements sync successful
+4193,2025-01-12 18:00:21.751,"",INFO,Background entitlements sync successful
+4194,2025-01-12 19:00:09.901,"",INFO,Background entitlements sync successful
+4195,2025-01-12 20:00:15.436,"",INFO,Background entitlements sync successful
+4196,2025-01-12 21:00:22.639,"",INFO,Background entitlements sync successful
+4197,2025-01-12 22:00:11.774,"",INFO,Background entitlements sync successful
+4198,2025-01-12 23:00:13.526,"",INFO,Background entitlements sync successful
+4199,2025-01-13 00:00:22.394,"",INFO,Background entitlements sync successful
+4200,2025-01-13 00:55:00.045,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4201,2025-01-13 01:00:15.437,"",INFO,Background entitlements sync successful
+4202,2025-01-13 02:00:22.337,"",INFO,Background entitlements sync successful
+4203,2025-01-13 03:00:21.225,"",INFO,Background entitlements sync successful
+4204,2025-01-13 04:00:31.788,"",WARN,Background entitlements sync failed. Reason: timeout
+4205,2025-01-13 04:00:31.859,"",WARN,Restoring last saved subscription information
+4206,2025-01-13 05:00:23.316,"",INFO,Background entitlements sync successful
+4207,2025-01-13 06:00:12.496,"",INFO,Background entitlements sync successful
+4208,2025-01-13 07:00:31.097,"",WARN,Background entitlements sync failed. Reason: timeout
+4209,2025-01-13 07:00:31.165,"",WARN,Restoring last saved subscription information
+4210,2025-01-13 08:00:20.291,"",INFO,Background entitlements sync successful
+4211,2025-01-13 09:00:19.764,"",INFO,Background entitlements sync successful
+4212,2025-01-13 10:00:13.889,"",INFO,Background entitlements sync successful
+4213,2025-01-13 11:00:18.832,"",INFO,Background entitlements sync successful
+4214,2025-01-13 12:00:22.108,"",INFO,Background entitlements sync successful
+4215,2025-01-13 13:00:12.854,"",INFO,Background entitlements sync successful
+4216,2025-01-13 14:00:20.567,"",INFO,Background entitlements sync successful
+4217,2025-01-13 15:00:26.878,"",INFO,Background entitlements sync successful
+4218,2025-01-13 16:00:22.463,"",INFO,Background entitlements sync successful
+4219,2025-01-13 17:00:20.362,"",INFO,Background entitlements sync successful
+4220,2025-01-13 18:00:20.788,"",INFO,Background entitlements sync successful
+4221,2025-01-13 19:00:13.432,"",INFO,Background entitlements sync successful
+4222,2025-01-13 20:00:21.694,"",INFO,Background entitlements sync successful
+4223,2025-01-13 21:00:09.374,"",INFO,Background entitlements sync successful
+4224,2025-01-13 22:00:25.411,"",INFO,Background entitlements sync successful
+4225,2025-01-13 23:00:22.253,"",INFO,Background entitlements sync successful
+4226,2025-01-14 00:00:21.037,"",INFO,Background entitlements sync successful
+4227,2025-01-14 00:55:00.043,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4228,2025-01-14 01:00:25.928,"",INFO,Background entitlements sync successful
+4229,2025-01-14 02:00:20.56,"",INFO,Background entitlements sync successful
+4230,2025-01-14 03:00:15.599,"",INFO,Background entitlements sync successful
+4231,2025-01-14 04:00:10.701,"",INFO,Background entitlements sync successful
+4232,2025-01-14 05:00:28.381,"",INFO,Background entitlements sync successful
+4233,2025-01-14 06:00:19.213,"",INFO,Background entitlements sync successful
+4234,2025-01-14 07:00:16.415,"",INFO,Background entitlements sync successful
+4235,2025-01-14 08:00:18.744,"",INFO,Background entitlements sync successful
+4236,2025-01-14 09:00:18.738,"",INFO,Background entitlements sync successful
+4237,2025-01-14 10:00:24.948,"",INFO,Background entitlements sync successful
+4238,2025-01-14 11:00:19.903,"",INFO,Background entitlements sync successful
+4239,2025-01-14 12:00:19.133,"",INFO,Background entitlements sync successful
+4240,2025-01-14 13:00:25.164,"",INFO,Background entitlements sync successful
+4241,2025-01-14 14:00:16.23,"",INFO,Background entitlements sync successful
+4242,2025-01-14 15:00:25.05,"",INFO,Background entitlements sync successful
+4243,2025-01-14 16:00:22.946,"",INFO,Background entitlements sync successful
+4244,2025-01-14 17:00:14.828,"",INFO,Background entitlements sync successful
+4245,2025-01-14 18:00:26.462,"",INFO,Background entitlements sync successful
+4246,2025-01-14 19:00:11.114,"",INFO,Background entitlements sync successful
+4247,2025-01-14 20:00:17.556,"",INFO,Background entitlements sync successful
+4248,2025-01-14 21:00:17.763,"",INFO,Background entitlements sync successful
+4249,2025-01-14 22:00:16.316,"",INFO,Background entitlements sync successful
+4250,2025-01-14 23:00:23.513,"",INFO,Background entitlements sync successful
+4251,2025-01-15 00:00:19.634,"",INFO,Background entitlements sync successful
+4252,2025-01-15 00:55:00.02,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+4253,2025-01-15 00:55:00.331,"",INFO,"Deleted 6,419 audit logs that were more than 30 days old"
+4254,2025-01-15 01:00:16.289,"",INFO,Background entitlements sync successful
+4255,2025-01-15 02:00:17.134,"",INFO,Background entitlements sync successful
+4256,2025-01-15 03:00:14.799,"",INFO,Background entitlements sync successful
+4257,2025-01-15 04:00:14.796,"",INFO,Background entitlements sync successful
+4258,2025-01-15 05:00:10.388,"",INFO,Background entitlements sync successful
+4259,2025-01-15 06:00:22.697,"",INFO,Background entitlements sync successful
+4260,2025-01-15 07:00:31.635,"",WARN,Background entitlements sync failed. Reason: timeout
+4261,2025-01-15 07:00:31.701,"",WARN,Restoring last saved subscription information
+4262,2025-01-15 08:00:17.458,"",INFO,Background entitlements sync successful
+4263,2025-01-15 09:00:10.126,"",INFO,Background entitlements sync successful
+4264,2025-01-15 10:00:16.434,"",INFO,Background entitlements sync successful
+4265,2025-01-15 11:00:15.713,"",INFO,Background entitlements sync successful
+4266,2025-01-15 12:00:28.416,"",INFO,Background entitlements sync successful
+4267,2025-01-15 13:00:31.736,"",WARN,Background entitlements sync failed. Reason: timeout
+4268,2025-01-15 13:00:31.842,"",WARN,Restoring last saved subscription information
+4269,2025-01-15 14:00:22.313,"",INFO,Background entitlements sync successful
+4270,2025-01-15 15:00:20.265,"",INFO,Background entitlements sync successful
+4271,2025-01-15 16:00:08.516,"",INFO,Background entitlements sync successful
+4272,2025-01-15 17:00:10.421,"",INFO,Background entitlements sync successful
+5005,2025-01-15 17:32:01.431,"",INFO,어플리케이션 서버가 시작중입니다. 버전:24.0.5 (Build 70499)
+5006,2025-01-15 17:32:03.048,"",INFO,Background entitlements sync successful
+5007,2025-01-15 18:00:31.674,"",WARN,Background entitlements sync failed. Reason: timeout
+5008,2025-01-15 18:00:31.768,"",WARN,Restoring last saved subscription information
+5009,2025-01-15 19:00:29.043,"",INFO,Background entitlements sync successful
+5010,2025-01-15 20:00:15.998,"",INFO,Background entitlements sync successful
+5011,2025-01-15 21:00:22.253,"",INFO,Background entitlements sync successful
+5012,2025-01-15 22:00:25.112,"",INFO,Background entitlements sync successful
+5013,2025-01-15 23:00:14.153,"",INFO,Background entitlements sync successful
+5014,2025-01-16 00:00:30.182,"",INFO,Background entitlements sync successful
+5015,2025-01-16 00:55:00.065,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5016,2025-01-16 01:00:07.979,"",INFO,Background entitlements sync successful
+5017,2025-01-16 02:00:35.297,"",WARN,Background entitlements sync failed. Reason: timeout
+5018,2025-01-16 02:00:35.396,"",WARN,Restoring last saved subscription information
+5019,2025-01-16 03:00:14.067,"",INFO,Background entitlements sync successful
+5020,2025-01-16 04:00:21.71,"",INFO,Background entitlements sync successful
+5021,2025-01-16 05:00:09.844,"",INFO,Background entitlements sync successful
+5022,2025-01-16 06:00:12.851,"",INFO,Background entitlements sync successful
+5023,2025-01-16 07:00:25.192,"",INFO,Background entitlements sync successful
+5024,2025-01-16 08:00:13.266,"",INFO,Background entitlements sync successful
+5025,2025-01-16 09:00:21.879,"",INFO,Background entitlements sync successful
+5026,2025-01-16 10:00:09.883,"",INFO,Background entitlements sync successful
+5027,2025-01-16 11:00:19.068,"",INFO,Background entitlements sync successful
+5028,2025-01-16 12:00:17.52,"",INFO,Background entitlements sync successful
+5029,2025-01-16 13:00:34.442,"",INFO,Background entitlements sync successful
+5030,2025-01-16 14:00:24.145,"",INFO,Background entitlements sync successful
+5031,2025-01-16 15:00:18.867,"",INFO,Background entitlements sync successful
+5032,2025-01-16 16:00:25.806,"",INFO,Background entitlements sync successful
+5033,2025-01-16 17:00:31.36,"",WARN,Background entitlements sync failed. Reason: timeout
+5034,2025-01-16 17:00:31.432,"",WARN,Restoring last saved subscription information
+5035,2025-01-16 18:00:15.29,"",INFO,Background entitlements sync successful
+5036,2025-01-16 19:00:17.34,"",INFO,Background entitlements sync successful
+5037,2025-01-16 20:00:13.184,"",INFO,Background entitlements sync successful
+5038,2025-01-16 21:00:31.554,"",INFO,Background entitlements sync successful
+5039,2025-01-16 22:00:16.239,"",INFO,Background entitlements sync successful
+5040,2025-01-16 23:00:12.719,"",INFO,Background entitlements sync successful
+5041,2025-01-17 00:00:11.355,"",INFO,Background entitlements sync successful
+5042,2025-01-17 00:55:00.057,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5043,2025-01-17 01:00:16.044,"",INFO,Background entitlements sync successful
+5044,2025-01-17 02:00:20.183,"",INFO,Background entitlements sync successful
+5045,2025-01-17 03:00:18.813,"",INFO,Background entitlements sync successful
+5046,2025-01-17 04:00:25.141,"",INFO,Background entitlements sync successful
+5047,2025-01-17 05:00:22.328,"",INFO,Background entitlements sync successful
+5048,2025-01-17 06:00:30.177,"",WARN,Background entitlements sync failed. Reason: timeout
+5049,2025-01-17 06:00:30.253,"",WARN,Restoring last saved subscription information
+5050,2025-01-17 07:00:26.569,"",INFO,Background entitlements sync successful
+5051,2025-01-17 08:00:35.388,"",WARN,Background entitlements sync failed. Reason: timeout
+5052,2025-01-17 08:00:35.455,"",WARN,Restoring last saved subscription information
+5053,2025-01-17 09:00:23.41,"",INFO,Background entitlements sync successful
+5054,2025-01-17 10:00:15.756,"",INFO,Background entitlements sync successful
+5055,2025-01-17 11:00:27.038,"",INFO,Background entitlements sync successful
+5056,2025-01-17 12:00:17.995,"",INFO,Background entitlements sync successful
+5057,2025-01-17 13:00:18.193,"",INFO,Background entitlements sync successful
+5058,2025-01-17 14:00:14.484,"",INFO,Background entitlements sync successful
+5059,2025-01-17 15:00:05.602,"",INFO,Background entitlements sync successful
+5060,2025-01-17 16:00:21.69,"",INFO,Background entitlements sync successful
+5061,2025-01-17 17:00:12.777,"",INFO,Background entitlements sync successful
+5062,2025-01-17 18:00:12.53,"",INFO,Background entitlements sync successful
+5063,2025-01-17 19:00:24.443,"",INFO,Background entitlements sync successful
+5064,2025-01-17 20:00:16.59,"",INFO,Background entitlements sync successful
+5065,2025-01-17 21:00:14.108,"",INFO,Background entitlements sync successful
+5066,2025-01-17 22:00:11.19,"",INFO,Background entitlements sync successful
+5067,2025-01-17 23:00:17.161,"",INFO,Background entitlements sync successful
+5068,2025-01-18 00:00:29.744,"",INFO,Background entitlements sync successful
+5069,2025-01-18 00:55:00.013,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5070,2025-01-18 01:00:31.883,"",WARN,Background entitlements sync failed. Reason: timeout
+5071,2025-01-18 01:00:31.982,"",WARN,Restoring last saved subscription information
+5072,2025-01-18 02:00:24.48,"",INFO,Background entitlements sync successful
+5073,2025-01-18 03:00:18.265,"",INFO,Background entitlements sync successful
+5074,2025-01-18 04:00:12.837,"",INFO,Background entitlements sync successful
+5075,2025-01-18 05:00:26.698,"",INFO,Background entitlements sync successful
+5076,2025-01-18 06:00:25.199,"",INFO,Background entitlements sync successful
+5077,2025-01-18 07:00:13.167,"",INFO,Background entitlements sync successful
+5078,2025-01-18 08:00:31.481,"",INFO,Background entitlements sync successful
+5079,2025-01-18 09:00:16.772,"",INFO,Background entitlements sync successful
+5080,2025-01-18 10:00:18.257,"",INFO,Background entitlements sync successful
+5081,2025-01-18 11:00:24.469,"",INFO,Background entitlements sync successful
+5082,2025-01-18 12:00:09.812,"",INFO,Background entitlements sync successful
+5083,2025-01-18 13:00:20.335,"",INFO,Background entitlements sync successful
+5084,2025-01-18 14:00:22.368,"",INFO,Background entitlements sync successful
+5085,2025-01-18 15:00:19.771,"",INFO,Background entitlements sync successful
+5086,2025-01-18 16:00:25.403,"",INFO,Background entitlements sync successful
+5087,2025-01-18 17:00:20.203,"",INFO,Background entitlements sync successful
+5088,2025-01-18 18:00:13.775,"",INFO,Background entitlements sync successful
+5089,2025-01-18 19:00:18.396,"",INFO,Background entitlements sync successful
+5090,2025-01-18 20:00:18.298,"",INFO,Background entitlements sync successful
+5091,2025-01-18 21:00:23.321,"",INFO,Background entitlements sync successful
+5092,2025-01-18 22:00:14.691,"",INFO,Background entitlements sync successful
+5093,2025-01-18 23:00:21.88,"",INFO,Background entitlements sync successful
+5094,2025-01-19 00:00:24.403,"",INFO,Background entitlements sync successful
+5095,2025-01-19 00:20:00.868,"",INFO,"데이터베이스의 백업이 성공적으로 '"C:\Program Files\PaperCut MF\server\data\backups\export-2025-01-19T00-20-00.zip'"에 기록되었습니다."
+5096,2025-01-19 00:55:00.004,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5097,2025-01-19 01:00:18.775,"",INFO,Background entitlements sync successful
+5098,2025-01-19 02:00:28.176,"",INFO,Background entitlements sync successful
+5099,2025-01-19 03:00:15.872,"",INFO,Background entitlements sync successful
+5100,2025-01-19 04:00:14.352,"",INFO,Background entitlements sync successful
+5101,2025-01-19 05:00:08.523,"",INFO,Background entitlements sync successful
+5102,2025-01-19 06:00:24.881,"",INFO,Background entitlements sync successful
+5103,2025-01-19 07:00:09.792,"",INFO,Background entitlements sync successful
+5104,2025-01-19 08:00:25.164,"",INFO,Background entitlements sync successful
+5105,2025-01-19 09:00:24.03,"",INFO,Background entitlements sync successful
+5106,2025-01-19 10:00:17.519,"",INFO,Background entitlements sync successful
+5107,2025-01-19 11:00:19.193,"",INFO,Background entitlements sync successful
+5108,2025-01-19 12:00:31.215,"",WARN,Background entitlements sync failed. Reason: timeout
+5109,2025-01-19 12:00:31.28,"",WARN,Restoring last saved subscription information
+5110,2025-01-19 13:00:20.855,"",INFO,Background entitlements sync successful
+5111,2025-01-19 14:00:19.177,"",INFO,Background entitlements sync successful
+5112,2025-01-19 15:00:22.765,"",INFO,Background entitlements sync successful
+5113,2025-01-19 15:47:08.858,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 106.241.252.212)"
+5114,2025-01-19 16:00:27.846,"",INFO,Background entitlements sync successful
+5115,2025-01-19 16:06:25.007,"",INFO,"사용자 계정 '"d000019'"이 '"admin'"로/으로 수동 변경되었습니다."
+5116,2025-01-19 16:40:09.277,"",INFO,"계정 '"d000019'" 가 '"admin'"로 수동변경되었습니다"
+5117,2025-01-19 16:40:16.412,"",INFO,"계정 '"d000019'" 가 '"admin'"로 수동변경되었습니다"
+5118,2025-01-19 17:00:22.095,"",INFO,Background entitlements sync successful
+5119,2025-01-19 18:00:25.783,"",INFO,Background entitlements sync successful
+5120,2025-01-19 19:00:10.105,"",INFO,Background entitlements sync successful
+5121,2025-01-19 20:00:19.321,"",INFO,Background entitlements sync successful
+5122,2025-01-19 21:00:16.385,"",INFO,Background entitlements sync successful
+5123,2025-01-19 22:00:17.657,"",INFO,Background entitlements sync successful
+5124,2025-01-19 23:00:08.575,"",INFO,Background entitlements sync successful
+5125,2025-01-20 00:00:16.276,"",INFO,Background entitlements sync successful
+5126,2025-01-20 00:55:00.003,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5127,2025-01-20 01:00:05.782,"",INFO,Background entitlements sync successful
+5128,2025-01-20 02:00:21.627,"",INFO,Background entitlements sync successful
+5129,2025-01-20 03:00:18.5,"",INFO,Background entitlements sync successful
+5130,2025-01-20 04:00:12.527,"",INFO,Background entitlements sync successful
+5131,2025-01-20 05:00:19.944,"",INFO,Background entitlements sync successful
+5132,2025-01-20 06:00:14.514,"",INFO,Background entitlements sync successful
+5133,2025-01-20 07:00:15.638,"",INFO,Background entitlements sync successful
+5134,2025-01-20 08:00:11.063,"",INFO,Background entitlements sync successful
+5135,2025-01-20 09:00:16.008,"",INFO,Background entitlements sync successful
+5136,2025-01-20 10:00:31.501,"",INFO,Background entitlements sync successful
+5137,2025-01-20 11:00:13.721,"",INFO,Background entitlements sync successful
+5138,2025-01-20 12:00:13.404,"",INFO,Background entitlements sync successful
+5139,2025-01-20 13:00:15.532,"",INFO,Background entitlements sync successful
+5140,2025-01-20 14:00:12.202,"",INFO,Background entitlements sync successful
+5141,2025-01-20 15:00:16.567,"",INFO,Background entitlements sync successful
+5142,2025-01-20 16:00:18.086,"",INFO,Background entitlements sync successful
+5143,2025-01-20 17:00:16.63,"",INFO,Background entitlements sync successful
+5144,2025-01-20 18:00:14.886,"",INFO,Background entitlements sync successful
+5145,2025-01-20 19:00:13.222,"",INFO,Background entitlements sync successful
+5146,2025-01-20 20:00:14.481,"",INFO,Background entitlements sync successful
+5147,2025-01-20 21:00:00.721,"",WARN,Background entitlements sync failed. Reason: Request to PaperCut MF gateway service failed. Internal Server Error.
+5148,2025-01-20 21:00:00.788,"",WARN,Restoring last saved subscription information
+5149,2025-01-20 22:00:11.65,"",INFO,Background entitlements sync successful
+5150,2025-01-20 23:00:17.967,"",INFO,Background entitlements sync successful
+5151,2025-01-21 00:00:13.164,"",INFO,Background entitlements sync successful
+5152,2025-01-21 00:55:00.015,"",INFO,운영시스템에 맞게 사용자와 그룹을 동기화시켰습니다.
+5153,2025-01-21 01:00:01.799,"",ERROR,Failed to reach gateway service. Reason: Request to PaperCut MF gateway service failed. Internal Server Error.
+5154,2025-01-21 01:00:01.868,"",WARN,Restoring last saved subscription information
+5155,2025-01-21 01:00:01.87,"",WARN,Background entitlements sync failed. Reason: Failed to sync entitlements. Request to PaperCut MF gateway service failed. Internal Server Error..
+5156,2025-01-21 01:00:01.928,"",WARN,Restoring last saved subscription information
+5157,2025-01-21 02:00:13.765,"",INFO,Background entitlements sync successful
+5158,2025-01-21 03:00:08.697,"",INFO,Background entitlements sync successful
+5159,2025-01-21 04:00:08.601,"",INFO,Background entitlements sync successful
+5160,2025-01-21 05:00:01.078,"",WARN,Background entitlements sync failed. Reason: Request to PaperCut MF gateway service failed. Internal Server Error.
+5161,2025-01-21 05:00:01.157,"",WARN,Restoring last saved subscription information
+5162,2025-01-21 06:00:11.303,"",INFO,Background entitlements sync successful
+5163,2025-01-21 07:00:30.806,"",WARN,Background entitlements sync failed. Reason: timeout
+5164,2025-01-21 07:00:30.898,"",WARN,Restoring last saved subscription information
+5165,2025-01-21 08:00:26.419,"",INFO,Background entitlements sync successful
+5166,2025-01-21 09:00:20.171,"",INFO,Background entitlements sync successful
+5167,2025-01-21 10:00:15.964,"",INFO,Background entitlements sync successful
+5168,2025-01-21 10:49:04.918,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 118.32.178.228)"
+5169,2025-01-21 11:00:23.277,"",INFO,Background entitlements sync successful
+5170,2025-01-21 12:00:18.096,"",INFO,Background entitlements sync successful
+5171,2025-01-21 13:00:16.298,"",INFO,Background entitlements sync successful
+5172,2025-01-21 14:00:14.199,"",INFO,Background entitlements sync successful
+5173,2025-01-21 15:00:18.313,"",INFO,Background entitlements sync successful
+5174,2025-01-21 15:44:28.321,"",INFO,"계정 '"170321'" 가 '"admin'"로 수동변경되었습니다"
+5175,2025-01-21 16:00:15.678,"",INFO,Background entitlements sync successful
+5176,2025-01-21 16:03:36.526,"",INFO,"User '"admin'" logged out from the administration site."
+5177,2025-01-21 16:04:20.726,"",WARN,"사용자 '"papercut2'"의 인증이 오류로 실패했습니다: Invalid username or password. (IP: 118.32.178.228)"
+5178,2025-01-21 16:46:58.961,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 118.32.178.228)"
+5179,2025-01-21 17:00:23.829,"",INFO,Background entitlements sync successful
+5180,2025-01-21 18:00:15.958,"",INFO,Background entitlements sync successful
+5181,2025-01-21 19:00:16.559,"",INFO,Background entitlements sync successful
+5182,2025-01-21 20:00:13.573,"",INFO,Background entitlements sync successful
+5183,2025-01-21 21:00:24.892,"",INFO,Background entitlements sync successful
+5184,2025-01-21 21:03:39.817,"",WARN,"사용자 '"admin'"의 인증이 오류로 실패했습니다: Invalid username or password. (IP: 180.68.39.206)"
+5185,2025-01-21 21:04:03.435,"",INFO,"사용자 '"admin'"가 관리자 사이트에 접속되었습니다. (IP: 180.68.39.206)"
+5186,2025-01-21 22:00:21.428,"",INFO,Background entitlements sync successful

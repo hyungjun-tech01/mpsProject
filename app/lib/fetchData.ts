@@ -15,7 +15,7 @@ const client = new pg.Client({
 await client.connect();
 
 
-// ----- Begin : User ----------------------------------------//
+// ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredUsers(
     query: string,
@@ -25,30 +25,60 @@ export async function fetchFilteredUsers(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users = query !== '' 
+        const users = query !== ''
             ? await client.query(`
-                SELECT * FROM tbl_user
+                SELECT
+                    u.user_id,
+                    u.user_name,
+                    u.full_name,
+                    u.email,
+                    u.home_directory,
+                    u.disabled_printing,
+                    u.department,
+                    u.total_pages,
+                    u.total_jobs,
+                    a.account_id,
+                    a.balance,
+                    a.restricted
+                FROM tbl_user u
+                JOIN tbl_user_account ua ON u.user_id = ua.user_id
+                JOIN tbl_account a ON a.account_id = ua.account_id
                 WHERE
-                    tbl_user.deleted='N' AND
+                    u.deleted='N' AND
                     (
-                        tbl_user.user_id ILIKE '${`%${query}%`}' OR
-                        tbl_user.user_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.full_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.email ILIKE '${`%${query}%`}'
+                        u.user_id ILIKE '${`%${query}%`}' OR
+                        u.user_name ILIKE '${`%${query}%`}' OR
+                        u.full_name ILIKE '${`%${query}%`}' OR
+                        u.email ILIKE '${`%${query}%`}'
                     )
-                ORDER BY tbl_user.modified_date DESC
+                ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * FROM tbl_user
+                SELECT
+                    u.user_id,
+                    u.user_name,
+                    u.full_name,
+                    u.email,
+                    u.home_directory,
+                    u.disabled_printing,
+                    u.department,
+                    u.total_pages,
+                    u.total_jobs,
+                    a.account_id,
+                    a.balance,
+                    a.restricted
+                FROM tbl_user u
+                JOIN tbl_user_account ua ON u.user_id = ua.user_id
+                JOIN tbl_account a ON a.account_id = ua.account_id
                 WHERE
-                    tbl_user.deleted='N'
-                ORDER BY tbl_user.modified_date DESC
+                    u.deleted='N'
+                ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
-        ;
-        
-        const converted = users.rows.map((data:User) => ({
+            ;
+
+        const converted = users.rows.map((data: User) => ({
             ...data,
             id: data.user_id,
         }));
@@ -64,7 +94,7 @@ export async function fetchUsersPages(
     itemsPerPage: number,
 ) {
     try {
-        const count = query !== '' 
+        const count = query !== ''
             ? await client.query(`
                 SELECT COUNT(*)
                 FROM tbl_user
@@ -83,7 +113,7 @@ export async function fetchUsersPages(
                 WHERE
                     tbl_user.deleted='N'
             `)
-        ;
+            ;
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -98,10 +128,23 @@ export async function fetchUserById(
 ) {
     try {
         const user = await client.query(`
-            SELECT * FROM tbl_user
-            WHERE user_id='${id}'
+            SELECT
+                u.user_name,
+                u.full_name,
+                u.email,
+                u.home_directory,
+                u.disabled_printing,
+                u.department,
+                u.card_number,
+                u.card_number2,
+                a.account_id,
+                a.balance
+            FROM tbl_user u
+            JOIN tbl_user_account ua ON u.user_id = ua.user_id
+            JOIN tbl_account a ON a.account_id = ua.account_id
+            WHERE u.user_id='${id}'
         `);
-        
+
         return user.rows[0];
     } catch (error) {
         console.error('Database Error:', error);
@@ -137,8 +180,64 @@ export async function fetchCreateUser(
         };
     }
 }
-// ----- End : User ------------------------------------------//
+
+export async function fetchTransactionsByAccountId(
+    account_id: string,
+) {
+    try {
+        const transactionInfo = await client.query(`
+                SELECT * FROM tbl_account_transaction
+                WHERE
+                    account_id='${account_id}'
+            `);
+
+        return transactionInfo.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch transaction by account id.');
+    }
+}
+
+export async function fetchTransactionsPagesByAccountId(
+    account_id: string,
+    itemsPerPage: number,
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_account_transaction
+                WHERE
+                    account_id='${account_id}'
+            `);
+
+            const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+            return totalPages;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch transaction by account id.');
+    }
+}
+
+export async function fetchProcessLogByUserId(
+    id: string,
+) {
+    try {
+        const processlog = await client.query(`
+                SELECT * FROM tbl_audit_log
+                WHERE
+                    tbl_audit_log.entity_id=${id}
+                ORDER BY tbl_audit_log.modified_date DESC
+            `);
+
+        return processlog.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch process log by user.');
+    }
+}
+// ----- End : User ---------------------------------------------------------//
 
 
+// ----- Begin : Audit Log --------------------------------------------------//
 
-// ----- End : Accounts -----------------------------------------//
+
+// ----- End : Audit Log ----------------------------------------------------//

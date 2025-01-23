@@ -1,0 +1,6 @@
+"group_id","attrib_value","modified_ticks","propagate","attrib_name"
+2002,AUTO_CHARGE_TO_PERSONAL_ACCOUNT,1736228199746,Y,initial-print-account-selection-mode
+2002,N,1736228199746,Y,initial-can-charge-printing-to-other-users
+2002,Y,1736228199746,Y,initial-can-charge-printing-to-account-from-list
+2002,Y,1736228199746,Y,initial-can-charge-printing-to-account-with-pin
+2002,Y,1736228199746,Y,initial-can-charge-printing-to-personal-account
