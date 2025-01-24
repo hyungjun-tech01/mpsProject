@@ -3,35 +3,43 @@ import {
   ScheduleOutlined,
   AccountCircleOutlined,
   InboxOutlined,
+  PrintOutlined,
+  FileCopyOutlined
 } from '@mui/icons-material';
-import { fetchCardData } from '@/app/lib/fetchData';
+import { fetchUserCount,
+  fetchPrinterCount,
+  fetchTotalPagesPerDayFor30Days,
+  fetchTodayPages
+ } from '@/app/lib/fetchData';
 
 const iconMap = {
   collected: PaidOutlined,
-  customers: AccountCircleOutlined,
-  pending: ScheduleOutlined,
-  invoices: InboxOutlined,
+  users: AccountCircleOutlined,
+  printers: PrintOutlined,
+  pages: FileCopyOutlined
 };
 
 export default async function CardWrapper() {
-  const {
-    numberOfCustomers,
-    numberOfInvoices,
-    totalPaidInvoices,
-    totalPendingInvoices
-  } = await fetchCardData();
+  const [
+    numberOfUsers,
+    numberOfPrinters,
+    totalPages,
+    todayPages,
+   ] = await Promise.all([
+    fetchUserCount(),
+    fetchPrinterCount(),
+    fetchTotalPagesPerDayFor30Days(),
+    fetchTodayPages()
+  ]);
 
   return (
     <>
       {/* NOTE: Uncomment this code in Chapter 9 */}
 
-      <Card title="Collected" value={totalPaidInvoices} type="collected" />
-      <Card title="Pending" value={totalPendingInvoices} type="pending" />
-      <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-      <Card
-        title="Total Customers"
-        value={numberOfCustomers}
-        type="customers"
+      <Card title="Users" value={numberOfUsers} type="users" />
+      <Card title="Printers" value={numberOfPrinters} type="printers" />
+      <Card title="Total Pages" value={totalPages} type="pages" />
+      <Card title="Today Pages" value={todayPages} type="pages"
       />
     </>
   );
@@ -44,7 +52,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: 'users' | 'printers' | 'pages' | 'collected';
 }) {
   const Icon = iconMap[type];
 
