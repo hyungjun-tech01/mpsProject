@@ -8,8 +8,8 @@ import {
 } from '@mui/icons-material';
 import { fetchUserCount,
   fetchPrinterCount,
-  fetchTotalPagesPerDayFor30Days,
-  fetchTodayPages
+  fetchAllTotalPageSum,
+  fetchTodayTotalPageSum
  } from '@/app/lib/fetchData';
 
 const iconMap = {
@@ -28,8 +28,8 @@ export default async function CardWrapper() {
    ] = await Promise.all([
     fetchUserCount(),
     fetchPrinterCount(),
-    fetchTotalPagesPerDayFor30Days(),
-    fetchTodayPages()
+    fetchAllTotalPageSum(),
+    fetchTodayTotalPageSum()
   ]);
 
   return (
@@ -38,8 +38,8 @@ export default async function CardWrapper() {
 
       <Card title="Users" value={numberOfUsers} type="users" />
       <Card title="Printers" value={numberOfPrinters} type="printers" />
-      <Card title="Total Pages" value={totalPages} type="pages" />
-      <Card title="Today Pages" value={todayPages} type="pages"
+      <Card title="Total Pages" value={totalPages || 0} type="pages" />
+      <Card title="Today Pages" value={todayPages || 0} type="pages"
       />
     </>
   );

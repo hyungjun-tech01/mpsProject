@@ -270,11 +270,11 @@ export async function fetchPrinterUsageLogPagesByUserId(
 
 export async function fetchUserCount() {
     try {
-        const count =  client.query(`
+        const count = await client.query(`
             SELECT COUNT(*)
             FROM tbl_user
             WHERE
-                deleted='N'
+                tbl_user.deleted='N'
         `);
         return count.rows[0].count;
     } catch (error) {
@@ -285,13 +285,40 @@ export async function fetchUserCount() {
 
 export async function fetchPrinterCount() {
     try {
-        const count =  client.query(`
+        const count = await client.query(`
             SELECT COUNT(*)
             FROM tbl_printer
             WHERE
-                deleted='N'
+                tbl_printer.deleted='N'
         `);
         return count.rows[0].count;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
+
+export async function fetchAllTotalPageSum() {
+    try {
+        const sum = await client.query(`
+            SELECT SUM(total_pages)
+            FROM tbl_printer_usage_log
+        `);
+        return sum.rows[0].sum;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
+
+export async function fetchTodayTotalPageSum() {
+    try {
+        const todayPages = await client.query(`
+            SELECT SUM(total_pages)
+            FROM tbl_printer_usage_log
+            WHERE usage_day = DATE(NOW())
+        `);
+        return todayPages.rows[0].sum;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer count.");
@@ -320,24 +347,3 @@ export async function fetchTotalPagesPerDayFor30Days() {
     }
 }
 
-export async function fetchTodayPages() {
-    try {
-        const totalPagesPerDay = await client.query(`
-            SELECT 
-                DATE(usage_day) AS use_day,
-                SUM(total_pages) AS pages
-            FROM 
-                tbl_printer_usage_log
-            WHERE 
-                usage_day >= NOW() - INTERVAL '30 day'
-                AND usage_day <= NOW()
-            GROUP BY 
-                usage_day
-            ORDER BY 
-		        usage_day ASC`);
-        return totalPagesPerDay.rows;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch card data.");
-    }
-}
