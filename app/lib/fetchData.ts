@@ -278,3 +278,7 @@ export async function fetchPrinterUsageLogPagesByUserId(
         throw new Error('Failed to fetch transaction by account id.');
     }
 }
+
+export async function fetchCardData() {
+    return null;
+}
