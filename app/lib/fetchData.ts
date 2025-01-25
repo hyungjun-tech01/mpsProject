@@ -341,11 +341,17 @@ export async function fetchTotalPagesPerDayFor30Days() {
             ORDER BY 
 		        usage_day ASC`);
 
-        const dataFromDB = response.rows.map(
-            (item:{used_day:Date, pages: number}) => ({
-                used_day: item.used_day.toISOString().split('T')[0],
-                pages: item.pages
-        }));
+        let maxVal = 0;
+        let dataFromDB:{used_by:string, pages:number}[] = [];
+        response.rows.forEach(
+            (item:{used_day:Date, pages: number}) => {
+                if(maxVal < item.pages) maxVal = item.pages;
+                dataFromDB.push({
+                    used_day: item.used_day.toISOString().split('T')[0],
+                    pages: item.pages
+                });
+            }
+        );
 
         if(dataFromDB.length === 0) return null;
 
@@ -356,7 +362,7 @@ export async function fetchTotalPagesPerDayFor30Days() {
             const tempDay = new Date();
             tempDay.setDate(today.getDate() + i - 30);
             const tempDayStr = tempDay.toISOString().split("T")[0];
-            if(i%4===0) {
+            if(i % 4 ===0) {
                 xData.push(tempDayStr);
             } else {
                 xData.push("");
@@ -369,7 +375,7 @@ export async function fetchTotalPagesPerDayFor30Days() {
                 yData.push(dataFromDB.at(foundIdx).pages);
             }
         }
-        return {date: xData, pages: yData};
+        return {date: xData, pages: yData, maxY: maxVal};
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch card data.");

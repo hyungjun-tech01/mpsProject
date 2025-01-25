@@ -24,9 +24,11 @@ ChartJS.register(
 export default function PageChart({
   labels,
   ydata,
+  maxY,
 }: {
   labels: string[];
   ydata: number[];
+  maxY: number;
 }) {
   const data = {
     labels: labels,
@@ -52,16 +54,18 @@ export default function PageChart({
         backgroundColor: "rgb(75,192,192,0.3)",
       },
       point: {
-        radius: 2,
-        hitRadius: 2,
+        radius: 5,
+        hitRadius: 0,
       },
     },
     scales: {
-      xAxis: {
-        display: false,
+      x: {
+        display: true,
+        offset: true,
       },
-      yAxis: {
-        display: false,
+      y: {
+        suggestedMax: maxY + 1,
+        display: true,
       },
     },
   };
