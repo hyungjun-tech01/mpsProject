@@ -823,8 +823,121 @@ CREATE INDEX IF NOT EXISTS ix_account_pin
     TABLESPACE pg_default;
 
 
+ DROP TABLE IF EXISTS public.tbl_account_temp;
 
+CREATE TABLE IF NOT EXISTS public.tbl_account_temp
+(
+    account_id              varchar(255),
+    account_type            varchar(255),
+    account_name            varchar(255),
+    balance                 varchar(255),
+    restricted              varchar(255),
+    overdraft               varchar(255),
+    pin                     varchar(255),
+    use_global_overdraft    varchar(255),
+    notes                   varchar(2000),
+    deleted                 varchar(255),
+    deleted_date            varchar(255),
+    created_date            varchar(255),
+    created_by              varchar(255),
+    modified_date           varchar(255),
+    modified_by             varchar(255),
+    parent_id               varchar(255),
+    account_name_lower      varchar(255),
+    sub_name                varchar(255),
+    sub_name_lower          varchar(255),
+    disabled                varchar(255),
+    disabled_until          varchar(255),
+    comments                varchar(255),
+    invoicing               varchar(255),
+    sub_pin                 varchar(255),
+    modified_ticks          varchar(255)
+);
 
+COPY tbl_account_temp (
+ account_id         ,    
+ account_type           ,
+ account_name           ,
+ balance                ,
+ restricted             ,
+ overdraft              ,
+ pin                    ,
+ use_global_overdraft   ,
+ notes                  ,
+ deleted                ,
+ deleted_date           ,
+ created_date          ,
+ created_by             ,
+ modified_date         ,
+ modified_by            ,
+ parent_id              ,
+ account_name_lower     ,
+ sub_name               ,
+ sub_name_lower         ,
+ disabled               ,
+ disabled_until         ,
+ comments               ,
+ invoicing              ,
+ sub_pin                ,
+ modified_ticks         
+) FROM 'c:\path_to_db\tbl_account_20250121.csv' csv HEADER;
+
+INSERT INTO tbl_account (
+	 account_id         ,    
+ account_type           ,
+ account_name           ,
+ balance               ,
+ restricted             ,
+ overdraft             ,
+ pin                    ,
+ use_global_overdraft   ,
+ notes                  ,
+ deleted                ,
+ deleted_date           ,
+ created_date           ,
+ created_by             ,
+ modified_date          ,
+ modified_by            ,
+ parent_id              ,
+ account_name_lower     ,
+ sub_name               ,
+ sub_name_lower         ,
+ disabled               ,
+ disabled_until         ,
+ comments               ,
+ invoicing              ,
+ sub_pin                ,
+ modified_ticks         
+)
+SELECT 
+	 account_id  ::bigint       ,    
+ account_type           ,
+ account_name           ,
+ balance           ::  double precision      ,
+ restricted             ,
+ overdraft          ::  double precision    ,
+ pin                    ,
+ use_global_overdraft   ,
+ notes                  ,
+ deleted                ,
+ deleted_date       ::timestamp    ,
+ created_date       ::timestamp    ,
+ created_by             ,
+ modified_date      ::timestamp    ,
+ modified_by            ,
+ parent_id           ::bigint   ,
+ account_name_lower     ,
+ sub_name               ,
+ sub_name_lower         ,
+ disabled               ,
+ disabled_until      ::timestamp   ,
+ comments               ,
+ invoicing              ,
+ sub_pin                ,
+ modified_ticks      ::bigint   
+FROM tbl_account_temp;
+
+DROP TABLE IF EXISTS public.tbl_account_temp;
 
 -- Table: public.tbl_account_attribute
 
@@ -2116,3 +2229,54 @@ CREATE INDEX IF NOT EXISTS ix_user_account_user
     ON public.tbl_user_account USING btree
     (user_id ASC NULLS LAST)
     TABLESPACE pg_default;
+
+
+DROP TABLE IF EXISTS public.tbl_user_account_temp;
+
+CREATE TABLE tbl_user_account_temp (
+ user_account_id  varchar(255) ,
+    user_id varchar(255),
+    account_id varchar(255),
+    created_date varchar(255),
+    created_by varchar(255),
+    modified_date varchar(255),
+    modified_by varchar(255),
+    modified_ticks varchar(255)
+);
+
+COPY tbl_user_account_temp (
+    user_account_id,
+	user_id ,
+    account_id ,
+    created_date ,
+    created_by ,
+    modified_date ,
+    modified_by ,
+    modified_ticks 
+) FROM 'c:\path_to_db\tbl_user_account_20250123.csv' csv;
+
+delete from tbl_user_account_temp t
+where t.user_id = 'user_id';
+
+INSERT INTO tbl_user_account (
+    user_account_id,
+		user_id ,
+    account_id ,
+    created_date ,
+    created_by ,
+    modified_date ,
+    modified_by ,
+    modified_ticks 
+)
+SELECT 
+user_account_id::bigint,
+	user_id ::bigint,
+    account_id ::bigint,
+    created_date ::timestamp,
+    created_by ,
+    modified_date ::timestamp,
+    modified_by ,
+    modified_ticks ::bigint
+FROM tbl_user_account_temp;
+
+DROP TABLE IF EXISTS tbl_user_account_temp;
