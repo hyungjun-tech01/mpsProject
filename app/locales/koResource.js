@@ -442,6 +442,10 @@ const koResource = {
             usage_date: '사용날짜',
         },        
         device :{
+            device:'장치',
+            external_device_list:'External Device List',
+            scan_actions:'Scan Actions',
+            scan_notifications:'Scan Notifications',
             printer_name:'장비이름',
             device_type: '장비타입',
             ext_device_function:'기능',

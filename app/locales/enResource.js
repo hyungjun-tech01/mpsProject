@@ -444,6 +444,10 @@ const enResource = {
             usage_date: 'Usage Date',
         },
         device :{
+            device:'Devices',
+            external_device_list:'External Device List',
+            scan_actions:'Scan Actions',
+            scan_notifications:'Scan Notifications',
             printer_name:'Device Name',
             device_type: 'Device Type',
             ext_device_function:'Functions',
