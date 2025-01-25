@@ -327,9 +327,9 @@ export async function fetchTodayTotalPageSum() {
 
 export async function fetchTotalPagesPerDayFor30Days() {
     try {
-        const totalPagesPerDay = await client.query(`
+        const response = await client.query(`
             SELECT 
-                DATE(usage_day) AS use_day,
+                DATE(usage_day) AS used_day,
                 SUM(total_pages) AS pages
             FROM 
                 tbl_printer_usage_log
@@ -340,7 +340,36 @@ export async function fetchTotalPagesPerDayFor30Days() {
                 usage_day
             ORDER BY 
 		        usage_day ASC`);
-        return totalPagesPerDay.rows;
+
+        const dataFromDB = response.rows.map(
+            (item:{used_day:Date, pages: number}) => ({
+                used_day: item.used_day.toISOString().split('T')[0],
+                pages: item.pages
+        }));
+
+        if(dataFromDB.length === 0) return null;
+
+        const today = new Date();
+        let xData: string[] = [];
+        let yData: number[] = [];
+        for (let i = 0; i < 30; i++) {
+            const tempDay = new Date();
+            tempDay.setDate(today.getDate() + i - 30);
+            const tempDayStr = tempDay.toISOString().split("T")[0];
+            if(i%4===0) {
+                xData.push(tempDayStr);
+            } else {
+                xData.push("");
+            }
+
+            const foundIdx = dataFromDB.findIndex(data => data.used_day === tempDayStr);
+            if(foundIdx === -1) {
+                yData.push(0);
+            } else {
+                yData.push(dataFromDB.at(foundIdx).pages);
+            }
+        }
+        return {date: xData, pages: yData};
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch card data.");

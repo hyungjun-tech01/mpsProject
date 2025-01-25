@@ -8,7 +8,6 @@ import { SideMenuList } from '@/constans';
 
 export default function NavLinks({ extended }: { extended: boolean }) {
   const pathname = usePathname();
-  console.log('Path name : ', pathname);
   return (
     <>
       {SideMenuList.map((link) => {
