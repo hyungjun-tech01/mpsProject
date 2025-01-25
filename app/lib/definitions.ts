@@ -1,3 +1,9 @@
+export interface ISearch {
+  query?: string;
+  itemsPerPage?: string;
+  page?: string;
+}
+
 export type IColumnData = {
   name: string;
   title: string;

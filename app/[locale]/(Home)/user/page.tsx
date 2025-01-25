@@ -1,10 +1,8 @@
-import { Suspense } from 'react';
 import type { Metadata } from "next";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
-import { TableSkeleton } from '@/app/components/skeletons';
-import { IColumnData } from '@/app/lib/definitions';
+import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
@@ -14,14 +12,9 @@ export const metadata: Metadata = {
     title: 'Users',
 }
 
-interface ISearchUser {
-    query?: string;
-    itemsPerPage?: string;
-    page?: string;
-}
 
 export default async function Page(props: {
-    searchParams?: Promise<ISearchUser>;
+    searchParams?: Promise<ISearch>;
     params: Promise<{ locale: "ko" | "en" }>;
 }) {
     const locale = (await props.params).locale;
@@ -35,6 +28,7 @@ export default async function Page(props: {
         fetchFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     const columns: IColumnData[] = [
+        { name: 'user_name', title: t('user.user_id'), align: 'center' },
         { name: 'full_name', title: t('user.user_name'), align: 'center' },
         { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
         { name: 'restricted', title: t('user.limited'), align: 'center' },
@@ -49,19 +43,17 @@ export default async function Page(props: {
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="Search users..." />
-                <CreateButton link="/user/create" title="Create User"/>
+                <CreateButton link="/user/create" title="Create User" />
             </div>
-            <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
-                <Table
-                    columns={columns}
-                    rows={users}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    category='user'
-                    locale={locale}
-                    deleteAction={deleteUser}
-                />
-            </Suspense>
+            <Table
+                columns={columns}
+                rows={users}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                category='user'
+                locale={locale}
+                deleteAction={deleteUser}
+            />
         </div>
     );
 }

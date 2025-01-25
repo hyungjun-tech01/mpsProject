@@ -7,11 +7,11 @@ import {
  } from '@mui/icons-material';
 
 export const SideMenuList = [
-    { name : 'Dashboard', href: '/dashboard', icon: SpaceDashboardOutlined },
-    { name : 'Users', href: '/user', icon: PersonOutlined },
-    { name : 'Devices', href: '/device', icon: PrintOutlined },
-    { name : 'Groups', href: '/group', icon: PeopleOutline },
-    { name : 'Audit Logs', href: '/auditlog', icon: PlagiarismOutlined },
+    { name : 'dashboard', title : 'Dashboard', href: '/', icon: SpaceDashboardOutlined },
+    { name : 'user', title : 'Users', href: '/user', icon: PersonOutlined },
+    { name : 'device', title : 'Devices', href: '/device', icon: PrintOutlined },
+    { name : 'group', title : 'Groups', href: '/group', icon: PeopleOutline },
+    { name : 'auditlog', title : 'Audit Logs', href: '/auditlog', icon: PlagiarismOutlined },
 ]
 
 export const BASE_PATH = `http://localhost:37000`;

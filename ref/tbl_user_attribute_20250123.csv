@@ -1,4 +1,3 @@
-"user_id","attrib_value","modified_ticks","propagate","attrib_name"
 1001,,1733645662649,Y,card-pin
 1002,,1733645662807,Y,card-pin
 1003,,1733645662825,Y,card-pin
@@ -656,7 +655,7 @@
 1003,N,1734261113223,Y,dont-apply-printer-filter-rules
 1003,N,1734261113223,Y,dont-archive
 1003,N,1734261113224,Y,dont-hold-jobs-in-release-station
-1003,"0.0",1734261113224,Y,printer-cost-adjustment-rate-percent
+1003,0.0,1734261113224,Y,printer-cost-adjustment-rate-percent
 1003,"",1734261113224,Y,release.jobs-from-other-groups
 1003,N,1734261113224,Y,apply-printer-cost-adjustment-rate
 2402,HASH:$2a$15$ajspssJ1RM.ySXRU03O4u.k0X3qBvq29bU5fWdtOtCA2k4uhXT0iO,1735219696430,Y,internal-password
@@ -677,3 +676,18 @@
 1011,"1736262000000,2,2",1736320771781,N,stats.rolling-month.sheets
 1011,"1736262000000,2,0,1,0,1",1736320771781,N,stats.rolling-week.pages
 1011,"1736262000000,2,0,1,0,1",1736320771781,N,stats.rolling-week.sheets
+2202,"",1737270384933,Y,release.jobs-from-other-users
+2202,N,1737270384944,Y,auto-release-jobs
+2202,N,1737270384959,Y,dont-apply-printer-filter-rules
+2202,Y,1737270384960,Y,can-charge-printing-to-account-from-list
+2202,N,1737270384961,Y,dont-hold-jobs-in-release-station
+2202,$2a$12$551wXkVutVYzdMj7Q7taY.GFWWq5HufDerhBIA5N0bBcyYrdQUieC,1737270384962,Y,card-pin
+2202,N,1737270384962,Y,apply-printer-cost-adjustment-rate
+2202,Y,1737270384963,Y,can-charge-printing-to-account-with-pin
+2202,N,1737270384963,Y,dont-archive
+2202,N,1737270384964,Y,override-printer-level-settings
+2202,Y,1737270384965,Y,can-charge-printing-to-personal-account
+2202,"",1737270384966,Y,release.jobs-from-other-groups
+2202,0.0,1737270384966,Y,printer-cost-adjustment-rate-percent
+2202,N,1737270384966,Y,unauthenticated
+2202,N,1737270384967,Y,can-charge-printing-to-other-users

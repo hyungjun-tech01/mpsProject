@@ -4,7 +4,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import { IEditItem } from '@/app/components/edit-items';
 import { fetchDevicesPages, fetchFilteredDevices } from '@/app/lib/fetchDeviceData';
 import { IColumnData } from '@/app/lib/definitions';
-import { TableSkeleton } from '@/app/components/skeletons';
+import { UserTableSkeleton } from '@/app/components/user/skeletons';
 import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
@@ -78,7 +78,7 @@ export default async function Device(
                 <Search placeholder="Search devices..." />
                 <CreateButton link="/user/create" title="Create User"/>
             </div>
-            <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
+            <Suspense key={query + currentPage} fallback={<UserTableSkeleton />}>
                 <Table
                     columns={columns}
                     rows={users}
