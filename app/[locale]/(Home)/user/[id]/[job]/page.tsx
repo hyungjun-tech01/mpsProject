@@ -117,8 +117,8 @@ export default async function Page(props: {
         { name: 'page', title: t('common.page'), align: 'center' },
         { name: 'usage_cost', title: t('printer.usage_cost'), align: 'center', type: 'currency' },
         { name: 'document_name', title: t('printer.document_name'), align: 'center' },
-        { name: 'property', title: t('printer.property'), align: 'center' },
-        { name: 'status', title: t('printer.status'), align: 'center' },
+        { name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
+        { name: 'status', title: t('printer.status'), align: 'center', type: 'list' },
     ];
 
     return (

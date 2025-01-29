@@ -228,12 +228,18 @@ export async function fetchPrinterUsageLogByUserId(
 
         const printerUsageLogs = response.rows.map((row) => {
             const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = `${row.paper_size} Duplex:${row.duplex} GrayScale:${row.gray_scale} ${row.document_size_kb} kB ${row.client_machine} ${row.printer_language}`;
-            let status = "";
-            if (row.usage_allowed === "N") status += `Denied: ${row.denied_reason}`;
-            if (row.printed === "Y") status += " Printed";
-            if (row.cancelled === "Y") status += " Cancelled";
-            if (row.refunded === "Y") status += " Refunded";
+            const properties = [ row.paper_size,
+                `Duplex:${row.duplex}`,
+                `GrayScale:${row.gray_scale}`,
+                `${row.document_size_kb} kB`,
+                `${row.client_machine}`,
+                `${row.printer_language}`
+            ];
+            let status = [];
+            if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
+            if (row.printed === "Y") status.push("Printed");
+            if (row.cancelled === "Y") status.push("Cancelled");
+            if (row.refunded === "Y") status.push("Refunded");
 
             return {
                 ...row,
