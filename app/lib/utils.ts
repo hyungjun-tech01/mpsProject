@@ -2,14 +2,13 @@
 
 export const formatCurrency = (
   amount: number | string,
-  locale: string = 'ko',
+  locale: string = "ko"
 ) => {
   let currency = "KRW";
   let check_locale = "";
 
-  switch(locale) 
-  {
-    case 'en':
+  switch (locale) {
+    case "en":
       currency = "USD";
       check_locale = "en-US";
       break;
@@ -18,56 +17,50 @@ export const formatCurrency = (
       break;
   }
 
-  return (amount).toLocaleString(check_locale, {
-    style: 'currency',
+  return amount.toLocaleString(check_locale, {
+    style: "currency",
     currency: currency,
   });
 };
 
-export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = 'ko',
-) => {
-  let check_locale = '';
-  switch(locale){
-    case 'en':
-      check_locale = 'en-US';
+export const formatDateToLocal = (dateStr: string, locale: string = "ko") => {
+  let check_locale = "";
+  switch (locale) {
+    case "en":
+      check_locale = "en-US";
       break;
     default:
-      check_locale = 'ko-KR';
+      check_locale = "ko-KR";
       break;
   }
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   };
   const formatter = new Intl.DateTimeFormat(check_locale, options);
   return formatter.format(date);
 };
 
-export const formatTimeToLocal = (
-  dateStr: string,
-  locale: string = 'ko',
-) => {
-  let check_locale = '';
-  switch(locale){
-    case 'en':
-      check_locale = 'en-US';
+export const formatTimeToLocal = (dateStr: string, locale: string = "ko") => {
+  let check_locale = "";
+  switch (locale) {
+    case "en":
+      check_locale = "en-US";
       break;
     default:
-      check_locale = 'ko-KR';
+      check_locale = "ko-KR";
       break;
   }
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
   };
   const formatter = new Intl.DateTimeFormat(check_locale, options);
   return formatter.format(date);
@@ -97,13 +90,13 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the current page is among the first 3 pages,
   // show the first 3, an ellipsis, and the last 2 pages.
   if (currentPage <= 3) {
-    return [1, 2, 3, '...', totalPages - 1, totalPages];
+    return [1, 2, 3, "...", totalPages - 1, totalPages];
   }
 
   // If the current page is among the last 3 pages,
   // show the first 2, an ellipsis, and the last 3 pages.
   if (currentPage >= totalPages - 2) {
-    return [1, 2, '...', totalPages - 2, totalPages - 1, totalPages];
+    return [1, 2, "...", totalPages - 2, totalPages - 1, totalPages];
   }
 
   // If the current page is somewhere in the middle,
@@ -111,11 +104,23 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   // another ellipsis, and the last page.
   return [
     1,
-    '...',
+    "...",
     currentPage - 1,
     currentPage,
     currentPage + 1,
-    '...',
+    "...",
     totalPages,
   ];
+};
+
+export const generateStrOf30Days = () => {
+  const today = new Date();
+  let xData: string[] = [];
+  for (let i = 0; i < 30; i++) {
+    const tempDay = new Date();
+    tempDay.setDate(today.getDate() + i - 30);
+    const tempDayStr = tempDay.toISOString().split("T")[0];
+    xData.push(tempDayStr);
+  }
+  return xData;
 };

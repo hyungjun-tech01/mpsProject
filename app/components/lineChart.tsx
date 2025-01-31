@@ -21,20 +21,26 @@ ChartJS.register(
   CategoryScale
 );
 
-export default function PageChart({
-  labels,
+export default function LineChart({
+  title,
+  xlabels,
   ydata,
   maxY,
 }: {
-  labels: string[];
+  title: string;
+  xlabels: string[];
   ydata: number[];
   maxY: number;
 }) {
+  const addY = maxY >= 10000 ? 1000 : (
+    maxY >= 1000 ? 100 : (
+      maxY >= 100 ? 10 : 1
+  ));
   const data = {
-    labels: labels,
+    labels: xlabels,
     datasets: [
       {
-        label: "Printed Pages",
+        label: title,
         data: ydata,
       },
     ],
@@ -42,7 +48,7 @@ export default function PageChart({
   const options = {
     plugins: {
       legend: {
-        display: false,
+        display: true,
       },
     },
     elements: {
@@ -64,7 +70,8 @@ export default function PageChart({
         offset: true,
       },
       y: {
-        suggestedMax: maxY + 1,
+        min: 0,
+        suggestedMax: maxY + addY,
         display: true,
       },
     },
@@ -74,7 +81,7 @@ export default function PageChart({
     <Line
         data={data}
         options={options}
-        className="w-full"
+        className="w-full bg-white mt-5 mb-5"
     />
   );
 }

@@ -1,6 +1,7 @@
 import pg from "pg";
 import { BASE_PATH } from "@/constans";
 import { User } from "@/app/lib/definitions";
+import { generateStrOf30Days } from "./utils";
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -361,13 +362,12 @@ export async function fetchTotalPagesPerDayFor30Days() {
 
         if(dataFromDB.length === 0) return null;
 
+        const str30days = generateStrOf30Days();
         const today = new Date();
         let xData: string[] = [];
         let yData: number[] = [];
         for (let i = 0; i < 30; i++) {
-            const tempDay = new Date();
-            tempDay.setDate(today.getDate() + i - 30);
-            const tempDayStr = tempDay.toISOString().split("T")[0];
+            const tempDayStr = str30days.at(i) || "";
             if(i % 4 ===0) {
                 xData.push(tempDayStr);
             } else {
