@@ -55,14 +55,10 @@ export default async function Device(
         
 
     return (
-        <main>
-             <Breadcrumbs
-                breadcrumbs={[
-                    { label: t('device.device'), href: '/device' },
-                ]}
-            />
-
             <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl">{t('device.device')}</h1>
+                </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                     <Search placeholder="Search Devices..." />
                     <CreateButton link="/device/create" title="Create Device" />
@@ -74,7 +70,6 @@ export default async function Device(
                     totalPages={totalPages}
                     editable={false}
                 />
-             </div>
-        </main>
+            </div>
     );
 }

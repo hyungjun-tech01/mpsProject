@@ -6,6 +6,7 @@ import { red } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
+    mode: 'light', 
     primary: {
       main: 'rgb(26 46 5)',
     },
@@ -18,11 +19,12 @@ const theme = createTheme({
     error: {
       main: red.A200,
     },
-  },
-  colorSchemes: { light: true, dark: true },
+   /**  colorSchemes: { light: true, dark: true },
   cssVariables: {
     colorSchemeSelector: 'class',
+  }, */
   },
+  
   typography: {
     fontFamily: 'var(--font-roboto)',
   },
