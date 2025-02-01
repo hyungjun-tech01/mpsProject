@@ -12,7 +12,6 @@ export const metadata: Metadata = {
     title: 'Users',
 }
 
-
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
     params: Promise<{ locale: "ko" | "en" }>;

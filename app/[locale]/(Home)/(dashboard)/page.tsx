@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import CardWrapper from "@/app/components/dashboard/cards";
 import { CardsSkeleton } from "@/app/components/dashboard/skeletons";
+import PageChartWrapper from "@/app/components/dashboard/charts";
 
 export default async function Page() {
   return (
@@ -10,6 +11,9 @@ export default async function Page() {
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
         </Suspense>
+      </div>
+      <div className="mt-6">
+        <PageChartWrapper />
       </div>
     </main>
   );

@@ -1,6 +1,7 @@
 import pg from "pg";
 import { BASE_PATH } from "@/constans";
 import { User } from "@/app/lib/definitions";
+import { generateStrOf30Days } from "./utils";
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -228,12 +229,18 @@ export async function fetchPrinterUsageLogByUserId(
 
         const printerUsageLogs = response.rows.map((row) => {
             const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = `${row.paper_size} Duplex:${row.duplex} GrayScale:${row.gray_scale} ${row.document_size_kb} kB ${row.client_machine} ${row.printer_language}`;
-            let status = "";
-            if (row.usage_allowed === "N") status += `Denied: ${row.denied_reason}`;
-            if (row.printed === "Y") status += " Printed";
-            if (row.cancelled === "Y") status += " Cancelled";
-            if (row.refunded === "Y") status += " Refunded";
+            const properties = [ row.paper_size,
+                `Duplex:${row.duplex}`,
+                `GrayScale:${row.gray_scale}`,
+                `${row.document_size_kb} kB`,
+                `${row.client_machine}`,
+                `${row.printer_language}`
+            ];
+            let status = [];
+            if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
+            if (row.printed === "Y") status.push("Printed");
+            if (row.cancelled === "Y") status.push("Cancelled");
+            if (row.refunded === "Y") status.push("Refunded");
 
             return {
                 ...row,
@@ -327,9 +334,9 @@ export async function fetchTodayTotalPageSum() {
 
 export async function fetchTotalPagesPerDayFor30Days() {
     try {
-        const totalPagesPerDay = await client.query(`
+        const response = await client.query(`
             SELECT 
-                DATE(usage_day) AS use_day,
+                DATE(usage_day) AS used_day,
                 SUM(total_pages) AS pages
             FROM 
                 tbl_printer_usage_log
@@ -340,7 +347,41 @@ export async function fetchTotalPagesPerDayFor30Days() {
                 usage_day
             ORDER BY 
 		        usage_day ASC`);
-        return totalPagesPerDay.rows;
+
+        let maxVal = 0;
+        let dataFromDB:{used_by:string, pages:number}[] = [];
+        response.rows.forEach(
+            (item:{used_day:Date, pages: number}) => {
+                if(maxVal < item.pages) maxVal = item.pages;
+                dataFromDB.push({
+                    used_day: item.used_day.toISOString().split('T')[0],
+                    pages: item.pages
+                });
+            }
+        );
+
+        if(dataFromDB.length === 0) return null;
+
+        const str30days = generateStrOf30Days();
+        const today = new Date();
+        let xData: string[] = [];
+        let yData: number[] = [];
+        for (let i = 0; i < 30; i++) {
+            const tempDayStr = str30days.at(i) || "";
+            if(i % 4 ===0) {
+                xData.push(tempDayStr);
+            } else {
+                xData.push("");
+            }
+
+            const foundIdx = dataFromDB.findIndex(data => data.used_day === tempDayStr);
+            if(foundIdx === -1) {
+                yData.push(0);
+            } else {
+                yData.push(dataFromDB.at(foundIdx).pages);
+            }
+        }
+        return {date: xData, pages: yData, maxY: maxVal};
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch card data.");
