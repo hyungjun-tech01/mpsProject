@@ -19,8 +19,8 @@ export default async function CreateDevice(
                 breadcrumbs={[
                     { label: t('device.device'), href: '/device' },
                     {
-                        label: 'Create User',
-                        href: '/user/create',
+                        label: 'Create Device',
+                        href: '/device/create',
                         active: true,
                     },
                 ]}
