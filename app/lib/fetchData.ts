@@ -388,3 +388,112 @@ export async function fetchTotalPagesPerDayFor30Days() {
     }
 }
 
+/*================= Logs =======================*/
+export async function fetchFilteredDeviceUsageLogs(
+    query: string,
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const response =
+            query != ""
+                ? await client.query(`
+                SELECT
+                    pul.usage_date,
+                    u.user_name,
+                    p.display_name,
+                    pul.total_pages,
+                    pul.usage_cost,
+                    pul.document_name,
+                    pul.paper_size,
+                    pul.duplex,
+                    pul.gray_scale,
+                    pul.document_size_kb,
+                    pul.client_machine,
+                    pul.printer_language,
+                    pul.denied_reason,
+                    pul.usage_allowed,
+                    pul.printed,
+                    pul.cancelled,
+                    pul.refunded
+                FROM tbl_printer_usage_log pul
+                JOIN tbl_user u ON u.user_id = pul.used_by_user_id
+                JOIN tbl_printer p ON p.printer_id = pul.printer_id
+                WHERE
+                    pul.usage_date ILIKE '${`%${query}%`}' OR
+                    u.user_name ILIKE '${`%${query}%`}' OR
+                    p.display_name ILIKE '${`%${query}%`}'
+                ORDER BY usage_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+                : await client.query(`
+                SELECT
+                    pul.usage_date,
+                    u.user_name,
+                    p.display_name,
+                    pul.total_pages,
+                    pul.usage_cost,
+                    pul.document_name,
+                    pul.paper_size,
+                    pul.duplex,
+                    pul.gray_scale,
+                    pul.document_size_kb,
+                    pul.client_machine,
+                    pul.printer_language,
+                    pul.denied_reason,
+                    pul.usage_allowed,
+                    pul.printed,
+                    pul.cancelled,
+                    pul.refunded
+                FROM tbl_printer_usage_log pul
+                JOIN tbl_user u ON u.user_id = pul.used_by_user_id
+                JOIN tbl_printer p ON p.printer_id = pul.printer_id
+                ORDER BY usage_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+
+        const printerUsageLogs = response.rows.map((row) => {
+            const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
+            const properties = [ row.paper_size,
+                `Duplex:${row.duplex}`,
+                `GrayScale:${row.gray_scale}`,
+                `${row.document_size_kb} kB`,
+                `${row.client_machine}`,
+                `${row.printer_language}`
+            ];
+            let status = [];
+            if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
+            if (row.printed === "Y") status.push("Printed");
+            if (row.cancelled === "Y") status.push("Cancelled");
+            if (row.refunded === "Y") status.push("Refunded");
+
+            return {
+                ...row,
+                page: pages,
+                property: properties,
+                status: status,
+            };
+        });
+        return printerUsageLogs;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer usage logs");
+    }
+}
+
+export async function fetchFilteredDeviceUsageLogPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_printer_usage_log
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer usage logs");
+    }
+}
