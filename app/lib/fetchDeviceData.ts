@@ -95,34 +95,29 @@ export async function fetchCreateDevice(newDevice: any) {
     try {
         console.log("create user", newDevice);
 
-        
+        let ext_device_function;
+        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
+        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
+        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
+
          // 값 배열로 변환
         const inputData = [
         newDevice.device_type,
         newDevice.device_name,
         newDevice.location ?? null, // undefined를 null로 변환
         newDevice.physical_printer_ip,
-        newDevice.device_administrator_name,
-        newDevice.device_administrator_password,
-        newDevice.ext_device_function_printer,
-        newDevice.ext_device_function_scan,
-        newDevice.ext_device_function_fax,
-        newDevice.enable_print_release,
-        newDevice.printer_device_group,
+        ext_device_function
       ];
 
         const query = `
-        INSERT INTO devices (
-          device_type, device_name, location, physical_printer_ip, 
-          device_administrator_name, device_administrator_password,
-          ext_device_function_printer, ext_device_function_scan, ext_device_function_fax,
-          enable_print_release, printer_device_group
+        INSERT INTO tbl_printer_info (
+          device_type, printer_name, location, physical_printer_id, 
+          ext_device_function
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+            $1, $2, $3, $4, $5
         ) RETURNING *;
       `;
   
-   
         const result = await client.query(query, inputData);
        
         // 성공 처리

@@ -2,6 +2,8 @@
 
 import { useActionState, useState } from 'react';
 import { createDevice, State } from './actions';
+import Link from 'next/link';
+import Button from '@mui/material/Button';
 
 export default function Form() {
     const initialState: State = { message: null, errors: {} };
@@ -63,7 +65,7 @@ export default function Form() {
                             id="device_name"
                             name="device_name"
                             type="text"
-                            defaultValue="Device Name"
+                            placeholder="Device Name"
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
                     </div>
@@ -75,7 +77,7 @@ export default function Form() {
                             id="location"
                             name="location"
                             type="text"
-                            defaultValue="Location"
+                            placeholder="Location"
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
                     </div>
@@ -87,7 +89,7 @@ export default function Form() {
                             id="physical_printer_ip"
                             name="physical_printer_ip"
                             type="text"
-                            defaultValue="IP Address"
+                            placeholder="IP Address"
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
                     </div>
@@ -174,8 +176,23 @@ export default function Form() {
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
                     </div>
+                    <div className="mt-4 flex justify-start gap-4">
+                    <Link
+                        href="/device"
+                        className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
+                        >
+                    Cancel
+                    </Link>
+                    <Button
+                        type="submit"
+                        className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
+                        >
+                    Create Device
+                    </Button>
+                    </div>
                 </div>
             </div>
+            
             </form>
         </div>
     );

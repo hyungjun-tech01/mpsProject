@@ -25,7 +25,7 @@ const FormSchema = z.object({
     }),
     location : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     physical_printer_ip :z.string({
-        invalid_type_error: 'Please enter device name',
+        invalid_type_error: 'Please enter ip address',
     }),
     device_administrator_name :z.string({
         invalid_type_error: 'Please enter device name',
