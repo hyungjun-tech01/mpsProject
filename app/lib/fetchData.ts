@@ -210,6 +210,39 @@ export async function fetchTransactionsPagesByAccountId(
     }
 }
 
+
+export async function fetchUserCount() {
+    try {
+        const count = await client.query(`
+            SELECT COUNT(*)
+            FROM tbl_user
+            WHERE
+                tbl_user.deleted='N'
+        `);
+        return count.rows[0].count;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch user count.");
+    }
+};
+
+export async function fetchPrinterCount() {
+    try {
+        const count = await client.query(`
+            SELECT COUNT(*)
+            FROM tbl_printer
+            WHERE
+                tbl_printer.deleted='N'
+        `);
+        return count.rows[0].count;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
+
+
+/*================= tbl_printer_usage_log =======================*/
 export async function fetchPrinterUsageLogByUserId(
     user_id: string,
     itemsPerPage: number,
@@ -274,36 +307,6 @@ export async function fetchPrinterUsageLogPagesByUserId(
         throw new Error("Failed to fetch transaction by account id.");
     }
 }
-
-export async function fetchUserCount() {
-    try {
-        const count = await client.query(`
-            SELECT COUNT(*)
-            FROM tbl_user
-            WHERE
-                tbl_user.deleted='N'
-        `);
-        return count.rows[0].count;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch user count.");
-    }
-};
-
-export async function fetchPrinterCount() {
-    try {
-        const count = await client.query(`
-            SELECT COUNT(*)
-            FROM tbl_printer
-            WHERE
-                tbl_printer.deleted='N'
-        `);
-        return count.rows[0].count;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer count.");
-    }
-};
 
 export async function fetchAllTotalPageSum() {
     try {
@@ -388,7 +391,6 @@ export async function fetchTotalPagesPerDayFor30Days() {
     }
 }
 
-/*================= Logs =======================*/
 export async function fetchFilteredDeviceUsageLogs(
     query: string,
     itemsPerPage: number,
@@ -495,5 +497,81 @@ export async function fetchFilteredDeviceUsageLogPages(
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer usage logs");
+    }
+}
+
+
+/*================= tbl_application_log =======================*/
+export async function fetchFilteredApplicationLogs(
+    itemsPerPage: number,
+    currentPage: number,
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const response = await client.query(`
+                SELECT *
+                FROM tbl_application_log
+                ORDER BY log_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch application logs");
+    }
+}
+
+export async function fetchFilteredApplicationLogPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_application_log
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch application logs");
+    }
+}
+
+
+/*================= tbl_audit_log =======================*/
+export async function fetchFilteredAuditLogs(
+    itemsPerPage: number,
+    currentPage: number,
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const response = await client.query(`
+                SELECT *
+                FROM tbl_audit_log
+                ORDER BY modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
+    }
+}
+
+export async function fetchFilteredAuditLogPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) FROM tbl_audit_log
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
     }
 }

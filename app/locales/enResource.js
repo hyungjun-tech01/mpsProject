@@ -311,11 +311,13 @@ const enResource = {
             contact_details: 'Contact Detials',
             currency: 'Currency',
             dashboard: 'Dashboard',
+            date: 'Date',
             details: 'Details',
             edit: 'Edit',
             email: 'Email Address',
             explanation: 'Explanation',
             fax_no: 'Fax No.',
+            from: 'From',
             information: 'Information',
             issued_by: 'Issued By',
             initialize: 'Initialize',
@@ -324,6 +326,7 @@ const enResource = {
             location: 'Location',
             maker: 'Maker',
             material: 'Material',
+            message: 'Message',
             memo: 'Memo',
             na:'N/A',
             name: 'Name',
@@ -352,6 +355,7 @@ const enResource = {
             status: 'Status',
             table : 'Table',
             title: 'Title',
+            to: 'To',
             total: 'Total',
             type: 'Type',
             type2: 'Type',
@@ -454,6 +458,15 @@ const enResource = {
             server_name:'Host Name',
             status:'Deleted'
         },
+        logs: {
+            action: 'Action',
+            auditlogs: 'Audit Logs',
+            applogs: 'Application Logs',
+            by: 'By',
+            log_level: 'Log Level',
+            printlogs: 'Print Logs',
+            server_name: 'Server',
+        }
     },
 }
 export default enResource;

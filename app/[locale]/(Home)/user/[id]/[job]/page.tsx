@@ -89,7 +89,7 @@ export default async function Page(props: {
 
     const str30days = generateStrOf30Days();
     const xlabels = str30days.map((str, idx) =>  idx % 5 === 0 ? str : "");
-    let tempData: {day:string, value:number}[] = [];
+    const tempData: {day:string, value:number}[] = [];
 
     for(let i = 0; i < dataFromDB.length; i++) {
         const dataStr = dataFromDB.at(i).transaction_date_str;
