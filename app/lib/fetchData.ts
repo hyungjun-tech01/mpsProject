@@ -84,7 +84,7 @@ export async function fetchFilteredUsers(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch users.");
     }
-}
+};
 
 export async function fetchUsersPages(query: string, itemsPerPage: number) {
     try {
@@ -113,7 +113,7 @@ export async function fetchUsersPages(query: string, itemsPerPage: number) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch total number of invoices.");
     }
-}
+};
 
 export async function fetchUserById(id: string) {
     try {
@@ -140,7 +140,7 @@ export async function fetchUserById(id: string) {
         console.error("Database Error:", error);
         throw new Error("Failed to get user by id.");
     }
-}
+};
 
 export async function fetchCreateUser(newUser: object) {
     try {
@@ -167,7 +167,7 @@ export async function fetchCreateUser(newUser: object) {
             data: "Database Error: Failed to Create User",
         };
     }
-}
+};
 
 export async function fetchTransactionsByAccountId(
     account_id: string,
@@ -189,7 +189,7 @@ export async function fetchTransactionsByAccountId(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch transaction by account id.");
     }
-}
+};
 
 export async function fetchTransactionsPagesByAccountId(
     account_id: string,
@@ -208,8 +208,7 @@ export async function fetchTransactionsPagesByAccountId(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch transaction by account id.");
     }
-}
-
+};
 
 export async function fetchUserCount() {
     try {
@@ -226,15 +225,16 @@ export async function fetchUserCount() {
     }
 };
 
-export async function fetchPrinterCount() {
+export async function fetchDevices() {
     try {
-        const count = await client.query(`
-            SELECT COUNT(*)
+        const response = await client.query(`
+            SELECT
+                printer_id
             FROM tbl_printer
             WHERE
                 tbl_printer.deleted='N'
         `);
-        return count.rows[0].count;
+        return response.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer count.");
@@ -287,7 +287,7 @@ export async function fetchPrinterUsageLogByUserId(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch transaction by account id.");
     }
-}
+};
 
 export async function fetchPrinterUsageLogPagesByUserId(
     user_id: string,
@@ -306,7 +306,7 @@ export async function fetchPrinterUsageLogPagesByUserId(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch transaction by account id.");
     }
-}
+};
 
 export async function fetchAllTotalPageSum() {
     try {
@@ -389,7 +389,7 @@ export async function fetchTotalPagesPerDayFor30Days() {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch card data.");
     }
-}
+};
 
 export async function fetchFilteredDeviceUsageLogs(
     query: string,
@@ -482,7 +482,7 @@ export async function fetchFilteredDeviceUsageLogs(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer usage logs");
     }
-}
+};
 
 export async function fetchFilteredDeviceUsageLogPages(
     itemsPerPage: number
@@ -498,10 +498,34 @@ export async function fetchFilteredDeviceUsageLogPages(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer usage logs");
     }
-}
+};
+
+export async function fetchLatestDeviceStatus() {
+    try {
+        const response = await client.query(`
+            SELECT
+                printer_id,
+                hardware_check_status
+            FROM (
+                SELECT
+                    p.printer_id,
+                    pul.hardware_check_status,
+                    ROW_NUMBER() OVER (PARTITION BY p.printer_id ORDER BY pul.usage_date DESC) AS rnk
+                FROM tbl_printer p
+                JOIN tbl_printer_usage_log pul ON p.printer_id = pul.printer_id
+                WHERE p.deleted = 'N'
+            ) latest_logs
+            WHERE rnk = 1;
+        `);
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer usage logs");
+    }
+};
 
 
-/*================= tbl_application_log =======================*/
+/*====================== tbl_application_log =======================*/
 export async function fetchFilteredApplicationLogs(
     itemsPerPage: number,
     currentPage: number,
@@ -520,7 +544,7 @@ export async function fetchFilteredApplicationLogs(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch application logs");
     }
-}
+};
 
 export async function fetchFilteredApplicationLogPages(
     itemsPerPage: number
@@ -536,10 +560,10 @@ export async function fetchFilteredApplicationLogPages(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch application logs");
     }
-}
+};
 
 
-/*================= tbl_audit_log =======================*/
+/*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
     itemsPerPage: number,
     currentPage: number,
@@ -558,7 +582,7 @@ export async function fetchFilteredAuditLogs(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch audit logs");
     }
-}
+};
 
 export async function fetchFilteredAuditLogPages(
     itemsPerPage: number
@@ -574,4 +598,4 @@ export async function fetchFilteredAuditLogPages(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch audit logs");
     }
-}
+};
