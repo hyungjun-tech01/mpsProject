@@ -298,6 +298,7 @@ const enResource = {
             additional_information:'Additional Information',
             address: 'Address',
             all: 'All',
+            apply: 'Apply',
             avail:'Avail.',
             cancel: 'Cancel',
             card: 'Card',
@@ -390,6 +391,7 @@ const enResource = {
         user :{
             card_number: 'Primary Card No.',
             card_number2: 'Secondary Card No.',
+            create_user: 'Create User',
             department: 'Department',
             disable_printing: 'Disable Printing',
             edit_user: 'Edit User',
@@ -422,6 +424,7 @@ const enResource = {
             subTitle_detail: 'Details',
             subTitle_ProcessedLog: 'Processed Log',
             subTitle_jobLog: 'Job Log',
+            update_user: 'Update User',
             user_id:'User Id',
             user_name:'User Name',
             user_role:'Role',

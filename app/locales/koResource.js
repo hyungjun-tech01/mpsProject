@@ -296,6 +296,7 @@ const koResource = {
             additional_information:'추가 정보',
             address: '주소',
             all:'전체',
+            apply: '적용',
             avail:'있음',
             cancel: '취소',
             card: '카드',
@@ -389,6 +390,7 @@ const koResource = {
         user :{
             card_number: '카드번호(1)',
             card_number2: '카드번호(2)',
+            create_user: '사용자 추가',
             department:'부서',
             disable_printing: '사용 불가',
             edit_user: '사용자 편집',
@@ -420,6 +422,7 @@ const koResource = {
             subTitle_detail: '상세내역',
             subTitle_ProcessedLog: '처리업무 기록',
             subTitle_jobLog: 'Job Log',
+            update_user: '사용자 변경하기',
             user_id:'사용자 아이디',
             user_name:'사용자 이름',
             user_role:'사용자 권한',

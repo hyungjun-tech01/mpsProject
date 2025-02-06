@@ -13,10 +13,18 @@ export interface ISection {
   items: IEditItem[];
 };
 
+export interface IButtonInfo {
+  title: string,
+  link: string,
+  isButton: boolean
+}
+
 export function EditForm({
-  items
+  items,
+  buttons,
 }: {
   items: ISection[];
+  buttons?: IButtonInfo[];
 }) {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(modifyUser, initialState);
@@ -58,18 +66,33 @@ export function EditForm({
           }
         </div>
       </div>
-      <div className="mt-6 flex justify-end gap-4">
-          <Link
-            href="/user"
-            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-          >
-            Cancel
-          </Link>
-          <Button
-            type="submit"
-            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-          >Update User</Button>
+      {!!buttons &&
+        <div className="mt-6 flex justify-end gap-4">
+          {buttons.map((button, idx) => {
+            if (button.isButton) {
+              return (
+                <Button
+                  key={idx}
+                  type="submit"
+                  className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                >
+                  {button.title}
+                </Button>
+              );
+            } else {
+              return (
+                <Link
+                  key={idx}
+                  href={button.link}
+                  className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                >
+                  {button.title}
+                </Link>
+              );
+            }
+          })}
         </div>
+      }
     </form>
   );
 }

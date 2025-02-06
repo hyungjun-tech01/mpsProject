@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 
-import { EditForm, ISection } from '@/app/components/user/edit-form';
+import { EditForm, IButtonInfo, ISection } from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 
@@ -21,7 +21,8 @@ import { formatCurrency } from "@/app/lib/utils";
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
-    params: Promise<{ id: string, job: string, locale: "ko" | "en" }> }
+    params: Promise<{ id: string, job: string, locale: "ko" | "en" }>
+}
 ) {
     const params = await props.params;
     const id = params.id;
@@ -61,10 +62,10 @@ export default async function Page(props: {
     let maxVal = 0;
     let prevVal = 0;
     const dataFromDB = transactionInfo.map(
-        (item:{transaction_date:Date, amount: number, balance: number}) => {
+        (item: { transaction_date: Date, amount: number, balance: number }) => {
             const before_value = item.balance - item.amount;
-            if(maxVal < item.balance) maxVal = item.balance;
-            if(maxVal < before_value) maxVal - before_value;
+            if (maxVal < item.balance) maxVal = item.balance;
+            if (maxVal < before_value) maxVal - before_value;
             return {
                 transaction_date: item.transaction_date,
                 transaction_date_str: item.transaction_date.toISOString().split('T')[0],
@@ -74,40 +75,40 @@ export default async function Page(props: {
         }
     ).sort(function (a, b) {
         if (a.transaction_date > b.transaction_date) {
-          return 1;
+            return 1;
         }
         if (a.transaction_date < b.transaction_date) {
-          return -1;
+            return -1;
         }
         // a must be equal to b
         return 0;
     });
 
-    if(dataFromDB.length > 0) {
+    if (dataFromDB.length > 0) {
         prevVal = dataFromDB.at(0).before_val;
     };
 
     const str30days = generateStrOf30Days();
-    const xlabels = str30days.map((str, idx) =>  idx % 5 === 0 ? str : "");
-    const tempData: {day:string, value:number}[] = [];
+    const xlabels = str30days.map((str, idx) => idx % 5 === 0 ? str : "");
+    const tempData: { day: string, value: number }[] = [];
 
-    for(let i = 0; i < dataFromDB.length; i++) {
+    for (let i = 0; i < dataFromDB.length; i++) {
         const dataStr = dataFromDB.at(i).transaction_date_str;
         const foundIdx = str30days.findIndex(item => item === dataStr);
-        if(foundIdx !== -1) {
+        if (foundIdx !== -1) {
             const nextVal = dataFromDB.at(i).after_val;
             const foundIdx1 = tempData.findIndex(item => item.day === dataStr);
-            if(foundIdx1 === -1) {
-                tempData.push({day: dataStr, value:nextVal});
+            if (foundIdx1 === -1) {
+                tempData.push({ day: dataStr, value: nextVal });
             } else {
-                tempData[foundIdx1] = {day:dataStr, value:nextVal};
+                tempData[foundIdx1] = { day: dataStr, value: nextVal };
             };
         }
     };
 
     const ydata = str30days.map(day => {
         const foundIdx = tempData.findIndex(item => item.day === day);
-        if(foundIdx !== -1) {
+        if (foundIdx !== -1) {
             prevVal = tempData.at(foundIdx).value;
         }
         return prevVal;
@@ -144,7 +145,7 @@ export default async function Page(props: {
             },
             {
                 title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
-                    { name: 'balance_chart', title: 'Blance Record', type: 'chart', defaultValue: chartData}
+                    { name: 'balance_chart', title: 'Blance Record', type: 'chart', defaultValue: chartData }
                 ]
             },
             {
@@ -185,6 +186,17 @@ export default async function Page(props: {
         { name: 'status', title: t('printer.status'), align: 'center', type: 'list' },
     ];
 
+    const buttonItems: { edit: IButtonInfo[], charge: IButtonInfo[] } = {
+        edit: [
+            { title: t('common.cancel'), link: '/user', isButton: false },
+            { title: t('user.update_user'), link: '', isButton: true },
+        ],
+        charge: [
+            { title: t('common.cancel'), link: '/user', isButton: false },
+            { title: t('common.apply'), link: '', isButton: true },
+        ]
+    };
+
     return (
         <main>
             <Breadcrumbs
@@ -206,7 +218,7 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} />}
+            {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} buttons={buttonItems[job]} />}
             {job === 'transaction' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

@@ -79,18 +79,31 @@ export function Card({
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       {typeof value !== 'object' &&
-        <p className={`truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`} >
+        <p className={`truncate rounded-xl bg-white px-4 py-6 text-center text-2xl`} >
           {value}
         </p>
       }
       {typeof value === 'object' &&
         <div className="flex justify-between">
           {
-            value.map((item, idx) =>
-              <div key={idx} className="flex-1 truncate rounded-xl bg-white px-4 py-4 text-center" >
-                <div className="text-l">{item.title}</div>
-                <div className="text-2xl">{item.value}</div>
-              </div>
+            value.map((item, idx) => {
+              if (idx === value.length - 1) {
+                return (
+                  <div key={idx} className="flex-1 truncate rounded-xl bg-white px-2 py-4 text-center" >
+                    <div className="text-l">{item.title}</div>
+                    <div className="text-2xl">{item.value}</div>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={idx} className="flex-1 truncate rounded-xl bg-white px-2 py-4 text-center mr-2" >
+                    <div className="text-l">{item.title}</div>
+                    <div className="text-2xl">{item.value}</div>
+                  </div>
+                )
+              }
+            }
+
             )
           }
         </div>
