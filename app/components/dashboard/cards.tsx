@@ -87,10 +87,10 @@ export function Card({
         <div className="flex justify-between">
           {
             value.map((item, idx) =>
-              <p key={idx} className="flex-1 truncate rounded-xl bg-white px-4 py-4 text-center" >
+              <div key={idx} className="flex-1 truncate rounded-xl bg-white px-4 py-4 text-center" >
                 <div className="text-l">{item.title}</div>
                 <div className="text-2xl">{item.value}</div>
-              </p>
+              </div>
             )
           }
         </div>
