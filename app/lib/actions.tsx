@@ -22,8 +22,8 @@ await client.connect();
 
 export type State = {
     errors?: {
-        user_name?: string;
-        modify_user?: string;
+        user_name?: string[];
+        modify_user?: string[];
     };
     message?: string | null;
 };
@@ -43,7 +43,7 @@ const FormSchema = z.object({
 
 const CreateCompany = FormSchema.omit({ id: true, date: true });
 
-export async function createUser(prevState: State, formData: FormData) {
+export async function createUser(state: State, formData: FormData) {
     const validatedFields = CreateCompany.safeParse({
         userName: formData.get('user_name'),
         userEmail: formData.get('email'),

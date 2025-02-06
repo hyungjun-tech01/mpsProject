@@ -3,31 +3,22 @@
 import Link from 'next/link';
 import { Button } from '@mui/material';
 import clsx from 'clsx';
-import { modifyUser, State } from '@/app/lib/actions';
+import { State } from '@/app/lib/actions';
 import { useActionState } from 'react';
-import { IEditItem, EditItem } from '../edit-items';
+import { IButtonInfo, IEditItem, ISection, EditItem } from '../edit-items';
 
-export interface ISection {
-  title: string;
-  description: string;
-  items: IEditItem[];
-};
-
-export interface IButtonInfo {
-  title: string,
-  link: string,
-  isButton: boolean
-}
 
 export function EditForm({
   items,
   buttons,
+  action,
 }: {
   items: ISection[];
   buttons?: IButtonInfo[];
+  action: (prevState: State, formData: FormData) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(modifyUser, initialState);
+  const [state, formAction] = useActionState(action, initialState);
 
   return (
     <form action={formAction}>

@@ -1,6 +1,8 @@
-import { EditForm, ISection, IButtonInfo } from '@/app/components/user/edit-form';
+import { ISection, IButtonInfo } from '@/app/components/edit-items';
+import { EditForm } from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import getDictionary from '@/app/locales/dictionaries';
+import { createUser } from '@/app/lib/actions';
 
 
 export default async function Page(props: {
@@ -59,7 +61,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <EditForm items={formItems} buttons={buttonItems}/>
+            <EditForm items={formItems} buttons={buttonItems} action={createUser}/>
         </main>
     );
 }

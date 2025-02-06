@@ -5,16 +5,29 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import { formatCurrency } from "../lib/utils";
 import LineChart from "@/app/components/lineChart";
 
+
 export interface IEditItem {
   name: string;
   title: string;
   type: "label" | "input" | "currency" | "select" | "checked" | "chart";
-  defaultValue: string | number | Object;
+  defaultValue: string | number | object;
   placeholder?: string;
   options?: { title: string; value: string | number }[] | null;
   locale?: string;
   error?: string[];
-}
+};
+
+export interface ISection {
+  title: string;
+  description: string;
+  items: IEditItem[];
+};
+
+export interface IButtonInfo {
+  title: string,
+  link: string,
+  isButton: boolean
+};
 
 export function EditItem({
   name,

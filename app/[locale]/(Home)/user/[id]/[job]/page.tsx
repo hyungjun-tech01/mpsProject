@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 
-import { EditForm, IButtonInfo, ISection } from '@/app/components/user/edit-form';
+import { IButtonInfo, ISection } from '@/app/components/edit-items';
+import { EditForm } from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
+import { modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { generateStrOf30Days } from '@/app/lib/utils';
 import {
@@ -65,7 +67,7 @@ export default async function Page(props: {
         (item: { transaction_date: Date, amount: number, balance: number }) => {
             const before_value = item.balance - item.amount;
             if (maxVal < item.balance) maxVal = item.balance;
-            if (maxVal < before_value) maxVal - before_value;
+            if (maxVal < before_value) maxVal = before_value;
             return {
                 transaction_date: item.transaction_date,
                 transaction_date_str: item.transaction_date.toISOString().split('T')[0],
@@ -218,7 +220,7 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} buttons={buttonItems[job]} />}
+            {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
             {job === 'transaction' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable
