@@ -28,25 +28,40 @@ export type State = {
     message?: string | null;
 };
 
-const FormSchema = z.object({
-    company_name: z.string({
-        invalid_type_error: 'Company name must be set',
+const UserFormSchema = z.object({
+    user_name: z.string({
+        invalid_type_error: 'User ID must be set',
     }),
-    company_name_en: z.string(),
-    amount: z.coerce.number()
-        .gt(0, { message: 'Please enter an amount greater than $0.' }),
-    status: z.enum(['pending', 'paid'], {
-        invalid_type_error: 'Please select an invoice status.',
+    full_name: z.string(),
+    email: z.string(),
+    home_directory: z.string(),
+    notes: z.string(),
+    disabled_printing: z.enum(['N', 'Y'], {
+        invalid_type_error: 'Please select an printing type.',
     }),
-    date: z.string(),
+    balance_current: z.coerce.number()
+        .gt(0, { message: 'Please enter an amount greater than 0.' }),
+    restricted: z.boolean(),
+    department: z.string(),
+    card_number: z.string(),
+    card_number2: z.string()
 });
 
-const CreateCompany = FormSchema.omit({ id: true, date: true });
+const CreateUser = UserFormSchema.omit({ });
 
-export async function createUser(state: State, formData: FormData) {
-    const validatedFields = CreateCompany.safeParse({
+export async function createUser(preState: State, formData: FormData) {
+    const validatedFields = CreateUser.safeParse({
         userName: formData.get('user_name'),
+        userFullName: formData.get('full_name'),
         userEmail: formData.get('email'),
+        homeDirectory: formData.get('home_directory'),
+        notes: formData.get('notes'),
+        disabledPrinting: formData.get('disabled_printing'),
+        balance: formData.get('balance_current'),
+        restricted: formData.get('restricted'),
+        department: formData.get('department'),
+        cardNumber: formData.get('card_number'),
+        cardNumber2: formData.get('card_number2'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -58,13 +73,57 @@ export async function createUser(state: State, formData: FormData) {
     }
 
     // Prepare data for insertion into the database
-    const { companyName, companyNameEn, ceoName } = validatedFields.data;
+    const { 
+        userName,
+        userFullName,
+        userEmail,
+        homeDirectory,
+        notes,
+        disabledPrinting,
+        restricted,
+        balance,
+        department,
+        cardNumber,
+        cardNumber2
+    } = validatedFields.data;
 
     try {
-        fetch()
+        await client.query(`
+            INSERT INTO tbl_user (
+                user_name,
+                full_name,
+                email,
+                notes,
+                department,
+                disapled_printing,
+                card_number,
+                card_number2,
+                created_date,
+                created_by,
+                modified_date,
+                modified_by
+            )
+            VALUES (
+                '${userName}',
+                '${userFullName}',
+                '${userEmail}',
+                '${notes}',
+                '${homeDirectory}',
+                '${disabledPrinting}',
+                '${restricted}',
+                '${balance}',
+                '${department}',
+                '${cardNumber}',
+                '${cardNumber2}',
+                NOW(),
+                admin,
+                NOW(),
+                admin
+            )
+        `);
     } catch (error) {
         return {
-            message: 'Database Error: Failed to Create Invoice.',
+            message: 'Database Error: Failed to Create User.',
         };
     }
 
@@ -72,9 +131,10 @@ export async function createUser(state: State, formData: FormData) {
     redirect('/user');
 }
 
+const ModifyUser = UserFormSchema.omit({user_name: true});
+
 export async function modifyUser(prevState: State, formData: FormData) {
-    const validatedFields = CreateCompany.safeParse({
-        userName: formData.get('user_name'),
+    const validatedFields = ModifyUser.safeParse({
         userEmail: formData.get('email'),
     });
 

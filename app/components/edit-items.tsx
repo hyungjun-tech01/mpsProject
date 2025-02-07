@@ -70,7 +70,6 @@ export function EditItem({
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
               />
             </div>
             <div id={`${name}-error`} aria-live="polite" aria-atomic="true">

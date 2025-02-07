@@ -168,3 +168,27 @@ export function UserEditSkeleton() {
         </main>
     )
 }
+
+export function UserCreateSkeleton() {
+    return (
+        <main>
+            <Breadcrumbs
+                breadcrumbs={[
+                    { label: 'User', href: '/user' },
+                    {
+                        label: `Create User :  (  )`,
+                        href: `/user/error`,
+                        active: true,
+                    },
+                ]}
+            />
+            <div className='w-full pl-2 flex justify-start'>
+                <div className="w-24 h-9 rounded-t-lg border-solid font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+                <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+            </div>
+            <div className="h-80 rounded-md bg-gray-50"/>
+        </main>
+    )
+}
