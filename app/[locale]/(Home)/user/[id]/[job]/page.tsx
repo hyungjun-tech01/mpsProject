@@ -147,7 +147,7 @@ export default async function Page(props: {
             },
             {
                 title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
-                    { name: 'balance_chart', title: 'Blance Record', type: 'chart', defaultValue: chartData }
+                    { name: 'balance_chart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
                 ]
             },
             {

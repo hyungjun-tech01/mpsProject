@@ -10,11 +10,12 @@ export interface IEditItem {
   name: string;
   title: string;
   type: "label" | "input" | "currency" | "select" | "checked" | "chart";
-  defaultValue: string | number | object;
+  defaultValue: string | number ;
   placeholder?: string;
   options?: { title: string; value: string | number }[] | null;
   locale?: string;
   error?: string[];
+  chartData?: {xlabels:string[], ydata:number[], maxY: number};
 };
 
 export interface ISection {
@@ -38,6 +39,7 @@ export function EditItem({
   options,
   locale,
   error,
+  chartData,
 }: IEditItem) {
   const [checked, setChecked] = useState(defaultValue === "Y");
 
@@ -181,11 +183,17 @@ export function EditItem({
         </div>
       );
     case "chart":
-      return <LineChart
+      if(!!chartData) {
+        return (
+          <LineChart
             title={title}
-            xlabels={defaultValue.xlabels}
-            ydata={defaultValue.ydata}
-            maxY={defaultValue.maxY}
-        />;
+            xlabels={chartData.xlabels}
+            ydata={chartData.ydata}
+            maxY={chartData.maxY}
+        />
+        );
+      } else {
+        return <div className="text-gray-600">No data</div>
+      }
   }
 }
