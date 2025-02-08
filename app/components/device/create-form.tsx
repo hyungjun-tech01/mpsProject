@@ -22,22 +22,22 @@ export default function Form() {
     
 
     // 체크박스 상태 변경 핸들러
-    const handlePrinterChange = (e) => {
+    const handlePrinterChange = (e:any) => {
         setPrinterChecked(e.target.checked);
     };
 
-    const handleScanChange = (e) => {
+    const handleScanChange = (e:any) => {
         setScanChecked(e.target.checked);
     };
 
-    const handleFaxChange = (e) => {
-        setFaxChecked(e.target.checked);
+    const handleFaxChange = (e:any) => {
+            setFaxChecked(e.target.checked);
     };
 
     console.log('create form');
     return (
         <div>
-            <form>
+            <form action={formAction}>
 
             <div className="flex justify-between mb-6">
                 <div className="w-1/3">
@@ -135,7 +135,7 @@ export default function Form() {
                                 id="ext_device_function_printer"
                                 name="ext_device_function_printer"
                                 type="checkbox"
-                                defaultValue=""
+                                value="Y"
                                 checked={printerChecked}
                                 onChange={handlePrinterChange}
                                 className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 "
@@ -145,11 +145,12 @@ export default function Form() {
                             </label>
                         </div>
                         <div className="mb-4">
+
                             <input
                                 id="ext_device_function_scan"
                                 name="ext_device_function_scan"
                                 type="checkbox"
-                                defaultValue=""
+                                value="Y"  // 체크 시 "Y" 전송
                                 checked={scanChecked}
                                 onChange={handleScanChange}
                                 className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -163,7 +164,7 @@ export default function Form() {
                                 id="ext_device_function_fax"
                                 name="ext_device_function_fax"
                                 type="checkbox"
-                                defaultValue=""
+                                value="Y"
                                 checked={faxChecked}
                                 onChange={handleFaxChange}
                                 className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -194,7 +195,6 @@ export default function Form() {
                     </Link>
                     <button
                         type="submit"
-                        formAction={formAction}
                         className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
                         >
                     Create Device

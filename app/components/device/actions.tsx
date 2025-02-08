@@ -9,7 +9,7 @@ import { fetchCreateDevice } from '@/app/lib/fetchDeviceData';
 
 export type State = {
     errors?: string|null;
-    message?: string | null;
+    message?: string|null;
 };
 
 const FormSchema = z.object({
@@ -47,7 +47,22 @@ const FormSchema = z.object({
 const CreateDevice = FormSchema;
 
 export async function createDevice(prevState: State, formData: FormData) {
-    console.log('create device');
+    
+
+    // 체크박스 값이 없으면 "N"으로 설정
+    if (!formData.has('ext_device_function_printer')) {
+        formData.set('ext_device_function_printer', 'N');
+    }
+    if (!formData.has('ext_device_function_scan')) {
+        formData.set('ext_device_function_scan', 'N');
+    }
+    if (!formData.has('ext_device_function_fax')) {
+        formData.set('ext_device_function_fax', 'N');
+    }
+
+    console.log('create device  ~~~~~', formData.get('ext_device_function_scan'));
+
+
     const validatedFields = CreateDevice.safeParse({
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
@@ -64,6 +79,7 @@ export async function createDevice(prevState: State, formData: FormData) {
 
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
+        console.log('Error', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create Device.',
