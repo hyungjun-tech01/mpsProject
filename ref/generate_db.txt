@@ -1890,41 +1890,39 @@ DROP TABLE IF EXISTS tbl_user_account_temp;
 
 -- uuid 설치 
 -- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-ALTER TABLE tbl_printer ALTER COLUMN printer_id TYPE VARCHAR(36);
 
-
-ALTER TABLE tbl_printer ALTER COLUMN printer_id SET DEFAULT uuid_generate_v4();
+drop table IF EXISTS tbl_printer_info;
 
 CREATE TABLE IF NOT EXISTS public.tbl_printer_info
 (
     printer_id varchar(36) NOT NULL default uuid_generate_v4(),
     server_name varchar(255) ,
     printer_name varchar(255) NOT NULL,
-    display_name varchar(510) NOT NULL,
+    display_name varchar(510),
     location varchar(255) ,
     notes varchar(2000),
-    charge_type varchar(20) NOT NULL,
-    default_cost double precision NOT NULL,
-    deleted varchar(1)  NOT NULL,
+    charge_type varchar(20) ,
+    default_cost double precision ,
+    deleted varchar(1)  ,
     deleted_date timestamp without time zone,
-    disabled varchar(1) NOT NULL,
+    disabled varchar(1) ,
     disabled_until timestamp without time zone,
-    total_jobs integer NOT NULL,
-    total_pages integer NOT NULL,
-    total_sheets integer NOT NULL,
+    total_jobs integer ,
+    total_pages integer ,
+    total_sheets integer ,
     reset_by varchar(255),
     reset_date timestamp without time zone,
-    created_date timestamp without time zone NOT NULL,
-    created_by varchar(255)  NOT NULL,
-    modified_date timestamp without time zone NOT NULL,
-    modified_by varchar(255)  NOT NULL,
-    color_detection_mode varchar(20)  NOT NULL,
-    device_type varchar(100) NOT NULL,
+    created_date timestamp without time zone ,
+    created_by varchar(255)  ,
+    modified_date timestamp without time zone ,
+    modified_by varchar(255)  ,
+    color_detection_mode varchar(20)  ,
+    device_type varchar(100) ,
     ext_device_function varchar(30) ,
     physical_printer_id varchar(100),
     printer_type varchar(200) ,
     serial_number varchar(100) ,
-    web_print_enabled varchar(1)  NOT NULL,
+    web_print_enabled varchar(1)  ,
     custom1 varchar(50),
     custom2 varchar(50),
     custom3 varchar(50),
@@ -1933,8 +1931,8 @@ CREATE TABLE IF NOT EXISTS public.tbl_printer_info
     custom6 varchar(50),
     last_usage_date timestamp without time zone,
     gcp_printer_id varchar(100) ,
-    gcp_enabled varchar(1)  NOT NULL,
-    modified_ticks bigint NOT NULL,
+    gcp_enabled varchar(1) ,
+    modified_ticks bigint ,
     server_uuid varchar(255) ,
     parent_id bigint
 )

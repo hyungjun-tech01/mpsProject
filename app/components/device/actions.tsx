@@ -8,11 +8,7 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import { fetchCreateDevice } from '@/app/lib/fetchDeviceData';
 
 export type State = {
-    errors?: {
-        company_code?: string;
-        salespersonId?: string;
-        modify_user?: string;
-    };
+    errors?: string|null;
     message?: string | null;
 };
 
@@ -51,6 +47,7 @@ const FormSchema = z.object({
 const CreateDevice = FormSchema;
 
 export async function createDevice(prevState: State, formData: FormData) {
+    console.log('create device');
     const validatedFields = CreateDevice.safeParse({
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),

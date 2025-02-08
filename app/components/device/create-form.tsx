@@ -5,13 +5,21 @@ import { createDevice, State } from './actions';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 
+async function increment(previousState:any, formData) {
+    console.log('increment');
+    return previousState + 1;
+  }
+
 export default function Form() {
-    const initialState: State = { message: null, errors: {} };
+    const initialState: State = { message: null, errors: null };
     const [printerChecked, setPrinterChecked] = useState(false);
     const [scanChecked, setScanChecked] = useState(false);
     const [faxChecked, setFaxChecked] = useState(false);
 
     const [state, formAction] = useActionState(createDevice, initialState);
+
+    //const [state, formAction] = useActionState(increment, 0);
+    
 
     // 체크박스 상태 변경 핸들러
     const handlePrinterChange = (e) => {
@@ -26,9 +34,10 @@ export default function Form() {
         setFaxChecked(e.target.checked);
     };
 
+    console.log('create form');
     return (
         <div>
-            <form action={formAction}>
+            <form>
 
             <div className="flex justify-between mb-6">
                 <div className="w-1/3">
@@ -183,12 +192,13 @@ export default function Form() {
                         >
                     Cancel
                     </Link>
-                    <Button
+                    <button
                         type="submit"
+                        formAction={formAction}
                         className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
                         >
                     Create Device
-                    </Button>
+                    </button>
                     </div>
                 </div>
             </div>

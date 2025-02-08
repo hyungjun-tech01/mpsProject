@@ -117,6 +117,8 @@ export async function fetchCreateDevice(newDevice: any) {
             $1, $2, $3, $4, $5
         ) RETURNING *;
       `;
+
+        console.log('insert printer');
   
         const result = await client.query(query, inputData);
        
