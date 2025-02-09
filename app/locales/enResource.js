@@ -433,6 +433,7 @@ const enResource = {
             placeholder_email: "Enter User's Email",
             placeholder_full_name: "Enter User's Full Name",
             placeholder_home_directory: "Enter User's Home Directory",
+            placeholder_user_name : "Enter User's ID",
         },
         account: {
             balance:'Balance',

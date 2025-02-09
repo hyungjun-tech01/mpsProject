@@ -22,7 +22,7 @@ await client.connect();
 
 export type State = {
     errors?: {
-        user_name?: string[];
+        userName?: string[];
         disabled_printing?: string[];
         balance_current?: string[];
     };
@@ -30,22 +30,22 @@ export type State = {
 };
 
 const UserFormSchema = z.object({
-    user_name: z.string({
+    userName: z.string({
         invalid_type_error: 'User ID must be set',
     }),
-    full_name: z.string(),
-    email: z.string(),
-    home_directory: z.string(),
-    notes: z.string(),
-    disabled_printing: z.enum(['N', 'Y'], {
-        invalid_type_error: 'Please select an printing type.',
-    }),
-    balance_current: z.coerce.number()
-        .gt(0, { message: 'Please enter an amount greater than 0.' }),
-    restricted: z.boolean(),
-    department: z.string(),
-    card_number: z.string(),
-    card_number2: z.string()
+    // full_name: z.string(),
+    // email: z.string(),
+    // home_directory: z.string(),
+    // notes: z.string(),
+    // disabled_printing: z.enum(['N', 'Y'], {
+    //     invalid_type_error: 'Please select an printing type.',
+    // }),
+    // balance_current: z.coerce.number()
+    //     .gt(0, { message: 'Please enter an amount greater than 0.' }),
+    // restricted: z.boolean(),
+    // department: z.string(),
+    // card_number: z.string(),
+    // card_number2: z.string()
 });
 
 const CreateUser = UserFormSchema.omit({ });
@@ -53,14 +53,14 @@ const CreateUser = UserFormSchema.omit({ });
 export async function createUser(prevState: State, formData: FormData) {
     const validatedFields = CreateUser.safeParse({
         userName: formData.get('user_name'),
-        userEmail: formData.get('email'),
-        notes: formData.get('notes'),
-        disabledPrinting: formData.get('disabled_printing'),
-        balance: formData.get('balance_current'),
-        restricted: formData.get('restricted'),
-        department: formData.get('department'),
-        cardNumber: formData.get('card_number'),
-        cardNumber2: formData.get('card_number2'),
+        // userEmail: formData.get('email'),
+        // notes: formData.get('notes'),
+        // disabledPrinting: formData.get('disabled_printing'),
+        // balance: formData.get('balance_current'),
+        // restricted: formData.get('restricted'),
+        // department: formData.get('department'),
+        // cardNumber: formData.get('card_number'),
+        // cardNumber2: formData.get('card_number2'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.

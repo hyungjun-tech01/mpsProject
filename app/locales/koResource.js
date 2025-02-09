@@ -431,6 +431,7 @@ const koResource = {
             placeholder_full_name: '사용자 이름을 입력하세요',
             placeholder_email: '사용자 이메일을 입력하세요',
             placeholder_home_directory: '사용자 홈디렉토리를 입력하세요',
+            placeholder_user_name : "사용자의 ID를 입력하세요",
         },
         account: {
             balance:'잔액',
