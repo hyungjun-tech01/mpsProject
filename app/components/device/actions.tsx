@@ -8,27 +8,27 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import { fetchCreateDevice } from '@/app/lib/fetchDeviceData';
 
 export type State = {
-    errors?: string|null;
+    errors?: Record<string, string[]> | null;
     message?: string|null;
 };
 
 const FormSchema = z.object({
     device_type : z.string({
-        invalid_type_error: 'Please enter device type',
+        invalid_type_error: 'Please select device type',
     }),
     device_name : z.string({
-        invalid_type_error: 'Please enter device name',
-    }),
+        invalid_type_error: 'Device name is required',
+    }).min(1, 'Device name is required'),
     location : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     physical_printer_ip :z.string({
-        invalid_type_error: 'Please enter ip address',
-    }),
+        invalid_type_error: 'Ip address is required',
+    }).min(1, 'Ip address is required'),
     device_administrator_name :z.string({
-        invalid_type_error: 'Please enter device name',
-    }),
+        invalid_type_error: 'Please enter device administrator name',
+    }).min(1, 'Please enter device administrator name'),
     device_administrator_password :z.string({
-        invalid_type_error: 'Please enter device name',
-    }),
+        invalid_type_error: 'Please enter device administrator password',
+    }).min(1, 'Please enter device administrator password'),
     ext_device_function_printer :  z.enum(["Y", "N"], {
         invalid_type_error: 'Please select Y or N',
     }),
@@ -41,7 +41,9 @@ const FormSchema = z.object({
     enable_print_release :  z.enum(["Y", "N"], {
         invalid_type_error: 'Please select Y or N',
     }),
-    printer_device_group  : z.string()
+    printer_device_group  :  z.string({
+        invalid_type_error: 'Printer device group is required',
+    }).min(1, 'Printer device group is required'),
 });
 
 const CreateDevice = FormSchema;
@@ -60,13 +62,13 @@ export async function createDevice(prevState: State, formData: FormData) {
         formData.set('ext_device_function_fax', 'N');
     }
 
-    console.log('create device  ~~~~~', formData.get('ext_device_function_scan'));
+    console.log('create device  ~~~~~', formData.get('device_name'));
 
 
     const validatedFields = CreateDevice.safeParse({
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
-        ceoName: formData.get('location'),
+        location: formData.get('location'),
         physical_printer_ip: formData.get('physical_printer_ip'),
         device_administrator_name: formData.get('device_administrator_name'),
         device_administrator_password: formData.get('device_administrator_password'),

@@ -5,10 +5,6 @@ import { createDevice, State } from './actions';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 
-async function increment(previousState:any, formData) {
-    console.log('increment');
-    return previousState + 1;
-  }
 
 export default function Form() {
     const initialState: State = { message: null, errors: null };
@@ -65,6 +61,9 @@ export default function Form() {
                                 Workpath SDK
                             </option>
                         </select>
+                        {state.errors?.device_type && (
+                            <p className="text-red-500 text-sm">{state.errors.device_type[0]}</p>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_device_name" className="mb-2 block text-sm font-medium">
@@ -77,6 +76,9 @@ export default function Form() {
                             placeholder="Device Name"
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
+                        {state.errors?.device_name && (
+                            <p className="text-red-500 text-sm">{state.errors.device_name[0]}</p>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_location" className="mb-2 block text-sm font-medium">
@@ -101,6 +103,9 @@ export default function Form() {
                             placeholder="IP Address"
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
+                        {state.errors?.physical_printer_ip && (
+                            <p className="text-red-500 text-sm">{state.errors.physical_printer_ip[0]}</p>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_device_administrator_name" className="mb-2 block text-sm font-medium">
@@ -113,6 +118,9 @@ export default function Form() {
                             defaultValue=""
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
+                        {state.errors?.device_administrator_name && (
+                            <p className="text-red-500 text-sm">{state.errors.device_administrator_name[0]}</p>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_device_administrator_password" className="mb-2 block text-sm font-medium">
@@ -125,6 +133,9 @@ export default function Form() {
                             defaultValue=""
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
+                         {state.errors?.device_administrator_password && (
+                            <p className="text-red-500 text-sm">{state.errors.device_administrator_password[0]}</p>
+                        )}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_ext_device_function" className="mb-2 block text-sm font-medium">
@@ -185,6 +196,9 @@ export default function Form() {
                             defaultValue=""
                             className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                         />
+                        {state.errors?.printer_device_group && (
+                            <p className="text-red-500 text-sm">{state.errors.printer_device_group[0]}</p>
+                        )}
                     </div>
                     <div className="mt-4 flex justify-start gap-4">
                     <Link
