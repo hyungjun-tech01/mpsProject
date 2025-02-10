@@ -22,31 +22,31 @@ export async function fetchFilteredDevices(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users = query !== '' 
+        const device = query !== '' 
             ? await client.query(`
-                SELECT * FROM tbl_printer
+                SELECT * FROM tbl_printer_info
                 WHERE
                 1=1 AND
                     (
-                        tbl_printer.display_name ILIKE '${`%${query}%`}' OR
-                        tbl_printer.device_type ILIKE '${`%${query}%`}' OR
-                        tbl_printer.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_printer.server_name ILIKE '${`%${query}%`}' OR 
-                        tbl_printer.deleted ILIKE '${`%${query}%`}'
+                        tbl_printer_info.display_name ILIKE '${`%${query}%`}' OR
+                        tbl_printer_info.device_type ILIKE '${`%${query}%`}' OR
+                        tbl_printer_info.ext_device_function ILIKE '${`%${query}%`}' OR
+                        tbl_printer_info.server_name ILIKE '${`%${query}%`}' OR 
+                        tbl_printer_info.deleted ILIKE '${`%${query}%`}'
                     )
                 ORDER BY tbl_printer.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * FROM tbl_printer
+                SELECT * FROM tbl_printer_info
                 WHERE
                 1=1
-                ORDER BY tbl_printer.modified_date DESC
+                ORDER BY tbl_printer_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
         ;
         
-        const converted = users.rows.map((data:User) => ({
+        const converted = device.rows.map((data:User) => ({
             ...data,
             id: data.user_id,
         }));
@@ -66,20 +66,18 @@ export async function fetchDevicesPages(
         const count = query !== '' 
             ? await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer
+                FROM tbl_printer_info
                 WHERE
                 1=1 AND
                 (
-                        tbl_printer.display_name ILIKE '${`%${query}%`}' OR
-                        tbl_printer.device_type ILIKE '${`%${query}%`}' OR
-                        tbl_printer.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_printer.server_name ILIKE '${`%${query}%`}'                    )
+                    tbl_printer_info.display_name ILIKE '${`%${query}%`}' OR
+                    tbl_printer_info.device_type ILIKE '${`%${query}%`}' OR
+                    tbl_printer_info.ext_device_function ILIKE '${`%${query}%`}' OR
+                    tbl_printer_info.server_name ILIKE '${`%${query}%`}'                    )
                 `)
             : await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer
-                WHERE
-                tbl_printer.deleted='N'
+                FROM tbl_printer_info
             `)
         ;
 
@@ -93,7 +91,7 @@ export async function fetchDevicesPages(
 
 export async function fetchCreateDevice(newDevice: any) {
     try {
-        console.log("create user", newDevice);
+        console.log("create device", newDevice);
 
         let ext_device_function;
         ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
@@ -112,9 +110,9 @@ export async function fetchCreateDevice(newDevice: any) {
         const query = `
         INSERT INTO tbl_printer_info (
           device_type, printer_name, location, physical_printer_id, 
-          ext_device_function
+          ext_device_function, deleted, created_date, created_by, modified_date, modified_by
         ) VALUES (
-            $1, $2, $3, $4, $5
+            $1, $2, $3, $4, $5, 'N', now(), -1, now(), -1
         ) RETURNING *;
       `;
 

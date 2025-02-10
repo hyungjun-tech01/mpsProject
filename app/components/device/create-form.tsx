@@ -11,6 +11,7 @@ export default function Form() {
     const [printerChecked, setPrinterChecked] = useState(false);
     const [scanChecked, setScanChecked] = useState(false);
     const [faxChecked, setFaxChecked] = useState(false);
+    const [enablePrintChecked, setEnablePrintChecked] = useState(false);
 
     const [state, formAction] = useActionState(createDevice, initialState);
 
@@ -28,6 +29,10 @@ export default function Form() {
 
     const handleFaxChange = (e:any) => {
             setFaxChecked(e.target.checked);
+    };
+
+    const handleEnablePrintChange = (e:any) => {
+        setEnablePrintChecked(e.target.checked);
     };
 
     console.log('create form');
@@ -156,7 +161,6 @@ export default function Form() {
                             </label>
                         </div>
                         <div className="mb-4">
-
                             <input
                                 id="ext_device_function_scan"
                                 name="ext_device_function_scan"
@@ -183,7 +187,21 @@ export default function Form() {
                             <label htmlFor="ext_ext_device_function_fax" className="ml-2 text-sm font-medium">
                                 Track & Control Fax
                             </label>
-                        </div>                        
+                        </div>          
+                        <div className="mb-4">
+                            <input
+                                id="enable_print_release"
+                                name="enable_print_release"
+                                type="checkbox"
+                                value="Y"
+                                checked={enablePrintChecked}
+                                onChange={handleEnablePrintChange}
+                                className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                            />
+                            <label htmlFor="ext_ext_device_function_fax" className="ml-2 text-sm font-medium">
+                                Enable Print 
+                            </label>
+                        </div>                                           
                     </div>  
                     <div className="mb-4">
                         <label htmlFor="title_printer_device_group" className="mb-2 block text-sm font-medium">
