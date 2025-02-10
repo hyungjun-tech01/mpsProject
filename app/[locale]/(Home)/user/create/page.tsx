@@ -52,10 +52,22 @@ export default async function Page(props: {
 
     //-----------------------------------
     const formItems = {
-        sec_detail_title : t('user.secTitle_details'),
-        sec_detail_description : t('comment.user_edit_details_description'),
-        user_name_title: 'ID',
-        user_name_placeholder: t('user.placeholder_user_name')
+        secDetailTitle : t('user.secTitle_details'),
+        secDetailDescription : t('comment.user_edit_details_description'),
+        userNameTitle: 'ID',
+        userNamePlaceholder: t('user.placeholder_user_name'),
+        userFullNameTitle: t('user.full_name'),
+        userFullNamePlaceholder: t('user.placeholder_full_name'),
+        userEmailTitle: t('common.email'),
+        userEmailPlaceholder: t('user.placeholder_email'),
+        userHomeDirTitle: t('user.home_directory'),
+        userHomeDirPlaceholder: t('user.placeholder_home_directory'),
+        userDisabledPrintingTitle: t('user.enable_disable_printing'),
+        userDisabledPrintingPlaceholder: t('user.placeholder_full_name'),
+        userEnablePrintingOption: t('user.enable_printing'),
+        userDisablePrintingOption: t('user.disable_printing'),
+        btnCancel: t('common.cancel'),
+        btnCreateUser: t('user.create_user'),
     }
 
     return (

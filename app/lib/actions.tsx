@@ -23,18 +23,21 @@ await client.connect();
 export type State = {
     errors?: {
         userName?: string[];
-        disabled_printing?: string[];
-        balance_current?: string[];
+        userEmail?: string[];
+        balanceCurrent?: string[];
     };
     message?: string | null;
 };
 
 const UserFormSchema = z.object({
+    id: z.string(),
     userName: z.string({
         invalid_type_error: 'User ID must be set',
     }),
     // full_name: z.string(),
-    // email: z.string(),
+    userEmail: z.string({
+        invalid_type_error: 'User Email must be set',
+    }),
     // home_directory: z.string(),
     // notes: z.string(),
     // disabled_printing: z.enum(['N', 'Y'], {
@@ -45,15 +48,16 @@ const UserFormSchema = z.object({
     // restricted: z.boolean(),
     // department: z.string(),
     // card_number: z.string(),
-    // card_number2: z.string()
+    // card_number2: z.string(),
+    date: z.string()
 });
 
-const CreateUser = UserFormSchema.omit({ });
+const CreateUser = UserFormSchema.omit({id: true, date: true });
 
 export async function createUser(prevState: State, formData: FormData) {
     const validatedFields = CreateUser.safeParse({
-        userName: formData.get('user_name'),
-        // userEmail: formData.get('email'),
+        userName: formData.get('userName'),
+        userEmail: formData.get('userEmail'),
         // notes: formData.get('notes'),
         // disabledPrinting: formData.get('disabled_printing'),
         // balance: formData.get('balance_current'),
@@ -65,6 +69,7 @@ export async function createUser(prevState: State, formData: FormData) {
 
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
+        console.log('Check : ', validatedFields);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create User.',
