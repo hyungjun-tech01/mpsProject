@@ -23,53 +23,35 @@ await client.connect();
 export type State = {
     errors?: {
         userName?: string[];
-        userEmail?: string[];
-        balanceCurrent?: string[];
+        userDisabledPrinting?: string[];
+        userBalanceCurrent?: string[];
     };
     message?: string | null;
 };
 
 const UserFormSchema = z.object({
-    id: z.string(),
     userName: z.string({
-        invalid_type_error: 'User ID must be set',
+        invalid_type_error: 'User ID must be string ',
+    }).min(1, { message: "Name is required" }),
+    userDisabledPrinting: z.enum(['N', 'Y'], {
+        invalid_type_error: "Please select an 'Disabled Printing' status."
     }),
-    // full_name: z.string(),
-    userEmail: z.string({
-        invalid_type_error: 'User Email must be set',
-    }),
-    // home_directory: z.string(),
-    // notes: z.string(),
-    // disabled_printing: z.enum(['N', 'Y'], {
-    //     invalid_type_error: 'Please select an printing type.',
-    // }),
-    // balance_current: z.coerce.number()
-    //     .gt(0, { message: 'Please enter an amount greater than 0.' }),
-    // restricted: z.boolean(),
-    // department: z.string(),
-    // card_number: z.string(),
-    // card_number2: z.string(),
-    date: z.string()
+    userBalanceCurrent: z.coerce.number()
+        .min(0, { message: 'Please enter a balance not less than 0.' }),
 });
 
-const CreateUser = UserFormSchema.omit({id: true, date: true });
+const CreateUser = UserFormSchema.omit({ });
 
 export async function createUser(prevState: State, formData: FormData) {
     const validatedFields = CreateUser.safeParse({
         userName: formData.get('userName'),
-        userEmail: formData.get('userEmail'),
-        // notes: formData.get('notes'),
-        // disabledPrinting: formData.get('disabled_printing'),
-        // balance: formData.get('balance_current'),
-        // restricted: formData.get('restricted'),
-        // department: formData.get('department'),
-        // cardNumber: formData.get('card_number'),
-        // cardNumber2: formData.get('card_number2'),
+        userDisabledPrinting: formData.get('userDisabledPrinting'),
+        userBalanceCurrent: formData.get('userBalanceCurrent'),
     });
 
+    console.log('Check : ', validatedFields);
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
-        console.log('Check : ', validatedFields);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create User.',
@@ -79,27 +61,29 @@ export async function createUser(prevState: State, formData: FormData) {
     // Prepare data for insertion into the database
     const { 
         userName,
+        userDisabledPrinting,
+        userBalanceCurrent,
+    } = validatedFields.data;
+    const {
         userFullName,
         userEmail,
         homeDirectory,
         notes,
-        disabledPrinting,
-        restricted,
-        balance,
         department,
         cardNumber,
         cardNumber2
-    } = validatedFields.data;
+    } = formData;
 
     try {
-        await client.query(`
+        const response = await client.query(`
             INSERT INTO tbl_user (
                 user_name,
                 full_name,
                 email,
+                home_directory,
                 notes,
+                disabled_printing,
                 department,
-                disapled_printing,
                 card_number,
                 card_number2,
                 created_date,
@@ -109,23 +93,23 @@ export async function createUser(prevState: State, formData: FormData) {
             )
             VALUES (
                 '${userName}',
-                '${userFullName}',
-                '${userEmail}',
-                '${notes}',
-                '${homeDirectory}',
-                '${disabledPrinting}',
-                '${restricted}',
-                '${balance}',
+                '${userFullName || ""}',
+                '${userEmail || ""}',
+                '${homeDirectory || ""}',
+                '${notes || ""}',
+                '${userDisabledPrinting || "N"}',
                 '${department}',
                 '${cardNumber}',
                 '${cardNumber2}',
                 NOW(),
-                admin,
+                'admin',
                 NOW(),
-                admin
+                'admin'
             )
         `);
+        console.log('Create User / Succeeded : ', response, userBalanceCurrent);
     } catch (error) {
+        console.log('Create User / Error : ', error);
         return {
             message: 'Database Error: Failed to Create User.',
         };

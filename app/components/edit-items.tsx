@@ -25,9 +25,8 @@ export interface ISection {
 };
 
 export interface IButtonInfo {
-  title: string,
-  link: string,
-  isButton: boolean
+  cancel : { title: string, link: string },
+  go : { title: string }
 };
 
 export function EditItem({
@@ -105,7 +104,7 @@ export function EditItem({
               {!locale ||
                 (locale === "ko" && (
                   <div className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900">
-                    ₩
+                    {' '}
                   </div>
                 ))}
               {locale && locale === "en" && (
