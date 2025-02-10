@@ -96,3 +96,11 @@ export type UserField = {
 // ----- Begin : User ----------------------------------------//
 
 
+export type Device = {
+  printer_id: number;
+  printer_name: string | null;
+  device_type: string | null;
+  ext_device_function: string | null;
+  server_name: string | null;
+  deleted: string | null;
+};

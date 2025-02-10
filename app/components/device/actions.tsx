@@ -61,6 +61,9 @@ export async function createDevice(prevState: State, formData: FormData) {
     if (!formData.has('ext_device_function_fax')) {
         formData.set('ext_device_function_fax', 'N');
     }
+    if (!formData.has('enable_print_release')) {
+        formData.set('enable_print_release', 'N');
+    }
 
     console.log('create device  ~~~~~', formData.get('device_name'));
 
@@ -95,7 +98,7 @@ export async function createDevice(prevState: State, formData: FormData) {
     if(!output.result) {
         return {
             errors: output.data,
-            message: 'Failed to Create User',
+            message: 'Failed to Create Device',
         }
     }
 
