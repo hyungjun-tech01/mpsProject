@@ -144,7 +144,6 @@ export async function fetchUserById(id: string) {
 
 export async function fetchCreateUser(newUser: object) {
     try {
-        console.log("create user", newUser);
         const inputData = {
             ...newUser,
             action_type: "ADD",

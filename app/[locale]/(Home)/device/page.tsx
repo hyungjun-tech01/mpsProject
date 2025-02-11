@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from 'react';
 import getDictionary from '@/app/locales/dictionaries';
 import { IEditItem } from '@/app/components/edit-items';
-import { fetchDevicesPages, fetchFilteredDevices } from '@/app/lib/fetchDeviceData';
+import { fetchDevicesPages, fetchFilteredDevices, fetchPrinterGroup } from '@/app/lib/fetchDeviceData';
 import { IColumnData } from '@/app/lib/definitions';
 import { UserTableSkeleton } from '@/app/components/user/skeletons';
 import Search from '@/app/components/search';
@@ -39,10 +39,11 @@ export default async function Device(
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const [t, totalPages, devices] = await Promise.all([
+    const [t, totalPages, devices, printerGroup] = await Promise.all([
         getDictionary(locale),
         fetchDevicesPages(query, itemsPerPage),
-        fetchFilteredDevices(query, itemsPerPage, currentPage)
+        fetchFilteredDevices(query, itemsPerPage, currentPage),
+        fetchPrinterGroup(),
     ]);
 
     const columns: IColumnData[] = [

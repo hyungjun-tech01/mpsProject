@@ -99,7 +99,7 @@ export default function Form() {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="title_physical_printer_ip" className="mb-2 block text-sm font-medium">
-                            IP
+                            장치 호스트이름 / IP
                         </label>
                         <input
                             id="physical_printer_ip"
@@ -217,6 +217,32 @@ export default function Form() {
                         {state.errors?.printer_device_group && (
                             <p className="text-red-500 text-sm">{state.errors.printer_device_group[0]}</p>
                         )}
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="title_printer_device_group" className="mb-2 block text-sm font-semibold">
+                            Printer/Device Group
+                        </label>
+                        <div className="relative">
+                            <select
+                                id='printer_device_group'
+                                name='printer_device_group'
+                                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                defaultValue="N"
+                                aria-describedby="disablePrinting-error"
+                            >
+                                <option value="N">
+                                    N
+                                </option>
+                            </select>
+                        </div>
+                        <div id="disablePrinting-error" aria-live="polite" aria-atomic="true">
+                            {state?.errors?.disablePrinting &&
+                                state.errors.disablePrinting.map((error: string) => (
+                                    <p className="mt-2 text-sm text-red-500" key={error}>
+                                        {error}
+                                    </p>
+                            ))}
+                        </div>
                     </div>
                     <div className="mt-4 flex justify-start gap-4">
                     <Link

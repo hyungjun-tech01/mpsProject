@@ -1,6 +1,6 @@
 import pg from 'pg';
 import { BASE_PATH } from '@/constans';
-import { User } from '@/app/lib/definitions';
+import { Device } from '@/app/lib/definitions';
 
 
 const client = new pg.Client({
@@ -34,7 +34,7 @@ export async function fetchFilteredDevices(
                         tbl_printer_info.server_name ILIKE '${`%${query}%`}' OR 
                         tbl_printer_info.deleted ILIKE '${`%${query}%`}'
                     )
-                ORDER BY tbl_printer.modified_date DESC
+                ORDER BY tbl_printer_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
@@ -46,17 +46,15 @@ export async function fetchFilteredDevices(
             `)
         ;
         
-        const converted = device.rows.map((data:User) => ({
+        const converted = device.rows.map((data:Device) => ({
             ...data,
-            id: data.user_id,
         }));
         return converted;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch users.');
+        throw new Error('Failed to fetch device.');
     }
 }
-
 
 export async function fetchDevicesPages(
     query: string,
@@ -91,12 +89,13 @@ export async function fetchDevicesPages(
 
 export async function fetchCreateDevice(newDevice: any) {
     try {
-        console.log("create device", newDevice);
 
         let ext_device_function;
         ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
         ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
         ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
+
+        ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
 
          // 값 배열로 변환
         const inputData = [
@@ -116,8 +115,6 @@ export async function fetchCreateDevice(newDevice: any) {
         ) RETURNING *;
       `;
 
-        console.log('insert printer');
-  
         const result = await client.query(query, inputData);
        
         // 성공 처리
@@ -130,3 +127,16 @@ export async function fetchCreateDevice(newDevice: any) {
         };
     }
 }
+
+export async function fetchPrinterGroup() {
+    try {
+        const response = await client.query(`
+           select printer_group_id, group_name, display_name
+             from tbl_printer_group;
+        `);
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer group");
+    }
+};

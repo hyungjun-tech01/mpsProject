@@ -97,7 +97,7 @@ export type UserField = {
 
 
 export type Device = {
-  printer_id: number;
+  printer_id: string|null;
   printer_name: string | null;
   device_type: string | null;
   ext_device_function: string | null;

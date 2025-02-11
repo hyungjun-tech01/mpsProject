@@ -1941,3 +1941,17 @@ TABLESPACE pg_default;
 insert into tbl_printer_info
 select * from tbl_printer;
 
+
+-- 임시 데이터 
+insert into tbl_printer_group
+(printer_group_id ,
+    group_name ,
+    display_name ,
+    created_date ,
+    created_by ,
+    modified_date,
+    modified_by ,
+    modified_ticks
+) values
+(1, 'AAA', 'AAA', now(), '-1', now(), '-1', 1
+);
