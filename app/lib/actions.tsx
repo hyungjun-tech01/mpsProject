@@ -57,25 +57,23 @@ export async function createUser(prevState: State, formData: FormData) {
         };
     };
 
-    // Prepare data for insertion into the database
+    // Prepare data for insertion into the database ------
     const { 
         userName,
         userDisabledPrinting,
         userBalanceCurrent,
     } = validatedFields.data;
 
-    const {
-        userFullName,
-        userEmail,
-        userHomeDirectory,
-        userNotes,
-        userRestricted,
-        userDepartment,
-        userCardNumber,
-        userCardNumber2
-    } = formData;
+    const userFullName = formData.get('userFullName');
+    const userEmail = formData.get('userEmail')
+    const userHomeDirectory = formData.get('userHomeDirectory')
+    const userNotes = formData.get('userNotes')
+    const userRestricted = formData.get('userRestricted')
+    const userDepartment = formData.get('userDepartment')
+    const userCardNumber = formData.get('userCardNumber')
+    const userCardNumber2 = formData.get('userCardNumber2')
 
-    // Get new user id
+    // Get new user id --------------------------------------
     let lastUserId = null;
     try {
         const resp = await client.query(`
@@ -86,7 +84,7 @@ export async function createUser(prevState: State, formData: FormData) {
         throw new Error("Failed to get user id.");
     };
 
-    // Create new user
+    // Create new user  --------------------------------------
     try {
         await client.query(`
             INSERT INTO tbl_user (
@@ -126,9 +124,9 @@ export async function createUser(prevState: State, formData: FormData) {
                 '${userHomeDirectory || ""}',
                 '${userNotes || ""}',
                 '${userDisabledPrinting || "N"}',
-                '${userDepartment}',
-                '${userCardNumber}',
-                '${userCardNumber2}',
+                '${userDepartment || ""}',
+                '${userCardNumber || ""}',
+                '${userCardNumber2 || ""}',
                 0, 0, 0,
                 'admin', NOW(), 'N',
                 NOW(), 'admin',
@@ -146,7 +144,7 @@ export async function createUser(prevState: State, formData: FormData) {
         };
     };
 
-    // Get new account id
+    // Get new account id --------------------------------------
     let lastAccountId = null;
     try {
         const resp = await client.query(`
@@ -165,7 +163,7 @@ export async function createUser(prevState: State, formData: FormData) {
         throw new Error("Failed to get account id.");
     };
 
-    // Create new account
+    // Create new account --------------------------------------
     try {
         await client.query(`
             INSERT INTO tbl_account (
@@ -216,7 +214,7 @@ export async function createUser(prevState: State, formData: FormData) {
         throw new Error("Failed to create account.");
     };
 
-    // Get new account id
+    // Get new account id --------------------------------------
     let lastUserAccountId = null;
     try {
         const resp = await client.query(`
@@ -238,7 +236,7 @@ export async function createUser(prevState: State, formData: FormData) {
         throw new Error("Failed to get account id.");
     };
 
-    // Create new user_account
+    // Create new user_account --------------------------------------
     try {
         await client.query(`
             INSERT INTO tbl_user_account (
