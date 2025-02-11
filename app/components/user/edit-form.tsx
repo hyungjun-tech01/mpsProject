@@ -14,7 +14,7 @@ export function EditForm({
   action,
 }: {
   items: ISection[];
-  buttons?: IButtonInfo[];
+  buttons?: IButtonInfo;
   action: (prevState: State, formData: FormData) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
@@ -23,7 +23,7 @@ export function EditForm({
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {items.map((sec: ISection, idx) => {
+        { items.map((sec: ISection, idx) => {
           return (
             <div key={idx} className={clsx('w-full p-2 flex flex-col md:flex-row',
               { 'border-b': idx !== items.length - 1 }
@@ -33,55 +33,51 @@ export function EditForm({
                 <div className='text-sm'>{sec.description}</div>
               </div>
               <div className='w-full md:w-2/3'>
-                {sec.items.map((item: IEditItem) =>
-                  <EditItem
-                    key={item.name}
-                    name={item.name}
-                    title={item.title}
-                    type={item.type}
-                    defaultValue={item.defaultValue}
-                    placeholder={item.placeholder}
-                    options={item.options}
-                    error={state.errors[item.name]}
-                  />
+                { sec.items.map((item: IEditItem) =>
+                    <EditItem
+                      key={item.name}
+                      name={item.name}
+                      title={item.title}
+                      type={item.type}
+                      defaultValue={item.defaultValue}
+                      placeholder={item.placeholder}
+                      options={item.options}
+                      error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) 
+                        ? state?.error[item.name]
+                        : null
+                      }
+                    />
                 )}
               </div>
             </div>
           )
         })}
         <div id="input-error" aria-live="polite" aria-atomic="true">
-          {state?.message &&
+          { !!state?.message &&
             <p className="mt-2 text-sm text-red-500">
               {state.message}
             </p>
           }
         </div>
       </div>
-      {!!buttons &&
+      { !!buttons &&
         <div className="mt-6 flex justify-end gap-4">
-          {buttons.map((button, idx) => {
-            if (button.isButton) {
-              return (
-                <Button
-                  key={idx}
-                  type="submit"
-                  className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-                >
-                  {button.title}
-                </Button>
-              );
-            } else {
-              return (
-                <Link
-                  key={idx}
-                  href={button.link}
-                  className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-                >
-                  {button.title}
-                </Link>
-              );
-            }
-          })}
+          { !!buttons.cancel &&
+            <Link
+              href={buttons.cancel.link}
+              className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+            >
+              {buttons.cancel.title}
+            </Link>
+          }
+          { !!buttons.go &&
+            <Button
+              type="submit"
+              className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+            >
+              {buttons.go.title}
+            </Button>
+          }
         </div>
       }
     </form>
