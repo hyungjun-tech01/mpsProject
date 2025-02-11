@@ -23,7 +23,7 @@ export function EditForm({
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {items.map((sec: ISection, idx) => {
+        { items.map((sec: ISection, idx) => {
           return (
             <div key={idx} className={clsx('w-full p-2 flex flex-col md:flex-row',
               { 'border-b': idx !== items.length - 1 }
@@ -33,7 +33,7 @@ export function EditForm({
                 <div className='text-sm'>{sec.description}</div>
               </div>
               <div className='w-full md:w-2/3'>
-                {sec.items.map((item: IEditItem) =>
+                { sec.items.map((item: IEditItem) =>
                     <EditItem
                       key={item.name}
                       name={item.name}
@@ -42,7 +42,10 @@ export function EditForm({
                       defaultValue={item.defaultValue}
                       placeholder={item.placeholder}
                       options={item.options}
-                      error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) ? state?.error[item.name] : null}
+                      error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) 
+                        ? state?.error[item.name]
+                        : null
+                      }
                     />
                 )}
               </div>
@@ -57,9 +60,9 @@ export function EditForm({
           }
         </div>
       </div>
-      {!!buttons &&
+      { !!buttons &&
         <div className="mt-6 flex justify-end gap-4">
-          {!!buttons.cancel &&
+          { !!buttons.cancel &&
             <Link
               href={buttons.cancel.link}
               className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
@@ -67,7 +70,7 @@ export function EditForm({
               {buttons.cancel.title}
             </Link>
           }
-          {!!buttons.go &&
+          { !!buttons.go &&
             <Button
               type="submit"
               className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
