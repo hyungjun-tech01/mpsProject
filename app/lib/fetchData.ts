@@ -269,7 +269,7 @@ export async function fetchPrinterUsageLogByUserId(
                 `${row.client_machine}`,
                 `${row.printer_language}`
             ];
-            let status = [];
+            const status = [];
             if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
             if (row.printed === "Y") status.push("Printed");
             if (row.cancelled === "Y") status.push("Cancelled");
@@ -352,7 +352,7 @@ export async function fetchTotalPagesPerDayFor30Days() {
 		        usage_day ASC`);
 
         let maxVal = 0;
-        let dataFromDB:{used_by:string, pages:number}[] = [];
+        const dataFromDB:{used_day:string, pages:number}[] = [];
         response.rows.forEach(
             (item:{used_day:Date, pages: number}) => {
                 if(maxVal < item.pages) maxVal = item.pages;
@@ -363,12 +363,11 @@ export async function fetchTotalPagesPerDayFor30Days() {
             }
         );
 
-        if(dataFromDB.length === 0) return null;
+        // if(dataFromDB.length === 0) return null;
 
         const str30days = generateStrOf30Days();
-        const today = new Date();
-        let xData: string[] = [];
-        let yData: number[] = [];
+        const xData: string[] = [];
+        const yData: number[] = [];
         for (let i = 0; i < 30; i++) {
             const tempDayStr = str30days.at(i) || "";
             if(i % 4 ===0) {
@@ -378,11 +377,7 @@ export async function fetchTotalPagesPerDayFor30Days() {
             }
 
             const foundIdx = dataFromDB.findIndex(data => data.used_day === tempDayStr);
-            if(foundIdx === -1) {
-                yData.push(0);
-            } else {
-                yData.push(dataFromDB.at(foundIdx).pages);
-            }
+            yData.push( foundIdx === -1 ? 0 : dataFromDB[foundIdx].pages);
         }
         return {date: xData, pages: yData, maxY: maxVal};
     } catch (error) {
@@ -464,7 +459,7 @@ export async function fetchFilteredDeviceUsageLogs(
                 `${row.client_machine}`,
                 `${row.printer_language}`
             ];
-            let status = [];
+            const status = [];
             if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
             if (row.printed === "Y") status.push("Printed");
             if (row.cancelled === "Y") status.push("Cancelled");

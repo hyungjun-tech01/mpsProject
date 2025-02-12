@@ -62,7 +62,6 @@ export default async function Page(props: {
     ];
 
     let maxVal = 0;
-    let prevVal = 0;
     const dataFromDB = transactionInfo.map(
         (item: { transaction_date: Date, amount: number, balance: number }) => {
             const before_value = item.balance - item.amount;
@@ -86,9 +85,7 @@ export default async function Page(props: {
         return 0;
     });
 
-    if (dataFromDB.length > 0) {
-        prevVal = dataFromDB.at(0).before_val;
-    };
+    let prevVal = dataFromDB.length > 0 ? dataFromDB.at(0).before_val : 0;
 
     const str30days = generateStrOf30Days();
     const xlabels = str30days.map((str, idx) => idx % 5 === 0 ? str : "");
@@ -111,7 +108,7 @@ export default async function Page(props: {
     const ydata = str30days.map(day => {
         const foundIdx = tempData.findIndex(item => item.day === day);
         if (foundIdx !== -1) {
-            prevVal = tempData.at(foundIdx).value;
+            prevVal = tempData[foundIdx].value;
         }
         return prevVal;
     });
@@ -188,15 +185,15 @@ export default async function Page(props: {
         { name: 'status', title: t('printer.status'), align: 'center', type: 'list' },
     ];
 
-    const buttonItems: { edit: IButtonInfo[], charge: IButtonInfo[] } = {
-        edit: [
-            { title: t('common.cancel'), link: '/user', isButton: false },
-            { title: t('user.update_user'), link: '', isButton: true },
-        ],
-        charge: [
-            { title: t('common.cancel'), link: '/user', isButton: false },
-            { title: t('common.apply'), link: '', isButton: true },
-        ]
+    const buttonItems: { edit: IButtonInfo, charge: IButtonInfo } = {
+        edit: {
+            cancel: { title: t('common.cancel'), link: '/user' },
+            go: { title: t('user.update_user') },
+        },
+        charge: {
+            cancel: { title: t('common.cancel'), link: '/user' },
+            go: { title: t('common.apply') },
+        }
     };
 
     return (
