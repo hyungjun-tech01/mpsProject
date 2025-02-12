@@ -130,7 +130,7 @@ export function EditItem({
                   name={name}
                   type="checkbox"
                   value="Y"
-                  checked
+                  defaultChecked
                 /> :
                 <input
                   id={name}
@@ -166,7 +166,7 @@ export function EditItem({
               name={name}
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={defaultValue}
-              aria-describedby="customer-error"
+              aria-describedby={`${name}-error`}
             >
               {options &&
                 options.map((item) => (
@@ -176,7 +176,7 @@ export function EditItem({
                 ))}
             </select>
           </div>
-          <div id="customer-error" aria-live="polite" aria-atomic="true">
+          <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
             {error &&
               error.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>

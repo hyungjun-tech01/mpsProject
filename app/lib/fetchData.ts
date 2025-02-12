@@ -128,7 +128,8 @@ export async function fetchUserById(id: string) {
                 u.card_number,
                 u.card_number2,
                 a.account_id,
-                a.balance
+                a.balance,
+                a.restricted
             FROM tbl_user u
             JOIN tbl_user_account ua ON u.user_id = ua.user_id
             JOIN tbl_account a ON a.account_id = ua.account_id

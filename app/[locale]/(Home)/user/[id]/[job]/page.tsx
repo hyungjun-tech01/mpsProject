@@ -127,7 +127,7 @@ export default async function Page(props: {
         edit: [
             {
                 title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
-                    { name: 'user_name', title: t('user.user_name'), type: 'label', defaultValue: user.user_name },
+                    { name: 'user_name', title: 'ID', type: 'label', defaultValue: user.user_name },
                     { name: 'full_name', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
                     { name: 'email', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
                     { name: 'home_directory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
@@ -142,7 +142,7 @@ export default async function Page(props: {
             {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
                     { name: 'balance_current', title: t('account.balance_current'), type: 'currency', defaultValue: user.balance, placeholder: t('user.placeholder_department') },
-                    { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restriced },
+                    { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
