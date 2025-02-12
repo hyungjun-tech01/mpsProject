@@ -271,6 +271,78 @@ export async function createUser(prevState: State, formData: FormData) {
         throw new Error("Failed to create user_account.");
     };
 
+    // If balance is greater than 0, create account_transaction -----------------------------------
+    // Get new account id -------------------------------------------------------------------------
+    let lastAccountTransactionId = null;
+    try {
+        const resp = await client.query(`
+            SELECT * FROM tbl_account_transaction ORDER BY account_transaction_id DESC LIMIT 1
+        `);
+        lastAccountTransactionId = Number(resp.rows[0].account_transaction_id) + 1;
+    } catch (error) {
+        throw new Error("Failed to get account_transaction id.");
+    };
+
+    // Create new account_transaction -------------------------------------------------------------------------
+    try {
+        await client.query(`
+            INSERT INTO tbl_account_transaction (
+                account_transaction_id,
+                transaction_date,
+                transacted_by,
+                account_id,
+                amount,
+                balance,
+                txn_comment,
+                is_credit,
+                transaction_type
+            )
+            VALUES (
+                '${lastAccountTransactionId}',
+                NOW(),
+                'admin',
+                '${lastAccountId}',
+                '${userBalanceCurrent}',
+                '${userBalanceCurrent}',
+                '', 'Y', 'ADJUST'
+            )
+        `);
+    } catch (error) {
+        // Delete created user
+        throw new Error("Failed to create account_transaction.");
+    };
+
+    // Get new application log id -------------------------------------------------------------------------
+    let lastApplicationLogId = null;
+    try {
+        const resp = await client.query(`
+            SELECT * FROM tbl_application_log ORDER BY application_log_id DESC LIMIT 1
+        `);
+        lastApplicationLogId = Number(resp.rows[0].application_log_id) + 1;
+    } catch (error) {
+        throw new Error("Failed to get application_log id.");
+    };
+
+    // Create new application log -------------------------------------------------------------------------
+    try {
+        await client.query(`
+            INSERT INTO tbl_application_log (
+                application_log_id,
+                log_date,
+                server_name,
+                log_level,
+                message
+            )
+            VALUES (
+                '${lastApplicationLogId}',
+                NOW(), '', 'INFO',
+                '신규 계정 생성 : ${userName}'
+            )
+        `);
+    } catch (error) {
+        throw new Error("Failed to create application_log.");
+    };
+
     revalidatePath('/user');
     redirect('/user');
 }
