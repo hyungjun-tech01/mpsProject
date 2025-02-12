@@ -77,15 +77,101 @@ export async function createUser(prevState: State, formData: FormData) {
     let lastUserId = null;
     try {
         const resp = await client.query(`
-            SELECT * FROM tbl_user ORDER BY user_id DESC LIMIT 1
+            SELECT max(user_id) user_id FROM tbl_user 
         `);
-        lastUserId = Number(resp.rows[0].user_id) + 1;
+        lastUserId = resp.rows.length > 0 ? Number(resp.rows[0].user_id) + 1 : 1;
     } catch (error) {
         throw new Error("Failed to get user id.");
     };
 
+     // Get new account id --------------------------------------
+     let lastAccountId = null;
+     try {
+         const resp = await client.query(`
+             SELECT max(account_id) account_id FROM tbl_account
+         `);
+         lastAccountId = resp.rows.length > 0 ? Number(resp.rows[0].account_id) + 1 : 1;
+     } catch (error) {
+         throw new Error("Failed to get account id.");
+     };
+
+     // Get new account id --------------------------------------
+    let lastUserAccountId = null;
+    try {
+        const resp = await client.query(`
+            SELECT max(user_account_id) user_account_id FROM tbl_user_account
+        `);
+        
+        lastUserAccountId = resp.rows.length > 0 ?  Number(resp.rows[0].user_account_id) + 1 : 1;
+
+    } catch (error) {
+        throw new Error("Failed to get account id.");
+    };
+
+
     // Create new user  --------------------------------------
     try {
+        // 값 배열로 변환
+        const userInputData = [
+            lastUserId,
+            userName,
+            userName,
+            userFullName,
+            userEmail,
+            userHomeDirectory,
+            userNotes,
+            userDisabledPrinting,
+            userDepartment,
+            userCardNumber,
+            userCardNumber2,
+            0, 
+            0, 
+            0,
+            'admin', 
+            'N',
+            'admin',
+            'admin',
+            0, 
+            0, 
+            'N',
+            'N', 
+            0
+          ];
+
+        const accountInputData = [
+            lastAccountId,
+            'USER',
+            userName,
+            userBalanceCurrent,
+            userRestricted === 'Y' ? 'Y' : 'N',
+            0,
+            '',
+            'Y',
+            '',
+            'N',
+            'admin',
+            'admin',
+            userName.toLowerCase(),
+            '',
+            '',
+            'N',
+            'COMMENT_OPTIONAL',
+            'USER_CHOICE_ON',
+            '',
+            0
+          ];  
+
+        const userAccountInputData = [  
+           lastUserAccountId,
+           lastUserId,
+           lastAccountId,
+           'admin', 
+           'admin',
+           0
+         ];
+
+        await client.query("BEGIN"); // 트랜잭션 시작  
+
         await client.query(`
             INSERT INTO tbl_user (
                 user_id,
@@ -115,130 +201,39 @@ export async function createUser(prevState: State, formData: FormData) {
                 internal,
                 modified_ticks
             )
-            VALUES (
-                '${lastUserId}',
-                '${userName}',
-                '${userName}',
-                '${userFullName || ""}',
-                '${userEmail || ""}',
-                '${userHomeDirectory || ""}',
-                '${userNotes || ""}',
-                '${userDisabledPrinting || "N"}',
-                '${userDepartment || ""}',
-                '${userCardNumber || ""}',
-                '${userCardNumber2 || ""}',
-                0, 0, 0,
-                'admin', NOW(), 'N',
-                NOW(), 'admin',
-                NOW(), 'admin',
-                0, 0, 'N',
-                'N', 0
-            )
-        `);
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13, $14,$15, NOW(), $16,NOW(), $17,NOW(), $18,$19, $20, $21,$22,$23)`
+            , userInputData);
         console.log('Succeeded to create new user. then create account');
 
-    } catch (error) {
-        console.log('Create User / Error : ', error);
-        return {
-            message: 'Database Error: Failed to Create User.',
-        };
-    };
-
-    // Get new account id --------------------------------------
-    let lastAccountId = null;
-    try {
-        const resp = await client.query(`
-            SELECT * FROM tbl_account ORDER BY account_id DESC LIMIT 1
-        `);
-        lastAccountId = Number(resp.rows[0].account_id) + 1;
-    } catch (error) {
-        // Delete created user
-        try{
-            await client.query(`
-                DELETE FROM tbl_user WHERE user_id='${lastUserId}'
-            `)
-        } catch (error) {
-            throw new Error("Failed to remove created user.");
-        };
-        throw new Error("Failed to get account id.");
-    };
-
-    // Create new account --------------------------------------
-    try {
         await client.query(`
-            INSERT INTO tbl_account (
-                account_id,
-                account_type,
-                account_name,
-                balance,
-                restricted,
-                overdraft,
-                pin,
-                use_global_overdraft,
-                notes,
-                deleted,
-                created_date,
-                created_by,
-                modified_date,
-                modified_by,
-                account_name_lower,
-                sub_name,
-                sub_name_lower,
-                disabled,
-                comments,
-                invoicing,
-                sub_pin,
-                modified_ticks
-            )
-            VALUES (
-                '${lastAccountId}',
-                'USER',
-                '${userName}',
-                '${userBalanceCurrent}',
-                '${userRestricted === 'Y' ? 'Y' : 'N'}',
-                0, '', 'Y', '', 'N',
-                NOW(), 'admin', NOW(), 'admin',
-                '${userName.toLowerCase()}',
-                '', '', 'N', 'COMMENT_OPTIONAL', 'USER_CHOICE_ON', '', 0
-            )
-        `);
-    } catch (error) {
-        // Delete created user
-        try{
-            await client.query(`
-                DELETE FROM tbl_user WHERE user_id='${lastUserId}'
-            `)
-        } catch (error) {
-            throw new Error("Failed to remove created user.");
-        };
-        throw new Error("Failed to create account.");
-    };
+        INSERT INTO tbl_account (
+            account_id,
+            account_type,
+            account_name,
+            balance,
+            restricted,
+            overdraft,
+            pin,
+            use_global_overdraft,
+            notes,
+            deleted,
+            created_date,
+            created_by,
+            modified_date,
+            modified_by,
+            account_name_lower,
+            sub_name,
+            sub_name_lower,
+            disabled,
+            comments,
+            invoicing,
+            sub_pin,
+            modified_ticks
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NOW(),$11,NOW(),$12,$13,$14,$15,$16,$17,$18,$19,$20)`
+        , accountInputData);        
 
-    // Get new account id --------------------------------------
-    let lastUserAccountId = null;
-    try {
-        const resp = await client.query(`
-            SELECT * FROM tbl_user_account ORDER BY user_account_id DESC LIMIT 1
-        `);
-        lastUserAccountId = Number(resp.rows[0].user_account_id) + 1;
-    } catch (error) {
-        // Delete created user
-        try{
-            await client.query(`
-                DELETE FROM tbl_user WHERE user_id='${lastUserId}'
-            `);
-            await client.query(`
-                DELETE FROM tbl_account WHERE account_id='${lastAccountId}'
-            `);
-        } catch (error) {
-            throw new Error("Failed to remove created user or created account.");
-        };
-        throw new Error("Failed to get account id.");
-    };
-
-    // Create new user_account --------------------------------------
-    try {
-        await client.query(`
+    await client.query(`
             INSERT INTO tbl_user_account (
                 user_account_id,
                 user_id,
@@ -249,76 +244,25 @@ export async function createUser(prevState: State, formData: FormData) {
                 modified_by,
                 modified_ticks
             )
-            VALUES (
-                '${lastUserAccountId}',
-                '${lastUserId}',
-                '${lastAccountId}',
-                NOW(), 'admin', NOW(), 'admin', 0
-            )
-        `);
+            VALUES ($1,$2,$3,NOW(),$4,NOW(), $5,$6)`, userAccountInputData);
+
+    await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+
     } catch (error) {
-        // Delete created user
-        try{
-            await client.query(`
-                DELETE FROM tbl_user WHERE user_id='${lastUserId}'
-            `);
-            await client.query(`
-                DELETE FROM tbl_account WHERE account_id='${lastAccountId}'
-            `);
-        } catch (error) {
-            throw new Error("Failed to remove created user and created account.");
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Create User / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Create User.',
         };
-        throw new Error("Failed to create user_account.");
     };
 
-    // If balance is greater than 0, create account_transaction -----------------------------------
-    // Get new account id -------------------------------------------------------------------------
-    let lastAccountTransactionId = null;
-    try {
-        const resp = await client.query(`
-            SELECT * FROM tbl_account_transaction ORDER BY account_transaction_id DESC LIMIT 1
-        `);
-        lastAccountTransactionId = Number(resp.rows[0].account_transaction_id) + 1;
-    } catch (error) {
-        throw new Error("Failed to get account_transaction id.");
-    };
-
-    // Create new account_transaction -------------------------------------------------------------------------
-    try {
-        await client.query(`
-            INSERT INTO tbl_account_transaction (
-                account_transaction_id,
-                transaction_date,
-                transacted_by,
-                account_id,
-                amount,
-                balance,
-                txn_comment,
-                is_credit,
-                transaction_type
-            )
-            VALUES (
-                '${lastAccountTransactionId}',
-                NOW(),
-                'admin',
-                '${lastAccountId}',
-                '${userBalanceCurrent}',
-                '${userBalanceCurrent}',
-                '', 'Y', 'ADJUST'
-            )
-        `);
-    } catch (error) {
-        // Delete created user
-        throw new Error("Failed to create account_transaction.");
-    };
-
-    // Get new application log id -------------------------------------------------------------------------
+        // Get new application log id -------------------------------------------------------------------------
     let lastApplicationLogId = null;
     try {
         const resp = await client.query(`
-            SELECT * FROM tbl_application_log ORDER BY application_log_id DESC LIMIT 1
+            SELECT max(application_log_id) application_log_id FROM tbl_application_log
         `);
-        lastApplicationLogId = Number(resp.rows[0].application_log_id) + 1;
+        lastApplicationLogId = resp.rows.length > 0 ?  Number(resp.rows[0].application_log_id) + 1 : 1;
     } catch (error) {
         throw new Error("Failed to get application_log id.");
     };
