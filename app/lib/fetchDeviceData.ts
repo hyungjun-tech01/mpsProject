@@ -112,8 +112,7 @@ export async function fetchCreateDevice(newDevice: any) {
           ext_device_function, deleted, created_date, created_by, modified_date, modified_by
         ) VALUES (
             $1, $2, $3, $4, $5, 'N', now(), -1, now(), -1
-        ) RETURNING *;
-      `;
+        )`;
 
         const result = await client.query(query, inputData);
        

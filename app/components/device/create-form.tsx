@@ -4,9 +4,12 @@ import { useActionState, useState } from 'react';
 import { createDevice, State } from './actions';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
+import { IButtonInfo, ISection } from '../edit-items';
 
 
-export default function Form() {
+export default function Form(
+    {items}:{items: ISection[];}
+){
     const initialState: State = { message: null, errors: null };
     const [printerChecked, setPrinterChecked] = useState(false);
     const [scanChecked, setScanChecked] = useState(false);
@@ -42,13 +45,13 @@ export default function Form() {
 
             <div className="flex justify-between mb-6">
                 <div className="w-1/3">
-                    <div>장치생성</div>
-                    <div>복사기 터미널 같은 주변 장치의 설치를 허용합니다. 하드웨어가 있어야 합니다.</div>
+                    <div>{items[0].title}</div>
+                    <div>{items[0].description}</div>
                 </div>
                 <div className="w-2/3 pl-6">
                     <div className="mb-4">
                         <label htmlFor="title_device_type" className="mb-2 block text-sm font-medium">
-                            Device Type
+                           Device Type
                         </label>
                         <select
                             id="device_type"
