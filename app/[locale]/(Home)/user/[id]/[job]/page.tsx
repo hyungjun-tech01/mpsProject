@@ -4,11 +4,12 @@ import clsx from 'clsx';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/user/edit-form';
+import { BalanceForm } from '@/app/components/user/balance-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
-import { modifyUser } from '@/app/lib/actions';
+import { changeBalance, modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { generateStrOf30Days } from '@/app/lib/utils';
 import {
@@ -55,7 +56,6 @@ export default async function Page(props: {
     ]);
 
     // Manipluate Process --------------------------------------------------------
-    const balanceText = formatCurrency(user.balance, locale);
     const balanceLink = <Link
             href={`/user/${id}/charge`}
             className='ml-4 text-sm text-lime-700'
@@ -134,12 +134,12 @@ export default async function Page(props: {
         edit: [
             {
                 title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
-                    { name: 'user_name', title: 'ID', type: 'label', defaultValue: user.user_name },
-                    { name: 'full_name', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
+                    { name: 'userName', title: 'ID', type: 'label', defaultValue: user.user_name },
+                    { name: 'fullName', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
                     { name: 'email', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
-                    { name: 'home_directory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
+                    { name: 'homeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
                     {
-                        name: 'disabled_printing', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
+                        name: 'disabledPrinting', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
                             { title: t('user.enable_printing'), value: 'N' },
                             { title: t('user.disable_printing'), value: 'Y' }
                         ]
@@ -148,29 +148,29 @@ export default async function Page(props: {
             },
             {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
-                    { name: 'balance_current', title: t('account.balance_current'), type: 'label', defaultValue: balanceText, placeholder: t('user.placeholder_department'), other: balanceLink },
+                    { name: 'balanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
                     { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
                 title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
-                    { name: 'balance_chart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
+                    { name: 'balanceChart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
                 ]
             },
             {
                 title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
                     { name: 'department', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
-                    { name: 'card_number', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
-                    { name: 'card_number2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
+                    { name: 'cardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
+                    { name: 'cardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
                 ]
             },
         ],
         charge: [
             {
                 title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
-                    { name: 'balance_current', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale) },
-                    { name: 'balance_new', title: t('account.balance_new'), type: 'currency', defaultValue: 0, locale: locale },
-                    { name: 'txn_comment', title: t('common.explanation'), type: 'input', defaultValue: "" },
+                    { name: 'balanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale) },
+                    { name: 'balanceNew', title: t('account.balance_new'), type: 'currency', defaultValue: user.balance, locale: locale },
+                    { name: 'txnComment', title: t('common.explanation'), type: 'input', defaultValue: "" },
                 ]
             },
         ],
@@ -227,7 +227,8 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {(job === 'edit' || job === 'charge') && <EditForm items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={changeBalance}/>}
             {job === 'transaction' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

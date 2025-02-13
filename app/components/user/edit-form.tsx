@@ -9,16 +9,19 @@ import { IButtonInfo, IEditItem, ISection, EditItem } from '../edit-items';
 
 
 export function EditForm({
+  id,
   items,
   buttons,
   action,
 }: {
+  id?: string;
   items: ISection[];
   buttons?: IButtonInfo;
   action: (prevState: State, formData: FormData) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(action, initialState);
+  const updatedAction = !!id ? action.bind(null, id) : action;
+  const [state, formAction] = useActionState(updatedAction, initialState);
 
   return (
     <form action={formAction}>
@@ -45,8 +48,8 @@ export function EditForm({
                       locale={item.locale}
                       chartData={item.chartData}
                       other={item.other}
-                      error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) 
-                        ? state?.error[item.name]
+                      error={ (!!state?.errors && !!state?.errors[item.name]) 
+                        ? state?.errors[item.name]
                         : null
                       }
                     />
