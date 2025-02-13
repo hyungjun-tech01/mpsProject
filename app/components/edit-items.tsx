@@ -196,7 +196,8 @@ export function EditItem({
           />
         );
       } else {
-        return <div className="text-gray-600">No data</div>
-      }
+        return (
+          <div className="text-gray-600">No data</div>
+      )}
   }
 }

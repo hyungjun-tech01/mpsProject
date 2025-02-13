@@ -42,6 +42,8 @@ export function EditForm({
                       defaultValue={item.defaultValue}
                       placeholder={item.placeholder}
                       options={item.options}
+                      locale={item.locale}
+                      chartData={item.chartData}
                       error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) 
                         ? state?.error[item.name]
                         : null

@@ -33,9 +33,8 @@ export default function LineChart({
   maxY: number;
 }) {
   const addY = maxY >= 10000 ? 1000 : (
-    maxY >= 1000 ? 100 : (
-      maxY >= 100 ? 10 : 1
-  ));
+    maxY >= 1000 ? 100 : 10
+  );
   const data = {
     labels: xlabels,
     datasets: [
