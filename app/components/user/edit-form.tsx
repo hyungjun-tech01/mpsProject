@@ -44,6 +44,7 @@ export function EditForm({
                       options={item.options}
                       locale={item.locale}
                       chartData={item.chartData}
+                      other={item.other}
                       error={ (!!state?.errors && state.errors.length > 0 && !!state?.errors[item.name]) 
                         ? state?.error[item.name]
                         : null

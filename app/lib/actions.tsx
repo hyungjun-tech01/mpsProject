@@ -307,28 +307,30 @@ export async function modifyUser(prevState: State, formData: FormData) {
     }
 
     // Prepare data for insertion into the database
-    const { companyName, companyNameEn, ceoName } = validatedFields.data;
-
-    try {
-        fetch()
-    } catch (error) {
-        return {
-            message: 'Database Error: Failed to Create Invoice.',
-        };
-    }
 
     revalidatePath('/user');
     redirect('/user');
 }
 
 export async function deleteUser(id: string) {
-    try {
-        await client.query(`DELETE FROM tbl_user WHERE user_id = '${id}'`);
-    } catch (error) {
-        return {
-            message: 'Database Error: Failed to Delete selected user.',
-        };
-    }
+    // try {
+    //     await client.query(`DELETE FROM tbl_user WHERE user_id = '${id}'`);
+    // } catch (error) {
+    //     return {
+    //         message: 'Database Error: Failed to Delete selected user.',
+    //     };
+    // }
 
     revalidatePath('/user');
 }
+
+const BalanceFormSchema = z.object({
+    userName: z.string({
+        invalid_type_error: 'User ID must be string ',
+    }).min(1, { message: "Name is required" }),
+    userDisabledPrinting: z.enum(['N', 'Y'], {
+        invalid_type_error: "Please select an 'Disabled Printing' status."
+    }),
+    userBalanceCurrent: z.coerce.number()
+        .min(0, { message: 'Please enter a balance not less than 0.' }),
+});

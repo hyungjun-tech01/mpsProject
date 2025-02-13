@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from 'react';
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import CurrencyWonIcon from "@/app/components/icons/CurrencyWonIcon"
 import LineChart from "@/app/components/lineChart";
@@ -15,6 +16,7 @@ export interface IEditItem {
   locale?: string;
   error?: string[];
   chartData?: { xlabels: string[], ydata: number[], maxY: number };
+  other?: React.JSX.Element;
 };
 
 export interface ISection {
@@ -38,6 +40,7 @@ export function EditItem({
   locale,
   error,
   chartData,
+  other
 }: IEditItem) {
   switch (type) {
     case "label":
@@ -46,10 +49,11 @@ export function EditItem({
           <label htmlFor={name} className="mb-2 block text-sm font-semibold">
             {title}
           </label>
-          <div className="relative">
+          <div className="relative flex">
             <label htmlFor={name} className="mb-2 block text-sm font-medium">
               {defaultValue}
             </label>
+            {!!other && (other)}
           </div>
         </div>
       );

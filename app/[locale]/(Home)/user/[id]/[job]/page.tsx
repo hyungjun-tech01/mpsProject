@@ -54,13 +54,15 @@ export default async function Page(props: {
         fetchPrinterUsageLogPagesByUserId(id, itemsPerPage)
     ]);
 
-    const subTitles = [
-        { category: 'edit', title: t('user.subTitle_detail'), link: `/user/${id}/edit` },
-        { category: 'charge', title: t('user.subTitle_budget'), link: `/user/${id}/charge` },
-        { category: 'transaction', title: t('user.subTitle_ProcessedLog'), link: `/user/${id}/transaction` },
-        { category: 'jobLog', title: t('user.subTitle_jobLog'), link: `/user/${id}/jobLog` }
-    ];
+    // Manipluate Process --------------------------------------------------------
+    const balanceText = formatCurrency(user.balance, locale);
+    const balanceLink = <Link
+            href={`/user/${id}/charge`}
+            className='ml-4 text-sm text-lime-700'
+        >{t('user.change_balance')}
+        </Link>
 
+    // Chart Process --------------------------------------------------------------
     let maxVal = 0;
     const dataFromDB = transactionInfo.map(
         (item: { transaction_date: Date, amount: number, balance: number }) => {
@@ -120,6 +122,14 @@ export default async function Page(props: {
         maxY: maxVal,
     };
 
+    // Items -------------------------------------------------------------------
+    const subTitles = [
+        { category: 'edit', title: t('user.subTitle_detail'), link: `/user/${id}/edit` },
+        { category: 'charge', title: t('user.subTitle_budget'), link: `/user/${id}/charge` },
+        { category: 'transaction', title: t('user.subTitle_ProcessedLog'), link: `/user/${id}/transaction` },
+        { category: 'jobLog', title: t('user.subTitle_jobLog'), link: `/user/${id}/jobLog` }
+    ];
+
     const items: { edit: ISection[], charge: ISection[] } = {
         edit: [
             {
@@ -138,7 +148,7 @@ export default async function Page(props: {
             },
             {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
-                    { name: 'balance_current', title: t('account.balance_current'), type: 'currency', defaultValue: user.balance, placeholder: t('user.placeholder_department') },
+                    { name: 'balance_current', title: t('account.balance_current'), type: 'label', defaultValue: balanceText, placeholder: t('user.placeholder_department'), other: balanceLink },
                     { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },

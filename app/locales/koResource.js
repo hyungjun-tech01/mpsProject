@@ -390,6 +390,7 @@ const koResource = {
         user :{
             card_number: '카드번호(1)',
             card_number2: '카드번호(2)',
+            change_balance: '(잔액변경)',
             create_user: '사용자 추가',
             department:'부서',
             disable_printing: '사용 불가',

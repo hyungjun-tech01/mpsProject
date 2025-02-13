@@ -391,6 +391,7 @@ const enResource = {
         user :{
             card_number: 'Primary Card No.',
             card_number2: 'Secondary Card No.',
+            change_balance: '(Change Balance)',
             create_user: 'Create User',
             department: 'Department',
             disable_printing: 'Disable Printing',
