@@ -467,7 +467,7 @@ const koResource = {
             location:'위치',
             option:'옵션',
             physical_printer_ip: '장치 호스트이름/IP',
-            device_administrator_name:'장치관리자 이름',
+            device_administrator_name:'장치 관리자 이름',
             title_device_administrator_password:'장치관리자 패스워드',
             ext_device_function_printer:'Track & Control Copying',
             ext_device_function_scan:'Track & Control Scanning',

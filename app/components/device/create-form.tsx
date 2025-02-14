@@ -3,8 +3,9 @@
 import { useActionState, useState } from 'react';
 import { createDevice, State } from './actions';
 import Link from 'next/link';
+import clsx from 'clsx';
 import Button from '@mui/material/Button';
-import { IButtonInfo, ISection } from '../edit-items';
+import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
 
 
 export default function Form(
@@ -42,11 +43,13 @@ export default function Form(
     return (
         <div>
             <form action={formAction}>
-
-            <div className="flex justify-between mb-6">
-                <div className="w-1/3">
-                    <div>{items[0].title}</div>
-                    <div>{items[0].description}</div>
+            <div className="rounded-md bg-gray-50 p-4 md:p-6">
+            <div key={1} className={clsx('w-full p-2 flex flex-col md:flex-row',
+              { 'border-b': 1 !== items.length - 1 }
+            )}>
+                <div  className='w-full md:w-1/3 pb-4 md:pr-6'>
+                    <div className='mb-5 text-xl font-semibold'>{items[0].title}</div>
+                    <div className='text-sm'>{items[0].description}</div>
                 </div>
                 <div className="w-2/3 pl-6">
                     <div className="mb-4">
@@ -73,63 +76,28 @@ export default function Form(
                             <p className="text-red-500 text-sm">{state.errors.device_type[0]}</p>
                         )}
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="title_device_name" className="mb-2 block text-sm font-medium">
-                            Device Name
-                        </label>
-                        <input
-                            id="device_name"
-                            name="device_name"
-                            type="text"
-                            placeholder="Device Name"
-                            className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                        />
-                        {state.errors?.device_name && (
-                            <p className="text-red-500 text-sm">{state.errors.device_name[0]}</p>
+
+                    <div className='w-full md:w-2/3'>
+                        { items[0].items.map((item: IEditItem) =>
+                            <EditItem
+                            key={item.name}
+                            name={item.name}
+                            title={item.title}
+                            type={item.type}
+                            defaultValue={item.defaultValue}
+                            placeholder={item.placeholder}
+                            options={item.options}
+                            locale={item.locale}
+                            chartData={item.chartData}
+                            other={item.other}
+                            error={ (!!state?.errors && !!state?.errors[item.name]) 
+                                ? state?.errors[item.name]
+                                : null
+                            }
+                            />
                         )}
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="title_location" className="mb-2 block text-sm font-medium">
-                            Location(Option)
-                        </label>
-                        <input
-                            id="location"
-                            name="location"
-                            type="text"
-                            placeholder="Location"
-                            className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="title_physical_printer_ip" className="mb-2 block text-sm font-medium">
-                            장치 호스트이름 / IP
-                        </label>
-                        <input
-                            id="physical_printer_ip"
-                            name="physical_printer_ip"
-                            type="text"
-                            placeholder="IP Address"
-                            className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                        />
-                        {state.errors?.physical_printer_ip && (
-                            <p className="text-red-500 text-sm">{state.errors.physical_printer_ip[0]}</p>
-                        )}
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="title_device_administrator_name" className="mb-2 block text-sm font-medium">
-                            Device's Administrator Name
-                        </label>
-                        <input
-                            id="device_administrator_name"
-                            name="device_administrator_name"
-                            type="text"
-                            defaultValue=""
-                            className="h-8 w-1/2 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                        />
-                        {state.errors?.device_administrator_name && (
-                            <p className="text-red-500 text-sm">{state.errors.device_administrator_name[0]}</p>
-                        )}
-                    </div>
+
                     <div className="mb-4">
                         <label htmlFor="title_device_administrator_password" className="mb-2 block text-sm font-medium">
                             Device's Administrator Password
@@ -263,7 +231,7 @@ export default function Form(
                     </div>
                 </div>
             </div>
-            
+            </div>
             </form>
         </div>
     );

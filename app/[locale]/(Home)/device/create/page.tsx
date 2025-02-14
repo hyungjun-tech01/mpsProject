@@ -22,9 +22,12 @@ export default async function CreateDevice(
             title: t('device.create_device'), 
             description: t('device.create_description'), 
             items: [             
-                { name: 'device_type', title: t('device.device_type'), type: 'input', defaultValue: "", placeholder: (t('device.device_type')) },
+                // { name: 'device_type', title: t('device.device_type'), type: 'input', defaultValue: "", placeholder: (t('device.device_type')) },
                 { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: "", placeholder: t('device.device_name') },
-                { name: 'location', title: t('device.location'), type: 'input', defaultValue: "", placeholder: t('device.location') }
+                { name: 'location', title: t('device.location'), type: 'input', defaultValue: "", placeholder: t('device.location') },
+                { name: 'physical_printer_ip', title: t('device.physical_printer_ip'), type: 'input', defaultValue: "", placeholder: t('device.physical_printer_ip') },
+                { name: 'device_administrator_name', title: t('device.device_administrator_name'), type: 'input', defaultValue: "", placeholder: t('device.device_administrator_name') },
+                
             ]
         }
     ];
