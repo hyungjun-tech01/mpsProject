@@ -135,11 +135,11 @@ export default async function Page(props: {
             {
                 title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
                     { name: 'userName', title: 'ID', type: 'label', defaultValue: user.user_name },
-                    { name: 'fullName', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
-                    { name: 'email', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
-                    { name: 'homeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
+                    { name: 'userFullName', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
+                    { name: 'userEmail', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
+                    { name: 'userHomeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
                     {
-                        name: 'disabledPrinting', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
+                        name: 'userDisabledPrinting', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
                             { title: t('user.enable_printing'), value: 'N' },
                             { title: t('user.disable_printing'), value: 'Y' }
                         ]
@@ -148,20 +148,20 @@ export default async function Page(props: {
             },
             {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
-                    { name: 'balanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
-                    { name: 'restricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
+                    { name: 'userBalanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
+                    { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
                 title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
-                    { name: 'balanceChart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
+                    { name: 'userBalanceChart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
                 ]
             },
             {
                 title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
-                    { name: 'department', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
-                    { name: 'cardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
-                    { name: 'cardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
+                    { name: 'userDepartment', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
+                    { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
+                    { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
                 ]
             },
         ],

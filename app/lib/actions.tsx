@@ -230,7 +230,7 @@ export async function createUser(prevState: State, formData: FormData) {
                 modified_ticks
             )
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NOW(),$11,NOW(),$12,$13,$14,$15,$16,$17,$18,$19,$20)`
-                , accountInputData);
+            , accountInputData);
 
         await client.query(`
             INSERT INTO tbl_user_account (
@@ -290,11 +290,11 @@ export async function createUser(prevState: State, formData: FormData) {
     redirect('/user');
 }
 
-const ModifyUser = UserFormSchema.omit({ userName: true });
+const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
 export async function modifyUser(id: string, prevState: State, formData: FormData) {
     const validatedFields = ModifyUser.safeParse({
-        userEmail: formData.get('email'),
+        userDisabledPrinting: formData.get('userDisabledPrinting'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -303,12 +303,115 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create User.',
         };
-    }
+    };
+    
+    const newFullName = formData.get('userFullName');
+    const newEmail = formData.get('userEmail');
+    const newHomeDir = formData.get('userHomeDirectory');
+    const newDisabledPrinting = formData.get('userDisabledPrinting');
+    const newRestricted = formData.get('userRestricted');
+    const newDept = formData.get('userDepartment');
+    const newCardNo1 = formData.get('userCardNumber');
+    const newCardNo2 = formData.get('userCardNumber2');
 
-    // Prepare data for insertion into the database
+    // Prepare data for updating the database
+    try {
+        // First, get current data
+        const resp = await client.query(`
+            SELECT
+                u.full_name,
+                u.email,
+                u.home_directory,
+                u.disabled_printing,
+                u.department,
+                u.card_number,
+                u.card_number2,
+                a.account_id,
+                a.restricted
+            FROM tbl_user u
+            JOIN tbl_user_account ua ON u.user_id = ua.user_id
+            JOIN tbl_account a ON a.account_id = ua.account_id
+            WHERE u.user_id='${id}'
+        `);
+        
+        const currFullName = resp.rows[0].full_name;
+        const currEmail = resp.rows[0].email;
+        const currHomeDir = resp.rows[0].home_directory;
+        const currDisabledPrinting = resp.rows[0].disabled_printing;
+        const currDept = resp.rows[0].department;
+        const currCardNo1 = resp.rows[0].card_number;
+        const currCardNo2 = resp.rows[0].card_number2;
 
-    revalidatePath('/user');
-    redirect('/user');
+        const userAccountID = resp.rows[0].account_id;
+        const currRestricted = resp.rows[0].restricted;
+
+        let checkNeedUpdate = false;
+        checkNeedUpdate ||= newFullName !== currFullName;
+        checkNeedUpdate ||= newEmail !== currEmail;
+        checkNeedUpdate ||= newHomeDir !== currHomeDir;
+        checkNeedUpdate ||= newDisabledPrinting !== currDisabledPrinting;
+        checkNeedUpdate ||= newDept !== currDept;
+        checkNeedUpdate ||= newCardNo1 !== currCardNo1;
+        checkNeedUpdate ||= newCardNo2 !== currCardNo2;
+
+        const checkRestricted = newRestricted !== currRestricted;
+
+        if (!checkNeedUpdate && !checkRestricted) {
+            return {
+                message: 'Info: No changed data',
+            };
+        };
+
+        if(checkNeedUpdate) {
+            try {
+                await client.query(`
+                    UPDATE tbl_user
+                    SET
+                        full_name='${newFullName}',
+                        email='${newEmail}',
+                        home_directory='${newHomeDir}',
+                        disabled_printing='${newDisabledPrinting}',
+                        department='${newDept}',
+                        card_number='${newCardNo1}',
+                        card_number2='${newCardNo2}',
+                        modified_date=NOW(),
+                        modified_by='admin'
+                    WHERE user_id='${id}'
+                `)
+            } catch (error) {
+                console.log('Update User / Error : ', error);
+                return {
+                    message: 'Database Error: Failed to update user data.',
+                };
+            };
+        };
+
+        if(checkRestricted) {
+            try {
+                await client.query(`
+                    UPDATE tbl_account
+                    SET
+                        restricted='${newRestricted}',
+                        modified_date=NOW(),
+                        modified_by='admin'
+                    WHERE account_id ='${userAccountID}'
+                    )
+                `)
+            } catch (error) {
+                console.log('Update User / Error : ', error);
+                return {
+                    message: 'Database Error: Failed to update account.',
+                };
+            };
+        }
+    } catch (error) {
+        console.log('Update User / Error : ', error);
+        return {
+            message: 'Database Error: Failed to get user data.',
+        };
+    };
+    
+    revalidatePath(`/user/${id}/edit`);
 }
 
 export async function deleteUser(id: string) {
@@ -404,7 +507,7 @@ export async function changeBalance(id: string, prevState: State, formData: Form
         const resp = await client.query(`
             SELECT * FROM tbl_account WHERE account_id='${foundAccountID}'
         `);
-        if(resp.rows.length === 0) return {
+        if (resp.rows.length === 0) return {
             message: 'Database Error: Failed to find account',
         };
         balanceCurrent = Number(resp.rows[0].balance);
@@ -415,7 +518,7 @@ export async function changeBalance(id: string, prevState: State, formData: Form
         };
     };
 
-    if(isNaN(balanceCurrent) || (balanceCurrent === balanceNew)){
+    if (isNaN(balanceCurrent) || (balanceCurrent === balanceNew)) {
         return {
             message: 'Info: New Balance is the same with the current.',
         };
