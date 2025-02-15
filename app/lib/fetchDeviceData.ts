@@ -130,6 +130,8 @@ export async function fetchCreateDevice(newDevice: any) {
 export async function fetchPrinterGroup() {
     try {
         const response = await client.query(`
+           select null printer_group_id, null group_name, null display_name
+           union all
            select printer_group_id, group_name, display_name
              from tbl_printer_group;
         `);
