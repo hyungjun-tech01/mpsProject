@@ -9,7 +9,7 @@ import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
 
 
 export default function Form(
-    {items}:{items: ISection[];}
+    {items,  buttons}:{items: ISection[]; buttons?: IButtonInfo;}
 ){
     const initialState: State = { message: null, errors: null };
     const [printerChecked, setPrinterChecked] = useState(false);
@@ -98,20 +98,26 @@ export default function Form(
                         )}
                         </div>                                     
                     </div>  
-                    <div className="mt-4 flex justify-start gap-4">
-                    <Link
-                        href="/device"
-                        className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
-                        >
-                    Cancel
-                    </Link>
-                    <button
-                        type="submit"
-                        className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-sm font-medium text-white transition-colors hover:bg-lime-500"
-                        >
-                    Create Device
-                    </button>
-                    </div>
+                    { !!buttons &&
+                        <div className="mt-6 flex justify-end gap-4">
+                        { !!buttons.cancel &&
+                            <Link
+                            href={buttons.cancel.link}
+                            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                            >
+                            {buttons.cancel.title}
+                            </Link>
+                        }
+                        { !!buttons.go &&
+                            <Button
+                            type="submit"
+                            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                            >
+                            {buttons.go.title}
+                            </Button>
+                        }
+                        </div>
+                    }
                 </div>
             </div>
             </div>

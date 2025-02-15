@@ -54,6 +54,11 @@ export default async function CreateDevice(
 
     ];
 
+    const buttonItems: IButtonInfo = {
+        cancel : { title: t('common.cancel'), link: '/device' },
+        go : { title: t('device.create_device') },
+    };
+
     return (
         <main>
             <Breadcrumbs
@@ -66,7 +71,7 @@ export default async function CreateDevice(
                     },
                 ]}
             />
-            <Form items={formItems}/>
+            <Form items={formItems}  buttons={buttonItems}/>
         </main>
     );
 }

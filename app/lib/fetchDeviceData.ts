@@ -1,7 +1,9 @@
+"use server";
+
 import pg from 'pg';
 import { BASE_PATH } from '@/constans';
 import { Device } from '@/app/lib/definitions';
-
+import { revalidatePath } from 'next/cache';
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -24,7 +26,47 @@ export async function fetchFilteredDevices(
     try {
         const device = query !== '' 
             ? await client.query(`
-                SELECT * FROM tbl_printer_info
+                SELECT printer_id id, 
+                printer_id
+                ,server_name
+                ,printer_name
+                ,display_name
+                ,location
+                ,notes
+                ,charge_type
+                ,default_cost
+                ,deleted
+                ,deleted_date
+                ,disabled
+                ,disabled_until
+                ,total_jobs
+                ,total_pages
+                ,total_sheets
+                ,reset_by
+                ,reset_date
+                ,created_date
+                ,created_by
+                ,modified_date
+                ,modified_by
+                ,color_detection_mode
+                ,device_type
+                ,ext_device_function
+                ,physical_printer_id
+                ,printer_type
+                ,serial_number
+                ,web_print_enabled
+                ,custom1
+                ,custom2
+                ,custom3
+                ,custom4
+                ,custom5
+                ,custom6
+                ,last_usage_date
+                ,gcp_printer_id
+                ,gcp_enabled
+                ,modified_ticks
+                ,server_uuid
+                ,parent_id FROM tbl_printer_info
                 WHERE
                 1=1 AND
                     (
@@ -38,7 +80,47 @@ export async function fetchFilteredDevices(
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * FROM tbl_printer_info
+                SELECT printer_id id, 
+                printer_id
+                ,server_name
+                ,printer_name
+                ,display_name
+                ,location
+                ,notes
+                ,charge_type
+                ,default_cost
+                ,deleted
+                ,deleted_date
+                ,disabled
+                ,disabled_until
+                ,total_jobs
+                ,total_pages
+                ,total_sheets
+                ,reset_by
+                ,reset_date
+                ,created_date
+                ,created_by
+                ,modified_date
+                ,modified_by
+                ,color_detection_mode
+                ,device_type
+                ,ext_device_function
+                ,physical_printer_id
+                ,printer_type
+                ,serial_number
+                ,web_print_enabled
+                ,custom1
+                ,custom2
+                ,custom3
+                ,custom4
+                ,custom5
+                ,custom6
+                ,last_usage_date
+                ,gcp_printer_id
+                ,gcp_enabled
+                ,modified_ticks
+                ,server_uuid
+                ,parent_id FROM tbl_printer_info
                 WHERE
                 1=1
                 ORDER BY tbl_printer_info.modified_date DESC
@@ -141,3 +223,26 @@ export async function fetchPrinterGroup() {
         throw new Error("Failed to fetch printer group");
     }
 };
+
+export async function deleteDevice(id: string) {
+    try {
+        console.log(id);
+        const result = await client.query(`
+            update tbl_printer_info
+            set deleted ='Y'
+            where printer_id=$1
+        `,[id]);
+       
+        // 성공 처리
+        revalidatePath('/device');
+        return { result: true, data: result.rows[0] };
+
+    } catch (error) {
+        revalidatePath('/device');
+        console.log('Delete device / Error : ', error);
+        return {
+            result: false,
+            data: "Database Error: Failed to Delete device",
+        };
+    };
+}
