@@ -477,6 +477,9 @@ const koResource = {
             ext_device_function_fax:'Track & Control Fax',
             enable_print_release:'Enable Print',
             printer_device_group:'Printer/Device Group',
+            edit_device:'장비 편집',
+            edit_description:'복사기 터미널 같은 주변 장치의 편집을 허용합니다. 하드웨어가 있어야 합니다.',
+            udpate_device:'장비 변경하기'
         },
         logs: {
             action: '수행 작업',

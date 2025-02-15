@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation'
 import { IBM_Plex_Mono } from 'next/font/google';
 
-import { fetchCreateDevice } from '@/app/lib/fetchDeviceData';
+import { fetchCreateDevice , fetchModifyDevice, fetchDeleteDevice} from '@/app/lib/fetchDeviceData';
 
 export type State = {
     errors?: Record<string, string[]> | null;
@@ -99,6 +99,76 @@ export async function createDevice(prevState: State, formData: FormData) {
         return {
             errors: output.data,
             message: 'Failed to Create Device',
+        }
+    }
+
+    revalidatePath('/device');
+    redirect('/device');
+}
+export async function deleteDevice(id : string) {
+    const output = await fetchDeleteDevice(id);
+
+    if(!output.result) {
+        return {
+            errors: output.data,
+            message: 'Failed to Delete Device',
+        }
+    }
+
+    revalidatePath('/device');
+    redirect('/device');
+}
+export async function modifyDevice(prevState: State, formData: FormData) {
+    // 체크박스 값이 없으면 "N"으로 설정
+    if (!formData.has('ext_device_function_printer')) {
+        formData.set('ext_device_function_printer', 'N');
+    }
+    if (!formData.has('ext_device_function_scan')) {
+        formData.set('ext_device_function_scan', 'N');
+    }
+    if (!formData.has('ext_device_function_fax')) {
+        formData.set('ext_device_function_fax', 'N');
+    }
+    if (!formData.has('enable_print_release')) {
+        formData.set('enable_print_release', 'N');
+    }
+
+    console.log('create device  ~~~~~', formData.get('device_name'));
+
+
+    const validatedFields = CreateDevice.safeParse({
+        printer_id : formData.get('device_type'),
+        device_type: formData.get('device_type'),
+        device_name: formData.get('device_name'),
+        location: formData.get('location'),
+        physical_printer_ip: formData.get('physical_printer_ip'),
+        device_administrator_name: formData.get('device_administrator_name'),
+        device_administrator_password: formData.get('device_administrator_password'),
+        ext_device_function_printer: formData.get('ext_device_function_printer'),
+        ext_device_function_scan: formData.get('ext_device_function_scan'),
+        ext_device_function_fax: formData.get('ext_device_function_fax'),
+        enable_print_release: formData.get('enable_print_release'),
+        printer_device_group: formData.get('printer_device_group')
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        console.log('Error', validatedFields.error.flatten().fieldErrors);
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Device.',
+        };
+    }
+
+    // Prepare data for insertion into the database
+    const newDevice = validatedFields.data;
+
+    const output = await fetchModifyDevice(newDevice);
+
+    if(!output.result) {
+        return {
+            errors: output.data,
+            message: 'Failed to Delete Device',
         }
     }
 

@@ -169,6 +169,73 @@ export async function fetchDevicesPages(
     }
 }
 
+export async function fetchDeviceById(id:string){
+    try {
+        const device = await client.query(`
+            SELECT
+            printer_id id, 
+            printer_id
+            ,server_name
+            ,printer_name
+            ,display_name
+            ,location
+            ,notes
+            ,charge_type
+            ,default_cost
+            ,deleted
+            ,deleted_date
+            ,disabled
+            ,disabled_until
+            ,total_jobs
+            ,total_pages
+            ,total_sheets
+            ,reset_by
+            ,reset_date
+            ,created_date
+            ,created_by
+            ,modified_date
+            ,modified_by
+            ,color_detection_mode
+            ,device_type
+            ,CASE 
+            WHEN ext_device_function LIKE '%COPIER%' THEN 'Y' 
+            ELSE 'N' 
+            END AS ext_device_function_printer
+            ,CASE 
+            WHEN ext_device_function LIKE '%SCAN%' THEN 'Y' 
+            ELSE 'N' 
+            END AS ext_device_function_scan
+            ,CASE 
+            WHEN ext_device_function LIKE '%FAX%' THEN 'Y' 
+            ELSE 'N' 
+            END AS ext_device_function_fax
+            ,physical_printer_id
+            ,printer_type
+            ,serial_number
+            ,web_print_enabled
+            ,custom1
+            ,custom2
+            ,custom3
+            ,custom4
+            ,custom5
+            ,custom6
+            ,last_usage_date
+            ,gcp_printer_id
+            ,gcp_enabled
+            ,modified_ticks
+            ,server_uuid
+            ,parent_id
+            FROM tbl_printer_info t
+            WHERE t.printer_id = '${id}'
+        `);
+
+        return device.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to get device by id.");
+    }
+}
+
 export async function fetchCreateDevice(newDevice: any) {
     try {
 
@@ -224,7 +291,7 @@ export async function fetchPrinterGroup() {
     }
 };
 
-export async function deleteDevice(id: string) {
+export async function fetchDeleteDevice(id: string) {
     try {
         console.log(id);
         const result = await client.query(`
@@ -234,15 +301,32 @@ export async function deleteDevice(id: string) {
         `,[id]);
        
         // 성공 처리
-        revalidatePath('/device');
         return { result: true, data: result.rows[0] };
 
     } catch (error) {
-        revalidatePath('/device');
         console.log('Delete device / Error : ', error);
         return {
             result: false,
             data: "Database Error: Failed to Delete device",
+        };
+    };
+}
+export async function fetchModifyDevice(newDevice: any) {
+    try {
+        console.log(newDevice);
+        const result = await client.query(`
+            update tbl_printer_info
+            set deleted ='Y'
+            where printer_id=$1
+        `,[newDevice.printer_id]);
+        // 성공 처리
+        return { result: true, data: result.rows[0] };
+
+    }catch (error) {
+        console.log('Delete device / Error : ', error);
+        return {
+            result: false,
+            data: "Database Error: Failed to Modify device",
         };
     };
 }

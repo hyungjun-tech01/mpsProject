@@ -8,7 +8,7 @@ import { UserTableSkeleton } from '@/app/components/user/skeletons';
 import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
-import { deleteDevice } from '@/app/lib/fetchDeviceData';
+import { deleteDevice } from '@/app/components/device/actions';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 import Link from 'next/link';
@@ -68,6 +68,8 @@ export default async function Device(
                     rows={devices}
                     currentPage={currentPage}
                     totalPages={totalPages}
+                    locale={locale}
+                    category='device'
                     deleteAction={deleteDevice}
                 />
             </div>

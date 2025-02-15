@@ -3,6 +3,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/device/create-form';
 import { fetchPrinterGroup } from '@/app/lib/fetchDeviceData';
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
+import {createDevice} from '@/app/components/device/actions';
 
 export default async function CreateDevice(
     props: { 
@@ -71,7 +72,7 @@ export default async function CreateDevice(
                     },
                 ]}
             />
-            <Form items={formItems}  buttons={buttonItems}/>
+            <Form items={formItems}  buttons={buttonItems} action={createDevice}/>
         </main>
     );
 }
