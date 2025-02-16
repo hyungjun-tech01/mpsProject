@@ -4,8 +4,8 @@ import pg from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-// import { signIn } from '@/auth';
-// import { AuthError } from 'next-auth';
+import { signIn } from '@/app/components/auth/auth';
+import { AuthError } from 'next-auth';
 
 
 const client = new pg.Client({
@@ -288,7 +288,7 @@ export async function createUser(prevState: State, formData: FormData) {
 
     revalidatePath('/user');
     redirect('/user');
-}
+};
 
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
@@ -412,7 +412,7 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     };
     
     revalidatePath(`/user/${id}/edit`);
-}
+};
 
 export async function deleteUser(id: string) {
     // First, get account id through tbl_user_account
@@ -457,13 +457,13 @@ export async function deleteUser(id: string) {
     };
 
     revalidatePath('/user');
-}
+};
 
 const ChangeBalance = z.object({
     balanceNew: z.coerce.number({
         invalid_type_error: 'Value must be number',
     }).min(0, { message: 'Please enter a balance not less than 0.' }),
-})
+});
 
 export async function changeBalance(id: string, prevState: State, formData: FormData) {
     const validatedFields = ChangeBalance.safeParse({
@@ -580,4 +580,4 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     };
 
     revalidatePath(`/user/${id}/charge`);
-}
+};

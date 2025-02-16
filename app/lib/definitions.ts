@@ -91,9 +91,16 @@ export type UserField = {
   secondary_user_source_type: string | null;
   secondary_external_user_name: string | null;
 }
+// ----- End : User ------------------------------------------//
 
 
-// ----- Begin : User ----------------------------------------//
+// ----- Begin : User Attribute ------------------------------//
+export type UserAttr = {
+  user_id: string;
+  attrib_name: string;
+  attrib_value: string;
+  propagate: string;
+};
 
 
 export type Device = {
