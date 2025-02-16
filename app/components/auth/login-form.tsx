@@ -1,15 +1,19 @@
 'use client';
 
 import {
+  ArrowForwardOutlined,
   KeyOutlined,
-  ErrorOutlineOutlined,
+  ErrorOutlineOutlined
 } from '@mui/icons-material';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@mui/material';
 import { useActionState } from 'react';
 import { authenticate } from '@/app/components/auth/actions';
+import { useSearchParams } from 'next/navigation';
+
 
 export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
@@ -61,8 +65,9 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
+        <input type="hidden" name="redirectTo" value={callbackUrl} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          Log in <ArrowForwardOutlined className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1">
           {errorMessage && (

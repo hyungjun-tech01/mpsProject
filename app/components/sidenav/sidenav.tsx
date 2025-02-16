@@ -4,7 +4,7 @@ import {
     PowerSettingsNew
 } from '@mui/icons-material';
 import NavLinks from './nav-links';
-// import { signOut } from '@/auth';
+import { logout } from '@/app/components/auth/actions';
 
 
 export default function SideNav({ extended }: { extended : boolean}) {
@@ -14,11 +14,7 @@ export default function SideNav({ extended }: { extended : boolean}) {
                 <NavLinks extended={extended} />
                 <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
                 <form
-                    action={ () => {
-                        // 'use server';
-                        // await signOut();
-                        console.log('sing out');
-                    }}
+                    action={logout}
                 >
                     <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 text-gray-500 p-3 text-base font-medium hover:bg-lime-100 hover:text-lime-700 md:flex-none md:justify-start md:p-2 md:px-3">
                         <PowerSettingsNew className="w-6" />

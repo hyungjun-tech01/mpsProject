@@ -1,4 +1,12 @@
+'use server';
+ 
+import { signIn, signOut } from '@/app/components/auth/auth';
 import { AuthError } from 'next-auth';
+
+
+export async function logout() {
+    await signOut({ redirectTo : '/login' });
+};
 
 export async function authenticate(
     prevState: string | undefined,

@@ -4,8 +4,6 @@ import pg from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/app/components/auth/auth';
-import { AuthError } from 'next-auth';
 
 
 const client = new pg.Client({
