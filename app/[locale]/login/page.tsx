@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import clsx from 'clsx';
 import LoginForm from '@/app/components/auth/login-form';
  
 export default function LoginPage() {

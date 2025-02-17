@@ -97,9 +97,9 @@ export type UserField = {
 // ----- Begin : User Attribute ------------------------------//
 export type UserAttr = {
   user_id: string;
-  attrib_name: string;
+  user_name: string;
+  email: string;
   attrib_value: string;
-  propagate: string;
 };
 
 

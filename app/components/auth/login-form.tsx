@@ -29,16 +29,16 @@ export default function LoginForm() {
           <div>
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="id"
+              htmlFor="name"
             >
               ID
             </label>
             <div className="relative">
               <input
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                id="id"
-                type="id"
-                name="id"
+                id="name"
+                type="name"
+                name="name"
                 placeholder="Enter your ID"
                 required
               />
@@ -66,7 +66,7 @@ export default function LoginForm() {
           </div>
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
-        <Button className="mt-4 w-full" aria-disabled={isPending}>
+        <Button type="submit" className="mt-4 w-full" aria-disabled={isPending}>
           Log in <ArrowForwardOutlined className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1">

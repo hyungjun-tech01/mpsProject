@@ -1,6 +1,6 @@
 'use server';
  
-import { signIn, signOut } from '@/app/components/auth/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 
 

@@ -2,8 +2,11 @@ import { Suspense } from "react";
 import CardWrapper from "@/app/components/dashboard/cards";
 import { CardsSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
+import { auth } from "@/auth" // auth 추가
 
 export default async function Page() {
+  const session = await auth() // session 호출 추가
+  console.log(session); // console log 추가
   return (
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">Dashboard</h1>
