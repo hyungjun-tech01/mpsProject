@@ -119,6 +119,16 @@ export async function deleteDevice(id : string) {
     redirect('/device');
 }
 export async function modifyDevice(prevState: State, formData: FormData) {
+    console.log("formData:", formData);
+    console.log("Type:", typeof formData);
+    console.log("Is FormData:", formData instanceof FormData);
+
+    if (!(formData instanceof FormData)) {
+        console.error("Error: formData가 FormData 인스턴스가 아닙니다.");
+        return;
+    }
+
+
     // 체크박스 값이 없으면 "N"으로 설정
     if (!formData.has('ext_device_function_printer')) {
         formData.set('ext_device_function_printer', 'N');
