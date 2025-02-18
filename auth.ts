@@ -43,29 +43,28 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ name: z.string(), password: z.string().min(6) })
+          .object({ user_name: z.string(), user_password: z.string().min(6) })
           .safeParse(credentials);
 
         console.log("Check : credentials ", credentials);
         console.log("Check : parsedCredentials ", parsedCredentials);
 
         if (parsedCredentials.success) {
-          const { name, password } = parsedCredentials.data;
+          const { user_name, user_password } = parsedCredentials.data;
 
-          if(name != 'admin') {
-            const userAttr = await getUserAttr(name);
+          if(user_name != 'admin') {
+            const userAttr = await getUserAttr(user_name);
             if (!userAttr) return null;
 
             const userPassword = userAttr.attrib_value.split(":")[1];
-            const passwordsMatch = await bcrypt.compare(password, userPassword);
+            const passwordsMatch = await bcrypt.compare(user_password, userPassword);
   
             if (passwordsMatch) return userAttr;
           } else {
             return {
-              user_id: name,
-              user_name: name,
+              user_id: '0000',
+              user_name: user_name,
               email: "",
-              attrib_value: "",
             };
           }
         }

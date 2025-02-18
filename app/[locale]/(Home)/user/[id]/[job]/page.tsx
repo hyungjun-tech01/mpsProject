@@ -4,7 +4,6 @@ import clsx from 'clsx';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/user/edit-form';
-import { BalanceForm } from '@/app/components/user/balance-form';
 import Breadcrumbs from '@/app/components/user/breadcrumbs';
 import LogTable from '@/app/components/table';
 

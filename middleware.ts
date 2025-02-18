@@ -1,16 +1,19 @@
+import type { NextRequest } from 'next/server';
 import { i18nRouter } from 'next-i18n-router';
 import i18nConfig from './i18nConfig';
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 
 
-export default NextAuth(authConfig).auth;
+const { auth } = NextAuth(authConfig)
 
-export function middleware(request) {
+export default auth(async function middleware(request: NextRequest) {
+  console.log("Test :", request);
   return i18nRouter(request, i18nConfig);
-};
+})
+
 
 // only applies this middleware to files in the app directory
 export const config = {
-  matcher: ['/((?!api|static|_next/static|_next/image|.*\\..*|_next|.*\\.png$).*)'],
+  matcher: '/((?!api|static|.*\\..*|_next|_next/static|_next/image|.*\\.png$).*)',
 };

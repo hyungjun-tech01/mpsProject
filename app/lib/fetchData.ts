@@ -1,6 +1,6 @@
 import pg from "pg";
 import { BASE_PATH } from "@/constans";
-import { User } from "@/app/lib/definitions";
+import { UserField } from "@/app/lib/definitions";
 import { generateStrOf30Days } from "./utils";
 
 const client = new pg.Client({
@@ -75,7 +75,7 @@ export async function fetchFilteredUsers(
                 ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
-        const converted = users.rows.map((data: User) => ({
+        const converted = users.rows.map((data: UserField) => ({
             ...data,
             id: data.user_id,
         }));
