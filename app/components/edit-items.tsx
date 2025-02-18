@@ -9,7 +9,7 @@ import LineChart from "@/app/components/lineChart";
 export interface IEditItem {
   name: string;
   title: string;
-  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password";
+  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden";
   defaultValue: string | number;
   placeholder?: string;
   options?: { title: string; value: string | number }[] | null;
@@ -229,6 +229,23 @@ export function EditItem({
               </div>
             </div>
           </div>
-        );  
+        );
+      case "hidden":
+        return (
+          <div className="mb-4">
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id={name}
+                  name={name}
+                  type="hidden"
+                  defaultValue={defaultValue}
+                  placeholder={placeholder}
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                />
+              </div>
+            </div>
+          </div>
+        );    
   }
 }

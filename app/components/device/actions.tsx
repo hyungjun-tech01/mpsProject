@@ -13,6 +13,7 @@ export type State = {
 };
 
 const FormSchema = z.object({
+    printer_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     device_type : z.string({
         invalid_type_error: 'Please select device type',
     }),
@@ -65,9 +66,6 @@ export async function createDevice(prevState: State, formData: FormData) {
         formData.set('enable_print_release', 'N');
     }
 
-    console.log('create device  ~~~~~', formData.get('device_name'));
-
-
     const validatedFields = CreateDevice.safeParse({
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
@@ -119,9 +117,6 @@ export async function deleteDevice(id : string) {
     redirect('/device');
 }
 export async function modifyDevice(prevState: State, formData: FormData) {
-    console.log("formData:", formData);
-    console.log("Type:", typeof formData);
-    console.log("Is FormData:", formData instanceof FormData);
 
     if (!(formData instanceof FormData)) {
         console.error("Error: formData가 FormData 인스턴스가 아닙니다.");
@@ -143,11 +138,9 @@ export async function modifyDevice(prevState: State, formData: FormData) {
         formData.set('enable_print_release', 'N');
     }
 
-    console.log('create device  ~~~~~', formData.get('device_name'));
-
 
     const validatedFields = CreateDevice.safeParse({
-        printer_id : formData.get('device_type'),
+        printer_id : formData.get('printer_id'),
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
         location: formData.get('location'),

@@ -312,13 +312,24 @@ export async function fetchDeleteDevice(id: string) {
     };
 }
 export async function fetchModifyDevice(newDevice: any) {
+
+    let ext_device_function;
+        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
+        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
+        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
+
+        ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
+
+        console.log('aaa', newDevice.device_type, newDevice.device_name, newDevice.location, 
+        newDevice.physical_printer_ip, ext_device_function, newDevice.printer_id);
     try {
-        console.log(newDevice);
         const result = await client.query(`
             update tbl_printer_info
-            set deleted ='Y'
-            where printer_id=$1
-        `,[newDevice.printer_id]);
+            set device_type = $1, printer_name = $2, 
+                location = $3, physical_printer_id = $4, ext_device_function = $5
+            where printer_id = $6
+        `,[ newDevice.device_type, newDevice.device_name, newDevice.location, 
+            newDevice.physical_printer_ip, ext_device_function, newDevice.printer_id]);
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
@@ -326,7 +337,7 @@ export async function fetchModifyDevice(newDevice: any) {
         console.log('Delete device / Error : ', error);
         return {
             result: false,
-            data: "Database Error: Failed to Modify device",
+            data: "Database Error",
         };
     };
 }

@@ -23,7 +23,8 @@ export default function Form(
     const [faxChecked, setFaxChecked] = useState(false);
     const [enablePrintChecked, setEnablePrintChecked] = useState(false);
 
-    const updatedAction = !!id ? action.bind(null, id) : action;
+    // const updatedAction = !!id ? action.bind(null, id) : action;
+    const updatedAction =    action;
     const [state, formAction] = useActionState(updatedAction, initialState);
 
     //const [state, formAction] = useActionState(increment, 0);

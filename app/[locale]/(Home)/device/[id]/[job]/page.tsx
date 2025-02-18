@@ -32,7 +32,8 @@ export default async function Page(props: {
         {
             title: t('device.edit_device'), 
             description: t('device.edit_description'), 
-            items: [             
+            items: [
+                { name: 'printer_id', title: t('device.printer_id'), type: 'hidden', defaultValue: device.printer_id, placeholder: t('device.printer_id') },             
                 {
                     name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: device.device_type, options: [
                         { title: t('device.open_api'), value: 'OpenAPI' },
