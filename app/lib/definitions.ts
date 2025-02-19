@@ -13,9 +13,10 @@ export type IColumnData = {
 
 // ----- Begin : User ----------------------------------------//
 export type User = {
+  user_id: string;
   user_name: string;
-  user_password: string;
-  user_email: string | null;
+  email: string | null;
+  attrib_value: string;
 };
 
 export type UserField = {
@@ -58,15 +59,6 @@ export type UserField = {
   secondary_external_user_name: string | null;
 }
 // ----- End : User ------------------------------------------//
-
-
-// ----- Begin : User Attribute ------------------------------//
-export type UserAttr = {
-  user_id: string;
-  user_name: string;
-  email: string;
-  attrib_value: string;
-};
 
 
 export type Device = {

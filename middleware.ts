@@ -7,13 +7,13 @@ import { authConfig } from './auth.config';
 
 const { auth } = NextAuth(authConfig)
 
+
 export default auth(async function middleware(request: NextRequest) {
-  console.log("Test :", request);
   return i18nRouter(request, i18nConfig);
-})
+});
 
 
 // only applies this middleware to files in the app directory
 export const config = {
-  matcher: '/((?!api|static|.*\\..*|_next|_next/static|_next/image|.*\\.png$).*)',
+  matcher: '/((?!api|static|.*\\..*|_next).*)'
 };

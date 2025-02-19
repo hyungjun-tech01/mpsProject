@@ -4,7 +4,7 @@ import { z } from "zod";
 import pg from "pg";
 import bcrypt from "bcrypt";
 import { authConfig } from "./auth.config";
-import type { UserAttr } from "@/app/lib/definitions";
+import type { User } from "@/app/lib/definitions";
 
 
 const client = new pg.Client({
@@ -18,9 +18,9 @@ const client = new pg.Client({
 
 await client.connect();
 
-async function getUserAttr(name: string): Promise<UserAttr | undefined> {
+async function getUserAttr(name: string): Promise<User | undefined> {
   try {
-    const user = await client.query<UserAttr>(`
+    const user = await client.query<User>(`
       SELECT
         u.user_id,
         u.user_name,
@@ -35,9 +35,10 @@ async function getUserAttr(name: string): Promise<UserAttr | undefined> {
     console.error("Failed to fetch user:", error);
     throw new Error("Failed to fetch user.");
   }
-}
+};
 
-export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+
+export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -45,9 +46,6 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
         const parsedCredentials = z
           .object({ user_name: z.string(), user_password: z.string().min(6) })
           .safeParse(credentials);
-
-        console.log("Check : credentials ", credentials);
-        console.log("Check : parsedCredentials ", parsedCredentials);
 
         if (parsedCredentials.success) {
           const { user_name, user_password } = parsedCredentials.data;
@@ -65,6 +63,7 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
               user_id: '0000',
               user_name: user_name,
               email: "",
+              attrib_value: "",
             };
           }
         }
