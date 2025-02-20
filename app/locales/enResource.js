@@ -450,6 +450,11 @@ const enResource = {
             usage_cost: 'Usage Const',
             usage_date: 'Usage Date',
         },
+        group: {
+            subTitle_device: 'Device Group',
+            subTitle_user: 'User Group',
+            subTitle_security: 'Security Group',
+        },
         device :{
             device:'Devices',
             external_device_list:'External Device List',

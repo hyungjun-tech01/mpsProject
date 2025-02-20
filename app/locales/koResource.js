@@ -450,7 +450,12 @@ const koResource = {
             status: '상태',
             usage_cost: '사용비용',
             usage_date: '사용날짜',
-        },        
+        },
+        group: {
+            subTitle_device: '장치 그룹',
+            subTitle_user: '사용자 그룹',
+            subTitle_security: '보안 그룹',
+        },
         device :{
             device:'장치',
             external_device_list:'External Device List',
