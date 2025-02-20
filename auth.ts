@@ -50,6 +50,8 @@ export const { auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { user_name, user_password } = parsedCredentials.data;
 
+          // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
+
           if(user_name != 'admin') {
             const userAttr = await getUserAttr(user_name);
             if (!userAttr) return null;
