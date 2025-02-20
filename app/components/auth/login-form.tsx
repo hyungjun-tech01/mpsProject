@@ -11,7 +11,11 @@ import { authenticate } from '@/app/components/auth/actions';
 import { useSearchParams } from 'next/navigation';
 
 
-export default function LoginForm() {
+export default function LoginForm({
+  languageData
+}:{
+  languageData: {title: string, userId: string, password:string, login:string}
+}) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
   const [errorMessage, formAction, isPending] = useActionState(
@@ -23,7 +27,7 @@ export default function LoginForm() {
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-b-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className="mb-3 text-2xl">
-          Please log in to continue.
+          {languageData.title}
         </h1>
         <div className="w-full">
           <div>
@@ -31,7 +35,7 @@ export default function LoginForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="user_name"
             >
-              ID
+              {languageData.userId}
             </label>
             <div className="relative">
               <input
@@ -49,7 +53,7 @@ export default function LoginForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="user_password"
             >
-              Password
+              {languageData.password}
             </label>
             <div className="relative">
               <input
@@ -66,8 +70,8 @@ export default function LoginForm() {
           </div>
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
-        <Button type="submit" className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowForwardOutlined className="ml-auto h-5 w-5 text-gray-50" />
+        <Button type="submit" className="mt-6 w-full bg-lime-100 border border-lime-700 px-1 py-0.5" aria-disabled={isPending}>
+          {languageData.login} <ArrowForwardOutlined className="ml-auto h-5 w-5 text-gray-500" />
         </Button>
         <div className="flex h-8 items-end space-x-1">
           {errorMessage && (

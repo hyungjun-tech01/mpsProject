@@ -1,7 +1,18 @@
 import { Suspense } from 'react';
 import LoginForm from '@/app/components/auth/login-form';
- 
-export default function LoginPage() {
+import getDictionary from '@/app/locales/dictionaries';
+
+export default async function LoginPage(props: {
+  params: Promise<{ locale: "ko" | "en" }>;
+}) {
+  const locale = (await props.params).locale;
+  const t = await getDictionary(locale);
+  const languageData = {
+    title : t('login.title'),
+    login : t('login.login'),
+    userId : t('login.userId'),
+    password : t('login.password'),
+  }
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col p-4 md:-mt-32">
@@ -11,7 +22,7 @@ export default function LoginPage() {
           </div>
         </div>
         <Suspense>
-          <LoginForm />
+          <LoginForm languageData={languageData}/>
         </Suspense>
       </div>
     </main>

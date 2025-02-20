@@ -6,19 +6,16 @@ const enResource = {
         },
         login: {
             login: 'Login',
-            userId:'User Id',
+            userId:'User ID',
             password:'Password',
             forgotPassword: 'Forgot Password?',
             emailOrUsername: 'E-mail or username',
             invalidEmailOrUsername: 'Invalid e-mail or username',
             invalidPassword: 'Invalid password',
-            logInToPlanka: 'Log in to Planka',
+            logIn: 'Log in',
             noInternetConnection: 'No internet connection',
             pageNotFound_title: 'Page Not Found',
-            projectManagement: 'CRM & PMS',
-
-
-            
+            title: 'Please log in to continue',
             serverConnectionFailed: 'Server connection failed',
             unknownError: 'Unknown error, try again later',
         },
