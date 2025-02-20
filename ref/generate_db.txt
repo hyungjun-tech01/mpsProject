@@ -1955,3 +1955,196 @@ insert into tbl_printer_group
 ) values
 (1, 'AAA', 'AAA', now(), '-1', now(), '-1', 1
 );
+
+-- 2025.02.19 
+drop table IF EXISTS tbl_user_info;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_info
+
+create table tbl_user_info
+(	user_id                     varchar(36)  default uuid_generate_v4(),
+	user_name                   varchar(255) primary key,
+	external_user_name          varchar(255) ,
+	full_name                   varchar(255) ,
+	email                       varchar(255) ,
+	notes                       varchar(2000),
+	total_jobs                  int4         ,
+	total_pages                 int4         ,
+	reset_by                    varchar(255) , 
+	reset_date                  timestamp    ,
+schedule_period               varchar(10)    ,  
+schedule_amount               float8         ,
+schedule_start                int4           ,
+	deleted                     bpchar(1)   default 'N',
+	deleted_date                timestamp    ,
+	created_date                timestamp    ,
+	created_by                  varchar(255) , 
+user_source_type              varchar(10)    ,  
+	modified_date               timestamp    ,
+	modified_by                 varchar(255) , 
+	department                  varchar(200) , 
+	office                      varchar(200) , 
+	card_number                 varchar(100) , 
+	card_number2                varchar(100) , 
+	disabled_printing           bpchar(1)  default 'N',
+	disabled_printing_until     timestamp    ,
+	home_directory              varchar(255) ,
+    password                      varchar(255) 
+);
+
+drop table public.tbl_user_info_temp;
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_info_temp
+(
+user_id                        varchar(255), 
+user_name                      varchar(255),
+external_user_name             varchar(255),
+full_name                      varchar(255),
+email                          varchar(255),
+notes                          varchar(255),
+total_jobs                     varchar(255),
+total_pages                    varchar(255),
+total_sheets                   varchar(255),
+reset_by                       varchar(255),
+reset_date                     varchar(255),
+deleted                        varchar(255),
+deleted_date                   varchar(255),
+created_date                   varchar(255),
+created_by                     varchar(255),
+modified_date                  varchar(255),
+modified_by                    varchar(255),
+department                     varchar(255),
+office                         varchar(255),
+card_number                    varchar(255),
+disabled_printing              varchar(255),
+disabled_printing_until        varchar(255),
+net_reset_by                   varchar(255),
+net_reset_date                 varchar(255),
+net_total_megabytes            varchar(255),
+net_total_time_hours           varchar(255),
+disabled_net                   varchar(255),
+disabled_net_until             varchar(255),
+internal                       varchar(255),
+last_user_activity             varchar(255),
+card_number2                   varchar(255),
+secondary_user_name            varchar(255),
+modified_ticks                 varchar(255),
+home_directory                 varchar(255),
+password_                       varchar(255),
+dept_id                        varchar2(255),
+primary_user_source_type       varchar(255),
+secondary_user_source_type     varchar(255),
+secondary_external_user_name   varchar(255)
+);
+
+-- tbl_user_202502192123.csv 파일을 d드라이브로 옮겨서 작업
+COPY tbl_user_info_temp (
+    user_id                  ,    
+user_name                    ,
+external_user_name           ,
+full_name                    ,
+email                        ,
+notes                        ,
+total_jobs                   ,
+total_pages                  ,
+total_sheets                 ,
+reset_by                     ,
+reset_date                   ,
+deleted                      ,
+deleted_date                 ,
+created_date                 ,
+created_by                   ,
+modified_date                ,
+modified_by                  ,
+department                   ,
+office                       ,
+card_number                  ,
+disabled_printing            ,
+disabled_printing_until      ,
+net_reset_by                 ,
+net_reset_date               ,
+net_total_megabytes          ,
+net_total_time_hours         ,
+disabled_net                 ,
+disabled_net_until           ,
+internal                     ,
+last_user_activity           ,
+card_number2                 ,
+secondary_user_name          ,
+modified_ticks               ,
+home_directory               ,
+password_                    ,
+dept_id                      ,
+primary_user_source_type     ,
+secondary_user_source_type   ,
+secondary_external_user_name 
+) FROM 'd:\tbl_user_202502192123.csv'  WITH (FORMAT csv, HEADER true);
+
+
+insert into tbl_user_info
+(
+	user_id                 ,
+    user_name               ,
+	external_user_name      ,
+	full_name               ,
+	email                   ,
+	notes                   ,
+	total_jobs              ,
+	total_pages             ,
+	reset_by                ,
+	reset_date              ,
+--schedule_period          ,
+--schedule_amount          ,
+--schedule_start           ,
+	deleted                 ,
+	deleted_date            ,
+	created_date            ,
+	created_by              ,
+user_source_type         ,
+	modified_date           ,
+	modified_by             ,
+	department              ,
+	office                  ,
+	card_number             ,
+	card_number2            ,
+	disabled_printing       ,
+	disabled_printing_until ,
+	home_directory          
+-- password                 
+)
+
+select 
+    user_id                 ,
+	user_name               ,
+	external_user_name      ,
+	full_name               ,
+	email                   ,
+	notes                   ,
+	total_jobs::integer              ,
+	total_pages::integer             ,
+	reset_by                ,
+	reset_date::timestamp              ,
+-- schedule_period          ,
+-- schedule_amount          ,
+-- schedule_start           ,
+	deleted                 ,
+	deleted_date::timestamp            ,
+	created_date::timestamp            ,
+	created_by              ,
+primary_user_source_type         ,
+	modified_date::timestamp           ,
+	modified_by             ,
+	department              ,
+	office                  ,
+	card_number             ,
+	card_number2            ,
+	disabled_printing       ,
+	disabled_printing_until::timestamp ,
+	home_directory          
+	-- ,
+-- password                 
+from tbl_user_info_temp;
+
+select * from tbl_user_info;
+
+drop table public.tbl_user_info_temp;
