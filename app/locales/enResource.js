@@ -317,6 +317,7 @@ const enResource = {
             fax_no: 'Fax No.',
             from: 'From',
             information: 'Information',
+            ip_address: 'IP Address',
             issued_by: 'Issued By',
             initialize: 'Initialize',
             item:'Item',
@@ -454,6 +455,9 @@ const enResource = {
             subTitle_device: 'Device Group',
             subTitle_user: 'User Group',
             subTitle_security: 'Security Group',
+            group_name: 'Group Name',
+            allocate_amount: 'Allocation Amount',
+            allocate_period: 'Allocation Period',
         },
         device :{
             device:'Devices',
@@ -463,6 +467,7 @@ const enResource = {
             printer_name:'Device Name',
             device_type: 'Device Type',
             ext_device_function:'Functions',
+            model_name: 'Model Name',
             server_name:'Host Name',
             status:'Deleted'
         },
