@@ -1956,7 +1956,8 @@ insert into tbl_printer_group
 (1, 'AAA', 'AAA', now(), '-1', now(), '-1', 1
 );
 
--- 2025.02.19 
+-- 2025.02.19 : tbl_user_info
+
 drop table IF EXISTS tbl_user_info;
 
 CREATE TABLE IF NOT EXISTS public.tbl_user_info
