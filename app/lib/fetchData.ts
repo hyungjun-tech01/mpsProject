@@ -594,3 +594,43 @@ export async function fetchFilteredAuditLogPages(
         throw new Error("Failed to fetch audit logs");
     }
 };
+
+
+/*========================== Group =========================*/
+export async function fetchGroupsBy(
+    query : string,
+    groupType : string,
+    itemsPerPage: number,
+    currentPage: number,
+) {
+    // const offset = (currentPage - 1) * itemsPerPage;
+    return [];
+};
+
+export async function fetchGroupPagesBy(
+    query : string,
+    groupType : string,
+    itemsPerPage: number,
+) {
+    // const offset = (currentPage - 1) * itemsPerPage;
+    return 0;
+};
+
+export async function fetchListInGroupBy(
+    query : string,
+    groupId : string,
+    itemsPerPage: number,
+    currentPage: number,
+) {
+    // const offset = (currentPage - 1) * itemsPerPage;
+    return [];
+};
+
+export async function fetchListInGroupPagesBy(
+    query : string,
+    groupId : string,
+    itemsPerPage: number,
+) {
+    // const offset = (currentPage - 1) * itemsPerPage;
+    return 0;
+};

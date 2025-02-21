@@ -82,7 +82,7 @@ export default function CustomizedTable<DataType>({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, idx) => {
+                        {rows.length > 0 && rows.map((row, idx) => {
                             return (
                                 <StyledTableRow key={idx}>
                                     {columns.map((column) => (
@@ -113,6 +113,16 @@ export default function CustomizedTable<DataType>({
                                 </StyledTableRow>
                             )
                         })}
+                        {rows.length === 0 && 
+                            <StyledTableRow>
+                                <StyledTableCell 
+                                    colSpan={editable ? columns.length + 1 : columns.length}
+                                    align="center"
+                                >
+                                    No Data
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>

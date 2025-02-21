@@ -10,7 +10,7 @@ export function CreateButton({ link, title }: { link: string, title: string}) {
       href={link}
       className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-base font-medium text-white transition-colors hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
     >
-      <span className="hidden md:block">{title}</span>{' '}
+      <span className="hidden md:block md:">{title}</span>{' '}
       <AddIcon className="h-5 md:ml-4" />
     </Link>
   );

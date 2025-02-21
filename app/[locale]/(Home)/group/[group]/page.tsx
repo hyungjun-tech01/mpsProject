@@ -7,12 +7,15 @@ import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
+import {
+    fetchGroupsBy,
+    fetchGroupPagesBy
+} from '@/app/lib/fetchData';
 
 
 export const metadata: Metadata = {
     title: 'Group',
 }
-
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
@@ -27,16 +30,15 @@ export default async function Page(props: {
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
 
-    const [t, ] = await Promise.all([
-        getDictionary(locale),
-    ]);
-    const deviceGroupData = [];
-    const userGroupData = [];
-    const securityGroupData = [];
-
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
+
+    const [t, totalPages, groupData] = await Promise.all([
+        getDictionary(locale),
+        fetchGroupPagesBy(query, group, itemsPerPage),
+        fetchGroupsBy(query, group, itemsPerPage, currentPage),
+    ]);
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
@@ -45,61 +47,52 @@ export default async function Page(props: {
         { category: 'security', title: t('group.subTitle_security'), link: `/group/security` },
     ];
 
-    // Total pages ---------------------------------------------------------------
-    const totalPages = {
-        device : 0,
-        user : 0,
-        security: 0,
-    }
-
-    // Texts ---------------------------------------------------------------------
-    const totalTexts = {
-        device: { search_placeholder : "Search device groups..." },
-        user: { search_placeholder : "Search user groups..."}, 
-        security: { search_placeholder : "Search security groups..."},
+    // Search Text ---------------------------------------------------------------------
+    const groupTexts = {
+        device : {
+            keySearchPlaceholder : t('group.search_placehodler_device'),
+        },
+        user : {
+            keySearchPlaceholder : t('group.search_placehodler_user'),
+        },
+        security : {
+            keySearchPlaceholder : t('group.search_placehodler_security'),
+        }
     };
 
     // Columns -------------------------------------------------------------------
-    const totalColumns = {
-        device : [
-            { name: 'device_name', title: t('device.device_name'), align: 'center' },
-            { name: 'ip_address', title: t('common.ip_address'), align: 'center' },
-            { name: 'location', title: t('device.location'), align: 'center' },
-            { name: 'model_name', title: t('device.model_name'), align: 'center' },
-            { name: 'status', title: t('common.status'), align: 'center' },
+    const groupColumns : { device: IColumnData[], user: IColumnData[], security: IColumnData[]} = {
+        device: [
+            { name: 'group_name', title: t('group.group_name'), align: 'center' },
+            { name: 'device_count', title: t('group.device_count'), align: 'center' },
+            { name: 'created', title: t('common.created'), align: 'center' },
         ],
-        user : [
+        user: [
             { name: 'group_name', title: t('group.group_name'), align: 'center' },
             { name: 'created', title: t('common.created'), align: 'center' },
             { name: 'balance', title: t('account.balance'), align: 'center' },
             { name: 'allocate_amount', title: t('group.allocate_amount'), align: 'center' },
             { name: 'allocate_period', title: t('group.allocate_period'), align: 'center' },
         ],
-        security : [
+        security: [
             { name: 'group_name', title: t('group.group_name'), align: 'center' },
             { name: 'created', title: t('common.created'), align: 'center' },
-            { name: 'balance', title: t('account.balance'), align: 'center' },
-            { name: 'allocate_amount', title: t('group.allocate_amount'), align: 'center' },
-            { name: 'allocate_period', title: t('group.allocate_period'), align: 'center' },
+            { name: 'explanation', title: t('common.explanation'), align: 'center' },
+            { name: 'dept_count', title: t('security.dept_count'), align: 'center' },
+            { name: 'manager_count', title: t('security.manager_count'), align: 'center' },
         ]
     };
 
-    // Data ---------------------------------------------------------------------
-    const totalData = {
-        device : deviceGroupData,
-        user : userGroupData,
-        security: securityGroupData
-    };
-
     // Delete Action ------------------------------------------------------------
-    const totalDeleteAction = {
+    const groupDeleteAction = {
         device: null,
-        user : null,
-        security : null,
+        user: null,
+        security: null,
     };
 
     return (
-        <div className='w-full pl-2 flex-col justify-start'>
+        <div className='w-full flex-col justify-start'>
+            <div className="pl-2">
             {subTitles.map(item => {
                 return <Link key={item.category} href={item.link}
                     className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
@@ -107,19 +100,20 @@ export default async function Page(props: {
                         { "text-gray-300  bg-white border-2": item.category !== group },
                     )}>{item.title}</Link>;
             })}
-            <div className="w-full">
-                <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                    <Search placeholder={totalTexts[group].search_placeholder} />
-                    <CreateButton link={`/group/${group}/create`} title="Create Group" />
+            </div>
+            <div className="w-full px-4 bg-gray-50 rounded-md">
+                <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
+                    <Search placeholder={groupTexts[group].keySearchPlaceholder} />
+                    <CreateButton link={`/group/${group}/create`} title={t('group.create_group')} />
                 </div>
                 <Table
-                    columns={totalColumns[group]}
-                    rows={totalData[group]}
+                    columns={groupColumns[group]}
+                    rows={groupData}
                     currentPage={currentPage}
-                    totalPages={totalPages[group]}
+                    totalPages={totalPages}
                     category={group}
                     locale={locale}
-                    deleteAction={totalDeleteAction[group]}
+                    deleteAction={groupDeleteAction[group]}
                 />
             </div>
         </div>

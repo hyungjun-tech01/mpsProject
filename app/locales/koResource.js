@@ -453,12 +453,17 @@ const koResource = {
             usage_date: '사용날짜',
         },
         group: {
+            allocate_amount: '할당 금액',
+            allocate_period: '할당 주기',
+            create_group: '새 그룹 만들기',
+            device_count: '장치 개수',
+            group_name: '그룹명',
+            search_placehodler_device: '장치 그룹 찾기...',
+            search_placehodler_security: '보안 그룹 찾기...',
+            search_placehodler_user: '사용자 그룹 찾기...',
             subTitle_device: '장치 그룹',
             subTitle_user: '사용자 그룹',
             subTitle_security: '보안 그룹',
-            group_name: '그룹명',
-            allocate_amount: '할당 금액',
-            allocate_period: '할당 주기',
         },
         device :{
             device:'장치',
@@ -490,6 +495,10 @@ const koResource = {
             edit_device:'장비 편집',
             edit_description:'복사기 터미널 같은 주변 장치의 편집을 허용합니다. 하드웨어가 있어야 합니다.',
             udpate_device:'장비 변경하기'
+        },
+        security: {
+            dept_count: '부서 수',
+            manager_count: '관리자 수',
         },
         logs: {
             action: '수행 작업',
