@@ -9,7 +9,7 @@ import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import LogTable from '@/app/components/table';
 import Link from 'next/link';
 import clsx from 'clsx';

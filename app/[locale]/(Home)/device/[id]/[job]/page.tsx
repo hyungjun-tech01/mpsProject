@@ -5,7 +5,7 @@ import {
     fetchDeviceById,
     fetchPrinterGroup,
 } from '@/app/lib/fetchDeviceData';
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
 import {modifyDevice} from '@/app/components/device/actions';
 import { IButtonInfo, ISection } from '@/app/components/edit-items';

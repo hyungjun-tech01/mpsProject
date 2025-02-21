@@ -1,4 +1,4 @@
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/device/create-form';
 import { fetchPrinterGroup } from '@/app/lib/fetchDeviceData';

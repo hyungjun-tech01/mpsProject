@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/user/edit-form';
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';

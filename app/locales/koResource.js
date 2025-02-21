@@ -457,6 +457,9 @@ const koResource = {
             allocate_period: '할당 주기',
             create_group: '새 그룹 만들기',
             device_count: '장치 개수',
+            group_details: '세부 사항',
+            group_edit: '그룹 편집',
+            group_members: '그룹원',
             group_name: '그룹명',
             search_placehodler_device: '장치 그룹 찾기...',
             search_placehodler_security: '보안 그룹 찾기...',
@@ -464,6 +467,7 @@ const koResource = {
             subTitle_device: '장치 그룹',
             subTitle_user: '사용자 그룹',
             subTitle_security: '보안 그룹',
+            update_group: '그룹 변경하기'
         },
         device :{
             device:'장치',

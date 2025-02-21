@@ -1,4 +1,4 @@
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import AddIcon from '@mui/icons-material/Add';
 
 function TableRowSkeleton() {

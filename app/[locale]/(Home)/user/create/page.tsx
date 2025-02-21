@@ -1,4 +1,4 @@
-import Breadcrumbs from '@/app/components/user/breadcrumbs';
+import Breadcrumbs from '@/app/components/breadcrumbs';
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import getDictionary from '@/app/locales/dictionaries';
 import { EditForm } from '@/app/components/user/edit-form';

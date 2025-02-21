@@ -616,7 +616,14 @@ export async function fetchGroupPagesBy(
     return 0;
 };
 
-export async function fetchListInGroupBy(
+export async function fetchGroupInfoByID(
+    groupId : string,
+) {
+    // const offset = (currentPage - 1) * itemsPerPage;
+    return [];
+};
+
+export async function fetchMembersInGroupByID(
     query : string,
     groupId : string,
     itemsPerPage: number,
@@ -626,7 +633,7 @@ export async function fetchListInGroupBy(
     return [];
 };
 
-export async function fetchListInGroupPagesBy(
+export async function fetchMembersPagesByID(
     query : string,
     groupId : string,
     itemsPerPage: number,

@@ -456,6 +456,9 @@ const enResource = {
             allocate_period: 'Allocation Period',
             create_group: 'Create Group',
             device_count: 'Device Count',
+            group_details: 'Details',
+            group_edit: 'Edit Group',
+            group_members: 'Members',
             group_name: 'Group Name',
             search_placehodler_device: 'Search device group...',
             search_placehodler_security: 'Search security group...',
@@ -463,6 +466,7 @@ const enResource = {
             subTitle_device: 'Device Group',
             subTitle_user: 'User Group',
             subTitle_security: 'Security Group',
+            update_group: 'Update Gropup'
         },
         device :{
             device:'Devices',
