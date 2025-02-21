@@ -452,12 +452,17 @@ const enResource = {
             usage_date: 'Usage Date',
         },
         group: {
+            allocate_amount: 'Allocation Amount',
+            allocate_period: 'Allocation Period',
+            create_group: 'Create Group',
+            device_count: 'Device Count',
+            group_name: 'Group Name',
+            search_placehodler_device: 'Search device group...',
+            search_placehodler_security: 'Search security group...',
+            search_placehodler_user: 'Search user group...',
             subTitle_device: 'Device Group',
             subTitle_user: 'User Group',
             subTitle_security: 'Security Group',
-            group_name: 'Group Name',
-            allocate_amount: 'Allocation Amount',
-            allocate_period: 'Allocation Period',
         },
         device :{
             device:'Devices',
@@ -470,6 +475,10 @@ const enResource = {
             model_name: 'Model Name',
             server_name:'Host Name',
             status:'Deleted'
+        },
+        security: {
+            dept_count: 'Dept. Count',
+            manager_count: 'Manager Count',
         },
         logs: {
             action: 'Action',
