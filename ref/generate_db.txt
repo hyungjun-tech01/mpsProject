@@ -1956,6 +1956,19 @@ insert into tbl_printer_group
 (1, 'AAA', 'AAA', now(), '-1', now(), '-1', 1
 );
 
+insert into tbl_printer_group
+(printer_group_id ,
+    group_name ,
+    display_name ,
+    created_date ,
+    created_by ,
+    modified_date,
+    modified_by ,
+    modified_ticks
+) values
+(2, 'BBB', 'BBB', now(), '-1', now(), '-1', 1
+);
+
 -- 2025.02.19 : tbl_user_info
 
 drop table IF EXISTS tbl_user_info;
@@ -2148,7 +2161,7 @@ select * from tbl_user_info;
 
 drop table public.tbl_user_info_temp;
 
---2025.02.25 :: tbl_device_info
+--2025.02.20 :: tbl_device_info
 
 drop table IF EXISTS tbl_device_info;
 
@@ -2338,5 +2351,101 @@ from tbl_device_info_temp;
 select * from tbl_device_info;
 
 drop table tbl_device_info_temp;
+
+
+--2025.02.21 :: tbl_group_info
+
+drop table IF EXISTS tbl_group_info;
+
+create table tbl_group_info(
+group_id           varchar(36)      default uuid_generate_v4(),
+group_name         varchar(255)   not null,
+group_type         varchar(20)    not null,
+group_notes        varchar(255)           ,
+schedule_period    varchar(10)            ,
+schedule_amount    float8                 ,
+remain_amount      float8                 ,
+schedule_start     int4                   ,
+reset_by           varchar(255)           ,
+reset_date         timestamp              ,
+created_date       timestamp              ,
+created_by         varchar(255)           ,
+modified_date      timestamp              ,
+modified_by        varchar(255)           
+);
+
+drop table IF EXISTS tbl_group_info_temp;
+
+create table tbl_group_info_temp(
+group_id	                          varchar(255),
+group_name	                          varchar(255),
+initial_credit	                      varchar(255),
+initially_restricted	              varchar(255),
+schedule_period	                      varchar(255),
+schedule_amount                       varchar(255),
+allow_accum	                          varchar(255),
+max_accum_balance	                  varchar(255),
+reset_statistics	                  varchar(255),
+created_date	                      varchar(255),
+created_by	                          varchar(255),
+modified_date	                      varchar(255),
+modified_by                     	  varchar(255),
+initial_settings_enabled	          varchar(255),
+modified_ticks                        varchar(255)
+);        
+
+copy tbl_group_info_temp(
+group_id	,
+group_name	,
+initial_credit	,
+initially_restricted	,
+schedule_period	,
+schedule_amount,
+allow_accum	,
+max_accum_balance	,
+reset_statistics	,
+created_date	,
+created_by	,
+modified_date	,
+modified_by	,
+initial_settings_enabled	,
+modified_ticks
+) FROM 'd:\tbl_group_202502212103.csv'  WITH (FORMAT csv, HEADER true);
+
+insert into tbl_group_info
+(
+group_id         ,
+group_name       ,
+group_type       ,
+group_notes      ,
+schedule_period  ,
+schedule_amount  ,
+remain_amount    ,
+schedule_start   ,
+reset_by         ,
+reset_date       ,
+created_date     ,
+created_by       ,
+modified_date    ,
+modified_by      
+)
+select group_id,
+group_name,
+'user',
+'',
+schedule_period,
+schedule_amount::float8,
+0,
+null,
+null,
+null,
+created_date::timestamp,
+created_by,
+modified_date::timestamp,
+modified_by  from tbl_group_info_temp;
+
+select * from tbl_group_info;
+
+drop table IF EXISTS tbl_group_info_temp;
 
 

@@ -1,0 +1,5 @@
+"group_id","group_name","initial_credit","initially_restricted","schedule_period","schedule_amount","allow_accum","max_accum_balance","reset_statistics","created_date","created_by","modified_date","modified_by","initial_settings_enabled","modified_ticks"
+1001,!!All Users!!,0.0,N,NONE,0.0,N,0.0,N,2024-02-06 04:32:03.899,[setup wizard],2024-02-06 04:32:03.899,[setup wizard],Y,1707161523899
+1002,!!Internal Users!!,0.0,Y,NONE,0.0,N,0.0,N,2024-02-07 13:23:13.679,admin,2024-02-07 13:23:13.679,admin,Y,1707279793679
+2002,Audit_Supervisors,0.0,Y,NONE,0.0,N,0.0,N,2024-10-02 11:44:50.062,admin,2024-10-02 11:44:50.062,admin,N,1727837090062
+2003,Audit_HR_Administrators,0.0,N,NONE,0.0,N,0.0,N,2024-10-02 11:44:50.101,admin,2024-10-02 12:04:47.480,admin,Y,1727838287480
