@@ -28,7 +28,7 @@ export default async function Page(props: {
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
-    if (!['detail', 'members'].includes(category)) {
+    if (!['edit', 'members'].includes(category)) {
         notFound();
     };
     const [t, groupInfo, totalPages, members] = await Promise.all([
@@ -40,24 +40,24 @@ export default async function Page(props: {
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
-        { category: 'detail', title: t('group.group_details'), link: `/group/${group}/${id}/detail` },
+        { category: 'edit', title: t('group.group_details'), link: `/group/${group}/${id}/edit` },
         { category: 'members', title: t('group.group_members'), link: `/group/${group}/${id}/members` },
     ];
     const groupBreadcrumbs = {
         device: [
             { label: t('group.subTitle_device'), link: `/group/device`},
-            { link: `/group/device/${id}/details`}
+            { link: `/group/device/${id}/edit`}
         ],
         user: [
             { label: t('group.subTitle_user'), link: `/group/user`},
-            { link: `/group/user/${id}/details`}
+            { link: `/group/user/${id}/edit`}
         ],
         security: [
             { label: t('group.subTitme_security'), link: `/group/security`},
-            { link: `/group/security/${id}/details`}
+            { link: `/group/security/${id}/edit`}
         ]
     };
-    const detailItems: { device: ISection[], user: ISection[], security: ISection[] } = {
+    const editItems: { device: ISection[], user: ISection[], security: ISection[] } = {
         device: [
 
         ],
@@ -104,7 +104,7 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {category === 'detail' && <EditForm id={id} items={detailItems[group]} buttons={buttonItems[group]} action={null} />}
+            {category === 'edit' && <EditForm id={id} items={editItems[group]} buttons={buttonItems[group]} action={null} />}
             {category === 'members' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <MemberTable
