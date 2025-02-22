@@ -367,7 +367,7 @@ CREATE TABLE IF NOT EXISTS public.tbl_account
     account_id bigint NOT NULL,
     account_type character varying(10) COLLATE pg_catalog."default" NOT NULL,
     account_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    balance double precision NOT NULL,
+    balance     ,
     restricted character(1) COLLATE pg_catalog."default" NOT NULL,
     overdraft double precision NOT NULL,
     pin character varying(50) COLLATE pg_catalog."default",
@@ -2001,7 +2001,9 @@ create table tbl_user_info
 	disabled_printing           bpchar(1)  default 'N',
 	disabled_printing_until     timestamp    ,
 	home_directory              varchar(255) ,
-    password                    varchar(255) 
+    password                    varchar(255) ,
+    balance                     double precision not null default 0,
+    restricted                  bpchar(1)   default 'N'
 );
 
 drop table public.tbl_user_info_temp;
@@ -2043,7 +2045,7 @@ secondary_user_name            varchar(255),
 modified_ticks                 varchar(255),
 home_directory                 varchar(255),
 password_                       varchar(255),
-dept_id                        varchar2(255),
+dept_id                        varchar(255),
 primary_user_source_type       varchar(255),
 secondary_user_source_type     varchar(255),
 secondary_external_user_name   varchar(255)
@@ -2431,7 +2433,7 @@ modified_by
 )
 select group_id,
 group_name,
-'user',
+'security',
 '',
 schedule_period,
 schedule_amount::float8,
@@ -2448,4 +2450,107 @@ select * from tbl_group_info;
 
 drop table IF EXISTS tbl_group_info_temp;
 
+--2025.02.22 :: tbl_group_member_info
+
+drop table IF EXISTS tbl_group_member_info;
+
+create table tbl_group_member_info(
+group_id                    varchar(36)   not null,
+member_id                   varchar(36)   not null,
+member_type                 varchar(20)   not null,
+group_admin_start_date      timestamp,
+group_admin_end_date        timestamp,
+PRIMARY KEY (group_id, member_id)
+);
+
+drop table IF EXISTS tbl_document_job_info;
+
+CREATE TABLE tbl_document_job_info (
+	document_id varchar(36) primary key  default uuid_generate_v4(),
+	created_by varchar(36) NOT NULL,
+	created_date timestamp NOT NULL,
+	deleted_date timestamp ,
+	printer_id varchar(36) ,
+	denied_reason varchar(30) ,
+	job_type varchar(10) ,
+	gray_scale bpchar(1) ,
+	dpi varchar(10) ,
+	total_pages int4 ,
+	paper_size varchar(20) ,
+	document_name varchar(255) NOT NULL,
+	archive_path varchar(30) ,
+	file_size_kb int4 ,
+	shared bpchar(1) );					
+
+
+
+drop table IF EXISTS tbl_document_shared_info;
+
+CREATE TABLE tbl_document_shared_info (
+	document_id varchar(36)  not null,
+	shared_to varchar(36)    not null,
+	shared_type varchar(10)  NOT NULL,
+	shared_expiry_date timestamp ,
+	primary key(document_id, shared_to));						
+
+
+drop table IF EXISTS tbl_fax_line_info;
+CREATE TABLE tbl_fax_line_info (
+fax_line_id                 varchar(36)   primary key  default uuid_generate_v4(),
+fax_line_name               varchar(255)  not null ,
+printer_id                  varchar(36)   not null ,
+fax_line_user_id            varchar(36)   not null ,
+fax_line_shared_group_id    varchar(36)   not null ,
+created_date                timestamp,
+created_by                  varchar(36),
+deleted_date                timestamp,
+deleted_by                  varchar(36)
+);					
+
+drop table if exists tbl_audit_job_log;
+
+CREATE TABLE tbl_audit_job_log
+(
+job_log_id                  varchar(36) primary key default uuid_generate_v4(),
+job_type                    varchar(10) not null,
+printer_serial_number       varchar(20),
+job_id                      varchar(20),
+user_name                   varchar(50),
+destination                 varchar(50),
+send_time                   varchar(20),
+file_name                   varchar(50),
+finish_time                 varchar(20),
+copies                      integer    ,
+original_pages              integer,
+detect_privacy              boolean,
+privacy_text                text,
+image_archive_path          varchar(100),
+text_archive_path           varchar(100),
+original_job_id             varchar(20),
+ocr_text                    text,
+image_archive               bytea,
+image_thumbnail             bytea,
+is_encrypted                boolean,
+security_group_name         varchar(255)
+);
+
+drop table if exists tbl_settings_info;
+
+CREATE TABLE tbl_settings_info
+(
+setting_id      varchar(36) primary key  default uuid_generate_v4(),
+setting_name    varchar(100),
+setting_value   text,
+value_type      varchar(100)
+);
+
+
+drop table if exists tbl_dept_info; 
+
+CREATE TABLE tbl_dept_info
+(
+dept_id                 varchar(36) primary key  default uuid_generate_v4(),
+dept_name               varchar(255),
+security_group_name     varchar(255)
+);
 

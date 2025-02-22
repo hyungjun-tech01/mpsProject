@@ -37,12 +37,10 @@ export async function fetchFilteredUsers(
                     u.department,
                     u.total_pages,
                     u.total_jobs,
-                    a.account_id,
-                    a.balance,
-                    a.restricted
-                FROM tbl_user u
-                JOIN tbl_user_account ua ON u.user_id = ua.user_id
-                JOIN tbl_account a ON a.account_id = ua.account_id
+                    null account_id,
+                    u.balance,
+                    u.restricted
+                FROM tbl_user_info u
                 WHERE
                     u.deleted='N' AND
                     (
@@ -64,12 +62,10 @@ export async function fetchFilteredUsers(
                     u.department,
                     u.total_pages,
                     u.total_jobs,
-                    a.account_id,
-                    a.balance,
-                    a.restricted
-                FROM tbl_user u
-                JOIN tbl_user_account ua ON u.user_id = ua.user_id
-                JOIN tbl_account a ON a.account_id = ua.account_id
+                    null account_id,
+                    u.balance,
+                    u.restricted
+                FROM tbl_user_info u
                 WHERE
                     u.deleted='N'
                 ORDER BY u.modified_date DESC
@@ -92,20 +88,20 @@ export async function fetchUsersPages(query: string, itemsPerPage: number) {
             query !== ""
                 ? await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_user
+                FROM tbl_user_info u
                 WHERE
-                    tbl_user.deleted='N' AND
+                    u.deleted='N' AND
                     (
-                        tbl_user.user_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.full_name ILIKE '${`%${query}%`}' OR
-                        tbl_user.email ILIKE '${`%${query}%`}'
+                        u.user_name ILIKE '${`%${query}%`}' OR
+                        u.full_name ILIKE '${`%${query}%`}' OR
+                        u.email ILIKE '${`%${query}%`}'
                     )
             `)
                 : await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_user
+                FROM tbl_user_info u
                 WHERE
-                    tbl_user.deleted='N'
+                    u.deleted='N'
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -127,12 +123,10 @@ export async function fetchUserById(id: string) {
                 u.department,
                 u.card_number,
                 u.card_number2,
-                a.account_id,
-                a.balance,
-                a.restricted
-            FROM tbl_user u
-            JOIN tbl_user_account ua ON u.user_id = ua.user_id
-            JOIN tbl_account a ON a.account_id = ua.account_id
+                null account_id,
+                u.balance,
+                u.restricted
+            FROM tbl_user_info u
             WHERE u.user_id='${id}'
         `);
 
@@ -156,7 +150,7 @@ export async function fetchCreateUser(newUser: object) {
             headers: { "Content-Type": "application/json" },
             body: input_json,
         });
-        const data = await response.json();
+        const data = await response.json(); 
         if (data.message) {
             return { result: false, data: data.message };
         }
