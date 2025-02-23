@@ -336,7 +336,7 @@ const koResource = {
             note: '비고',
             page:'페이지',
             color_total_pages:'컬러매수',
-            black_total_pages:'흑백매수',
+            black_total_pages:'흑백매수 ',
             phone_no: '전화번호',
             previous: '이전',
             preview: '미리보기',

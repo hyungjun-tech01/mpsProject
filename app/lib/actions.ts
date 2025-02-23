@@ -307,18 +307,15 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         // First, get current data
         const resp = await client.query(`
             SELECT
-                u.full_name,
+                u.user_name full_name,
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
                 u.department,
                 u.card_number,
                 u.card_number2,
-                a.account_id,
-                a.restricted
-            FROM tbl_user u
-            JOIN tbl_user_account ua ON u.user_id = ua.user_id
-            JOIN tbl_account a ON a.account_id = ua.account_id
+                u.restricted
+            FROM tbl_user_info u
             WHERE u.user_id='${id}'
         `);
         
@@ -329,8 +326,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         const currDept = resp.rows[0].department;
         const currCardNo1 = resp.rows[0].card_number;
         const currCardNo2 = resp.rows[0].card_number2;
-
-        const userAccountID = resp.rows[0].account_id;
         const currRestricted = resp.rows[0].restricted;
 
         let checkNeedUpdate = false;
@@ -341,10 +336,10 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         checkNeedUpdate ||= newDept !== currDept;
         checkNeedUpdate ||= newCardNo1 !== currCardNo1;
         checkNeedUpdate ||= newCardNo2 !== currCardNo2;
+        checkNeedUpdate ||= newRestricted !== currRestricted;
 
-        const checkRestricted = newRestricted !== currRestricted;
 
-        if (!checkNeedUpdate && !checkRestricted) {
+        if (!checkNeedUpdate ) {
             return {
                 message: 'Info: No changed data',
             };
@@ -353,15 +348,16 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         if(checkNeedUpdate) {
             try {
                 await client.query(`
-                    UPDATE tbl_user
+                    UPDATE tbl_user_info
                     SET
-                        full_name='${newFullName}',
+                        user_name='${newFullName}',
                         email='${newEmail}',
                         home_directory='${newHomeDir}',
                         disabled_printing='${newDisabledPrinting}',
                         department='${newDept}',
                         card_number='${newCardNo1}',
                         card_number2='${newCardNo2}',
+                        restricted = '${newRestricted}',
                         modified_date=NOW(),
                         modified_by='admin'
                     WHERE user_id='${id}'
@@ -374,24 +370,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
             };
         };
 
-        if(checkRestricted) {
-            try {
-                await client.query(`
-                    UPDATE tbl_account
-                    SET
-                        restricted='${newRestricted}',
-                        modified_date=NOW(),
-                        modified_by='admin'
-                    WHERE account_id ='${userAccountID}'
-                    )
-                `)
-            } catch (error) {
-                console.log('Update User / Error : ', error);
-                return {
-                    message: 'Database Error: Failed to update account.',
-                };
-            };
-        }
     } catch (error) {
         console.log('Update User / Error : ', error);
         return {

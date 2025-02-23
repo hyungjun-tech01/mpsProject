@@ -295,9 +295,10 @@ export async function fetchPrinterUsageLogPagesByUserId(
 ) {
     try {
         const count = await client.query(`
-                SELECT COUNT(*) FROM tbl_printer_usage_log
-                WHERE
-                    used_by_user_id='${user_id}'
+                SELECT COUNT(*) 
+                FROM tbl_audit_job_log pul, tbl_user_info tu
+                WHERE pul.user_name = tu.user_name
+                  and tu.user_id ='${user_id}'
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
@@ -312,7 +313,7 @@ export async function fetchAllTotalPageSum() {
     try {
         const sum = await client.query(`
             SELECT SUM(total_pages)
-            FROM tbl_printer_usage_log
+            FROM tbl_audit_job_log
         `);
         return sum.rows[0].sum;
     } catch (error) {
@@ -325,8 +326,9 @@ export async function fetchTodayTotalPageSum() {
     try {
         const todayPages = await client.query(`
             SELECT SUM(total_pages)
-            FROM tbl_printer_usage_log
-            WHERE usage_day = DATE(NOW())
+            FROM tbl_audit_job_log
+            WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
+            AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
         `);
         return todayPages.rows[0].sum;
     } catch (error) {
@@ -338,18 +340,13 @@ export async function fetchTodayTotalPageSum() {
 export async function fetchTotalPagesPerDayFor30Days() {
     try {
         const response = await client.query(`
-            SELECT 
-                DATE(usage_day) AS used_day,
-                SUM(total_pages) AS pages
-            FROM 
-                tbl_printer_usage_log
-            WHERE 
-                usage_day >= NOW() - INTERVAL '30 day'
-                AND usage_day <= NOW()
-            GROUP BY 
-                usage_day
-            ORDER BY 
-		        usage_day ASC`);
+        SELECT 
+        TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
+            SUM(total_pages) AS pages
+        FROM tbl_audit_job_log
+        WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+        GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
+        ORDER BY used_day ASC`);
 
         let maxVal = 0;
         const dataFromDB:{used_day:string, pages:number}[] = [];
