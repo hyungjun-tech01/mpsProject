@@ -262,12 +262,12 @@ export async function fetchPrinterUsageLogByUserId(
 
         const printerUsageLogs = response.rows.map((row) => {
             const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = [ row.paper_size,
-                `Duplex:${row.duplex}`,
-                `GrayScale:${row.gray_scale}`,
-                `${row.document_size_kb} kB`,
-                `${row.client_machine}`,
-                `${row.printer_language}`
+            const properties = [row.paper_size,
+            `Duplex:${row.duplex}`,
+            `GrayScale:${row.gray_scale}`,
+            `${row.document_size_kb} kB`,
+            `${row.client_machine}`,
+            `${row.printer_language}`
             ];
             const status = [];
             if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
@@ -352,10 +352,10 @@ export async function fetchTotalPagesPerDayFor30Days() {
 		        usage_day ASC`);
 
         let maxVal = 0;
-        const dataFromDB:{used_day:string, pages:number}[] = [];
+        const dataFromDB: { used_day: string, pages: number }[] = [];
         response.rows.forEach(
-            (item:{used_day:Date, pages: number}) => {
-                if(maxVal < item.pages) maxVal = item.pages;
+            (item: { used_day: Date, pages: number }) => {
+                if (maxVal < item.pages) maxVal = item.pages;
                 dataFromDB.push({
                     used_day: item.used_day.toISOString().split('T')[0],
                     pages: item.pages
@@ -370,16 +370,16 @@ export async function fetchTotalPagesPerDayFor30Days() {
         const yData: number[] = [];
         for (let i = 0; i < 30; i++) {
             const tempDayStr = str30days.at(i) || "";
-            if(i % 4 ===0) {
+            if (i % 4 === 0) {
                 xData.push(tempDayStr);
             } else {
                 xData.push("");
             }
 
             const foundIdx = dataFromDB.findIndex(data => data.used_day === tempDayStr);
-            yData.push( foundIdx === -1 ? 0 : dataFromDB[foundIdx].pages);
+            yData.push(foundIdx === -1 ? 0 : dataFromDB[foundIdx].pages);
         }
-        return {date: xData, pages: yData, maxY: maxVal};
+        return { date: xData, pages: yData, maxY: maxVal };
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch card data.");
@@ -452,12 +452,12 @@ export async function fetchFilteredDeviceUsageLogs(
 
         const printerUsageLogs = response.rows.map((row) => {
             const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = [ row.paper_size,
-                `Duplex:${row.duplex}`,
-                `GrayScale:${row.gray_scale}`,
-                `${row.document_size_kb} kB`,
-                `${row.client_machine}`,
-                `${row.printer_language}`
+            const properties = [row.paper_size,
+            `Duplex:${row.duplex}`,
+            `GrayScale:${row.gray_scale}`,
+            `${row.document_size_kb} kB`,
+            `${row.client_machine}`,
+            `${row.printer_language}`
             ];
             const status = [];
             if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
@@ -598,34 +598,76 @@ export async function fetchFilteredAuditLogPages(
 
 /*========================== Group =========================*/
 export async function fetchGroupsBy(
-    query : string,
-    groupType : string,
+    query: string,
+    groupType: string,
     itemsPerPage: number,
     currentPage: number,
 ) {
-    // const offset = (currentPage - 1) * itemsPerPage;
-    return [];
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const resp = query !== ""
+            ? await client.query(`
+                SELECT * from tbl_group_info
+                WHERE
+                    group_type='${groupType}' AND
+                    (
+                        group_name ILIKE '${`%${query}%`}'
+                    )
+                ORDER BY modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+            : await client.query(`
+                SELECT * from tbl_group_info
+                WHERE group_type='${groupType}'
+                ORDER BY modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+        
+        return resp.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goups by group type");
+    }
 };
 
 export async function fetchGroupPagesBy(
-    query : string,
-    groupType : string,
+    query: string,
+    groupType: string,
     itemsPerPage: number,
 ) {
-    // const offset = (currentPage - 1) * itemsPerPage;
-    return 0;
+    try {
+        const resp = query !== ""
+            ? await client.query(`
+                SELECT COUNT(*) from tbl_group_info
+                WHERE
+                    group_type='${groupType}' AND
+                    (
+                        group_name ILIKE '${`%${query}%`}'
+                    )
+                ORDER BY modified_date DESC
+            `)
+            : await client.query(`
+                SELECT COUNT(*) from tbl_group_info
+                WHERE group_type='${groupType}'
+            `);
+        
+        return resp.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goups by group type");
+    }
 };
 
 export async function fetchGroupInfoByID(
-    groupId : string,
+    groupId: string,
 ) {
     // const offset = (currentPage - 1) * itemsPerPage;
     return [];
 };
 
 export async function fetchMembersInGroupByID(
-    query : string,
-    groupId : string,
+    query: string,
+    groupId: string,
     itemsPerPage: number,
     currentPage: number,
 ) {
@@ -634,8 +676,8 @@ export async function fetchMembersInGroupByID(
 };
 
 export async function fetchMembersPagesByID(
-    query : string,
-    groupId : string,
+    query: string,
+    groupId: string,
     itemsPerPage: number,
 ) {
     // const offset = (currentPage - 1) * itemsPerPage;
