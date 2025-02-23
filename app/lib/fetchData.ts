@@ -607,7 +607,10 @@ export async function fetchGroupsBy(
     try {
         const resp = query !== ""
             ? await client.query(`
-                SELECT * from tbl_group_info
+                SELECT
+                    group_id AS id,
+                    * 
+                FROM tbl_group_info
                 WHERE
                     group_type='${groupType}' AND
                     (
@@ -617,12 +620,15 @@ export async function fetchGroupsBy(
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * from tbl_group_info
+                SELECT
+                    group_id AS id,
+                    * 
+                FROM tbl_group_info
                 WHERE group_type='${groupType}'
                 ORDER BY modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
-        
+
         return resp.rows;
     } catch (error) {
         console.error("Database Error:", error);
@@ -650,8 +656,8 @@ export async function fetchGroupPagesBy(
                 SELECT COUNT(*) from tbl_group_info
                 WHERE group_type='${groupType}'
             `);
-        
-        return resp.rows[0];
+        const totalPages = Math.ceil(Number(resp.rows[0].count) / itemsPerPage);
+        return totalPages;     
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goups by group type");
@@ -660,9 +666,21 @@ export async function fetchGroupPagesBy(
 
 export async function fetchGroupInfoByID(
     groupId: string,
+    groupType: string,
 ) {
-    // const offset = (currentPage - 1) * itemsPerPage;
-    return [];
+    try {
+        const resp = await client.query(`
+            SELECT
+                *
+            FROM tbl_group_info
+            WHERE group_type = '${groupType}'
+            AND group_id = '${groupId}'
+        `);
+        return resp.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goup by ID");
+    }
 };
 
 export async function fetchMembersInGroupByID(

@@ -172,11 +172,12 @@ export function EditItem({
               aria-describedby={`${name}-error`}
             >
               {options &&
-                options.map((item) => (
-                  <option key={item.value} value={item.value}>
+                options.map((item) => {
+                  console.log(item);
+                  return <option key={item.value} value={item.value}>
                     {item.title}
                   </option>
-                ))}
+              })}
             </select>
           </div>
           <div id={`${name}-error`} aria-live="polite" aria-atomic="true">

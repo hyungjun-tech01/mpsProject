@@ -132,7 +132,8 @@ export default async function Page(props: {
     const items: { edit: ISection[], charge: ISection[] } = {
         edit: [
             {
-                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
+                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'),
+                items: [
                     { name: 'userName', title: 'ID', type: 'label', defaultValue: user.user_name },
                     { name: 'userFullName', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
                     { name: 'userEmail', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
@@ -146,18 +147,21 @@ export default async function Page(props: {
                 ]
             },
             {
-                title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
+                title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'),
+                items: [
                     { name: 'userBalanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
                     { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
-                title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
+                title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'),
+                items: [
                     { name: 'userBalanceChart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
                 ]
             },
             {
-                title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
+                title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'),
+                items: [
                     { name: 'userDepartment', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
                     { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
                     { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
@@ -166,7 +170,8 @@ export default async function Page(props: {
         ],
         charge: [
             {
-                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'), items: [
+                title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'),
+                items: [
                     { name: 'balanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale) },
                     { name: 'balanceNew', title: t('account.balance_new'), type: 'currency', defaultValue: user.balance, locale: locale },
                     { name: 'txnComment', title: t('common.explanation'), type: 'input', defaultValue: "" },
@@ -226,8 +231,14 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
-            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={changeBalance}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={async (prevState, formData) => {
+                await modifyUser(id, prevState, formData);
+                return;
+            }}/>}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={async (prevState, formData) => {
+                await changeBalance(id, prevState, formData);
+                return;
+            }}/>}
             {job === 'transaction' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

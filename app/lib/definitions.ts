@@ -2,14 +2,19 @@ export interface ISearch {
   query?: string;
   itemsPerPage?: string;
   page?: string;
-}
+};
+
+export type IBreadCrums = {
+  label: string;
+  link: string;
+};
 
 export type IColumnData = {
   name: string;
   title: string;
   type?: string;
   align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
-}
+};
 
 // ----- Begin : User ----------------------------------------//
 export type User = {

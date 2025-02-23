@@ -17,7 +17,7 @@ export function EditForm({
   id?: string;
   items: ISection[];
   buttons?: IButtonInfo;
-  action: (prevState: State, formData: FormData) => Promise<void>;
+  action: (id: string | undefined, prevState: State, formData: FormData) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
   const updatedAction = !!id ? action.bind(null, id) : action;

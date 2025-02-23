@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
-    params: Promise<{ group: string, locale: "ko" | "en" }>
+    params: Promise<{ group: 'device' | 'user' | 'security', locale: "ko" | "en" }>
 }
 ) {
     const params = await props.params;
