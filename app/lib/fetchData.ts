@@ -208,9 +208,9 @@ export async function fetchUserCount() {
     try {
         const count = await client.query(`
             SELECT COUNT(*)
-            FROM tbl_user
+            FROM tbl_user_info u
             WHERE
-                tbl_user.deleted='N'
+                u.deleted='N'
         `);
         return count.rows[0].count;
     } catch (error) {
@@ -224,9 +224,9 @@ export async function fetchDevices() {
         const response = await client.query(`
             SELECT
                 printer_id
-            FROM tbl_printer
+            FROM tbl_printer_info p
             WHERE
-                tbl_printer.deleted='N'
+                p.deleted='N'
         `);
         return response.rows;
     } catch (error) {
@@ -245,38 +245,44 @@ export async function fetchPrinterUsageLogByUserId(
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const response = await client.query(`
-                SELECT * FROM tbl_printer_usage_log pul
-                JOIN tbl_printer p
-                    ON p.printer_id = pul.printer_id
-                WHERE
-                    pul.used_by_user_id='${user_id}'
-                ORDER BY usage_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
+            SELECT to_char(TO_TIMESTAMP(pul.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') usage_date,
+                td.device_name display_name,
+                pul.total_pages pages,
+                pul.color_total_pages color_total_pages,
+                (pul.total_pages - pul.color_total_pages) black_total_pages,
+                pul.document_name document_name,
+                pul.status status
+            FROM tbl_audit_job_log pul, tbl_user_info tu, tbl_device_info td
+            WHERE pul.user_name = tu.user_name
+             and pul.device_id = td.device_id
+             and tu.user_id='${user_id}'
+             ORDER BY usage_date DESC
+             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
 
-        const printerUsageLogs = response.rows.map((row) => {
-            const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = [ row.paper_size,
-                `Duplex:${row.duplex}`,
-                `GrayScale:${row.gray_scale}`,
-                `${row.document_size_kb} kB`,
-                `${row.client_machine}`,
-                `${row.printer_language}`
-            ];
-            const status = [];
-            if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
-            if (row.printed === "Y") status.push("Printed");
-            if (row.cancelled === "Y") status.push("Cancelled");
-            if (row.refunded === "Y") status.push("Refunded");
+        // const printerUsageLogs = response.rows.map((row) => {
+        //     const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
+        //     const properties = [ row.paper_size,
+        //         `Duplex:${row.duplex}`,
+        //         `GrayScale:${row.gray_scale}`,
+        //         `${row.document_size_kb} kB`,
+        //         `${row.client_machine}`,
+        //         `${row.printer_language}`
+        //     ];
+        //     const status = [];
+        //     if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
+        //     if (row.printed === "Y") status.push("Printed");
+        //     if (row.cancelled === "Y") status.push("Cancelled");
+        //     if (row.refunded === "Y") status.push("Refunded");
 
-            return {
-                ...row,
-                page: pages,
-                property: properties,
-                status: status,
-            };
-        });
-        return printerUsageLogs;
+        //     return {
+        //         ...row,
+        //         page: pages,
+        //         property: properties,
+        //         status: status,
+        //     };
+        // });
+        return response.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch transaction by account id.");

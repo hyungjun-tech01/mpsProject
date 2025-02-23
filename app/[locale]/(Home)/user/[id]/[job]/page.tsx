@@ -185,13 +185,15 @@ export default async function Page(props: {
     ];
 
     const printerUsageColumns: IColumnData[] = [
-        { name: 'usage_date', title: t('printer.usage_date'), type: 'date' },
+        { name: 'usage_date', title: t('printer.usage_date') },
         { name: 'display_name', title: t('printer.printer') },
-        { name: 'page', title: t('common.page'), align: 'center' },
-        { name: 'usage_cost', title: t('printer.usage_cost'), align: 'center', type: 'currency' },
+        { name: 'pages', title: t('common.page'), align: 'center' },
+        { name: 'color_total_pages', title: t('common.color_total_pages'), align: 'center' },
+        { name: 'black_total_pages', title: t('common.black_total_pages'), align: 'center' },
+        //{ name: 'usage_cost', title: t('printer.usage_cost'), align: 'center', type: 'currency' },
         { name: 'document_name', title: t('printer.document_name'), align: 'center' },
-        { name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
-        { name: 'status', title: t('printer.status'), align: 'center', type: 'list' },
+        //{ name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
+        { name: 'status', title: t('printer.status'), align: 'center' },
     ];
 
     const buttonItems: { edit: IButtonInfo, charge: IButtonInfo } = {

@@ -2531,8 +2531,149 @@ ocr_text                    text,
 image_archive               bytea,
 image_thumbnail             bytea,
 is_encrypted                boolean,
+security_group_name         varchar(255),
+device_id                   varchar(36),
+total_pages                 integer,
+color_total_pages           integer,
+document_name               varchar(255),
+status                      varchar(100)
+);
+
+drop table if exists tbl_audit_job_log_temp;
+
+CREATE TABLE tbl_audit_job_log_temp
+(
+job_log_id                  varchar(36),
+job_type                    varchar(10),
+printer_serial_number       varchar(20),
+job_id                      varchar(20),
+user_name                   varchar(50),
+destination                 varchar(50),
+send_time                   varchar(20),
+file_name                   varchar(50),
+finish_time                 varchar(20),
+copies                      varchar(100)    ,
+original_pages              varchar(100),
+detect_privacy              varchar(100),
+privacy_text                text,
+image_archive_path          varchar(100),
+text_archive_path           varchar(100),
+original_job_id             varchar(20),
+ocr_text                    text,
+image_archive               varchar(255),
+image_thumbnail             varchar(255),
+is_encrypted                varchar(255),
 security_group_name         varchar(255)
 );
+
+copy tbl_audit_job_log_temp(
+job_log_id              ,  
+job_type                ,
+printer_serial_number   ,
+job_id                  ,
+user_name               ,
+destination             ,
+send_time               ,
+file_name               ,
+finish_time             ,
+copies                  ,
+original_pages          ,
+detect_privacy          ,
+privacy_text            ,
+image_archive_path      ,
+text_archive_path       ,
+original_job_id         ,
+ocr_text                ,
+image_archive           ,
+image_thumbnail         ,
+is_encrypted            ,
+security_group_name     
+) FROM 'd:\tbl_audit_job_log_202502231630.csv'  WITH (FORMAT csv, HEADER true);
+
+insert into tbl_audit_job_log
+(
+job_log_id              ,  
+job_type                ,
+printer_serial_number   ,
+job_id                  ,
+user_name               ,
+destination             ,
+send_time               ,
+file_name               ,
+finish_time             ,
+copies                  ,
+original_pages          ,
+detect_privacy          ,
+privacy_text            ,
+image_archive_path      ,
+text_archive_path       ,
+original_job_id         ,
+ocr_text                ,
+image_archive           ,
+image_thumbnail         ,
+is_encrypted            ,
+security_group_name     
+)
+select job_log_id       ,  
+job_type                ,
+printer_serial_number   ,
+job_id                  ,
+user_name               ,
+destination             ,
+send_time               ,
+file_name               ,
+finish_time             ,
+copies ::int                 ,
+original_pages ::int         ,
+detect_privacy ::boolean     ,
+privacy_text            ,
+image_archive_path      ,
+text_archive_path       ,
+original_job_id         ,
+ocr_text                ,
+image_archive ::bytea          ,
+image_thumbnail ::bytea        ,
+is_encrypted   ::boolean       ,
+security_group_name     
+ from tbl_audit_job_log_temp;
+
+-- sample data status 변경 
+update  tbl_audit_job_log t 
+set status = 'Printed'; -- Sample Date Printed 로 변경.
+
+-- device id update 
+-- 살아 있는 프린터 찾기 
+select * from tbl_device_info t
+where t.deleted = 'N';    -- 실제로 찾을 것 ...
+-- 4008
+-- 4009
+
+UPDATE tbl_audit_job_log
+SET device_id = '4008'
+WHERE job_log_id IN (
+    SELECT job_log_id
+    FROM tbl_audit_job_log
+    WHERE device_id IS NULL 
+    LIMIT 5
+);
+
+UPDATE tbl_audit_job_log
+SET device_id = '4009'
+where device_id is null;
+
+-- total pages update
+UPDATE tbl_audit_job_log
+set total_pages = original_pages, color_total_pages = original_pages;
+
+-- document_name 
+UPDATE tbl_audit_job_log
+set document_name = '문서_'||job_log_id;
+
+
+select * from tbl_audit_job_log;
+
+drop table if exists tbl_audit_job_log_temp;
+
 
 drop table if exists tbl_settings_info;
 
