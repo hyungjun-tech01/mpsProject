@@ -281,6 +281,15 @@ export async function createUser(prevState: State, formData: FormData) {
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
 export async function modifyUser(id: string, prevState: State, formData: FormData) {
+
+    
+    if (!formData.has('userDisabledPrinting')) {
+        formData.set('userDisabledPrinting', 'N');
+    }
+    if (!formData.has('userRestricted')) {
+        formData.set('userRestricted', 'N');
+    }
+
     const validatedFields = ModifyUser.safeParse({
         userDisabledPrinting: formData.get('userDisabledPrinting'),
     });
@@ -302,12 +311,14 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     const newCardNo1 = formData.get('userCardNumber');
     const newCardNo2 = formData.get('userCardNumber2');
 
+    console.log('newDisabledPrinting', newDisabledPrinting, 'newRestricted', newRestricted);
+
     // Prepare data for updating the database
     try {
         // First, get current data
         const resp = await client.query(`
             SELECT
-                u.user_name full_name,
+                u.full_name,
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
@@ -350,7 +361,7 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
                 await client.query(`
                     UPDATE tbl_user_info
                     SET
-                        user_name='${newFullName}',
+                        full_name='${newFullName}',
                         email='${newEmail}',
                         home_directory='${newHomeDir}',
                         disabled_printing='${newDisabledPrinting}',
