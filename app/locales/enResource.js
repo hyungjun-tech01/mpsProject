@@ -315,6 +315,8 @@ const enResource = {
         comment: {
             click_below_to_edit: '👉 Click the below to edit',
             click_drag_file_upload: 'Click or drag file to this area to upload',
+            group_edit_group_name: 'The Group Name',
+            group_edit_schedule: 'The specified quota will be allotted to the member(s) resgisterd in this group',
             input_search_text: 'Input search text',
             msg_fail_save: 'Failed to save.',
             msg_no_data: 'No input data',

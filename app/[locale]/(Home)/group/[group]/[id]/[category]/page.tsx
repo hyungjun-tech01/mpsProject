@@ -26,8 +26,6 @@ export default async function Page(props: {
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
 
-    console.log('Group / ID :', id);
-
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
@@ -63,7 +61,10 @@ export default async function Page(props: {
     const editItems: { device: ISection[], user: ISection[], security: ISection[] } = {
         device: [
             {
-                title: t('common.details'), description: t('comment.group_edit_device_description'),
+                title: t('common.details'), description: [
+                    t('comment.group_edit_group_name'),
+                    t('comment.group_edit_schedule'),
+                ],
                 items: [
                     { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: groupInfo.group_name },
                     { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: groupInfo.schedule_period || '',
@@ -81,7 +82,10 @@ export default async function Page(props: {
         ],
         user: [
             {
-                title: t('common.details'), description: t('comment.group_edit_device_description'),
+                title: t('common.details'), description: [
+                    t('comment.group_edit_group_name'),
+                    t('comment.group_edit_schedule'),
+                ],
                 items: [
                     { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: groupInfo.group_name },
                     { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: groupInfo.schedule_period,

@@ -21,7 +21,7 @@ export interface IEditItem {
 
 export interface ISection {
   title: string;
-  description: string;
+  description: string | object;
   items: IEditItem[];
 };
 
@@ -172,12 +172,10 @@ export function EditItem({
               aria-describedby={`${name}-error`}
             >
               {options &&
-                options.map((item) => {
-                  console.log(item);
-                  return <option key={item.value} value={item.value}>
+                options.map((item) => <option key={item.value} value={item.value}>
                     {item.title}
                   </option>
-              })}
+              )}
             </select>
           </div>
           <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
@@ -203,50 +201,50 @@ export function EditItem({
       } else {
         return (
           <div className="text-gray-600">No data</div>
-      )}
-      case "password":
-        return (
-          <div className="mb-4">
-            <label htmlFor={name} className="mb-2 block text-sm font-semibold">
-              {title}
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id={name}
-                  name={name}
-                  type="password"
-                  placeholder={placeholder}
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                />
-              </div>
-              <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
-                {error &&
-                  error.map((error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-              </div>
+      )};
+    case "password":
+      return (
+        <div className="mb-4">
+          <label htmlFor={name} className="mb-2 block text-sm font-semibold">
+            {title}
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id={name}
+                name={name}
+                type="password"
+                placeholder={placeholder}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+            </div>
+            <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
+              {error &&
+                error.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
             </div>
           </div>
-        );
-      case "hidden":
-        return (
-          <div className="mb-4">
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id={name}
-                  name={name}
-                  type="hidden"
-                  defaultValue={defaultValue}
-                  placeholder={placeholder}
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                />
-              </div>
+        </div>
+      );
+    case "hidden":
+      return (
+        <div className="mb-4">
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id={name}
+                name={name}
+                type="hidden"
+                defaultValue={defaultValue}
+                placeholder={placeholder}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
             </div>
           </div>
-        );    
+        </div>
+      );    
   }
 }
