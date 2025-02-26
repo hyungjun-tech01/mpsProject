@@ -26,104 +26,23 @@ export async function fetchFilteredDevices(
     try {
         const device = query !== '' 
             ? await client.query(`
-                SELECT printer_id id, 
-                printer_id
-                ,server_name
-                ,printer_name
-                ,display_name
-                ,location
-                ,notes
-                ,charge_type
-                ,default_cost
-                ,deleted
-                ,deleted_date
-                ,disabled
-                ,disabled_until
-                ,total_jobs
-                ,total_pages
-                ,total_sheets
-                ,reset_by
-                ,reset_date
-                ,created_date
-                ,created_by
-                ,modified_date
-                ,modified_by
-                ,color_detection_mode
-                ,device_type
-                ,ext_device_function
-                ,physical_printer_id
-                ,printer_type
-                ,serial_number
-                ,web_print_enabled
-                ,custom1
-                ,custom2
-                ,custom3
-                ,custom4
-                ,custom5
-                ,custom6
-                ,last_usage_date
-                ,gcp_printer_id
-                ,gcp_enabled
-                ,modified_ticks
-                ,server_uuid
-                ,parent_id FROM tbl_printer_info
+                SELECT * FROM tbl_device_info
                 WHERE
                 1=1 AND
                     (
-                        tbl_printer_info.display_name ILIKE '${`%${query}%`}' OR
-                        tbl_printer_info.device_type ILIKE '${`%${query}%`}' OR
-                        tbl_printer_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_printer_info.server_name ILIKE '${`%${query}%`}' OR 
-                        tbl_printer_info.deleted ILIKE '${`%${query}%`}'
+                        tbl_device_info.printer_name ILIKE '${`%${query}%`}' OR
+                        tbl_device_info.device_model ILIKE '${`%${query}%`}' OR
+                        tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
+                        tbl_device_info.deleted ILIKE '${`%${query}%`}'
                     )
-                ORDER BY tbl_printer_info.modified_date DESC
+                ORDER BY tbl_device_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT printer_id id, 
-                printer_id
-                ,server_name
-                ,printer_name
-                ,display_name
-                ,location
-                ,notes
-                ,charge_type
-                ,default_cost
-                ,deleted
-                ,deleted_date
-                ,disabled
-                ,disabled_until
-                ,total_jobs
-                ,total_pages
-                ,total_sheets
-                ,reset_by
-                ,reset_date
-                ,created_date
-                ,created_by
-                ,modified_date
-                ,modified_by
-                ,color_detection_mode
-                ,device_type
-                ,ext_device_function
-                ,physical_printer_id
-                ,printer_type
-                ,serial_number
-                ,web_print_enabled
-                ,custom1
-                ,custom2
-                ,custom3
-                ,custom4
-                ,custom5
-                ,custom6
-                ,last_usage_date
-                ,gcp_printer_id
-                ,gcp_enabled
-                ,modified_ticks
-                ,server_uuid
-                ,parent_id FROM tbl_printer_info
+                SELECT * FROM tbl_device_info
                 WHERE
                 1=1
-                ORDER BY tbl_printer_info.modified_date DESC
+                ORDER BY tbl_device_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
         ;

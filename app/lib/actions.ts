@@ -311,7 +311,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     const newCardNo1 = formData.get('userCardNumber');
     const newCardNo2 = formData.get('userCardNumber2');
 
-    console.log('newDisabledPrinting', newDisabledPrinting, 'newRestricted', newRestricted);
 
     // Prepare data for updating the database
     try {
@@ -393,36 +392,38 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
 
 export async function deleteUser(id: string) {
     // First, get account id through tbl_user_account
-    let foundAccountID = null;
-    try {
-        const response = client.query(`
-            SELECT * FROM tbl_user_account WHERE user_id='${id}
-        `);
-        if (response.rows.length === 0) {
-            return {
-                message: 'Cannot find account by user ID',
-            };
-        };
-        foundAccountID = response.rows[0].account_id;
-    } catch (error) {
-        console.log('Delete User / Error : ', error);
-        return {
-            message: 'Database Error: Failed to get account by user ID.',
-        };
-    };
+    // let foundAccountID = null;
+    // try {
+    //     const response = client.query(`
+    //         SELECT * FROM tbl_user_account WHERE user_id='${id}
+    //     `);
+    //     if (response.rows.length === 0) {
+    //         return {
+    //             message: 'Cannot find account by user ID',
+    //         };
+    //     };
+    //     foundAccountID = response.rows[0].account_id;
+    // } catch (error) {
+    //     console.log('Delete User / Error : ', error);
+    //     return {
+    //         message: 'Database Error: Failed to get account by user ID.',
+    //     };
+    // };
 
     // Then, Delete user_account, account and user
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
+        // await client.query(`
+        //     DELETE FROM tbl_user_account WHERE user_id='${id}
+        // `);
+        // await client.query(`
+        //     DELETE FROM tbl_account WHERE account_id='${foundAccountID}
+        // `)
         await client.query(`
-            DELETE FROM tbl_user_account WHERE user_id='${id}
+            update tbl_user_info 
+            set deleted = 'Y', deleted_date = now()
+            WHERE user_id='${id}'
         `);
-        await client.query(`
-            DELETE FROM tbl_account WHERE account_id='${foundAccountID}
-        `)
-        await client.query(`
-            DELETE FROM tbl_user WHERE user_id='${id}
-        `)
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
@@ -459,30 +460,30 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     const txnComment = formData.get('txnComment');
 
     // First, get account id through tbl_user_account
-    let foundAccountID = null;
-    try {
-        const resp = await client.query(`
-            SELECT * FROM tbl_user_account WHERE user_id='${id}'
-        `);
+    // let foundAccountID = null;
+    // try {
+    //     const resp = await client.query(`
+    //         SELECT * FROM tbl_user_account WHERE user_id='${id}'
+    //     `);
 
-        if (resp.rows.length === 0) {
-            return {
-                message: 'Database Error: Failed to find account by user ID',
-            };
-        };
-        foundAccountID = resp.rows[0].account_id;
-    } catch (error) {
-        console.log('Update Balance / Error : ', error);
-        return {
-            message: 'Database Error: Failed to get account by user ID.',
-        };
-    };
+    //     if (resp.rows.length === 0) {
+    //         return {
+    //             message: 'Database Error: Failed to find account by user ID',
+    //         };
+    //     };
+    //     foundAccountID = resp.rows[0].account_id;
+    // } catch (error) {
+    //     console.log('Update Balance / Error : ', error);
+    //     return {
+    //         message: 'Database Error: Failed to get account by user ID.',
+    //     };
+    // };
 
     // Then, Check if new value is the same with the current
     let balanceCurrent = null;
     try {
         const resp = await client.query(`
-            SELECT * FROM tbl_account WHERE account_id='${foundAccountID}'
+            SELECT * FROM tbl_user_info WHERE user_id='${id}'
         `);
         if (resp.rows.length === 0) return {
             message: 'Database Error: Failed to find account',
@@ -502,51 +503,51 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     };
 
     // Next, get new account_transaction id --------------------------------------
-    let lastAccountTransactionId = null;
-    try {
-        const resp = await client.query(`
-            SELECT max(account_transaction_id) account_transaction_id FROM tbl_account_transaction
-        `);
-        lastAccountTransactionId = resp.rows.length > 0 ? Number(resp.rows[0].account_transaction_id) + 1 : 1;
-    } catch (error) {
-        throw new Error("Failed to get account_transaction_id.");
-    };
+    // let lastAccountTransactionId = null;
+    // try {
+    //     const resp = await client.query(`
+    //         SELECT max(account_transaction_id) account_transaction_id FROM tbl_account_transaction
+    //     `);
+    //     lastAccountTransactionId = resp.rows.length > 0 ? Number(resp.rows[0].account_transaction_id) + 1 : 1;
+    // } catch (error) {
+    //     throw new Error("Failed to get account_transaction_id.");
+    // };
 
     // Next, update balance in account and record this into account_transaction
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
         await client.query(`
-            UPDATE tbl_account
+            UPDATE tbl_user_info
             SET
                 balance='${balanceNew}',
                 modified_date=NOW(),
                 modified_by='admin'
-            WHERE account_id='${foundAccountID}'
+            WHERE user_id='${id}'
         `);
-        await client.query(`
-            INSERT INTO tbl_account_transaction (
-                account_transaction_id,
-                transaction_date,
-                transacted_by,
-                account_id,
-                amount,
-                balance,
-                txn_comment,
-                is_credit,
-                transaction_type
-            )
-            VALUES (
-                '${lastAccountTransactionId}',
-                NOW(),
-                'admin',
-                '${foundAccountID}',
-                '${balanceNew}',
-                '${balanceNew}',
-                '${txnComment}',
-                'Y',
-                'ADJUST'
-            )
-        `)
+        // await client.query(`
+        //     INSERT INTO tbl_account_transaction (
+        //         account_transaction_id,
+        //         transaction_date,
+        //         transacted_by,
+        //         account_id,
+        //         amount,
+        //         balance,
+        //         txn_comment,
+        //         is_credit,
+        //         transaction_type
+        //     )
+        //     VALUES (
+        //         '${lastAccountTransactionId}',
+        //         NOW(),
+        //         'admin',
+        //         '${foundAccountID}',
+        //         '${balanceNew}',
+        //         '${balanceNew}',
+        //         '${txnComment}',
+        //         'Y',
+        //         'ADJUST'
+        //     )
+        // `)
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋
     } catch (error) {
         await client.query("ROLLBACK"); // 에러 발생 시 롤백

@@ -62,11 +62,13 @@ export type UserField = {
 
 
 export type Device = {
-  id: string|null;
-  printer_id: string|null;
-  printer_name: string | null;
-  device_type: string | null;
+  device_id: string|null;
+  device_name: string|null;
+  location: string | null;
+  notes: string | null;
   ext_device_function: string | null;
-  server_name: string | null;
+  physical_device_id: string | null;
+  device_model: string | null;
+  serial_number: string | null;
   deleted: string | null;
 };
