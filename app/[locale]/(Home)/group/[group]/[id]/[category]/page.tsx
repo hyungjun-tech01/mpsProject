@@ -6,7 +6,8 @@ import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import MemberTable from '@/app/components/table';
-import { IColumnData, ISearch } from '@/app/lib/definitions';
+import { ISearch, IBreadCrums } from '@/app/lib/definitions';
+import { modifyGroup } from '@/app/lib/actionsGroup';
 import { fetchGroupInfoByID, fetchMembersInGroupByID, fetchMembersPagesByID } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
 
@@ -28,44 +29,89 @@ export default async function Page(props: {
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
-    if (!['detail', 'members'].includes(category)) {
+    if (!['edit', 'members'].includes(category)) {
         notFound();
     };
     const [t, groupInfo, totalPages, members] = await Promise.all([
         getDictionary(locale),
-        fetchGroupInfoByID(id),
+        fetchGroupInfoByID(id, group),
         fetchMembersPagesByID(query, id, itemsPerPage),
         fetchMembersInGroupByID(query, id, itemsPerPage, currentPage),
     ]);
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
-        { category: 'detail', title: t('group.group_details'), link: `/group/${group}/${id}/detail` },
+        { category: 'edit', title: t('group.group_details'), link: `/group/${group}/${id}/edit` },
         { category: 'members', title: t('group.group_members'), link: `/group/${group}/${id}/members` },
     ];
-    const groupBreadcrumbs = {
+    const groupBreadcrumbs: { device: IBreadCrums[], user: IBreadCrums[], security: IBreadCrums[] } = {
         device: [
-            { label: t('group.subTitle_device'), link: `/group/device`},
-            { link: `/group/device/${id}/details`}
+            { label: t('group.subTitle_device'), link: `/group/device` },
+            { label: `${t('group.group_edit')}`, link: `/group/device/${id}/edit` }
         ],
         user: [
-            { label: t('group.subTitle_user'), link: `/group/user`},
-            { link: `/group/user/${id}/details`}
+            { label: t('group.subTitle_user'), link: `/group/user` },
+            { label: `${t('group.group_edit')}`, link: `/group/user/${id}/edit` }
         ],
         security: [
-            { label: t('group.subTitme_security'), link: `/group/security`},
-            { link: `/group/security/${id}/details`}
+            { label: t('group.subTitme_security'), link: `/group/security` },
+            { label: `${t('group.group_edit')}`, link: `/group/security/${id}/edit` }
         ]
     };
-    const detailItems: { device: ISection[], user: ISection[], security: ISection[] } = {
+    const editItems: { device: ISection[], user: ISection[], security: ISection[] } = {
         device: [
-
+            {
+                title: t('common.details'), description: [
+                    t('comment.group_edit_group_name'),
+                    t('comment.group_edit_schedule'),
+                ],
+                items: [
+                    { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: groupInfo.group_name },
+                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: groupInfo.schedule_period || '',
+                        options: [
+                            { title: t('common.none'), value: 'NONE' },
+                            { title: t('common.per_day'), value: 'PER_DAY' },
+                            { title: t('common.per_week'), value: 'PER_WEEK' },
+                            { title: t('common.per_month'), value: 'PER_MONTH' },
+                            { title: t('common.per_year'), value: 'PER_YEAR' },
+                        ]
+                    },
+                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: groupInfo.schedule_amount },
+                ]
+            },
         ],
         user: [
-
+            {
+                title: t('common.details'), description: [
+                    t('comment.group_edit_group_name'),
+                    t('comment.group_edit_schedule'),
+                ],
+                items: [
+                    { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: groupInfo.group_name },
+                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: groupInfo.schedule_period,
+                        options: [
+                            { title: t('common.none'), value: 'NONE' },
+                            { title: t('common.per_day'), value: 'PER_DAY' },
+                            { title: t('common.per_week'), value: 'PER_WEEK' },
+                            { title: t('common.per_month'), value: 'PER_MONTH' },
+                            { title: t('common.per_year'), value: 'PER_YEAR' },
+                        ]
+                    },
+                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: groupInfo.schedule_amount },
+                ]
+            },
         ],
         security: [
-
+            {
+                title: t('common.details'), description: t('comment.group_edit_device_description'),
+                items: [
+                    { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: groupInfo.group_name },
+                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: groupInfo.schedule_period,
+                        options: [t('common.per_day'), t('common.per_week'), t('common.per_month'), t('common.per_year') ] 
+                    },
+                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: groupInfo.schedule_amount },
+                ]
+            },
         ]
     };
     const buttonItems: { device: IButtonInfo, user: IButtonInfo, security: IButtonInfo } = {
@@ -104,12 +150,12 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {category === 'detail' && <EditForm id={id} items={detailItems[group]} buttons={buttonItems[group]} action={null} />}
+            {category === 'edit' && <EditForm id={id} items={editItems[group]} buttons={buttonItems[group]} action={modifyGroup} />}
             {category === 'members' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <MemberTable
-                        columns={transactionColumns}
-                        rows={groupInfo}
+                        columns={members}
+                        rows={[]}
                         currentPage={currentPage}
                         totalPages={totalPages}
                         editable={false}

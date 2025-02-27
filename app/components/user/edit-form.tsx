@@ -17,7 +17,7 @@ export function EditForm({
   id?: string;
   items: ISection[];
   buttons?: IButtonInfo;
-  action: (prevState: State, formData: FormData) => Promise<void>;
+  action: (id: string | undefined, prevState: State, formData: FormData) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
   const updatedAction = !!id ? action.bind(null, id) : action;
@@ -33,7 +33,18 @@ export function EditForm({
             )}>
               <div className='w-full md:w-1/3 pb-4 md:pr-6'>
                 <div className='mb-5 text-xl font-semibold'>{sec.title}</div>
-                <div className='text-sm'>{sec.description}</div>
+                {typeof sec.description === 'string' &&
+                  <div className='text-sm'>{sec.description}</div>
+                }
+                {Array.isArray(sec.description) &&
+                  sec.description.map((item, idx)=> {
+                    if(idx !== sec.description.length - 1) {
+                      return <div key={idx} className='text-sm mb-4'>{item}</div>
+                    } else {
+                      return <div key={idx} className='text-sm'>{item}</div>
+                    }
+                  })
+                }
               </div>
               <div className='w-full md:w-2/3'>
                 { sec.items.map((item: IEditItem) =>

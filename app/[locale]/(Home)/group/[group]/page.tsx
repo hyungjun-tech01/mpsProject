@@ -11,6 +11,9 @@ import {
     fetchGroupsBy,
     fetchGroupPagesBy
 } from '@/app/lib/fetchData';
+import {
+    deleteGroup
+} from '@/app/lib/actionsGroup';
 
 
 export const metadata: Metadata = {
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
-    params: Promise<{ group: string, locale: "ko" | "en" }>
+    params: Promise<{ group: 'device' | 'user' | 'security', locale: "ko" | "en" }>
 }
 ) {
     const params = await props.params;
@@ -68,11 +71,11 @@ export default async function Page(props: {
             { name: 'created', title: t('common.created'), align: 'center' },
         ],
         user: [
-            { name: 'group_name', title: t('group.group_name'), align: 'center' },
-            { name: 'created', title: t('common.created'), align: 'center' },
-            { name: 'balance', title: t('account.balance'), align: 'center' },
-            { name: 'allocate_amount', title: t('group.allocate_amount'), align: 'center' },
-            { name: 'allocate_period', title: t('group.allocate_period'), align: 'center' },
+            { name: 'group_name', title: t('group.group_name'), align: 'left' },
+            { name: 'created_date', title: t('common.created'), align: 'left', type: 'date' },
+            { name: 'remain_amount', title: t('account.balance'), align: 'center', type: 'currency' },
+            { name: 'schedule_amount', title: t('group.allocate_amount'), align: 'center' },
+            { name: 'schedule_period', title: t('group.allocate_period'), align: 'center' },
         ],
         security: [
             { name: 'group_name', title: t('group.group_name'), align: 'center' },
@@ -81,13 +84,6 @@ export default async function Page(props: {
             { name: 'dept_count', title: t('security.dept_count'), align: 'center' },
             { name: 'manager_count', title: t('security.manager_count'), align: 'center' },
         ]
-    };
-
-    // Delete Action ------------------------------------------------------------
-    const groupDeleteAction = {
-        device: null,
-        user: null,
-        security: null,
     };
 
     return (
@@ -113,7 +109,7 @@ export default async function Page(props: {
                     totalPages={totalPages}
                     category={group}
                     locale={locale}
-                    deleteAction={groupDeleteAction[group]}
+                    deleteAction={deleteGroup}
                 />
             </div>
         </div>

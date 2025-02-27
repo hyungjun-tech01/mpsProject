@@ -70,7 +70,7 @@ export default function LoginForm({
           </div>
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
-        <Button type="submit" className="mt-6 w-full bg-lime-100 border border-lime-700 px-1 py-0.5" aria-disabled={isPending}>
+        <Button type="submit" className="mt-8 w-full bg-lime-200  px-3 py-0.5" aria-disabled={isPending}>
           {languageData.login} <ArrowForwardOutlined className="ml-auto h-5 w-5 text-gray-500" />
         </Button>
         <div className="flex h-8 items-end space-x-1">
