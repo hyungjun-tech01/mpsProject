@@ -51,7 +51,7 @@ export default async function Device(
         { name: 'ext_device_function', title: t('device.ext_device_function'), align: 'center' },
         { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center' },
         { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
-        { name: 'deleted', title: t('device.deleted'), align: 'center' },
+        { name: 'status', title: t('device.status'), align: 'center' },
     ];
         
 

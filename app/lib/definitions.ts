@@ -76,4 +76,5 @@ export type Device = {
   device_model: string | null;
   serial_number: string | null;
   deleted: string | null;
+  status:string|null;
 };
