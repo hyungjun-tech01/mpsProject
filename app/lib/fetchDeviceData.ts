@@ -26,11 +26,24 @@ export async function fetchFilteredDevices(
     try {
         const device = query !== '' 
             ? await client.query(`
-                SELECT * FROM tbl_device_info
+                SELECT 
+                device_id id,
+                device_id,
+                device_name,
+                location,
+                notes,
+                physical_device_id,
+                device_model,
+                serial_number,
+                deleted,
+                device_status,
+                device_type,
+                ext_device_function
+                from tbl_device_info
                 WHERE
                 1=1 AND
                     (
-                        tbl_device_info.printer_name ILIKE '${`%${query}%`}' OR
+                        tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
                         tbl_device_info.device_model ILIKE '${`%${query}%`}' OR
                         tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
                         tbl_device_info.deleted ILIKE '${`%${query}%`}'
@@ -39,7 +52,20 @@ export async function fetchFilteredDevices(
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-                SELECT * FROM tbl_device_info
+                SELECT 
+                    device_id id,
+                    device_id,
+                    device_name,
+                    location,
+                    notes,
+                    physical_device_id,
+                    device_model,
+                    serial_number,
+                    deleted,
+                    device_status,
+                    device_type,
+                    ext_device_function
+                FROM tbl_device_info
                 WHERE
                 1=1
                 ORDER BY tbl_device_info.modified_date DESC
@@ -92,31 +118,18 @@ export async function fetchDeviceById(id:string){
     try {
         const device = await client.query(`
             SELECT
-            printer_id id, 
-            printer_id
-            ,server_name
-            ,printer_name
-            ,display_name
-            ,location
-            ,notes
-            ,charge_type
-            ,default_cost
-            ,deleted
-            ,deleted_date
-            ,disabled
-            ,disabled_until
-            ,total_jobs
-            ,total_pages
-            ,total_sheets
-            ,reset_by
-            ,reset_date
-            ,created_date
-            ,created_by
-            ,modified_date
-            ,modified_by
-            ,color_detection_mode
-            ,device_type
-            ,CASE 
+            device_id id,
+            device_id,
+            device_name,
+            location,
+            notes,
+            physical_device_id,
+            device_model,
+            serial_number,
+            deleted,
+            device_status,
+            device_type,
+            CASE 
             WHEN ext_device_function LIKE '%COPIER%' THEN 'Y' 
             ELSE 'N' 
             END AS ext_device_function_printer
@@ -128,24 +141,8 @@ export async function fetchDeviceById(id:string){
             WHEN ext_device_function LIKE '%FAX%' THEN 'Y' 
             ELSE 'N' 
             END AS ext_device_function_fax
-            ,physical_printer_id
-            ,printer_type
-            ,serial_number
-            ,web_print_enabled
-            ,custom1
-            ,custom2
-            ,custom3
-            ,custom4
-            ,custom5
-            ,custom6
-            ,last_usage_date
-            ,gcp_printer_id
-            ,gcp_enabled
-            ,modified_ticks
-            ,server_uuid
-            ,parent_id
-            FROM tbl_printer_info t
-            WHERE t.printer_id = '${id}'
+            FROM tbl_device_info t
+            WHERE t.device_id = '${id}'
         `);
 
         return device.rows[0];

@@ -67,6 +67,7 @@ export type UserField = {
 
 
 export type Device = {
+  id: string|null;
   device_id: string|null;
   device_name: string|null;
   location: string | null;

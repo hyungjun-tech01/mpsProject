@@ -2695,3 +2695,8 @@ dept_name               varchar(255),
 security_group_name     varchar(255)
 );
 
+
+
+--2025.03.01 
+-- tbl_device_info device_type 추가 
+alter table tbl_device_info add column device_type varchar(255);

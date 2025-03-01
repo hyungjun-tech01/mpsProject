@@ -33,19 +33,16 @@ export default async function Page(props: {
             title: t('device.edit_device'), 
             description: t('device.edit_description'), 
             items: [
-                { name: 'printer_id', title: t('device.printer_id'), type: 'hidden', defaultValue: device.printer_id, placeholder: t('device.printer_id') },             
+                { name: 'device_id', title: t('device.device_id'), type: 'hidden', defaultValue: device.device_id, placeholder: t('device.device_id') },             
                 {
                     name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: device.device_type, options: [
                         { title: t('device.open_api'), value: 'OpenAPI' },
                         { title: t('device.workpath_sdk'), value: 'Workpath SDK' }
                     ]
                 },
-                { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: device.printer_name, placeholder: t('device.device_name') },
+                { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: device.device_name, placeholder: t('device.device_name') },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: device.location, placeholder: t('device.location') },
-                { name: 'physical_printer_ip', title: t('device.physical_printer_ip'), type: 'input', defaultValue: device.physical_printer_id, placeholder: t('device.physical_printer_ip') },
-                { name: 'device_administrator_name', title: t('device.device_administrator_name'), type: 'input', defaultValue: "", placeholder: t('device.device_administrator_name') },
-                { name: 'device_administrator_password', title: t('device.device_administrator_password'), type: 'password', defaultValue: "", placeholder: t('device.device_administrator_password') },
-                
+                { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: device.physical_device_id, placeholder: t('device.physical_device_id') },
             ]
         },
         {
@@ -74,7 +71,7 @@ export default async function Page(props: {
                 breadcrumbs={[
                     { label: t('device.device'), href: '/device' },
                     {
-                        label: `${t('device.edit_device')} : ${device.printer_name}`,
+                        label: `${t('device.edit_device')} : ${device.device_name}`,
                         href: `/device/${id}/${job}`,
                         active: true,
                     },

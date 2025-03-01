@@ -422,6 +422,7 @@ const koResource = {
         },
         device :{
             device:'장치',
+            device_id:'장치 ID',
             external_device_list:'External Device List',
             scan_actions:'Scan Actions',
             scan_notifications:'Scan Notifications',
@@ -433,7 +434,7 @@ const koResource = {
             workpath_sdk:'Workpath SDK',
             ext_device_function:'기능',
             server_name:'호스트 이름',
-            status:'삭제여부',
+            status:'상태',
             create_device:'장치생성',
             create_description:'복사기 터미널 같은 주변 장치의 설치를 허용합니다. 하드웨어가 있어야 합니다.',
             location:'위치',
