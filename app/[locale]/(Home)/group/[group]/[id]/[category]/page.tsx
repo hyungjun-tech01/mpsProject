@@ -155,7 +155,7 @@ export default async function Page(props: {
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <MemberTable
                         columns={members}
-                        rows={[]}
+                        rows={members}
                         currentPage={currentPage}
                         totalPages={totalPages}
                         editable={false}

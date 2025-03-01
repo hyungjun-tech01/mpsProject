@@ -33,6 +33,25 @@ const GroupFrmSchema = z.object({
     .min(0, { message: 'Please enter an amount not less than 0.' }),
 });
 
+const CreateGroup = GroupFrmSchema.omit({});
+
+export async function createGroup(id: string, prevState: State, formData: FormData) {
+    const validatedFields = ModifyGroup.safeParse({
+        schedulePreiod: formData.get('schedulePreiod'),
+        scheduleAmount: formData.get('scheduleAmount'),
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create User.',
+        };
+    };
+
+    console.log('Modify Group');
+};
+
 const ModifyGroup = GroupFrmSchema.omit({});
 
 export async function modifyGroup(id: string, prevState: State, formData: FormData) {
