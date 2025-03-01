@@ -2006,7 +2006,7 @@ create table tbl_user_info
     restricted                  bpchar(1)   default 'N'
 );
 
-drop table public.tbl_user_info_temp;
+drop table if exists public.tbl_user_info_temp;
 
 CREATE TABLE IF NOT EXISTS public.tbl_user_info_temp
 (
@@ -2161,7 +2161,7 @@ from tbl_user_info_temp;
 
 select * from tbl_user_info;
 
-drop table public.tbl_user_info_temp;
+drop table if exists public.tbl_user_info_temp;
 
 --2025.02.20 :: tbl_device_info
 
@@ -2191,7 +2191,7 @@ create table tbl_device_info
     device_status       varchar(50)
 );
     
-drop table tbl_device_info_temp;
+drop table if exists tbl_device_info_temp;
 
 create table tbl_device_info_temp
 (
@@ -2352,7 +2352,7 @@ from tbl_device_info_temp;
 
 select * from tbl_device_info;
 
-drop table tbl_device_info_temp;
+drop table if exists tbl_device_info_temp;
 
 
 --2025.02.21 :: tbl_group_info
