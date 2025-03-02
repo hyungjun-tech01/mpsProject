@@ -2703,3 +2703,9 @@ alter table tbl_device_info add column device_type varchar(255);
 
 update tbl_device_info 
 set device_type = 'OpenAPI';
+
+-- 2025.03.02 
+-- group_type( device ) 추가 
+insert into tbl_group_info
+(group_name, group_type, created_date, created_by, modified_date, modified_by )
+values('All Devices', 'device', now(), 'admin', now(), 'admin');

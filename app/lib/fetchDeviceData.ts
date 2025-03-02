@@ -118,31 +118,35 @@ export async function fetchDeviceById(id:string){
     try {
         const device = await client.query(`
             SELECT
-            device_id id,
-            device_id,
-            device_name,
-            location,
-            notes,
-            physical_device_id,
-            device_model,
-            serial_number,
-            deleted,
-            device_status,
-            device_type,
-            CASE 
-            WHEN ext_device_function LIKE '%COPIER%' THEN 'Y' 
-            ELSE 'N' 
-            END AS ext_device_function_printer
-            ,CASE 
-            WHEN ext_device_function LIKE '%SCAN%' THEN 'Y' 
-            ELSE 'N' 
-            END AS ext_device_function_scan
-            ,CASE 
-            WHEN ext_device_function LIKE '%FAX%' THEN 'Y' 
-            ELSE 'N' 
-            END AS ext_device_function_fax
+                device_id id,
+                device_id,
+                device_name,
+                location,
+                notes,
+                physical_device_id,
+                device_model,
+                serial_number,
+                deleted,
+                device_status,
+                device_type,
+                CASE 
+                WHEN ext_device_function LIKE '%COPIER%' THEN 'Y' 
+                ELSE 'N' 
+                END AS ext_device_function_printer
+                ,CASE 
+                WHEN ext_device_function LIKE '%SCAN%' THEN 'Y' 
+                ELSE 'N' 
+                END AS ext_device_function_scan
+                ,CASE 
+                WHEN ext_device_function LIKE '%FAX%' THEN 'Y' 
+                ELSE 'N' 
+                END AS ext_device_function_fax,
+                tgi.group_name,
+                tgi.group_id
             FROM tbl_device_info t
-            WHERE t.device_id = '${id}'
+            LEFT JOIN tbl_group_member_info tgmi ON t.device_id = tgmi.member_id
+            LEFT JOIN tbl_group_info tgi ON tgi.group_id = tgmi.group_id
+            and t.device_id = '${id}'
         `);
 
         return device.rows[0];
