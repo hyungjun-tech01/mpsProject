@@ -118,35 +118,37 @@ export async function fetchDeviceById(id:string){
     try {
         const device = await client.query(`
             SELECT
-                device_id id,
-                device_id,
-                device_name,
-                location,
-                notes,
-                physical_device_id,
-                device_model,
-                serial_number,
-                deleted,
-                device_status,
-                device_type,
-                CASE 
-                WHEN ext_device_function LIKE '%COPIER%' THEN 'Y' 
-                ELSE 'N' 
-                END AS ext_device_function_printer
-                ,CASE 
-                WHEN ext_device_function LIKE '%SCAN%' THEN 'Y' 
-                ELSE 'N' 
-                END AS ext_device_function_scan
-                ,CASE 
-                WHEN ext_device_function LIKE '%FAX%' THEN 'Y' 
-                ELSE 'N' 
-                END AS ext_device_function_fax,
+                t.device_id AS id,
+                t.device_id,
+                t.device_name,
+                t.location,
+                t.notes,
+                t.physical_device_id,
+                t.device_model,
+                t.serial_number,
+                t.deleted,
+                t.device_status,
+                t.device_type,
+                tgi.group_id, 
                 tgi.group_name,
-                tgi.group_id
+                CASE 
+                    WHEN t.ext_device_function LIKE '%COPIER%' THEN 'Y' 
+                    ELSE 'N' 
+                END AS ext_device_function_printer,
+                CASE 
+                    WHEN t.ext_device_function LIKE '%SCAN%' THEN 'Y' 
+                    ELSE 'N' 
+                END AS ext_device_function_scan,
+                CASE 
+                    WHEN t.ext_device_function LIKE '%FAX%' THEN 'Y' 
+                    ELSE 'N' 
+                END AS ext_device_function_fax
             FROM tbl_device_info t
-            LEFT JOIN tbl_group_member_info tgmi ON t.device_id = tgmi.member_id
-            LEFT JOIN tbl_group_info tgi ON tgi.group_id = tgmi.group_id
-            and t.device_id = '${id}'
+            LEFT JOIN tbl_group_member_info tgmi
+                ON t.device_id = tgmi.member_id
+            LEFT JOIN tbl_group_info tgi
+                ON tgmi.group_id = tgi.group_id
+            WHERE t.device_id = '${id}'
         `);
 
         return device.rows[0];
@@ -199,10 +201,11 @@ export async function fetchCreateDevice(newDevice: any) {
 export async function fetchPrinterGroup() {
     try {
         const response = await client.query(`
-           select null printer_group_id, null group_name, null display_name
+           select null group_id, null group_name
            union all
-           select printer_group_id, group_name, display_name
-             from tbl_printer_group;
+           select group_id, group_name
+             from tbl_group_info
+             where group_type = 'device';
         `);
         return response.rows;
     } catch (error) {
@@ -215,9 +218,9 @@ export async function fetchDeleteDevice(id: string) {
     try {
         console.log(id);
         const result = await client.query(`
-            update tbl_printer_info
+            update tbl_device_info
             set deleted ='Y'
-            where printer_id=$1
+            where device_id=$1
         `,[id]);
        
         // 성공 처리
@@ -240,21 +243,47 @@ export async function fetchModifyDevice(newDevice: any) {
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
 
-        console.log('aaa', newDevice.device_type, newDevice.device_name, newDevice.location, 
-        newDevice.physical_printer_ip, ext_device_function, newDevice.printer_id);
     try {
         const result = await client.query(`
-            update tbl_printer_info
-            set device_type = $1, printer_name = $2, 
-                location = $3, physical_printer_id = $4, ext_device_function = $5
-            where printer_id = $6
+            update tbl_device_info
+            set device_type = $1, device_name = $2, 
+                location = $3, physical_device_id = $4, 
+                device_status = $5, notes = $6,
+                device_model = $7, serial_number = $8, 
+                ext_device_function = $9, deleted = $10
+            where device_id = $11
         `,[ newDevice.device_type, newDevice.device_name, newDevice.location, 
-            newDevice.physical_printer_ip, ext_device_function, newDevice.printer_id]);
+            newDevice.physical_device_id, 
+            newDevice.device_status, newDevice.notes, 
+            newDevice.device_model, newDevice.serial_number,
+            ext_device_function, newDevice.deleted, 
+            newDevice.device_id]);
+
+        // tbl_group_member_info 데이터가 있으면, update 
+        // tbl_group_member_info 데이터가 없으면, insert 
+        const queryResult1 = await client.query(`
+            select count(*) cnt from tbl_group_member_info t
+            where t.member_id = $1`,[newDevice.device_id]);
+
+        // 결과에서 카운트를 정수로 변환
+        const count = parseInt(queryResult1.rows[0].cnt, 10);    
+
+        if (count > 0) {
+            const result1 = await client.query(`
+            update tbl_group_member_info
+               set group_id = $1
+               where member_id = $2`,[ newDevice.device_group, newDevice.device_id]);
+        }else{
+            const result1 = await client.query(`
+            insert into tbl_group_member_info(group_id, member_id, member_type)
+            values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
+        }
+
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
     }catch (error) {
-        console.log('Delete device / Error : ', error);
+        console.log('Modify device / Error : ', error);
         return {
             result: false,
             data: "Database Error",

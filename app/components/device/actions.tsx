@@ -13,7 +13,7 @@ export type State = {
 };
 
 const FormSchema = z.object({
-    printer_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    device_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     device_type : z.string({
         invalid_type_error: 'Please select device type',
     }),
@@ -21,15 +21,13 @@ const FormSchema = z.object({
         invalid_type_error: 'Device name is required',
     }).min(1, 'Device name is required'),
     location : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
-    physical_printer_ip :z.string({
-        invalid_type_error: 'Ip address is required',
-    }).min(1, 'Ip address is required'),
-    device_administrator_name :z.string({
-        invalid_type_error: 'Please enter device administrator name',
-    }).min(1, 'Please enter device administrator name'),
-    device_administrator_password :z.string({
-        invalid_type_error: 'Please enter device administrator password',
-    }).min(1, 'Please enter device administrator password'),
+    notes : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    physical_device_id :z.string({
+        invalid_type_error: 'Host Name or Ip address is required',
+    }).min(1, 'Host Name or Ip address is required'),
+    device_model : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    serial_number : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    device_status : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     ext_device_function_printer :  z.enum(["Y", "N"], {
         invalid_type_error: 'Please select Y or N',
     }),
@@ -39,10 +37,10 @@ const FormSchema = z.object({
     ext_device_function_fax :  z.enum(["Y", "N"], {
         invalid_type_error: 'Please select Y or N',
     }),
-    enable_print_release :  z.enum(["Y", "N"], {
-        invalid_type_error: 'Please select Y or N',
-    }),
-    printer_device_group  :  z.string({
+    // enable_print_release :  z.enum(["Y", "N"], {
+    //     invalid_type_error: 'Please select Y or N',
+    // }),
+    device_group  :  z.string({
         invalid_type_error: 'Printer device group is required',
     }).min(1, 'Printer device group is required'),
 });
@@ -62,22 +60,24 @@ export async function createDevice(prevState: State, formData: FormData) {
     if (!formData.has('ext_device_function_fax')) {
         formData.set('ext_device_function_fax', 'N');
     }
-    if (!formData.has('enable_print_release')) {
-        formData.set('enable_print_release', 'N');
-    }
+    // if (!formData.has('enable_print_release')) {
+    //     formData.set('enable_print_release', 'N');
+    // }
 
     const validatedFields = CreateDevice.safeParse({
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
+        device_status: formData.get('device_status'),
         location: formData.get('location'),
-        physical_printer_ip: formData.get('physical_printer_ip'),
+        notes: formData.get('notes'),
+        physical_printer_id: formData.get('physical_printer_id'),
         device_administrator_name: formData.get('device_administrator_name'),
         device_administrator_password: formData.get('device_administrator_password'),
         ext_device_function_printer: formData.get('ext_device_function_printer'),
         ext_device_function_scan: formData.get('ext_device_function_scan'),
         ext_device_function_fax: formData.get('ext_device_function_fax'),
-        enable_print_release: formData.get('enable_print_release'),
-        printer_device_group: formData.get('printer_device_group')
+        // enable_print_release: formData.get('enable_print_release'),
+        device_group: formData.get('device_group')
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -134,24 +134,25 @@ export async function modifyDevice(prevState: State, formData: FormData) {
     if (!formData.has('ext_device_function_fax')) {
         formData.set('ext_device_function_fax', 'N');
     }
-    if (!formData.has('enable_print_release')) {
-        formData.set('enable_print_release', 'N');
-    }
+    // if (!formData.has('enable_print_release')) {
+    //     formData.set('enable_print_release', 'N');
+    // }
 
 
     const validatedFields = CreateDevice.safeParse({
-        printer_id : formData.get('printer_id'),
+        device_id : formData.get('device_id'),
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
+        device_status: formData.get('device_status'),
         location: formData.get('location'),
-        physical_printer_ip: formData.get('physical_printer_ip'),
-        device_administrator_name: formData.get('device_administrator_name'),
-        device_administrator_password: formData.get('device_administrator_password'),
+        notes: formData.get('notes'),
+        physical_device_id: formData.get('physical_device_id'),
         ext_device_function_printer: formData.get('ext_device_function_printer'),
         ext_device_function_scan: formData.get('ext_device_function_scan'),
         ext_device_function_fax: formData.get('ext_device_function_fax'),
-        enable_print_release: formData.get('enable_print_release'),
-        printer_device_group: formData.get('printer_device_group')
+        device_model: formData.get('device_model'),
+        serial_number: formData.get('serial_number'),
+        device_group: formData.get('device_group')
     });
 
     // If form validation fails, return errors early. Otherwise, continue.

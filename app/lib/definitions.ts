@@ -70,6 +70,8 @@ export type Device = {
   id: string|null;
   device_id: string|null;
   device_name: string|null;
+  device_type: string|null;
+  device_status: string|null;
   location: string | null;
   notes: string | null;
   ext_device_function: string | null;
@@ -77,5 +79,4 @@ export type Device = {
   device_model: string | null;
   serial_number: string | null;
   deleted: string | null;
-  status:string|null;
 };

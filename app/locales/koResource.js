@@ -430,11 +430,12 @@ const koResource = {
             device_name:'장비이름',
             device_model:'장비모델',
             device_type: '장비타입',
+            notes:'비고',
             open_api:'OpenAPI',
             workpath_sdk:'Workpath SDK',
             ext_device_function:'기능',
             server_name:'호스트 이름',
-            status:'상태',
+            device_status:'상태',
             create_device:'장치생성',
             create_description:'복사기 터미널 같은 주변 장치의 설치를 허용합니다. 하드웨어가 있어야 합니다.',
             location:'위치',
@@ -453,7 +454,8 @@ const koResource = {
             edit_device:'장비 편집',
             edit_description:'복사기 터미널 같은 주변 장치의 편집을 허용합니다. 하드웨어가 있어야 합니다.',
             udpate_device:'장비 변경하기',
-            serial_number:'시리얼번호'
+            serial_number:'시리얼번호',
+            deleted:'삭제여부',
         },
         security: {
             dept_count: '부서 수',

@@ -43,6 +43,10 @@ export default async function Page(props: {
                 { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: device.device_name, placeholder: t('device.device_name') },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: device.location, placeholder: t('device.location') },
                 { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: device.physical_device_id, placeholder: t('device.physical_device_id') },
+                { name: 'device_status', title: t('device.device_status'), type: 'input', defaultValue: device.device_status, placeholder: t('device.device_status') },
+                { name: 'notes', title: t('device.notes'), type: 'input', defaultValue: device.notes, placeholder: t('device.notes') },
+                { name: 'device_model', title: t('device.device_model'), type: 'input', defaultValue: device.device_model, placeholder: t('device.device_model') },
+                { name: 'serial_number', title: t('device.serial_number'), type: 'input', defaultValue: device.serial_number, placeholder: t('device.serial_number') },
             ]
         },
         {
@@ -52,10 +56,10 @@ export default async function Page(props: {
                 { name: 'ext_device_function_printer', title: t('device.ext_device_function_printer'), type: 'checked', defaultValue: device.ext_device_function_printer, placeholder: t('device.ext_device_function_printer') },
                 { name: 'ext_device_function_scan', title: t('device.ext_device_function_scan'), type: 'checked', defaultValue: device.ext_device_function_scan, placeholder: t('device.ext_device_function_scan') },
                 { name: 'ext_device_function_fax', title: t('device.ext_device_function_fax'), type: 'checked', defaultValue: device.ext_device_function_fax, placeholder: t('device.ext_device_function_fax') },
-                { name: 'enable_print_release', title: t('device.enable_print_release'), type: 'checked', defaultValue: "", placeholder: t('device.enable_print_release') },
+                { name: 'deleted', title: t('device.deleted'), type: 'checked', defaultValue: device.deleted, placeholder: t('device.deleted') },
                 {
-                    name: 'printer_device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: "", 
-                    options:  printerGroup.map((x:any) => ( {'title':x.group_name, 'value':x.printer_group_id} ) )
+                    name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: device.group_id, 
+                    options:  printerGroup.map((x:any) => ( {'title':x.group_name, 'value':x.group_id} ) )
                 },
             ]
         },
