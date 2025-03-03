@@ -17,6 +17,7 @@ export interface IEditItem {
   error?: string[];
   chartData?: { xlabels: string[], ydata: number[], maxY: number };
   other?: React.JSX.Element;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
 
 export interface ISection {
@@ -40,7 +41,8 @@ export function EditItem({
   locale,
   error,
   chartData,
-  other
+  other,
+  onChange
 }: IEditItem) {
   switch (type) {
     case "label":
@@ -103,9 +105,9 @@ export function EditItem({
                 required
               />
               {(!locale || locale === "ko") &&
-                  <div className="pointer-events-none absolute left-3 top-[16px] h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900">
-                    <CurrencyWonIcon  className="pointer-events-none absolute left-1 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900"/>
-                  </div>
+                <div className="pointer-events-none absolute left-3 top-[16px] h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900">
+                  <CurrencyWonIcon className="pointer-events-none absolute left-1 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                </div>
               }
               {!!locale && locale === "en" && (
                 <PaidOutlinedIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -169,13 +171,14 @@ export function EditItem({
               name={name}
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={defaultValue}
+              onChange={onChange}
               aria-describedby={`${name}-error`}
             >
               {options &&
                 options.map((item) => <option key={item.value} value={item.value}>
-                    {item.title}
-                  </option>
-              )}
+                  {item.title}
+                </option>
+                )}
             </select>
           </div>
           <div id={`${name}-error`} aria-live="polite" aria-atomic="true">
@@ -201,7 +204,8 @@ export function EditItem({
       } else {
         return (
           <div className="text-gray-600">No data</div>
-      )};
+        )
+      };
     case "password":
       return (
         <div className="mb-4">
@@ -245,6 +249,6 @@ export function EditItem({
             </div>
           </div>
         </div>
-      );    
+      );
   }
 }

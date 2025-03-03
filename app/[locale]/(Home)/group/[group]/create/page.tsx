@@ -1,13 +1,11 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import clsx from 'clsx';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/user/edit-form';
+import { UserForm } from '@/app/components/group/user-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
-import MemberTable from '@/app/components/table';
-import { ISearch, IBreadCrums, IColumnData } from '@/app/lib/definitions';
-import { createGroup, modifyGroup } from '@/app/lib/actionsGroup';
+import { ISearch, IBreadCrums } from '@/app/lib/definitions';
+import { createGroup } from '@/app/lib/actionsGroup';
 import getDictionary from '@/app/locales/dictionaries';
 
 
@@ -42,71 +40,49 @@ export default async function Page(props: {
             { label: `${t('group.create_group')}`, link: `/group/security/create` }
         ]
     };
-    const editItems: { device: ISection[], user: ISection[], security: ISection[] } = {
-        device: [
-            {
-                title: t('common.details'), description: [
-                    t('comment.group_edit_group_name'),
-                    t('comment.group_edit_schedule'),
-                ],
-                items: [
-                    { name: 'group_name', title: t('group.group_name'), type: 'input', defaultValue: "" },
-                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: "NONE",
-                        options: [
-                            { title: t('common.none'), value: 'NONE' },
-                            { title: t('common.per_day'), value: 'PER_DAY' },
-                            { title: t('common.per_week'), value: 'PER_WEEK' },
-                            { title: t('common.per_month'), value: 'PER_MONTH' },
-                            { title: t('common.per_year'), value: 'PER_YEAR' },
-                        ]
-                    },
-                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: 0 },
-                ]
-            },
-        ],
-        user: [
-            {
-                title: t('common.details'), description: [
-                    t('comment.group_edit_group_name'),
-                    t('comment.group_edit_schedule'),
-                ],
-                items: [
-                    { name: 'group_name', title: t('group.group_name'), type: 'label', defaultValue: "" },
-                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: 'NONE',
-                        options: [
-                            { title: t('common.none'), value: 'NONE' },
-                            { title: t('common.per_day'), value: 'PER_DAY' },
-                            { title: t('common.per_week'), value: 'PER_WEEK' },
-                            { title: t('common.per_month'), value: 'PER_MONTH' },
-                            { title: t('common.per_year'), value: 'PER_YEAR' },
-                        ]
-                    },
-                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: 0 },
-                ]
-            },
-        ],
-        security: [
-            {
-                title: t('common.details'), description: t('comment.group_edit_device_description'),
-                items: [
-                    { name: 'group_name', title: t('group.group_name'), type: 'input', defaultValue: "" },
-                    { name: 'schedule_period', title: t('group.schedule_period'), type: 'select', defaultValue: "NONE",
-                        options: [
-                            { title: t('common.none'), value: 'NONE' },
-                            { title: t('common.per_day'), value: 'PER_DAY' },
-                            { title: t('common.per_week'), value: 'PER_WEEK' },
-                            { title: t('common.per_month'), value: 'PER_MONTH' },
-                            { title: t('common.per_year'), value: 'PER_YEAR' },
-                        ]
-                    },
-                    { name: 'schedule_amount', title: t('group.schedule_amount'), type: 'currency', defaultValue: 0 },
-                ]
-            },
-        ]
+    const translated = {
+        title_generals: t('common.generals'),
+        desc_generas: t('comment.group_edit_group_name'),
+        group_name: t('group.group_name'),
+        placeholder_group_name: t('group.group_name_placeholder'),
+        common_note: t('common.note'),
+        title_schedule_quota: t('group.schedule_quota'),
+        desc_schedule_quota: t('comment.group_edit_quota'),
+        group_schedule_period: t('group.schedule_period'),
+        none:t('common.none'),
+        per_day:t('common.per_day'),
+        per_week:t('common.per_week'),
+        per_month:t('common.per_month'),
+        per_year:t('common.per_year'),
+        group_schedue_start: t('group.group_schedue_start'),
+        sunday: t('common.sunday'),
+        monday: t('common.monday'),
+        tuesday: t('common.tuesday'),
+        wednesday: t('common.wednesday'),
+        thursday: t('common.thursday'),
+        friday: t('common.friday'),
+        saturday: t('common.saturday'),
+        group_schedule_amount: t('group.schedule_amount'),
+        button_cancel: t('common.cancel'),
+        button_go: t('common.apply'),
+        title_grouping: t('common.grouping'),
+        group_member: t('group.group_members'),
+        none_group_member: t('group.none_group_members'),
     };
-    const buttonItem: IButtonInfo = {
-        cancel: { title: t('common.cancel'), link: '/group/security' },
-        go: { title: t('common.apply') },
+    const deviceItems: ISection[] = [
+        {
+            title: t('common.generals'), description: [
+                t('comment.group_edit_group_name'),
+            ],
+            items: [
+                { name: 'group_name', title: t('group.group_name'), type: 'input', defaultValue: "" },
+                { name: 'group_notes', title: t('common.note'), type: 'input', defaultValue: "" },
+            ]
+        },
+    ];
+    const deviceButtons: IButtonInfo = {
+        go: {title: t('common.apply')},
+        cancel: {title: t('common.cancel'), link: '/group/device'}
     };
 
     return (
@@ -121,7 +97,11 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <EditForm items={editItems[group]} buttons={buttonItem} action={createGroup} />
+            {group === 'device' && <EditForm items={deviceItems} buttons={deviceButtons} action={createGroup} />}
+            {group === 'user' &&
+                <UserForm locale={locale} translated={translated} page={currentPage} action={createGroup} />
+            }
+            {group === 'security' && <EditForm items={deviceItems} buttons={deviceButtons} action={createGroup} />}
         </main>
     );
 }
