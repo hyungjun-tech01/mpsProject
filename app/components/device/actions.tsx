@@ -94,8 +94,6 @@ export async function createDevice(prevState: State, formData: FormData) {
     // Prepare data for insertion into the database
     const newDevice = validatedFields.data;
 
-    console.log('Create', newDevice);
-
     const output = await fetchCreateDevice(newDevice);
     if(!output.result) {
         return {
