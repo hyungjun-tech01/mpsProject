@@ -7,24 +7,32 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import { ISearch, IBreadCrums } from '@/app/lib/definitions';
 import { createGroup } from '@/app/lib/actionsGroup';
 import getDictionary from '@/app/locales/dictionaries';
+import { fetchUsersNotInGroup, fetchUsersNotInGroupPages, fetchUsersInGroup } from '@/app/lib/fetchGroupData';
 
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
-    params: Promise<{ group: string, category: string, locale: "ko" | "en" }>
+    params: Promise<{ group: string, category: string, locale: "ko" | "en", id?:string }>
 }
 ) {
     const params = await props.params;
     const locale = params.locale;
     const group = params.group;
+    const groupId = params.id;
     const searchParams = await props.searchParams;
     const currentPage = Number(searchParams?.page) || 1;
+    const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
 
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
 
-    const t = await getDictionary(locale);
+    const [t, outGroup, totalPages, inGroup] = await Promise.all([
+        getDictionary(locale),
+        fetchUsersNotInGroup(itemsPerPage, currentPage),
+        fetchUsersNotInGroupPages(itemsPerPage),
+        !!groupId ? fetchUsersInGroup(groupId) : []
+    ]);
 
     const groupBreadcrumbs: { device: IBreadCrums[], user: IBreadCrums[], security: IBreadCrums[] } = {
         device: [
@@ -99,7 +107,14 @@ export default async function Page(props: {
             />
             {group === 'device' && <EditForm items={deviceItems} buttons={deviceButtons} action={createGroup} />}
             {group === 'user' &&
-                <UserForm locale={locale} translated={translated} page={currentPage} action={createGroup} />
+                <UserForm 
+                    locale={locale}
+                    translated={translated}
+                    page={currentPage}
+                    totalpages={totalPages}
+                    outGroup={outGroup}
+                    inGroup={inGroup}
+                    action={createGroup} />
             }
             {group === 'security' && <EditForm items={deviceItems} buttons={deviceButtons} action={createGroup} />}
         </main>

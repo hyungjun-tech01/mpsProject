@@ -13,11 +13,13 @@ export function UserForm({
     locale,
     translated,
     page,
+    totalPages,
     action,
 }: {
     id?: string;
     locale: string;
     page: number;
+    totalpages: number;
     translated: object;
     action: (id: string | undefined, prevState: State, formData: FormData) => Promise<void>;
 }) {
@@ -272,7 +274,8 @@ export function UserForm({
                     title={translated.title_grouping}
                     noneGroupMemberTitle={translated.none_group_member}
                     groupMemberTitle={translated.group_member}
-                    page={page}
+                    currentPage={page}
+                    totalPages={totalPages}
                     outGroup={[]}
                     inGroup={[]}
                 />

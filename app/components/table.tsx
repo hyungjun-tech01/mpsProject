@@ -126,7 +126,7 @@ export default function CustomizedTable<DataType>({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="flex jus    tify-center">
+            <div className="flex justify-center">
                 <Pagination
                     count={totalPages}
                     shape="rounded"

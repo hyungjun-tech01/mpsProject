@@ -1,0 +1,85 @@
+import pg from "pg";
+import { BASE_PATH } from "@/constans";
+import { UserField } from "@/app/lib/definitions";
+import { generateStrOf30Days } from "./utils";
+
+const client = new pg.Client({
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS,
+});
+
+await client.connect();
+
+// ----- Begin : User -------------------------------------------------------//
+// const ITEMS_PER_PAGE = 10;
+
+export async function fetchUsersNotInGroup(
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    try {
+        const users = await client.query(`
+                SELECT
+                    u.user_id as id,
+                    u.user_name as name
+                FROM tbl_user_info u
+                JOIN tbl_group_memeber_info gm ON gm.member_id = u.user_id
+                WHERE
+                    u.deleted='N' AND  gm.member_id IS NULL
+                ORDER BY u.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+        return users.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users not in group.");
+    }
+};
+
+export async function fetchUsersNotInGroupPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_user_info u
+                JOIN tbl_group_memeber_info gm ON (gm.member_id = u.user_id AND gm.group_type='user')
+                WHERE
+                    u.deleted='N' AND  gm.member_id IS NULL
+                ORDER BY u.modified_date DESC
+            `);
+            const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+            return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users not in group.");
+    }
+};
+
+export async function fetchUsersInGroup(
+    id: string
+) {
+    try {
+        const users = await client.query(`
+                SELECT
+                    u.user_id as id,
+                    u.user_name as name
+                FROM tbl_user_info u
+                JOIN tbl_group_memeber_info gm ON (gm.member_id = u.user_id AND gm.group_type='user')
+                WHERE
+                    u.deleted='N' AND u.user_id = '${id}'
+                ORDER BY u.modified_date DESC
+            `);
+        return users.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users not in group.");
+    }
+};
