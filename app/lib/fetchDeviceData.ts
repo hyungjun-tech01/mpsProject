@@ -161,6 +161,9 @@ export async function fetchDeviceById(id:string){
 export async function fetchCreateDevice(newDevice: any) {
     try {
 
+        // 트랜잭션 시작
+        await client.query('BEGIN');
+
         let ext_device_function;
         ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
         ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
@@ -168,32 +171,40 @@ export async function fetchCreateDevice(newDevice: any) {
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
 
-         // 값 배열로 변환
-        const inputData = [
-        newDevice.device_type,
-        newDevice.device_name,
-        newDevice.location ?? null, // undefined를 null로 변환
-        newDevice.physical_printer_ip,
-        ext_device_function
-      ];
-
-        const query = `
-        INSERT INTO tbl_printer_info (
-          device_type, printer_name, location, physical_printer_id, 
-          ext_device_function, deleted, created_date, created_by, modified_date, modified_by
+        const result = await client.query(`
+        INSERT INTO tbl_device_info (
+          device_type, device_name, location, physical_device_id, 
+          ext_device_function, deleted, web_print_enabled, notes, device_model, serial_number,
+          created_date, created_by, modified_date, modified_by
         ) VALUES (
-            $1, $2, $3, $4, $5, 'N', now(), -1, now(), -1
-        )`;
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+            now(), -1, now(), -1
+        ) RETURNING *`, [newDevice.device_type,newDevice.device_name, newDevice.location, 
+            newDevice.physical_device_id,ext_device_function,'N', 'N', newDevice.notes,
+            newDevice.device_model,newDevice.serial_number
+        ]);
 
-        const result = await client.query(query, inputData);
+        const newDeviceId = result.rows[0].device_id;
+        const result1 = await client.query(`
+        insert into tbl_group_member_info(group_id, member_id, member_type)
+        values($1, $2, $3)`,[ newDevice.device_group, newDeviceId, 'device']);
+
        
+        // 모든 쿼리 성공 시 커밋
+        await client.query('COMMIT');    
+
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
-    } catch (error) {
+    } catch (error:any) {
+
+        // 오류 발생 시 롤백
+        await client.query('ROLLBACK');
+
+        console.error('Insert Error:', error); // 오류 출력
         return {
             result: false,
-            data: "Database Error: Failed to Create device",
+            data: `Database Error: ${error.message}`,
         };
     }
 }
@@ -236,14 +247,17 @@ export async function fetchDeleteDevice(id: string) {
 }
 export async function fetchModifyDevice(newDevice: any) {
 
-    let ext_device_function;
+    try {
+        // 트랜잭션 시작
+        await client.query('BEGIN');
+
+        let ext_device_function;
         ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
         ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
         ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
 
-    try {
         const result = await client.query(`
             update tbl_device_info
             set device_type = $1, device_name = $2, 
@@ -279,10 +293,16 @@ export async function fetchModifyDevice(newDevice: any) {
             values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
         }
 
+        // 모든 쿼리 성공 시 커밋
+        await client.query('COMMIT');
+
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
     }catch (error) {
+       // 오류 발생 시 롤백
+       await client.query('ROLLBACK');
+
         console.log('Modify device / Error : ', error);
         return {
             result: false,

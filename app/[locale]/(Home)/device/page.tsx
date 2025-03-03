@@ -46,14 +46,14 @@ export default async function Device(
     ]);
 
     const columns: IColumnData[] = [
-        { name: 'id', title: t('device.id') },
         { name: 'device_name', title: t('device.printer_name') },
         { name: 'device_model', title: t('device.device_model'), align: 'center' },
         { name: 'device_type', title: t('device.device_type'), align: 'center' },
         { name: 'ext_device_function', title: t('device.ext_device_function'), align: 'center' },
         { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center' },
         { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
-        { name: 'status', title: t('device.status'), align: 'center' },
+        { name: 'device_status', title: t('device.device_status'), align: 'center' },
+        { name: 'deleted', title: t('device.deleted'), align: 'center' },
     ];
     return (
             <div className="w-full">
