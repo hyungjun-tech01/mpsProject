@@ -2708,4 +2708,14 @@ set device_type = 'OpenAPI';
 -- group_type( device ) 추가 
 insert into tbl_group_info
 (group_name, group_type, created_date, created_by, modified_date, modified_by )
-values('All Devices', 'device', now(), 'admin', now(), 'admin');
+values('All0 Devices', 'device', now(), 'admin', now(), 'admin');
+
+-- 2025.03.03 
+-- tbl_device_info 테이블 , device_administrator, device_administrator_password, enable_printer_release 추가
+-- tbl_device_info 테이블 , device_administrator, device_administrator_password, enable_printer_release 추가
+alter table tbl_device_info add column  device_administrator varchar(255);
+alter table tbl_device_info add column device_administrator_password varchar(1000);
+alter table tbl_device_info add column enable_printer_release bpchar(1);
+
+
+

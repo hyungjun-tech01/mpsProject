@@ -70,13 +70,15 @@ export async function createDevice(prevState: State, formData: FormData) {
         device_status: formData.get('device_status'),
         location: formData.get('location'),
         notes: formData.get('notes'),
-        physical_printer_id: formData.get('physical_printer_id'),
+        physical_device_id: formData.get('physical_device_id'),
         device_administrator_name: formData.get('device_administrator_name'),
         device_administrator_password: formData.get('device_administrator_password'),
         ext_device_function_printer: formData.get('ext_device_function_printer'),
         ext_device_function_scan: formData.get('ext_device_function_scan'),
         ext_device_function_fax: formData.get('ext_device_function_fax'),
         // enable_print_release: formData.get('enable_print_release'),
+        device_model: formData.get('device_model'),
+        serial_number: formData.get('serial_number'),
         device_group: formData.get('device_group')
     });
 
