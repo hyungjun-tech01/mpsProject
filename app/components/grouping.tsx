@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { Button, Pagination } from '@mui/material';
+import { Button } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined } from '@mui/icons-material';
+import Pagination from './pagination';
 
 
 export default function Grouping({
@@ -55,7 +56,7 @@ export default function Grouping({
         ];
         setGroup(updateGroup);
 
-        setSelectedInGroup(selected);
+        setSelectedInGroup(null);
         setSelectedInNoneGroup(null);
     };
 
@@ -77,7 +78,7 @@ export default function Grouping({
         ];
         setNonGroup(updateNonGroup);
 
-        setSelectedInNoneGroup(selected);
+        setSelectedInNoneGroup(null);
         setSelectedInGroup(null);
 
     };
@@ -116,12 +117,20 @@ export default function Grouping({
         }
     };
 
+    useEffect(()=>{
+        const updatedOutGroup = outGroup.filter(item => group.findIndex(member => member.id === item.id) === -1);
+        setNonGroup(updatedOutGroup);
+
+        const updatedInGroup = [ ...inGroup, ...group];
+        setGroup(updatedInGroup);
+    }, [outGroup, inGroup]);
+
     return (
-        <div className={'w-full p-2 flex flex-col'}>
+        <div className={'w-full px-2 pt-2 pb-14 flex flex-col'}>
             <div className='w-full'>
                 <div className='mb-5 text-xl font-semibold'>{title}</div>
             </div>
-            <div className='w-full h-64 flex'>
+            <div className='w-full h-80 flex'>
                 <div className='grow p-2 mr-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{noneGroupMemberTitle}</div>
                     <div className='grow h-full p-2 mr-2 border rounded-lg bg-white flex-col overflow-auto'>
@@ -139,7 +148,7 @@ export default function Grouping({
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-white text-black'
+                                    className='bg-white text-black font-normal'
                                     onClick={handleSelectInNoneGroup}
                                 >
                                     {member.name}
@@ -147,24 +156,19 @@ export default function Grouping({
                             }
                         })}
                     </div>
-                    <div className="flex justify-center">
-                        <Pagination
-                            count={totalPages}
-                            shape="rounded"
-                            page={currentPage}
-                            onChange={(event: React.ChangeEvent, page: number) => goSelectedPage(page)}
-                        />
+                    <div className="flex justify-center py-2">
+                        <Pagination totalPages={totalPages} />
                     </div>
                 </div>
                 <div className='grou-0 w-20 p-2 flex-0 flex flex-col justify-center'>
                     <Button
-                        className='h-8 border rounded-lg mb-2'
+                        className='h-8 border rounded-lg mb-2 hover:bg-lime-100'
                         onClick={handleMemberInGroup}
                     >
                         <ArrowForwardOutlined />
                     </Button>
                     <Button
-                        className='h-8 border rounded-lg'
+                        className='h-8 border rounded-lg hover:bg-lime-100'
                         onClick={handleMemberOutGroup}
                     >
                         <ArrowBackOutlined />

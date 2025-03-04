@@ -14,13 +14,17 @@ export function UserForm({
     translated,
     page,
     totalPages,
+    outGroup,
+    inGroup,
     action,
 }: {
     id?: string;
     locale: string;
     page: number;
-    totalpages: number;
+    totalPages: number;
     translated: object;
+    outGroup: {id:string, name:string}[];
+    inGroup: {id:string, name:string}[];
     action: (id: string | undefined, prevState: State, formData: FormData) => Promise<void>;
 }) {
     const initialState: State = { message: null, errors: {} };
@@ -112,8 +116,8 @@ export function UserForm({
     };
 
     useEffect(() => {
-        genOptionsForYearDate(1);
-    }, []);
+        console.log('User form is updated');
+    }, [schedulePeriod])
 
     return (
         <form action={formAction}>
@@ -160,7 +164,7 @@ export function UserForm({
                             defaultValue=""
                             options={optionsForSchedulePeriod}
                             onChange={(event: ChangeEvent) => {
-                                // console.log("Change Schedule Period :", event.target.value);
+                                console.log("Change Schedule Period :", event.target.value);
                                 SetSchedulePeriod(event.target.value);
                             }}
                             error={(!!state?.errors && !!state?.errors.group_name)
@@ -276,8 +280,8 @@ export function UserForm({
                     groupMemberTitle={translated.group_member}
                     currentPage={page}
                     totalPages={totalPages}
-                    outGroup={[]}
-                    inGroup={[]}
+                    outGroup={outGroup}
+                    inGroup={inGroup}
                 />
                 <div id="input-error" aria-live="polite" aria-atomic="true">
                     {!!state?.message &&

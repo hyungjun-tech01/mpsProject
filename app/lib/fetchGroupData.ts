@@ -1,7 +1,4 @@
 import pg from "pg";
-import { BASE_PATH } from "@/constans";
-import { UserField } from "@/app/lib/definitions";
-import { generateStrOf30Days } from "./utils";
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -29,7 +26,7 @@ export async function fetchUsersNotInGroup(
                     u.user_id as id,
                     u.user_name as name
                 FROM tbl_user_info u
-                JOIN tbl_group_memeber_info gm ON gm.member_id = u.user_id
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = u.user_id
                 WHERE
                     u.deleted='N' AND  gm.member_id IS NULL
                 ORDER BY u.modified_date DESC
@@ -50,13 +47,12 @@ export async function fetchUsersNotInGroupPages(
                 SELECT
                     COUNT(*)
                 FROM tbl_user_info u
-                JOIN tbl_group_memeber_info gm ON (gm.member_id = u.user_id AND gm.group_type='user')
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = u.user_id
                 WHERE
                     u.deleted='N' AND  gm.member_id IS NULL
-                ORDER BY u.modified_date DESC
             `);
-            const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-            return totalPages;
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch users not in group.");
@@ -72,7 +68,7 @@ export async function fetchUsersInGroup(
                     u.user_id as id,
                     u.user_name as name
                 FROM tbl_user_info u
-                JOIN tbl_group_memeber_info gm ON (gm.member_id = u.user_id AND gm.group_type='user')
+                JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
                 WHERE
                     u.deleted='N' AND u.user_id = '${id}'
                 ORDER BY u.modified_date DESC

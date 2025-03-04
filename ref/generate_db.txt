@@ -2723,7 +2723,7 @@ alter table tbl_device_info add column enable_printer_release bpchar(1);
 
 drop table if exists tbl_group_member_info;
 
-CREATE TABLE tbl_group_memeber_info
+CREATE TABLE tbl_group_member_info
 (
     group_id                varchar(36) not NULL,
     member_id               varchar(36) not NULL,

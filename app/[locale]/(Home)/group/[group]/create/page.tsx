@@ -111,7 +111,7 @@ export default async function Page(props: {
                     locale={locale}
                     translated={translated}
                     page={currentPage}
-                    totalpages={totalPages}
+                    totalPages={totalPages}
                     outGroup={outGroup}
                     inGroup={inGroup}
                     action={createGroup} />
