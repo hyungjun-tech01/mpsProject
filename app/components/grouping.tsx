@@ -18,7 +18,6 @@ export default function Grouping({
     title: string;
     noneGroupMemberTitle: string;
     groupMemberTitle: string;
-    currentPage: number;
     totalPages: number;
     outGroup: { id: string, name: string }[];
     inGroup: { id: string, name: string }[];
@@ -167,27 +166,39 @@ export default function Grouping({
                 <div className='grow shrink p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{groupMemberTitle}</div>
                     <div className='grow h-full p-2 border rounded-lg bg-white flex-col overflow-auto'>
-                        {group.map(member => {
+                        {group.map((member, idx)=> {
+                            const memberName = "member_" + idx;
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
-                                return <div
-                                    key={member.id}
-                                    id={member.id}
-                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
-                                    onClick={handleSelectInGroup}
-                                >
-                                    {member.name}
-                                </div>
+                                return (
+                                    <>
+                                        <div
+                                            key={member.id}
+                                            id={member.id}
+                                            className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
+                                            onClick={handleSelectInGroup}
+                                        >
+                                            {member.name}
+                                        </div>
+                                        <input type="hidden" name={memberName} value={member.id} />
+                                    </>
+                                )
                             } else {
-                                return <div
-                                    key={member.id}
-                                    id={member.id}
-                                    className='bg-white text-black font-light pl-1'
-                                    onClick={handleSelectInGroup}
-                                >
-                                    {member.name}
-                                </div>
+                                return (
+                                    <>
+                                        <div
+                                            key={member.id}
+                                            id={member.id}
+                                            className='bg-white text-black font-light pl-1'
+                                            onClick={handleSelectInGroup}
+                                        >
+                                            {member.name}
+                                        </div>
+                                        <input type="hidden" name={memberName} value={member.id} />
+                                    </>
+                                )
                             }
                         })}
+                        <input type="hidden" name="member_length" value={group.length} />
                     </div>
                 </div>
             </div>

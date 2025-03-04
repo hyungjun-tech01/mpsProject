@@ -278,7 +278,6 @@ export function UserForm({
                     title={translated.title_grouping}
                     noneGroupMemberTitle={translated.none_group_member}
                     groupMemberTitle={translated.group_member}
-                    currentPage={page}
                     totalPages={totalPages}
                     outGroup={outGroup}
                     inGroup={inGroup}

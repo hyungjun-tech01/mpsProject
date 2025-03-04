@@ -29,8 +29,9 @@ export type State = {
 
 const GroupFormSchema = z.object({
     groupID: z.string(),
-    groupName: z.string(),
-    groupNotes: z.string(),
+    groupName: z.string({
+        invalid_type_error: 'User ID must be string ',
+    }).min(1, { message: "Name is required" }),
     schedulePeriod: z.enum(['NONE','PER_DAY','PER_WEEK', 'PER_MONTH', 'PER_YEAR'], {
         invalid_type_error: "Please select an 'Quota Period' status."
     }),
@@ -42,9 +43,9 @@ const GroupFormSchema = z.object({
 const CreateGroup = GroupFormSchema.omit({groupID:true});
 
 export async function createGroup(prevState: State, formData: FormData) {
+    console.log('Create Group / formData :', formData);
     const validatedFields = CreateGroup.safeParse({
         groupName: formData.get('group_name'),
-        groupNote: formData.get('group_notes'),
         schedulePeriod: formData.get('schedule_preiod'),
         scheduleStart: formData.get('schedule_start'),
         scheduleAmount: formData.get('scheduleAmount'),
@@ -59,6 +60,7 @@ export async function createGroup(prevState: State, formData: FormData) {
     };
 
     console.log('Modify Group');
+    // revalidatePath('/group/user');
 };
 
 const ModifyGroup = GroupFormSchema.omit({});
