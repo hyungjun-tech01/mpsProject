@@ -11,7 +11,6 @@ export default function Grouping({
     title,
     noneGroupMemberTitle,
     groupMemberTitle,
-    currentPage,
     totalPages,
     outGroup,
     inGroup,
@@ -24,15 +23,6 @@ export default function Grouping({
     outGroup: { id: string, name: string }[];
     inGroup: { id: string, name: string }[];
 }) {
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const goSelectedPage = (page: number) => {
-        const params = new URLSearchParams(searchParams);
-        params.set('page', page.toString());
-        router.push(`${pathname}?${params.toString()}`);
-    };
-
     const [nonGroup, setNonGroup] = useState(outGroup);
     const [group, setGroup] = useState(inGroup);
     const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<{ id: string, name: string } | null>(null);
@@ -126,20 +116,20 @@ export default function Grouping({
     }, [outGroup, inGroup]);
 
     return (
-        <div className={'w-full px-2 pt-2 pb-14 flex flex-col'}>
+        <div className={'w-full px-2 pt-2 pb-14 flex md: flex-col'}>
             <div className='w-full'>
                 <div className='mb-5 text-xl font-semibold'>{title}</div>
             </div>
             <div className='w-full h-80 flex'>
-                <div className='grow p-2 mr-2 flex-col'>
+                <div className='grow shrink p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{noneGroupMemberTitle}</div>
-                    <div className='grow h-full p-2 mr-2 border rounded-lg bg-white flex-col overflow-auto'>
+                    <div className='h-full p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {nonGroup.map(member => {
                             if (!!selectedInNoneGroup && selectedInNoneGroup.id === member.id) {
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-lime-700 text-white font-semibold'
+                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
                                     onClick={handleSelectInNoneGroup}
                                 >
                                     {member.name}
@@ -148,7 +138,7 @@ export default function Grouping({
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-white text-black font-normal'
+                                    className='bg-white text-black font-light pl-1'
                                     onClick={handleSelectInNoneGroup}
                                 >
                                     {member.name}
@@ -160,29 +150,29 @@ export default function Grouping({
                         <Pagination totalPages={totalPages} />
                     </div>
                 </div>
-                <div className='grou-0 w-20 p-2 flex-0 flex flex-col justify-center'>
+                <div className='w-20 flex-0 flex flex-col justify-center'>
                     <Button
-                        className='h-8 border rounded-lg mb-2 hover:bg-lime-100'
+                        className='h-8 border rounded-lg mb-2 mx-2 hover:bg-lime-100'
                         onClick={handleMemberInGroup}
                     >
                         <ArrowForwardOutlined />
                     </Button>
                     <Button
-                        className='h-8 border rounded-lg hover:bg-lime-100'
+                        className='h-8 border rounded-lg mx-2 hover:bg-lime-100'
                         onClick={handleMemberOutGroup}
                     >
                         <ArrowBackOutlined />
                     </Button>
                 </div>
-                <div className='grow p-2 ml-2 flex-col'>
+                <div className='grow shrink p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{groupMemberTitle}</div>
-                    <div className='grow h-full p-2 ml-2 border rounded-lg bg-white flex-col overflow-auto'>
+                    <div className='grow h-full p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {group.map(member => {
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-lime-700 text-white font-semibold'
+                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
                                     onClick={handleSelectInGroup}
                                 >
                                     {member.name}
@@ -191,7 +181,7 @@ export default function Grouping({
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-white text-black'
+                                    className='bg-white text-black font-light pl-1'
                                     onClick={handleSelectInGroup}
                                 >
                                     {member.name}
