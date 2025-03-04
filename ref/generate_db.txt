@@ -2719,3 +2719,16 @@ alter table tbl_device_info add column enable_printer_release bpchar(1);
 
 
 
+-- 2025.03.04
+
+drop table if exists tbl_group_member_info;
+
+CREATE TABLE tbl_group_memeber_info
+(
+    group_id                varchar(36) not NULL,
+    member_id               varchar(36) not NULL,
+    member_type             varchar(20) not NULL,
+    group_admin_start_date  timestamp,
+    group_admin_end_date    timestamp,
+    PRIMARY KEY (group_id, member_id)
+);
