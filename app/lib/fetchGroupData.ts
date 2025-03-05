@@ -79,3 +79,73 @@ export async function fetchUsersInGroup(
         throw new Error("Failed to fetch users not in group.");
     }
 };
+
+
+// ----- Begin : Device -------------------------------------------------------//
+// const ITEMS_PER_PAGE = 10;
+
+export async function fetchDevicesNotInGroup(
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    try {
+        const devices = await client.query(`
+                SELECT
+                    d.device_id as id,
+                    d.device_name as name
+                FROM tbl_device_info d
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
+                WHERE
+                    d.deleted='N' AND  gm.member_id IS NULL
+                ORDER BY d.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+        return devices.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch devices not in group.");
+    }
+};
+
+export async function fetchDeviesNotInGroupPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_device_info d
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
+                WHERE
+                    d.deleted='N' AND  gm.member_id IS NULL
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch devices not in group.");
+    }
+};
+
+export async function fetchDevicesInGroup(
+    id: string
+) {
+    try {
+        const devices = await client.query(`
+                SELECT
+                    d.device_id as id,
+                    d.device_name as name
+                FROM tbl_device_info d
+                JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
+                WHERE
+                    d.deleted='N' AND d.device_id = '${id}'
+                ORDER BY d.modified_date DESC
+            `);
+        return devices.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch devices not in group.");
+    }
+};
