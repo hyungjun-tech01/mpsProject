@@ -35,8 +35,6 @@ const GroupFormSchema = z.object({
     schedulePeriod: z.enum(['NONE','PER_DAY','PER_WEEK', 'PER_MONTH', 'PER_YEAR'], {
         invalid_type_error: "Please select an 'Quota Period' status."
     }),
-    scheduleStart: z.coerce.number().min(1, { message: 'Wrong Value'}),
-    scheduleStartSub: z.coerce.number().min(1, { message: 'Wrong Value'}),
     scheduleAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
 });
 
@@ -46,9 +44,8 @@ export async function createGroup(prevState: State, formData: FormData) {
     console.log('Create Group / formData :', formData);
     const validatedFields = CreateGroup.safeParse({
         groupName: formData.get('group_name'),
-        schedulePeriod: formData.get('schedule_preiod'),
-        scheduleStart: formData.get('schedule_start'),
-        scheduleAmount: formData.get('scheduleAmount'),
+        schedulePeriod: formData.get('schedule_period'),
+        scheduleAmount: formData.get('schedule_amount'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -59,8 +56,87 @@ export async function createGroup(prevState: State, formData: FormData) {
         };
     };
 
-    console.log('Modify Group');
-    // revalidatePath('/group/user');
+    const { groupName, schedulePeriod, scheduleAmount } = validatedFields.data;
+    const scheduleStart = (schedulePeriod === 'NONE' || schedulePeriod === 'PER_DAY')
+        ? 0
+        : (schedulePeriod === 'PER_YEAR'
+            ? Number(formData.get('schedule_start')) * 100 + Number(formData.get('schedule_start_sub'))
+            : Number(formData.get('schedule_start'))
+        );
+    const groupNotes = formData.get('group_notes');
+    const groupSize = Number(formData.get('member_length'));
+    const groupMembers = [];
+    for(let num=0; num < groupSize; num++)
+    {
+        const tempName = "member_" + num;
+        const memberID = formData.get(tempName);
+        groupMembers.push(memberID);
+    }
+
+    console.log('Create Group / Name :', groupName);
+    console.log('Create Group / Notes :', groupNotes);
+    console.log('Create Group / Schedule Period :', schedulePeriod);
+    console.log('Create Group / Schedule Start :', scheduleStart);
+    console.log('Create Group / Member :', groupMembers);
+    console.log('Create Group / Amount :', scheduleAmount);
+
+    // Create new group  --------------------------------------
+    try {
+        // 값 배열로 변환
+        const groupInputData = [
+            groupName,
+            "user",
+            groupNotes,
+            schedulePeriod,
+            scheduleAmount,
+            0,
+            scheduleStart,
+        ];
+
+        await client.query("BEGIN"); // 트랜잭션 시작  
+
+        const newGroup = await client.query(`
+            INSERT INTO tbl_group_info (
+                group_name,
+                group_type,
+                group_notes,
+                schedule_period,
+                schedule_amount,
+                remain_amount,
+                schedule_start,
+                created_date,
+                created_by,
+                modified_date,
+                modified_by
+            )
+            VALUES ($1,$2,$3,$4,$5,$6,$7,NOW(),'admin',NOW(),'admin') RETURNING group_id`
+            , groupInputData);
+
+        
+        const groupId = newGroup.rows[0].group_id;
+
+        groupMembers.forEach(async member => client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ('${groupId}', '${member}', 'user')`
+            )
+        );
+
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Create Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Create Group.',
+        };
+    };
+
+    revalidatePath('/group/user');
+    redirect('/group/user');
 };
 
 const ModifyGroup = GroupFormSchema.omit({});

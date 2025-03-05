@@ -72,41 +72,6 @@ export async function createUser(prevState: State, formData: FormData) {
     const userCardNumber = formData.get('userCardNumber')
     const userCardNumber2 = formData.get('userCardNumber2')
 
-    // Get new user id --------------------------------------
-    // let lastUserId = null;
-    // try {
-    //     const resp = await client.query(`
-    //         SELECT max(user_id) user_id FROM tbl_user 
-    //     `);
-    //     lastUserId = resp.rows.length > 0 ? Number(resp.rows[0].user_id) + 1 : 1;
-    // } catch (error) {
-    //     throw new Error("Failed to get user id.");
-    // };
-
-    // Get new account id --------------------------------------
-    // let lastAccountId = null;
-    // try {
-    //     const resp = await client.query(`
-    //          SELECT max(account_id) account_id FROM tbl_account
-    //      `);
-    //     lastAccountId = resp.rows.length > 0 ? Number(resp.rows[0].account_id) + 1 : 1;
-    // } catch (error) {
-    //     throw new Error("Failed to get account id.");
-    // };
-
-    // Get new account id --------------------------------------
-    // let lastUserAccountId = null;
-    // try {
-    //     const resp = await client.query(`
-    //         SELECT max(user_account_id) user_account_id FROM tbl_user_account
-    //     `);
-
-    //     lastUserAccountId = resp.rows.length > 0 ? Number(resp.rows[0].user_account_id) + 1 : 1;
-    // } catch (error) {
-    //     throw new Error("Failed to get account id.");
-    // };
-
-
     // Create new user  --------------------------------------
     try {
         // 값 배열로 변환
@@ -130,38 +95,6 @@ export async function createUser(prevState: State, formData: FormData) {
             userBalanceCurrent,                               
             userRestricted === 'Y' ? 'Y' : 'N',
         ];
-
-        // const accountInputData = [
-        //     lastAccountId,
-        //     'USER',
-        //     userName,
-        //     userBalanceCurrent,
-        //     userRestricted === 'Y' ? 'Y' : 'N',
-        //     0,
-        //     '',
-        //     'Y',
-        //     '',
-        //     'N',
-        //     'admin',
-        //     'admin',
-        //     userName.toLowerCase(),
-        //     '',
-        //     '',
-        //     'N',
-        //     'COMMENT_OPTIONAL',
-        //     'USER_CHOICE_ON',
-        //     '',
-        //     0
-        // ];
-
-        // const userAccountInputData = [
-        //     lastUserAccountId,
-        //     lastUserId,
-        //     lastAccountId,
-        //     'admin',
-        //     'admin',
-        //     0
-        // ];
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -192,47 +125,6 @@ export async function createUser(prevState: State, formData: FormData) {
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,now(),$14,now(),$15,NOW(),$16,$17,$18)`
             , userInputData);
 
-        // await client.query(`
-        //     INSERT INTO tbl_account (
-        //         account_id,
-        //         account_type,
-        //         account_name,
-        //         balance,
-        //         restricted,
-        //         overdraft,
-        //         pin,
-        //         use_global_overdraft,
-        //         notes,
-        //         deleted,
-        //         created_date,
-        //         created_by,
-        //         modified_date,
-        //         modified_by,
-        //         account_name_lower,
-        //         sub_name,
-        //         sub_name_lower,
-        //         disabled,
-        //         comments,
-        //         invoicing,
-        //         sub_pin,
-        //         modified_ticks
-        //     )
-        //     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NOW(),$11,NOW(),$12,$13,$14,$15,$16,$17,$18,$19,$20)`
-        //     , accountInputData);
-
-        // await client.query(`
-        //     INSERT INTO tbl_user_account (
-        //         user_account_id,
-        //         user_id,
-        //         account_id,
-        //         created_date,
-        //         created_by,
-        //         modified_date,
-        //         modified_by,
-        //         modified_ticks
-        //     )
-        //     VALUES ($1,$2,$3,NOW(),$4,NOW(), $5,$6)`, userAccountInputData);
-
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
@@ -242,37 +134,6 @@ export async function createUser(prevState: State, formData: FormData) {
             message: 'Database Error: Failed to Create User.',
         };
     };
-
-    // Get new application log id -------------------------------------------------------------------------
-    // let lastApplicationLogId = null;
-    // try {
-    //     const resp = await client.query(`
-    //         SELECT max(application_log_id) application_log_id FROM tbl_application_log
-    //     `);
-    //     lastApplicationLogId = resp.rows.length > 0 ? Number(resp.rows[0].application_log_id) + 1 : 1;
-    // } catch (error) {
-    //     throw new Error("Failed to get application_log id.");
-    // };
-
-    // // Create new application log -------------------------------------------------------------------------
-    // try {
-    //     await client.query(`
-    //         INSERT INTO tbl_application_log (
-    //             application_log_id,
-    //             log_date,
-    //             server_name,
-    //             log_level,
-    //             message
-    //         )
-    //         VALUES (
-    //             '${lastApplicationLogId}',
-    //             NOW(), '', 'INFO',
-    //             '신규 계정 생성 : ${userName}'
-    //         )
-    //     `);
-    // } catch (error) {
-    //     throw new Error("Failed to create application_log.");
-    // };
 
     revalidatePath('/user');
     redirect('/user');

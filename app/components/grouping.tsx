@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
@@ -115,20 +114,20 @@ export default function Grouping({
     }, [outGroup, inGroup]);
 
     return (
-        <div className={'w-full px-2 pt-2 pb-14 flex md: flex-col'}>
+        <div className={'w-full p-2 mb-4 flex md: flex-col'}>
             <div className='w-full'>
                 <div className='mb-5 text-xl font-semibold'>{title}</div>
             </div>
-            <div className='w-full h-80 flex'>
-                <div className='grow shrink p-2 flex-col'>
+            <div className='w-full flex'>
+                <div className='flex-1 p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{noneGroupMemberTitle}</div>
-                    <div className='h-full p-2 border rounded-lg bg-white flex-col overflow-auto'>
+                    <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {nonGroup.map(member => {
                             if (!!selectedInNoneGroup && selectedInNoneGroup.id === member.id) {
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
+                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full  cursor-default'
                                     onClick={handleSelectInNoneGroup}
                                 >
                                     {member.name}
@@ -137,7 +136,7 @@ export default function Grouping({
                                 return <div
                                     key={member.id}
                                     id={member.id}
-                                    className='bg-white text-black font-light pl-1'
+                                    className='bg-white text-black font-light pl-1 cursor-default'
                                     onClick={handleSelectInNoneGroup}
                                 >
                                     {member.name}
@@ -163,38 +162,36 @@ export default function Grouping({
                         <ArrowBackOutlined />
                     </Button>
                 </div>
-                <div className='grow shrink p-2 flex-col'>
+                <div className='flex-1 p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{groupMemberTitle}</div>
-                    <div className='grow h-full p-2 border rounded-lg bg-white flex-col overflow-auto'>
+                    <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {group.map((member, idx)=> {
                             const memberName = "member_" + idx;
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
                                 return (
-                                    <>
+                                    <div key={idx}>
                                         <div
-                                            key={member.id}
                                             id={member.id}
-                                            className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full'
+                                            className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full cursor-default'
                                             onClick={handleSelectInGroup}
                                         >
                                             {member.name}
                                         </div>
-                                        <input type="hidden" name={memberName} value={member.id} />
-                                    </>
+                                        <input key={member.id} type="hidden" name={memberName} value={member.id} />
+                                    </div>
                                 )
                             } else {
                                 return (
-                                    <>
+                                    <div key={idx}>
                                         <div
-                                            key={member.id}
                                             id={member.id}
-                                            className='bg-white text-black font-light pl-1'
+                                            className='bg-white text-black font-light pl-1 cursor-default'
                                             onClick={handleSelectInGroup}
                                         >
                                             {member.name}
                                         </div>
                                         <input type="hidden" name={memberName} value={member.id} />
-                                    </>
+                                    </div>
                                 )
                             }
                         })}

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@mui/material';
 import { State } from '@/app/lib/actions';
-import { ChangeEvent, useActionState, useEffect, useState } from 'react';
+import { ChangeEvent, useActionState, useState } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
 
@@ -12,7 +12,6 @@ export function UserForm({
     id,
     locale,
     translated,
-    page,
     totalPages,
     outGroup,
     inGroup,
@@ -20,15 +19,19 @@ export function UserForm({
 }: {
     id?: string;
     locale: string;
-    page: number;
     totalPages: number;
     translated: object;
     outGroup: {id:string, name:string}[];
     inGroup: {id:string, name:string}[];
-    action: (id: string | undefined, prevState: State, formData: FormData) => Promise<void>;
+    action: (
+        id: string | undefined,
+        inGroup: {id:string, name:string}[] | undefined,
+        prevState: State,
+        formData: FormData
+    ) => Promise<void>;
 }) {
     const initialState: State = { message: null, errors: {} };
-    const updatedAction = !!id ? action.bind(null, id) : action;
+    const updatedAction = !!id ? action.bind(null, id, inGroup) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>("NONE");
     const [scheduleStart, SetScheduleStart] = useState<number>(1);
@@ -115,9 +118,9 @@ export function UserForm({
         genOptionsForYearDate(chosenValue);
     };
 
-    useEffect(() => {
-        console.log('User form is updated');
-    }, [schedulePeriod])
+    // useEffect(() => {
+    //     console.log('User form is updated');
+    // }, [schedulePeriod])
 
     return (
         <form action={formAction}>
@@ -164,7 +167,6 @@ export function UserForm({
                             defaultValue=""
                             options={optionsForSchedulePeriod}
                             onChange={(event: ChangeEvent) => {
-                                console.log("Change Schedule Period :", event.target.value);
                                 SetSchedulePeriod(event.target.value);
                             }}
                             error={(!!state?.errors && !!state?.errors.group_name)
@@ -181,7 +183,7 @@ export function UserForm({
                                     {schedulePeriod === "PER_WEEK" &&
                                         <select
                                             id="schedule_start"
-                                            name="schedule_start_week"
+                                            name="schedule_start"
                                             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                             defaultValue={scheduleStart}
                                             aria-describedby={"schedule_start-error"}
@@ -200,7 +202,7 @@ export function UserForm({
                                     {schedulePeriod === "PER_MONTH" &&
                                         <select
                                             id="schedule_start"
-                                            name="schedule_start_month"
+                                            name="schedule_start"
                                             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                             defaultValue={scheduleStart}
                                             aria-describedby={"schedule_start-error"}
@@ -220,7 +222,7 @@ export function UserForm({
                                         <div className='flex gap-4'>
                                             <select
                                                 id="schedule_start"
-                                                name="schedule_start_year_month"
+                                                name="schedule_start"
                                                 className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                                 defaultValue={scheduleStart}
                                                 aria-describedby={"schedule_start-error"}
@@ -234,7 +236,7 @@ export function UserForm({
                                             </select>
                                             <select
                                                 id="schedule_start"
-                                                name="schedule_start_year_date"
+                                                name="schedule_start_sub"
                                                 className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                                 defaultValue={subScheduleStartSub}
                                                 aria-describedby={"schedule_start-error"}
