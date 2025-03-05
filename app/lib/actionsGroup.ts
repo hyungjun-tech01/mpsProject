@@ -38,11 +38,88 @@ const GroupFormSchema = z.object({
     scheduleAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
 });
 
-const CreateGroup = GroupFormSchema.omit({groupID:true});
+const CreateDeviceGroup = GroupFormSchema.omit({groupID:true, schedulePeriod:true, scheduleAmount:true});
 
-export async function createGroup(prevState: State, formData: FormData) {
+export async function createDeviceGroup(prevState: State, formData: FormData) {
     console.log('Create Group / formData :', formData);
-    const validatedFields = CreateGroup.safeParse({
+    const validatedFields = CreateDeviceGroup.safeParse({
+        groupName: formData.get('group_name')
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create User.',
+        };
+    };
+
+    const { groupName } = validatedFields.data;
+    const groupNotes = formData.get('group_notes');
+    const groupSize = Number(formData.get('member_length'));
+    const groupMembers = [];
+    for(let num=0; num < groupSize; num++)
+    {
+        const tempName = "member_" + num;
+        const memberID = formData.get(tempName);
+        groupMembers.push(memberID);
+    }
+
+    // Create new group  --------------------------------------
+    try {
+        // 값 배열로 변환
+        const groupInputData = [
+            groupName,
+            "device",
+            groupNotes,
+        ];
+
+        await client.query("BEGIN"); // 트랜잭션 시작  
+
+        const newGroup = await client.query(`
+            INSERT INTO tbl_group_info (
+                group_name,
+                group_type,
+                group_notes,
+                created_date,
+                created_by,
+                modified_date,
+                modified_by
+            )
+            VALUES ($1,$2,$3,NOW(),'admin',NOW(),'admin') RETURNING group_id`
+            , groupInputData);
+       
+        const groupId = newGroup.rows[0].group_id;
+
+        groupMembers.forEach(async member => client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ('${groupId}', '${member}', 'user')`
+            )
+        );
+
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Create Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Create Group.',
+        };
+    };
+
+    revalidatePath('/group/device');
+    redirect('/group/device');
+};
+
+const CreateUserGroup = GroupFormSchema.omit({groupID:true});
+
+export async function createUserGroup(prevState: State, formData: FormData) {
+    // console.log('Create Group / formData :', formData);
+    const validatedFields = CreateUserGroup.safeParse({
         groupName: formData.get('group_name'),
         schedulePeriod: formData.get('schedule_period'),
         scheduleAmount: formData.get('schedule_amount'),
@@ -73,14 +150,7 @@ export async function createGroup(prevState: State, formData: FormData) {
         groupMembers.push(memberID);
     }
 
-    console.log('Create Group / Name :', groupName);
-    console.log('Create Group / Notes :', groupNotes);
-    console.log('Create Group / Schedule Period :', schedulePeriod);
-    console.log('Create Group / Schedule Start :', scheduleStart);
-    console.log('Create Group / Member :', groupMembers);
-    console.log('Create Group / Amount :', scheduleAmount);
-
-    // Create new group  --------------------------------------
+    // Create new user group  --------------------------------------
     try {
         // 값 배열로 변환
         const groupInputData = [

@@ -5,7 +5,7 @@ import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { ISearch, IBreadCrums } from "@/app/lib/definitions";
-import { createGroup } from "@/app/lib/actionsGroup";
+import { createDeviceGroup, createUserGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import {
   fetchUsersNotInGroup,
@@ -27,7 +27,7 @@ export default async function Page(props: {
 
   if (!["device", "user", "security"].includes(group)) {
     notFound();
-  }
+  };
 
   const [t, outGroup, totalPages] = await Promise.all([
     getDictionary(locale),
@@ -139,7 +139,7 @@ export default async function Page(props: {
           totalPages={totalPages}
           outGroup={outGroup}
           inGroup={[]}
-          action={createGroup}
+          action={createDeviceGroup}
         />
       )}
       {group === "user" && (
@@ -150,7 +150,7 @@ export default async function Page(props: {
           totalPages={totalPages}
           outGroup={outGroup}
           inGroup={[]}
-          action={createGroup}
+          action={createUserGroup}
         />
       )}
       {group === "security" && (
