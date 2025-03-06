@@ -10,11 +10,8 @@ import LogTable from '@/app/components/table';
 import getDictionary from '@/app/locales/dictionaries';
 import { changeBalance, modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { generateStrOf30Days } from '@/app/lib/utils';
 import {
     fetchUserById,
-    fetchTransactionsByAccountId,
-    fetchTransactionsPagesByAccountId,
     fetchPrinterUsageLogByUserId,
     fetchPrinterUsageLogPagesByUserId
 } from '@/app/lib/fetchData';
@@ -47,9 +44,7 @@ export default async function Page(props: {
         notFound();
     }
 
-    const [/*transactionInfo, transcationCount , */printerUsageInfo, printerUsageCount] = await Promise.all([
-        //fetchTransactionsByAccountId(user.account_id, itemsPerPage, currentPage),
-        //fetchTransactionsPagesByAccountId(user.account_id, itemsPerPage),
+    const [printerUsageInfo, printerUsageCount] = await Promise.all([
         fetchPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
         fetchPrinterUsageLogPagesByUserId(id, itemsPerPage)
     ]);
@@ -61,68 +56,7 @@ export default async function Page(props: {
         >{t('user.change_balance')}
         </Link>
 
-    // Chart Process --------------------------------------------------------------
-    // let maxVal = 0;
-    // const dataFromDB = transactionInfo.map(
-    //     (item: { transaction_date: Date, amount: number, balance: number }) => {
-    //         const before_value = item.balance - item.amount;
-    //         if (maxVal < item.balance) maxVal = item.balance;
-    //         if (maxVal < before_value) maxVal = before_value;
-    //         return {
-    //             transaction_date: item.transaction_date,
-    //             transaction_date_str: item.transaction_date.toISOString().split('T')[0],
-    //             before_val: before_value,
-    //             after_val: item.balance
-    //         };
-    //     }
-    // ).sort(function (a, b) {
-    //     if (a.transaction_date > b.transaction_date) {
-    //         return 1;
-    //     }
-    //     if (a.transaction_date < b.transaction_date) {
-    //         return -1;
-    //     }
-    //     // a must be equal to b
-    //     return 0;
-    // });
-
-    // let prevVal = dataFromDB.length > 0 ? dataFromDB.at(0).before_val : 0;
-
-    // const str30days = generateStrOf30Days();
-    // const xlabels = str30days.map((str, idx) => idx % 5 === 0 ? str : "");
-    // const tempData: { day: string, value: number }[] = [];
-
-    // for (let i = 0; i < dataFromDB.length; i++) {
-    //     const dataStr = dataFromDB.at(i).transaction_date_str;
-    //     const foundIdx = str30days.findIndex(item => item === dataStr);
-    //     if (foundIdx !== -1) {
-    //         const nextVal = dataFromDB.at(i).after_val;
-    //         const foundIdx1 = tempData.findIndex(item => item.day === dataStr);
-    //         if (foundIdx1 === -1) {
-    //             tempData.push({ day: dataStr, value: nextVal });
-    //         } else {
-    //             tempData[foundIdx1] = { day: dataStr, value: nextVal };
-    //         };
-    //     }
-    // };
-
-    // const ydata = str30days.map(day => {
-    //     const foundIdx = tempData.findIndex(item => item.day === day);
-    //     if (foundIdx !== -1) {
-    //         prevVal = tempData[foundIdx].value;
-    //     }
-    //     return prevVal;
-    // });
-
-    // const chartData = {
-    //     title: 'Valance Record',
-    //     xlabels: xlabels,
-    //     ydata: ydata,
-    //     maxY: maxVal,
-    // };
-
     // Items -------------------------------------------------------------------
-    //{ category: 'transaction', title: t('user.subTitle_ProcessedLog'), link: `/user/${id}/transaction` },
     const subTitles = [
         { category: 'edit', title: t('user.subTitle_detail'), link: `/user/${id}/edit` },
         { category: 'charge', title: t('user.subTitle_budget'), link: `/user/${id}/charge` },
@@ -153,11 +87,6 @@ export default async function Page(props: {
                     { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
-            // {
-            //     title: t('user.secTitle_statistics'), description: t('comment.user_edit_statistics_description'), items: [
-            //         { name: 'userBalanceChart', title: 'Blance Record', type: 'chart', defaultValue: "", chartData: chartData }
-            //     ]
-            // },
             {
                 title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'),
                 items: [
@@ -179,24 +108,13 @@ export default async function Page(props: {
         ],
     };
 
-    const transactionColumns: IColumnData[] = [
-        { name: 'transaction_date', title: t('account.transaction_date'), type: 'date' },
-        { name: 'transacted_by', title: t('account.transaction_by'), align: 'center' },
-        { name: 'amount', title: t('common.price_1'), align: 'center', type: 'currency' },
-        { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
-        { name: 'transaction_type', title: t('account.transaction_type'), align: 'center' },
-        { name: 'txn_comment', title: t('common.explanation'), align: 'center' },
-    ];
-
     const printerUsageColumns: IColumnData[] = [
         { name: 'usage_date', title: t('printer.usage_date') },
         { name: 'display_name', title: t('printer.printer') },
         { name: 'pages', title: t('common.page'), align: 'center' },
         { name: 'color_total_pages', title: t('common.color_total_pages'), align: 'center' },
         { name: 'black_total_pages', title: t('common.black_total_pages'), align: 'center' },
-        //{ name: 'usage_cost', title: t('printer.usage_cost'), align: 'center', type: 'currency' },
         { name: 'document_name', title: t('printer.document_name'), align: 'center' },
-        //{ name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
         { name: 'status', title: t('printer.status'), align: 'center' },
     ];
 
@@ -234,17 +152,6 @@ export default async function Page(props: {
             </div>
             {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
             {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={changeBalance}/>}
-            {/* {job === 'transaction' &&
-                <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                    <LogTable
-                        columns={transactionColumns}
-                        rows={transactionInfo}
-                        currentPage={currentPage}
-                        totalPages={transcationCount}
-                        editable={false}
-                    />
-                </div>
-            } */}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

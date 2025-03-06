@@ -10,7 +10,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import {
     fetchGroupsBy,
     fetchGroupPagesBy
-} from '@/app/lib/fetchData';
+} from '@/app/lib/fetchGroupData';
 import {
     deleteGroup
 } from '@/app/lib/actionsGroup';
@@ -40,7 +40,7 @@ export default async function Page(props: {
     const [t, totalPages, groupData] = await Promise.all([
         getDictionary(locale),
         fetchGroupPagesBy(query, group, itemsPerPage),
-        fetchGroupsBy(query, group, itemsPerPage, currentPage),
+        fetchGroupsBy(query, group, itemsPerPage, currentPage, locale),
     ]);
 
     // Tabs ----------------------------------------------------------------------
@@ -68,19 +68,19 @@ export default async function Page(props: {
         device: [
             { name: 'group_name', title: t('group.group_name'), align: 'center' },
             { name: 'device_count', title: t('group.device_count'), align: 'center' },
-            { name: 'created', title: t('common.created'), align: 'center' },
+            { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
         ],
         user: [
             { name: 'group_name', title: t('group.group_name'), align: 'left' },
             { name: 'created_date', title: t('common.created'), align: 'left', type: 'date' },
             { name: 'remain_amount', title: t('account.balance'), align: 'center', type: 'currency' },
-            { name: 'schedule_amount', title: t('group.allocate_amount'), align: 'center' },
+            { name: 'schedule_amount', title: t('group.allocate_amount'), align: 'center', type: 'currency' },
             { name: 'schedule_period', title: t('group.allocate_period'), align: 'center' },
         ],
         security: [
             { name: 'group_name', title: t('group.group_name'), align: 'center' },
-            { name: 'created', title: t('common.created'), align: 'center' },
-            { name: 'explanation', title: t('common.explanation'), align: 'center' },
+            { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
+            { name: 'group_notes', title: t('common.explanation'), align: 'center' },
             { name: 'dept_count', title: t('security.dept_count'), align: 'center' },
             { name: 'manager_count', title: t('security.manager_count'), align: 'center' },
         ]
@@ -107,7 +107,7 @@ export default async function Page(props: {
                     rows={groupData}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    category={group}
+                    category={`/group/${group}`}
                     locale={locale}
                     deleteAction={deleteGroup}
                 />

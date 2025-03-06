@@ -10,19 +10,19 @@ export default function Grouping({
     title,
     noneGroupMemberTitle,
     groupMemberTitle,
-    totalPages,
     outGroup,
     inGroup,
+    onlyOutGroup
 }: {
     title: string;
     noneGroupMemberTitle: string;
     groupMemberTitle: string;
-    totalPages: number;
-    outGroup: { id: string, name: string }[];
-    inGroup: { id: string, name: string }[];
+    outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+    inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+    onlyOutGroup?: boolean;
 }) {
-    const [nonGroup, setNonGroup] = useState(outGroup);
-    const [group, setGroup] = useState(inGroup);
+    const [nonGroup, setNonGroup] = useState(outGroup.members);
+    const [group, setGroup] = useState(inGroup.members);
     const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<{ id: string, name: string } | null>(null);
     const [selectedInGroup, setSelectedInGroup] = useState<{ id: string, name: string } | null>(null);
 
@@ -40,7 +40,7 @@ export default function Grouping({
 
         const updateGroup = [
             selectedInNoneGroup,
-            ...group,
+            ...group
         ];
         setGroup(updateGroup);
 
@@ -105,11 +105,11 @@ export default function Grouping({
         }
     };
 
-    useEffect(()=>{
-        const updatedOutGroup = outGroup.filter(item => group.findIndex(member => member.id === item.id) === -1);
+    useEffect(() => {
+        const updatedOutGroup = outGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1);
         setNonGroup(updatedOutGroup);
 
-        const updatedInGroup = [ ...inGroup, ...group];
+        const updatedInGroup = [...inGroup.members, ...group];
         setGroup(updatedInGroup);
     }, [outGroup, inGroup]);
 
@@ -145,7 +145,7 @@ export default function Grouping({
                         })}
                     </div>
                     <div className="flex justify-center py-2">
-                        <Pagination totalPages={totalPages} />
+                        <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
                     </div>
                 </div>
                 <div className='w-20 flex-0 flex flex-col justify-center'>
@@ -165,7 +165,7 @@ export default function Grouping({
                 <div className='flex-1 p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{groupMemberTitle}</div>
                     <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
-                        {group.map((member, idx)=> {
+                        {group.map((member, idx) => {
                             const memberName = "member_" + idx;
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
                                 return (
@@ -197,6 +197,11 @@ export default function Grouping({
                         })}
                         <input type="hidden" name="member_length" value={group.length} />
                     </div>
+                    {!!onlyOutGroup &&
+                        <div className="flex justify-center py-2">
+                            <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
+                        </div>
+                    }
                 </div>
             </div>
         </div>
