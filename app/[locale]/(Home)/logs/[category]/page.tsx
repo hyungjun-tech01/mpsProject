@@ -3,10 +3,11 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import Table from '@/app/components/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { fetchFilteredDeviceUsageLogPages,
-    fetchFilteredDeviceUsageLogs,
-    fetchFilteredApplicationLogPages,
-    fetchFilteredApplicationLogs,
+import Search from '@/app/components/search';
+import { //fetchFilteredDeviceUsageLogPages,
+    //fetchFilteredDeviceUsageLogs,
+    //fetchFilteredApplicationLogPages,
+    // fetchFilteredApplicationLogs,
     fetchFilteredAuditLogPages,
     fetchFilteredAuditLogs
 } from '@/app/lib/fetchData';
@@ -57,62 +58,84 @@ export default async function Page(props: {
     //     { name: 'message', title: t('common.message'), align: 'left' },
     // ];
     const auditlogColumns: IColumnData[] = [
-        { name: 'send_date', title: t('common.date'), align: 'center', type: 'date' },
-        { name: 'user_name', title: t('logs.user_name'), align: 'center' },
-        { name: 'modified_by', title: t('logs.by'), align: 'center',  },
-        { name: 'entiity_type', title: t('common.type2'), align: 'center',  },
-        { name: 'property_name', title: t('printer.property'), align: 'center',  },
-        { name: 'prevous_value', title: t('common.from'), align: 'center',  },
-        { name: 'modified_value', title: t('common.to'), align: 'center',  },
+        { name: 'send_date', title: t('common.date'), align: 'center' },
+        { name: 'user_name', title: t('user.user_name'), align: 'center' },
+        { name: 'destination', title: t('logs.destination'), align: 'center',  },
+        { name: 'printer_serial_number', title: t('device.serial_number'), align: 'center',  },
+        { name: 'copies', title: t('logs.copies'), align: 'center',  },
+        { name: 'original_pages', title: t('logs.original_pages'), align: 'center',  },
+        { name: 'total_pages', title: t('logs.total_pages'), align: 'center',  }, 
+        { name: 'color_total_pages', title: t('logs.color_total_pages'), align: 'center',  }, 
+        { name: 'document_name', title: t('logs.document_name'), align: 'center',  }, 
+        { name: 'status', title: t('logs.status'), align: 'center',  }, 
+        { name: 'detect_privacy', title: t('logs.detect_privacy'), align: 'center',  },
+        { name: 'privacy_text', title: t('logs.privacy_text'), align: 'center',  },
     ];
 
     return (
         <div className="w-full">
-            <div className='w-full pl-2 flex justify-start'>
-                {subTitles.map((item, idx) => {
-                    return <Link key={idx} href={item.link}
-                        className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
-                            { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === category },
-                            { "text-gray-300  bg-white border-2": item.category !== category },
-                        )}>{item.title}</Link>;
-                })}
+            <div className="flex w-full items-center justify-between">
+                <h1 className="text-2xl">{t('device.device')}</h1>
             </div>
-            {/* {category === 'printlogs' &&
-                <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                    <Table
-                        columns={printlogColumns}
-                        rows={printlogs}
-                        currentPage={currentPage}
-                        totalPages={printlogPages}
-                        locale={locale}
-                        editable={false}
-                    />
-                </div>
-            }
-            {category === 'applogs' &&
-                <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                    <Table
-                        columns={applogColumns}
-                        rows={applogs}
-                        currentPage={currentPage}
-                        totalPages={applogPages}
-                        locale={locale}
-                        editable={false}
-                    />
-                </div>
-            } */}
-            {category === 'auditlogs' &&
-                <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                    <Table
-                        columns={auditlogColumns}
-                        rows={auditlogs}
-                        currentPage={currentPage}
-                        totalPages={auditlogPages}
-                        locale={locale}
-                        editable={false}
-                    />
-                </div>
-            }
+            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                <Search placeholder="Search Devices..." />
+            </div>
+            <Table
+                columns={auditlogColumns}
+                rows={auditlogs}
+                currentPage={currentPage}
+                totalPages={auditlogPages}
+                locale={locale}
+                category='auditlogs'
+            />
         </div>
+
+        // <div className="w-full">
+        //     <div className='w-full pl-2 flex justify-start'>
+        //         {subTitles.map((item, idx) => {
+        //             return <Link key={idx} href={item.link}
+        //                 className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
+        //                     { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === category },
+        //                     { "text-gray-300  bg-white border-2": item.category !== category },
+        //                 )}>{item.title}</Link>;
+        //         })}
+        //     </div>
+        //     {category === 'printlogs' &&
+        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        //             <Table
+        //                 columns={printlogColumns}
+        //                 rows={printlogs}
+        //                 currentPage={currentPage}
+        //                 totalPages={printlogPages}
+        //                 locale={locale}
+        //                 editable={false}
+        //             />
+        //         </div>
+        //     }
+        //     {category === 'applogs' &&
+        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        //             <Table
+        //                 columns={applogColumns}
+        //                 rows={applogs}
+        //                 currentPage={currentPage}
+        //                 totalPages={applogPages}
+        //                 locale={locale}
+        //                 editable={false}
+        //             />
+        //         </div>
+        //     }
+        //     {category === 'auditlogs' &&
+        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        //             <Table
+        //                 columns={auditlogColumns}
+        //                 rows={auditlogs}
+        //                 currentPage={currentPage}
+        //                 totalPages={auditlogPages}
+        //                 locale={locale}
+        //                 editable={false}
+        //             />
+        //         </div>
+        //     }
+        // </div>
     );
 }

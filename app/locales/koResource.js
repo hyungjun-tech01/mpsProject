@@ -476,13 +476,16 @@ const koResource = {
             manager_count: '관리자 수',
         },
         logs: {
-            action: '수행 작업',
+            destination: '전송처',
             auditlogs: '감사 Log',
-            applogs: '프로그램 관련 Log',
-            by: 'By',
-            log_level: 'Log 수준',
-            printlogs: '인쇄 관련 Log',
-            server_name: '서버명',
+            copies: '부수',
+            original_pages: '매수',
+            total_pages : '전체매수',
+            color_total_pages : '컬러매수',
+            document_name : '문서이름',
+            status: '상태',
+            detect_privacy: '검출여부',
+            privacy_text: '검출 결과'
         }
     },
 }

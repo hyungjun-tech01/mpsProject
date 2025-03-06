@@ -572,14 +572,19 @@ export async function fetchFilteredAuditLogs(
                 destination ,
                 send_time,
                 file_name ,
-                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') send_date ,
+                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
                 copies  ,
                 original_pages ,
-                detect_privacy  ,
-                privacy_text,
+                CASE WHEN detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                substr(privacy_text,0,100) privacy_text,
                 image_archive_path ,
                 text_archive_path ,
-                original_job_id  
+                original_job_id  ,
+                document_name,
+                total_pages,
+                color_total_pages
             from tbl_audit_job_log			
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
