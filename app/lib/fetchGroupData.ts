@@ -265,8 +265,17 @@ export async function fetchDevicesNotInGroup(
     try {
         const devices = await client.query(`
                 SELECT
-                    d.device_id as id,
-                    d.device_name as name
+                    d.device_id id,
+                    d.device_name,
+                    d.location,
+                    d.notes,
+                    d.physical_device_id,
+                    d.device_model,
+                    d.serial_number,
+                    d.deleted,
+                    d.device_status,
+                    d.device_type,
+                    d.ext_device_function
                 FROM tbl_device_info d
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
@@ -311,8 +320,17 @@ export async function fetchDevicesInGroup(
     try {
         const devices = await client.query(`
                 SELECT
-                    d.device_id as id,
-                    d.device_name as name
+                    d.device_id id,
+                    d.device_name,
+                    d.location,
+                    d.notes,
+                    d.physical_device_id,
+                    d.device_model,
+                    d.serial_number,
+                    d.deleted,
+                    d.device_status,
+                    d.device_type,
+                    d.ext_device_function
                 FROM tbl_device_info d
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
                 WHERE
@@ -348,7 +366,7 @@ export async function fetchDevicesInGroupPages(
     }
 };
 
-// ----- Begin : Device -------------------------------------------------------//
+// ----- Begin : Dept -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchDeptsNotInGroup(

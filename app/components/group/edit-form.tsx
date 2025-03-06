@@ -5,7 +5,8 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import Grouping from "@/app/components/grouping";
+import { IColumnData, Device } from "@/app/lib/definitions";
+import Table from "@/app/components/table";
 
 export function EditForm({
   id,
@@ -14,17 +15,21 @@ export function EditForm({
   translated,
   outGroup,
   inGroup,
+  columns,
+  locale,
   action,
 }: {
   id?: string;
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
-  outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
-  inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+  outGroup: { currentPage: number, totalPages: number, members: Device[] };
+  inGroup: { currentPage: number, totalPages: number, members: Device[] };
+  columns: IColumnData[];
+  locale: string;
   action: (
     id: string | undefined,
-    inGroup: {id:string, name:string}[] | undefined,
+    inGroup: Device[] | undefined,
     prevState: State,
     formData: FormData
   ) => Promise<void>;
@@ -88,14 +93,22 @@ export function EditForm({
             </div>
           );
         })}
-        <Grouping
-          title={translated.title_grouping}
-          noneGroupMemberTitle={translated.none_group_member}
-          groupMemberTitle={translated.group_member}
-          outGroup={outGroup}
-          inGroup={inGroup}
-          onlyOutGroup={!!id}
-        />
+        <div className={'w-full p-2 mb-4 flex md: flex-col'}>
+          <div className='w-full'>
+              <div className='mb-5 text-xl font-semibold'>{translated.title_grouping}</div>
+          </div>
+          <div className='w-full flex-col'>
+            <div className='mb-2 pl-2 font-semibold'>{translated.none_group_member}</div>
+            <Table
+              columns={columns}
+              rows={outGroup.members}
+              currentPage={outGroup.currentPage}
+              totalPages={outGroup.totalPages}
+              locale={locale}
+              checkable={true}
+            />
+          </div>
+        </div>
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
