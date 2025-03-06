@@ -207,8 +207,12 @@ export async function fetchUsersNotInGroupPages(
 };
 
 export async function fetchUsersInGroup(
-    id: string
+    id: string,
+    itemsPerPage: number,
+    currentPage: number
 ) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
     try {
         const users = await client.query(`
                 SELECT
@@ -219,14 +223,35 @@ export async function fetchUsersInGroup(
                 WHERE
                     u.deleted='N' AND u.user_id = '${id}'
                 ORDER BY u.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return users.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch users not in group.");
+        throw new Error("Failed to fetch users in group.");
     }
 };
 
+export async function fetchUsersInGroupPages(
+    id: string,
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_user_info u
+                JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
+                WHERE
+                    u.deleted='N' AND u.user_id = '${id}'
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users in group.");
+    }
+};
 
 // ----- Begin : Device -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
@@ -277,8 +302,12 @@ export async function fetchDeviesNotInGroupPages(
 };
 
 export async function fetchDevicesInGroup(
-    id: string
+    id: string,
+    itemsPerPage: number,
+    currentPage: number
 ) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
     try {
         const devices = await client.query(`
                 SELECT
@@ -289,10 +318,125 @@ export async function fetchDevicesInGroup(
                 WHERE
                     d.deleted='N' AND d.device_id = '${id}'
                 ORDER BY d.modified_date DESC
+                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return devices.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch devices not in group.");
+    }
+};
+
+export async function fetchDevicesInGroupPages(
+    id: string,
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_device_info d
+                JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
+                WHERE
+                    d.deleted='N' AND d.device_id = '${id}'
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch depts not in group.");
+    }
+};
+
+// ----- Begin : Device -------------------------------------------------------//
+// const ITEMS_PER_PAGE = 10;
+
+export async function fetchDeptsNotInGroup(
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    try {
+        const depts = await client.query(`
+                SELECT
+                    d.dept_id as id,
+                    d.dept_name as name
+                FROM tbl_dept_info d
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.dept_id
+                WHERE
+                    gm.member_id IS NULL
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+        return depts.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch dept not in group.");
+    }
+};
+
+export async function fetchDeptsNotInGroupPages(
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_dept_info d
+                LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.dept_id
+                WHERE
+                    gm.member_id IS NULL
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch depts not in group.");
+    }
+};
+
+export async function fetchDeptsInGroup(
+    id: string,
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    try {
+        const depts = await client.query(`
+                SELECT
+                    d.dept_id as id,
+                    d.dept_name as name
+                FROM tbl_dept_info d
+                JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
+                WHERE
+                    d.dept_id = '${id}'
+                LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+        return depts.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch depts not in group.");
+    }
+};
+
+export async function fetchDeptsInGroupPages(
+    id: string,
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT
+                    COUNT(*)
+                FROM tbl_dept_info d
+                JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
+                WHERE
+                    d.dept_id = '${id}'
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch depts not in group.");
     }
 };

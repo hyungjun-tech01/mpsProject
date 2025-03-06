@@ -5,14 +5,17 @@ import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { ISearch, IBreadCrums } from "@/app/lib/definitions";
-import { createDeviceGroup, createUserGroup } from "@/app/lib/actionsGroup";
+import { createDeviceGroup, createUserGroup, createSecurityGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import {
   fetchUsersNotInGroup,
   fetchUsersNotInGroupPages,
   fetchDevicesNotInGroup,
-  fetchDeviesNotInGroupPages
+  fetchDeviesNotInGroupPages,
+  fetchDeptsNotInGroup,
+  fetchDeptsNotInGroupPages
 } from "@/app/lib/fetchGroupData";
+
 
 export default async function Page(props: {
   searchParams?: Promise<ISearch>;
@@ -29,19 +32,22 @@ export default async function Page(props: {
     notFound();
   };
 
-  const [t, outGroup, totalPages] = await Promise.all([
+  const [t, outGroupData, totalPages] = await Promise.all([
     getDictionary(locale),
     group === "user"
       ? fetchUsersNotInGroup(itemsPerPage, currentPage)
       : group === "device"
-      ? fetchDevicesNotInGroup(itemsPerPage, currentPage)
-      : [],
+        ? fetchDevicesNotInGroup(itemsPerPage, currentPage)
+        : fetchDeptsNotInGroup(itemsPerPage, currentPage),
     group === "user"
       ? fetchUsersNotInGroupPages(itemsPerPage)
       : group === "device"
-      ? fetchDeviesNotInGroupPages(itemsPerPage)
-      : [],
+        ? fetchDeviesNotInGroupPages(itemsPerPage)
+        : fetchDeptsNotInGroupPages(itemsPerPage),
   ]);
+
+  const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
+  const inGroup = { paramName: '', totalPages: 0, members: [] };
 
   const groupBreadcrumbs: {
     device: IBreadCrums[];
@@ -57,10 +63,11 @@ export default async function Page(props: {
       { label: `${t("group.create_group")}`, link: `/group/user/create` },
     ],
     security: [
-      { label: t("group.subTitme_security"), link: `/group/security` },
+      { label: t("group.subTitle_security"), link: `/group/security` },
       { label: `${t("group.create_group")}`, link: `/group/security/create` },
     ],
   };
+
   const translated = {
     title_generals: t("common.generals"),
     desc_generas: t("comment.group_edit_group_name"),
@@ -90,27 +97,51 @@ export default async function Page(props: {
     group_member: t("group.group_members"),
     none_group_member: t("group.none_group_members"),
   };
-  const deviceItems: ISection[] = [
-    {
-      title: t("common.generals"),
-      description: [t("comment.group_edit_group_name")],
-      items: [
-        {
-          name: "group_name",
-          title: t("group.group_name"),
-          type: "input",
-          defaultValue: "",
-        },
-        {
-          name: "group_notes",
-          title: t("common.note"),
-          type: "input",
-          defaultValue: "",
-        },
-      ],
-    },
-  ];
-  const deviceButtons: IButtonInfo = {
+
+  const contentsItems: { device: ISection[], security: ISection[] } = {
+    device: [
+      {
+        title: t("common.generals"),
+        description: [t("comment.group_edit_group_name")],
+        items: [
+          {
+            name: "group_name",
+            title: t("group.group_name"),
+            type: "input",
+            defaultValue: "",
+          },
+          {
+            name: "group_notes",
+            title: t("common.note"),
+            type: "input",
+            defaultValue: "",
+          },
+        ],
+      },
+    ],
+    security: [
+      {
+        title: t("common.generals"),
+        description: [t("comment.group_edit_group_name")],
+        items: [
+          {
+            name: "group_name",
+            title: t("group.group_name"),
+            type: "input",
+            defaultValue: "",
+          },
+          {
+            name: "group_notes",
+            title: t("common.note"),
+            type: "input",
+            defaultValue: "",
+          },
+        ],
+      },
+    ]
+  };
+
+  const buttonItems: IButtonInfo = {
     go: { title: t("common.apply") },
     cancel: { title: t("common.cancel"), link: "/group/device" },
   };
@@ -132,13 +163,11 @@ export default async function Page(props: {
       />
       {group === "device" && (
         <EditForm
-          items={deviceItems}
-          buttons={deviceButtons}
+          items={contentsItems.device}
+          buttons={buttonItems}
           translated={translated}
-          page={currentPage}
-          totalPages={totalPages}
           outGroup={outGroup}
-          inGroup={[]}
+          inGroup={inGroup}
           action={createDeviceGroup}
         />
       )}
@@ -146,18 +175,19 @@ export default async function Page(props: {
         <UserForm
           locale={locale}
           translated={translated}
-          page={currentPage}
-          totalPages={totalPages}
           outGroup={outGroup}
-          inGroup={[]}
+          inGroup={inGroup}
           action={createUserGroup}
         />
       )}
       {group === "security" && (
         <EditForm
-          items={deviceItems}
-          buttons={deviceButtons}
-          action={createGroup}
+          items={contentsItems.security}
+          buttons={buttonItems}
+          translated={translated}
+          outGroup={outGroup}
+          inGroup={inGroup}
+          action={createSecurityGroup}
         />
       )}
     </main>

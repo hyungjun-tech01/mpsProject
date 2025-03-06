@@ -107,7 +107,7 @@ export default async function Page(props: {
                     rows={groupData}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    category={group}
+                    category={`/group/${group}`}
                     locale={locale}
                     deleteAction={deleteGroup}
                 />

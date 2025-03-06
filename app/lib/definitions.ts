@@ -4,6 +4,13 @@ export interface ISearch {
   page?: string;
 };
 
+export interface IGroupSearch {
+  query?: string;
+  itemsPerPage?: string;
+  outGroupPage?: string;
+  inGroupPage?: string;
+};
+
 export type IBreadCrums = {
   label: string;
   link: string;

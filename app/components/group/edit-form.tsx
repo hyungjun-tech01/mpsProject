@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@mui/material";
-import clsx from "clsx";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
@@ -13,7 +12,6 @@ export function EditForm({
   items,
   buttons,
   translated,
-  totalPages,
   outGroup,
   inGroup,
   action,
@@ -21,10 +19,9 @@ export function EditForm({
   id?: string;
   items: ISection[];
   buttons?: IButtonInfo;
-  totalPages: number;
   translated: object;
-  outGroup: {id:string, name:string}[];
-  inGroup: {id:string, name:string}[];
+  outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+  inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
   action: (
     id: string | undefined,
     inGroup: {id:string, name:string}[] | undefined,
@@ -33,7 +30,7 @@ export function EditForm({
   ) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updatedAction = !!id ? action.bind(null, id, inGroup) : action;
+  const updatedAction = !!id ? action.bind(null, id, inGroup.members) : action;
   const [state, formAction] = useActionState(updatedAction, initialState);
 
   return (
@@ -95,9 +92,9 @@ export function EditForm({
           title={translated.title_grouping}
           noneGroupMemberTitle={translated.none_group_member}
           groupMemberTitle={translated.group_member}
-          totalPages={totalPages}
           outGroup={outGroup}
           inGroup={inGroup}
+          onlyOutGroup={!!id}
         />
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (

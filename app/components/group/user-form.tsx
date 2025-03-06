@@ -12,17 +12,15 @@ export function UserForm({
     id,
     locale,
     translated,
-    totalPages,
     outGroup,
     inGroup,
     action,
 }: {
     id?: string;
     locale: string;
-    totalPages: number;
     translated: object;
-    outGroup: {id:string, name:string}[];
-    inGroup: {id:string, name:string}[];
+    outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+    inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
     action: (
         id: string | undefined,
         inGroup: {id:string, name:string}[] | undefined,
@@ -31,7 +29,7 @@ export function UserForm({
     ) => Promise<void>;
 }) {
     const initialState: State = { message: null, errors: {} };
-    const updatedAction = !!id ? action.bind(null, id, inGroup) : action;
+    const updatedAction = !!id ? action.bind(null, id, inGroup.members) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>("NONE");
     const [scheduleStart, SetScheduleStart] = useState<number>(1);
@@ -46,13 +44,13 @@ export function UserForm({
         { title: translated.per_year, value: "PER_YEAR" },
     ];
     const optionsForWeek = [
-        { title: translated.sunday, value: "SUNDAY" },
-        { title: translated.monday, value: "MONDAY" },
-        { title: translated.tuesday, value: "TUESDAY" },
-        { title: translated.wednesday, value: "WEDNESDAY" },
-        { title: translated.thursday, value: "THURSDAY" },
-        { title: translated.friday, value: "FRIDAY" },
-        { title: translated.saturday, value: "SATURDAY" },
+        { title: translated.sunday, value: 0 },
+        { title: translated.monday, value: 1 },
+        { title: translated.tuesday, value: 2 },
+        { title: translated.wednesday, value: 3 },
+        { title: translated.thursday, value: 4 },
+        { title: translated.friday, value: 5 },
+        { title: translated.saturday, value: 6 },
     ];
     const optionsForMonth = [];
     if (locale === 'ko') {
@@ -280,9 +278,9 @@ export function UserForm({
                     title={translated.title_grouping}
                     noneGroupMemberTitle={translated.none_group_member}
                     groupMemberTitle={translated.group_member}
-                    totalPages={totalPages}
                     outGroup={outGroup}
                     inGroup={inGroup}
+                    onlyOutGroup={!!id}
                 />
                 <div id="input-error" aria-live="polite" aria-atomic="true">
                     {!!state?.message &&

@@ -209,6 +209,83 @@ export async function createUserGroup(prevState: State, formData: FormData) {
     redirect('/group/user');
 };
 
+const CreateSecurityGroup = GroupFormSchema.omit({groupID:true, schedulePeriod:true, scheduleAmount:true});
+
+export async function createSecurityGroup(prevState: State, formData: FormData) {
+    console.log('Create Group / formData :', formData);
+    const validatedFields = CreateSecurityGroup.safeParse({
+        groupName: formData.get('group_name')
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create User.',
+        };
+    };
+
+    const { groupName } = validatedFields.data;
+    const groupNotes = formData.get('group_notes');
+    const groupSize = Number(formData.get('member_length'));
+    const groupMembers = [];
+    for(let num=0; num < groupSize; num++)
+    {
+        const tempName = "member_" + num;
+        const memberID = formData.get(tempName);
+        groupMembers.push(memberID);
+    }
+
+    // Create new group  --------------------------------------
+    try {
+        // 값 배열로 변환
+        const groupInputData = [
+            groupName,
+            "security",
+            groupNotes,
+        ];
+
+        await client.query("BEGIN"); // 트랜잭션 시작  
+
+        const newGroup = await client.query(`
+            INSERT INTO tbl_group_info (
+                group_name,
+                group_type,
+                group_notes,
+                created_date,
+                created_by,
+                modified_date,
+                modified_by
+            )
+            VALUES ($1,$2,$3,NOW(),'admin',NOW(),'admin') RETURNING group_id`
+            , groupInputData);
+       
+        const groupId = newGroup.rows[0].group_id;
+
+        groupMembers.forEach(async member => client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ('${groupId}', '${member}', 'dept')`
+            )
+        );
+
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Create Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Create Group.',
+        };
+    };
+
+    revalidatePath('/group/security');
+    redirect('/group/security');
+};
+
 const ModifyGroup = GroupFormSchema.omit({});
 
 export async function modifyGroup(id: string, prevState: State, formData: FormData) {
