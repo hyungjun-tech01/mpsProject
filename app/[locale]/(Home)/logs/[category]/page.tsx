@@ -26,39 +26,39 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const [t, printlogPages, printlogs, applogPages, applogs, auditlogPages, auditlogs] = await Promise.all([
+    const [t, /* printlogPages, printlogs, applogPages, applogs,*/ auditlogPages, auditlogs] = await Promise.all([
         getDictionary(locale),
-        fetchFilteredDeviceUsageLogPages(itemsPerPage),
-        fetchFilteredDeviceUsageLogs(query, itemsPerPage, currentPage),
-        fetchFilteredApplicationLogPages(itemsPerPage),
-        fetchFilteredApplicationLogs(itemsPerPage, currentPage),
+        //fetchFilteredDeviceUsageLogPages(itemsPerPage),
+        //fetchFilteredDeviceUsageLogs(query, itemsPerPage, currentPage),
+        //fetchFilteredApplicationLogPages(itemsPerPage),
+        //fetchFilteredApplicationLogs(itemsPerPage, currentPage),
         fetchFilteredAuditLogPages(itemsPerPage),
         fetchFilteredAuditLogs(itemsPerPage, currentPage)
     ]);
     const subTitles = [
-        { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },
-        { category: 'applogs', title: t('logs.applogs'), link: `/logs/applogs` },
+     //   { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },
+     //   { category: 'applogs', title: t('logs.applogs'), link: `/logs/applogs` },
         { category: 'auditlogs', title: t('logs.auditlogs'), link: `/logs/auditlogs` }
     ];
-    const printlogColumns: IColumnData[] = [
-        { name: 'usage_date', title: t('printer.usage_date'), align: 'center', type: 'date' },
-        { name: 'user_name', title: t('user.user_name'), align: 'center' },
-        { name: 'display_name', title: t('printer.printer'), align: 'center', type: 'currency' },
-        { name: 'total_pages', title: t('common.page'), align: 'center' },
-        { name: 'usage_cost', title: t('printer.usage_cost'), align: 'center' },
-        { name: 'document_name', title: t('printer.document_name'), align: 'center' },
-        { name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
-        { name: 'status', title: t('printer.status'), align: 'center' },
-    ];
-    const applogColumns: IColumnData[] = [
-        { name: 'log_date', title: t('common.date'), align: 'center', type: 'date' },
-        { name: 'server_name', title: t('logs.server_name'), align: 'center' },
-        { name: 'log_level', title: t('logs.log_level'), align: 'center',  },
-        { name: 'message', title: t('common.message'), align: 'left' },
-    ];
+    // const printlogColumns: IColumnData[] = [
+    //     { name: 'usage_date', title: t('printer.usage_date'), align: 'center', type: 'date' },
+    //     { name: 'user_name', title: t('user.user_name'), align: 'center' },
+    //     { name: 'display_name', title: t('printer.printer'), align: 'center', type: 'currency' },
+    //     { name: 'total_pages', title: t('common.page'), align: 'center' },
+    //     { name: 'usage_cost', title: t('printer.usage_cost'), align: 'center' },
+    //     { name: 'document_name', title: t('printer.document_name'), align: 'center' },
+    //     { name: 'property', title: t('printer.property'), align: 'center', type: 'list' },
+    //     { name: 'status', title: t('printer.status'), align: 'center' },
+    // ];
+    // const applogColumns: IColumnData[] = [
+    //     { name: 'log_date', title: t('common.date'), align: 'center', type: 'date' },
+    //     { name: 'server_name', title: t('logs.server_name'), align: 'center' },
+    //     { name: 'log_level', title: t('logs.log_level'), align: 'center',  },
+    //     { name: 'message', title: t('common.message'), align: 'left' },
+    // ];
     const auditlogColumns: IColumnData[] = [
-        { name: 'modified_date', title: t('common.date'), align: 'center', type: 'date' },
-        { name: 'action', title: t('logs.action'), align: 'center' },
+        { name: 'send_date', title: t('common.date'), align: 'center', type: 'date' },
+        { name: 'user_name', title: t('logs.user_name'), align: 'center' },
         { name: 'modified_by', title: t('logs.by'), align: 'center',  },
         { name: 'entiity_type', title: t('common.type2'), align: 'center',  },
         { name: 'property_name', title: t('printer.property'), align: 'center',  },
@@ -77,7 +77,7 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {category === 'printlogs' &&
+            {/* {category === 'printlogs' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <Table
                         columns={printlogColumns}
@@ -100,7 +100,7 @@ export default async function Page(props: {
                         editable={false}
                     />
                 </div>
-            }
+            } */}
             {category === 'auditlogs' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <Table
