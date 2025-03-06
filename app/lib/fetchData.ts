@@ -384,114 +384,114 @@ export async function fetchTotalPagesPerDayFor30Days() {
     }
 };
 
-export async function fetchFilteredDeviceUsageLogs(
-    query: string,
-    itemsPerPage: number,
-    currentPage: number
-) {
-    const offset = (currentPage - 1) * itemsPerPage;
-    try {
-        const response =
-            query != ""
-                ? await client.query(`
-                SELECT
-                    pul.usage_date,
-                    u.user_name,
-                    p.display_name,
-                    pul.total_pages,
-                    pul.usage_cost,
-                    pul.document_name,
-                    pul.paper_size,
-                    pul.duplex,
-                    pul.gray_scale,
-                    pul.document_size_kb,
-                    pul.client_machine,
-                    pul.printer_language,
-                    pul.denied_reason,
-                    pul.usage_allowed,
-                    pul.printed,
-                    pul.cancelled,
-                    pul.refunded
-                FROM tbl_printer_usage_log pul
-                JOIN tbl_user u ON u.user_id = pul.used_by_user_id
-                JOIN tbl_printer p ON p.printer_id = pul.printer_id
-                WHERE
-                    pul.usage_date ILIKE '${`%${query}%`}' OR
-                    u.user_name ILIKE '${`%${query}%`}' OR
-                    p.display_name ILIKE '${`%${query}%`}'
-                ORDER BY usage_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `)
-                : await client.query(`
-                SELECT
-                    pul.usage_date,
-                    u.user_name,
-                    p.display_name,
-                    pul.total_pages,
-                    pul.usage_cost,
-                    pul.document_name,
-                    pul.paper_size,
-                    pul.duplex,
-                    pul.gray_scale,
-                    pul.document_size_kb,
-                    pul.client_machine,
-                    pul.printer_language,
-                    pul.denied_reason,
-                    pul.usage_allowed,
-                    pul.printed,
-                    pul.cancelled,
-                    pul.refunded
-                FROM tbl_printer_usage_log pul
-                JOIN tbl_user u ON u.user_id = pul.used_by_user_id
-                JOIN tbl_printer p ON p.printer_id = pul.printer_id
-                ORDER BY usage_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `);
+// export async function fetchFilteredDeviceUsageLogs(
+//     query: string,
+//     itemsPerPage: number,
+//     currentPage: number
+// ) {
+//     const offset = (currentPage - 1) * itemsPerPage;
+//     try {
+//         const response =
+//             query != ""
+//                 ? await client.query(`
+//                 SELECT
+//                     pul.usage_date,
+//                     u.user_name,
+//                     p.display_name,
+//                     pul.total_pages,
+//                     pul.usage_cost,
+//                     pul.document_name,
+//                     pul.paper_size,
+//                     pul.duplex,
+//                     pul.gray_scale,
+//                     pul.document_size_kb,
+//                     pul.client_machine,
+//                     pul.printer_language,
+//                     pul.denied_reason,
+//                     pul.usage_allowed,
+//                     pul.printed,
+//                     pul.cancelled,
+//                     pul.refunded
+//                 FROM tbl_printer_usage_log pul
+//                 JOIN tbl_user u ON u.user_id = pul.used_by_user_id
+//                 JOIN tbl_printer p ON p.printer_id = pul.printer_id
+//                 WHERE
+//                     pul.usage_date ILIKE '${`%${query}%`}' OR
+//                     u.user_name ILIKE '${`%${query}%`}' OR
+//                     p.display_name ILIKE '${`%${query}%`}'
+//                 ORDER BY usage_date DESC
+//                 LIMIT ${itemsPerPage} OFFSET ${offset}
+//             `)
+//                 : await client.query(`
+//                 SELECT
+//                     pul.usage_date,
+//                     u.user_name,
+//                     p.display_name,
+//                     pul.total_pages,
+//                     pul.usage_cost,
+//                     pul.document_name,
+//                     pul.paper_size,
+//                     pul.duplex,
+//                     pul.gray_scale,
+//                     pul.document_size_kb,
+//                     pul.client_machine,
+//                     pul.printer_language,
+//                     pul.denied_reason,
+//                     pul.usage_allowed,
+//                     pul.printed,
+//                     pul.cancelled,
+//                     pul.refunded
+//                 FROM tbl_printer_usage_log pul
+//                 JOIN tbl_user u ON u.user_id = pul.used_by_user_id
+//                 JOIN tbl_printer p ON p.printer_id = pul.printer_id
+//                 ORDER BY usage_date DESC
+//                 LIMIT ${itemsPerPage} OFFSET ${offset}
+//             `);
 
-        const printerUsageLogs = response.rows.map((row) => {
-            const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
-            const properties = [row.paper_size,
-            `Duplex:${row.duplex}`,
-            `GrayScale:${row.gray_scale}`,
-            `${row.document_size_kb} kB`,
-            `${row.client_machine}`,
-            `${row.printer_language}`
-            ];
-            const status = [];
-            if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
-            if (row.printed === "Y") status.push("Printed");
-            if (row.cancelled === "Y") status.push("Cancelled");
-            if (row.refunded === "Y") status.push("Refunded");
+//         const printerUsageLogs = response.rows.map((row) => {
+//             const pages = `${row.total_pages} (Color:${row.total_color_pages})`;
+//             const properties = [row.paper_size,
+//             `Duplex:${row.duplex}`,
+//             `GrayScale:${row.gray_scale}`,
+//             `${row.document_size_kb} kB`,
+//             `${row.client_machine}`,
+//             `${row.printer_language}`
+//             ];
+//             const status = [];
+//             if (row.usage_allowed === "N") status.push(`Denied: ${row.denied_reason}`);
+//             if (row.printed === "Y") status.push("Printed");
+//             if (row.cancelled === "Y") status.push("Cancelled");
+//             if (row.refunded === "Y") status.push("Refunded");
 
-            return {
-                ...row,
-                page: pages,
-                property: properties,
-                status: status,
-            };
-        });
-        return printerUsageLogs;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer usage logs");
-    }
-};
+//             return {
+//                 ...row,
+//                 page: pages,
+//                 property: properties,
+//                 status: status,
+//             };
+//         });
+//         return printerUsageLogs;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch printer usage logs");
+//     }
+// };
 
-export async function fetchFilteredDeviceUsageLogPages(
-    itemsPerPage: number
-) {
-    try {
-        const count = await client.query(`
-                SELECT COUNT(*) FROM tbl_printer_usage_log
-            `);
+// export async function fetchFilteredDeviceUsageLogPages(
+//     itemsPerPage: number
+// ) {
+//     try {
+//         const count = await client.query(`
+//                 SELECT COUNT(*) FROM tbl_printer_usage_log
+//             `);
 
-        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        return totalPages;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer usage logs");
-    }
-};
+//         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+//         return totalPages;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch printer usage logs");
+//     }
+// };
 
 export async function fetchLatestDeviceStatus() {
     try {
@@ -519,41 +519,41 @@ export async function fetchLatestDeviceStatus() {
 
 
 /*====================== tbl_application_log =======================*/
-export async function fetchFilteredApplicationLogs(
-    itemsPerPage: number,
-    currentPage: number,
-) {
-    const offset = (currentPage - 1) * itemsPerPage;
-    try {
-        const response = await client.query(`
-                SELECT *
-                FROM tbl_application_log
-                ORDER BY log_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `);
+// export async function fetchFilteredApplicationLogs(
+//     itemsPerPage: number,
+//     currentPage: number,
+// ) {
+//     const offset = (currentPage - 1) * itemsPerPage;
+//     try {
+//         const response = await client.query(`
+//                 SELECT *
+//                 FROM tbl_application_log
+//                 ORDER BY log_date DESC
+//                 LIMIT ${itemsPerPage} OFFSET ${offset}
+//             `);
 
-        return response.rows;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch application logs");
-    }
-};
+//         return response.rows;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch application logs");
+//     }
+// };
 
-export async function fetchFilteredApplicationLogPages(
-    itemsPerPage: number
-) {
-    try {
-        const count = await client.query(`
-                SELECT COUNT(*) FROM tbl_application_log
-            `);
+// export async function fetchFilteredApplicationLogPages(
+//     itemsPerPage: number
+// ) {
+//     try {
+//         const count = await client.query(`
+//                 SELECT COUNT(*) FROM tbl_application_log
+//             `);
 
-        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        return totalPages;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch application logs");
-    }
-};
+//         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+//         return totalPages;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch application logs");
+//     }
+// };
 
 
 /*========================== tbl_audit_log =========================*/
@@ -564,11 +564,31 @@ export async function fetchFilteredAuditLogs(
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const response = await client.query(`
-                SELECT *
-                FROM tbl_audit_log
-                ORDER BY modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `);
+            select job_log_id ,
+                job_type ,
+                printer_serial_number ,
+                job_id      ,
+                user_name ,
+                destination ,
+                send_time,
+                file_name ,
+                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                copies  ,
+                original_pages ,
+                CASE WHEN detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                substr(privacy_text,0,100) privacy_text,
+                image_archive_path ,
+                text_archive_path ,
+                original_job_id  ,
+                document_name,
+                total_pages,
+                color_total_pages
+            from tbl_audit_job_log			
+            ORDER BY send_time DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `);
 
         return response.rows;
     } catch (error) {
@@ -582,7 +602,7 @@ export async function fetchFilteredAuditLogPages(
 ) {
     try {
         const count = await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_log
+                SELECT COUNT(*) FROM tbl_audit_job_log
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);

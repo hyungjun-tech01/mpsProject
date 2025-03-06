@@ -11,7 +11,7 @@ export const SideMenuList = [
     { name : 'user', title : 'Users', href: '/user', icon: PersonOutlined },
     { name : 'device', title : 'Devices', href: '/device', icon: PrintOutlined },
     { name : 'group', title : 'Groups', href: '/group/device', icon: PeopleOutline },
-    { name : 'logs', title : 'Logs', href: '/logs/printlogs', icon: PlagiarismOutlined },
+    { name : 'logs', title : 'Logs', href: '/logs/auditlogs', icon: PlagiarismOutlined },
 ]
 
 export const BASE_PATH = `http://localhost:37000`;
