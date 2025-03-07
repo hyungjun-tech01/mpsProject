@@ -266,7 +266,7 @@ export async function fetchDevicesNotInGroup(
         const devices = await client.query(`
                 SELECT
                     d.device_id id,
-                    d.device_name,
+                    d.device_name name,
                     d.location,
                     d.notes,
                     d.physical_device_id,

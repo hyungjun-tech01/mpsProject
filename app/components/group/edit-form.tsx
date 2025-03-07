@@ -5,8 +5,9 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import { IColumnData, Device } from "@/app/lib/definitions";
-import Table from "@/app/components/table";
+import { Device } from "@/app/lib/definitions";
+import Grouping from "../grouping";
+
 
 export function EditForm({
   id,
@@ -15,8 +16,6 @@ export function EditForm({
   translated,
   outGroup,
   inGroup,
-  columns,
-  locale,
   action,
 }: {
   id?: string;
@@ -25,8 +24,6 @@ export function EditForm({
   translated: object;
   outGroup: { currentPage: number, totalPages: number, members: Device[] };
   inGroup: { currentPage: number, totalPages: number, members: Device[] };
-  columns: IColumnData[];
-  locale: string;
   action: (
     id: string | undefined,
     inGroup: Device[] | undefined,
@@ -93,7 +90,15 @@ export function EditForm({
             </div>
           );
         })}
-        <div className={'w-full p-2 mb-4 flex md: flex-col'}>
+        <Grouping
+          title={translated.title_grouping}
+          noneGroupMemberTitle={translated.none_group_member}
+          groupMemberTitle={translated.group_member}
+          outGroup={outGroup}
+          inGroup={inGroup}
+          onlyOutGroup={true}
+        />
+        {/* <div className={'w-full p-2 mb-4 flex md: flex-col'}>
           <div className='w-full'>
               <div className='mb-5 text-xl font-semibold'>{translated.title_grouping}</div>
           </div>
@@ -108,7 +113,7 @@ export function EditForm({
               checkable={true}
             />
           </div>
-        </div>
+        </div> */}
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
