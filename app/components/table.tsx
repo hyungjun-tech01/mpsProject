@@ -46,6 +46,7 @@ interface ITable<DataType> {
     locale?: string;
     deleteAction?: (id: string) => void;
     editable?: boolean;
+    checkable?: boolean;
 }
 
 export default function CustomizedTable<DataType>({
@@ -57,6 +58,7 @@ export default function CustomizedTable<DataType>({
     locale,
     deleteAction,
     editable = true,
+    checkable = false,
 }: ITable<DataType>) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -73,6 +75,7 @@ export default function CustomizedTable<DataType>({
                 <Table className="min-w-[700px]" aria-label="customized table">
                     <TableHead>
                         <TableRow>
+                            { checkable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                             {columns.map((column, idx) => (
                                 <StyledTableCell key={idx} align={column.align} >
                                     {column.title}
@@ -85,6 +88,15 @@ export default function CustomizedTable<DataType>({
                         {rows.length > 0 && rows.map((row, idx) => {
                             return (
                                 <StyledTableRow key={idx}>
+                                    { checkable && 
+                                        <StyledTableCell
+                                            component="th"
+                                            align='center'
+                                            scope="row"
+                                        >
+                                            <input type="checkbox" id={row.id} name={row.id} />
+                                        </StyledTableCell>
+                                    }
                                     {columns.map((column) => (
                                         <StyledTableCell
                                             key={column.name}

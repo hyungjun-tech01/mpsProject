@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import { ArrowForwardOutlined, ArrowBackOutlined } from '@mui/icons-material';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { ArrowForwardOutlined, ArrowBackOutlined, SearchOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
+import { Device } from '../lib/definitions';
 
 
 export default function Grouping({
@@ -17,14 +18,103 @@ export default function Grouping({
     title: string;
     noneGroupMemberTitle: string;
     groupMemberTitle: string;
-    outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
-    inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+    outGroup: { paramName: string, totalPages: number, members: Device[] };
+    inGroup: { paramName: string, totalPages: number, members: Device[] };
     onlyOutGroup?: boolean;
 }) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const handleMenuOpenOutGroup = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+        const foundIdx = nonGroup.findIndex(member => member.id === event.currentTarget.id);
+        if(foundIdx !== -1) {
+            setShownMember(nonGroup[foundIdx]);
+        }
+    };
+    const handleMenuOpenInGroup = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+        const foundIdx = group.findIndex(member => member.id === event.currentTarget.id);
+        if(foundIdx !== -1) {
+            setShownMember(nonGroup[foundIdx]);
+        }
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+        setShownMember(null);
+    };
+    const menuId = 'member-detail-menu';
+    const [shownMember, setShownMember] = useState<null | Device>(null);
+    const renderMenu = ( !shownMember  ? null :
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Name : </span>
+                    <span className='text-gray-600'>{shownMember.device_name}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Model : </span>
+                    <span className='text-gray-600'>{shownMember.device_model}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Type : </span>
+                    <span className='text-gray-600'>{shownMember.device_type}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Device Funtion : </span>
+                    <span className='text-gray-600'>{shownMember.ext_device_function}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Physical Device ID : </span>
+                    <span className='text-gray-600'>{shownMember.physical_device_id}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Serial No. : </span>
+                    <span className='text-gray-600'>{shownMember.serial_number}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Device Status : </span>
+                    <span className='text-gray-600'>{shownMember.device_status}</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div>
+                    <span className='mr-3 font-medium'>Deleted : </span>
+                    <span className='text-gray-600'>{shownMember.deleted}</span>
+                </div>
+            </MenuItem>
+        </Menu>
+    );
+
     const [nonGroup, setNonGroup] = useState(outGroup.members);
     const [group, setGroup] = useState(inGroup.members);
-    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<{ id: string, name: string } | null>(null);
-    const [selectedInGroup, setSelectedInGroup] = useState<{ id: string, name: string } | null>(null);
+    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<Device | null>(null);
+    const [selectedInGroup, setSelectedInGroup] = useState<Device | null>(null);
 
     const handleMemberInGroup = () => {
         if (!selectedInNoneGroup) return;
@@ -77,7 +167,7 @@ export default function Grouping({
         const target = event.target as HTMLDivElement;
         if (!target.id) return;
 
-        const targetId = target.id;
+        const targetId = target.id.split('@')[1];
         const foundIdx = nonGroup.findIndex(member => member.id === targetId);
         if (foundIdx === -1) return;
 
@@ -94,7 +184,7 @@ export default function Grouping({
         const target = event.target as HTMLDivElement;
         if (!target.id) return;
 
-        const targetId = target.id;
+        const targetId = target.id.split('@')[1];
         const foundIdx = group.findIndex(member => member.id === targetId);
         if (foundIdx === -1) return;
 
@@ -122,26 +212,32 @@ export default function Grouping({
                 <div className='flex-1 p-2 flex-col'>
                     <div className='mb-2 pl-2 font-semibold'>{noneGroupMemberTitle}</div>
                     <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
-                        {nonGroup.map(member => {
+                        {nonGroup.map((member, idx) => {
                             if (!!selectedInNoneGroup && selectedInNoneGroup.id === member.id) {
-                                return <div
-                                    key={member.id}
-                                    id={member.id}
-                                    className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full  cursor-default'
-                                    onClick={handleSelectInNoneGroup}
-                                >
-                                    {member.name}
+                                return (
+                                <div key={idx} className='flex justify-between'>
+                                    <div
+                                        id={`name@${member.id}`}
+                                        className='bg-lime-700 text-white font-normal pl-1 rounded-l w-full  cursor-default'
+                                        onClick={handleSelectInNoneGroup}
+                                    >
+                                        {member.name}
+                                    </div>
+                                    <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup} />
                                 </div>
-                            } else {
-                                return <div
-                                    key={member.id}
-                                    id={member.id}
-                                    className='bg-white text-black font-light pl-1 cursor-default'
-                                    onClick={handleSelectInNoneGroup}
-                                >
-                                    {member.name}
-                                </div>
-                            }
+                            )} else {
+                                return ( 
+                                    <div key={idx} className='flex justify-between'>
+                                        <div
+                                            id={`name@${member.id}`}
+                                            className='bg-white text-black font-light pl-1 cursor-default'
+                                            onClick={handleSelectInNoneGroup}
+                                        >
+                                            {member.name}
+                                        </div>
+                                        <SearchOutlined id={member.id} className='bg-white' onClick={handleMenuOpenOutGroup} />
+                                    </div>
+                            )}
                         })}
                     </div>
                     <div className="flex justify-center py-2">
@@ -169,14 +265,15 @@ export default function Grouping({
                             const memberName = "member_" + idx;
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
                                 return (
-                                    <div key={idx}>
+                                    <div key={idx} className='flex justify-between'>
                                         <div
-                                            id={member.id}
-                                            className='bg-lime-700 text-white font-normal pl-1 rounded-sm w-full cursor-default'
+                                            id={`name@${member.id}`}
+                                            className='bg-lime-700 text-white font-normal pl-1 rounded-l w-full cursor-default'
                                             onClick={handleSelectInGroup}
                                         >
                                             {member.name}
                                         </div>
+                                        <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup} />
                                         <input key={member.id} type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )
@@ -184,12 +281,13 @@ export default function Grouping({
                                 return (
                                     <div key={idx}>
                                         <div
-                                            id={member.id}
+                                            id={`name@${member.id}`}
                                             className='bg-white text-black font-light pl-1 cursor-default'
                                             onClick={handleSelectInGroup}
                                         >
                                             {member.name}
                                         </div>
+                                        <SearchOutlined id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup} />
                                         <input type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )
@@ -204,6 +302,7 @@ export default function Grouping({
                     }
                 </div>
             </div>
+            { renderMenu }
         </div>
     )
 }

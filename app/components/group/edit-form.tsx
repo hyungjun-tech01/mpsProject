@@ -5,7 +5,9 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import Grouping from "@/app/components/grouping";
+import { Device } from "@/app/lib/definitions";
+import Grouping from "../grouping";
+
 
 export function EditForm({
   id,
@@ -20,11 +22,11 @@ export function EditForm({
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
-  outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
-  inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+  outGroup: { currentPage: number, totalPages: number, members: Device[] };
+  inGroup: { currentPage: number, totalPages: number, members: Device[] };
   action: (
     id: string | undefined,
-    inGroup: {id:string, name:string}[] | undefined,
+    inGroup: Device[] | undefined,
     prevState: State,
     formData: FormData
   ) => Promise<void>;
@@ -94,8 +96,24 @@ export function EditForm({
           groupMemberTitle={translated.group_member}
           outGroup={outGroup}
           inGroup={inGroup}
-          onlyOutGroup={!!id}
+          onlyOutGroup={true}
         />
+        {/* <div className={'w-full p-2 mb-4 flex md: flex-col'}>
+          <div className='w-full'>
+              <div className='mb-5 text-xl font-semibold'>{translated.title_grouping}</div>
+          </div>
+          <div className='w-full flex-col'>
+            <div className='mb-2 pl-2 font-semibold'>{translated.none_group_member}</div>
+            <Table
+              columns={columns}
+              rows={outGroup.members}
+              currentPage={outGroup.currentPage}
+              totalPages={outGroup.totalPages}
+              locale={locale}
+              checkable={true}
+            />
+          </div>
+        </div> */}
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>

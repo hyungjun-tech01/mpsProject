@@ -4,7 +4,7 @@ import { IButtonInfo, ISection } from "@/app/components/edit-items";
 import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
-import { ISearch, IBreadCrums } from "@/app/lib/definitions";
+import { ISearch, IBreadCrums, IColumnData } from "@/app/lib/definitions";
 import { createDeviceGroup, createUserGroup, createSecurityGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import {
@@ -46,8 +46,8 @@ export default async function Page(props: {
         : fetchDeptsNotInGroupPages(itemsPerPage),
   ]);
 
-  const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
-  const inGroup = { paramName: '', totalPages: 0, members: [] };
+  const outGroup = { currentPage: currentPage, totalPages: totalPages, members: outGroupData };
+  const inGroup = { currentPage: 0, totalPages: 0, members: [] };
 
   const groupBreadcrumbs: {
     device: IBreadCrums[];
@@ -168,10 +168,12 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
+          // columns={columnItems.device}
+          // locale={locale}
           action={createDeviceGroup}
         />
       )}
-      {group === "user" && (
+      {/* {group === "user" && (
         <UserForm
           locale={locale}
           translated={translated}
@@ -187,9 +189,11 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
+          columns={columnItems.security}
+          locale={locale}
           action={createSecurityGroup}
         />
-      )}
+      )} */}
     </main>
   );
 }
