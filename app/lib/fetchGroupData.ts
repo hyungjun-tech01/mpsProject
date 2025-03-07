@@ -162,6 +162,7 @@ export async function fetchGroupInfoByID(
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchUsersNotInGroup(
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -176,6 +177,7 @@ export async function fetchUsersNotInGroup(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = u.user_id
                 WHERE
                     u.deleted='N' AND  gm.member_id IS NULL
+                    ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -187,6 +189,7 @@ export async function fetchUsersNotInGroup(
 };
 
 export async function fetchUsersNotInGroupPages(
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -197,6 +200,7 @@ export async function fetchUsersNotInGroupPages(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = u.user_id
                 WHERE
                     u.deleted='N' AND  gm.member_id IS NULL
+                    ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -208,6 +212,7 @@ export async function fetchUsersNotInGroupPages(
 
 export async function fetchUsersInGroup(
     id: string,
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -222,6 +227,7 @@ export async function fetchUsersInGroup(
                 JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
                 WHERE
                     u.deleted='N' AND u.user_id = '${id}'
+                    ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -234,6 +240,7 @@ export async function fetchUsersInGroup(
 
 export async function fetchUsersInGroupPages(
     id: string,
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -244,6 +251,7 @@ export async function fetchUsersInGroupPages(
                 JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
                 WHERE
                     u.deleted='N' AND u.user_id = '${id}'
+                    ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -257,6 +265,7 @@ export async function fetchUsersInGroupPages(
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchDevicesNotInGroup(
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -280,6 +289,7 @@ export async function fetchDevicesNotInGroup(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
+                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY d.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -291,6 +301,7 @@ export async function fetchDevicesNotInGroup(
 };
 
 export async function fetchDeviesNotInGroupPages(
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -301,6 +312,7 @@ export async function fetchDeviesNotInGroupPages(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
+                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -312,6 +324,7 @@ export async function fetchDeviesNotInGroupPages(
 
 export async function fetchDevicesInGroup(
     id: string,
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -335,6 +348,7 @@ export async function fetchDevicesInGroup(
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
                 WHERE
                     d.deleted='N' AND d.device_id = '${id}'
+                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY d.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -347,6 +361,7 @@ export async function fetchDevicesInGroup(
 
 export async function fetchDevicesInGroupPages(
     id: string,
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -357,6 +372,7 @@ export async function fetchDevicesInGroupPages(
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
                 WHERE
                     d.deleted='N' AND d.device_id = '${id}'
+                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -370,6 +386,7 @@ export async function fetchDevicesInGroupPages(
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchDeptsNotInGroup(
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -384,6 +401,7 @@ export async function fetchDeptsNotInGroup(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.dept_id
                 WHERE
                     gm.member_id IS NULL
+                    ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return depts.rows;
@@ -394,6 +412,7 @@ export async function fetchDeptsNotInGroup(
 };
 
 export async function fetchDeptsNotInGroupPages(
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -404,6 +423,7 @@ export async function fetchDeptsNotInGroupPages(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.dept_id
                 WHERE
                     gm.member_id IS NULL
+                    ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -415,6 +435,7 @@ export async function fetchDeptsNotInGroupPages(
 
 export async function fetchDeptsInGroup(
     id: string,
+    query: string,
     itemsPerPage: number,
     currentPage: number
 ) {
@@ -429,6 +450,7 @@ export async function fetchDeptsInGroup(
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
                 WHERE
                     d.dept_id = '${id}'
+                    ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return depts.rows;
@@ -440,6 +462,7 @@ export async function fetchDeptsInGroup(
 
 export async function fetchDeptsInGroupPages(
     id: string,
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -450,6 +473,7 @@ export async function fetchDeptsInGroupPages(
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
                 WHERE
                     d.dept_id = '${id}'
+                    ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;

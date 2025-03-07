@@ -22,8 +22,8 @@ export function EditForm({
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
-  outGroup: { currentPage: number, totalPages: number, members: Device[] };
-  inGroup: { currentPage: number, totalPages: number, members: Device[] };
+  outGroup: { paramName: string, totalPages: number, members: Device[] };
+  inGroup: { paramName: string, totalPages: number, members: Device[] } | null;
   action: (
     id: string | undefined,
     inGroup: Device[] | undefined,
@@ -32,7 +32,7 @@ export function EditForm({
   ) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updatedAction = !!id ? action.bind(null, id, inGroup.members) : action;
+  const updatedAction = !!id ? action.bind(null, id, !!inGroup ? inGroup.members : []) : action;
   const [state, formAction] = useActionState(updatedAction, initialState);
 
   return (
@@ -93,27 +93,12 @@ export function EditForm({
         <Grouping
           title={translated.title_grouping}
           noneGroupMemberTitle={translated.none_group_member}
+          noneGroupSearchPlaceholder={translated.serach_placeholder_in_nonegroup}
           groupMemberTitle={translated.group_member}
+          groupSearchPlaceholder={translated.serach_placeholder_in_group}
           outGroup={outGroup}
           inGroup={inGroup}
-          onlyOutGroup={true}
         />
-        {/* <div className={'w-full p-2 mb-4 flex md: flex-col'}>
-          <div className='w-full'>
-              <div className='mb-5 text-xl font-semibold'>{translated.title_grouping}</div>
-          </div>
-          <div className='w-full flex-col'>
-            <div className='mb-2 pl-2 font-semibold'>{translated.none_group_member}</div>
-            <Table
-              columns={columns}
-              rows={outGroup.members}
-              currentPage={outGroup.currentPage}
-              totalPages={outGroup.totalPages}
-              locale={locale}
-              checkable={true}
-            />
-          </div>
-        </div> */}
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (
             <p className="mt-2 text-sm text-red-500">{state.message}</p>

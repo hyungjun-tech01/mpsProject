@@ -4,7 +4,7 @@ import { IButtonInfo, ISection } from "@/app/components/edit-items";
 import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
-import { ISearch, IBreadCrums, IColumnData } from "@/app/lib/definitions";
+import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
 import { createDeviceGroup, createUserGroup, createSecurityGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import {
@@ -18,14 +18,15 @@ import {
 
 
 export default async function Page(props: {
-  searchParams?: Promise<ISearch>;
+  searchParams?: Promise<IGroupSearch>;
   params: Promise<{ group: string; category: string; locale: "ko" | "en" }>;
 }) {
   const params = await props.params;
   const locale = params.locale;
   const group = params.group;
   const searchParams = await props.searchParams;
-  const currentPage = Number(searchParams?.page) || 1;
+  const query = searchParams?.queryOutGroup || '';
+  const currentPage = Number(searchParams?.outGroupPage) || 1;
   const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
 
   if (!["device", "user", "security"].includes(group)) {
@@ -35,19 +36,18 @@ export default async function Page(props: {
   const [t, outGroupData, totalPages] = await Promise.all([
     getDictionary(locale),
     group === "user"
-      ? fetchUsersNotInGroup(itemsPerPage, currentPage)
+      ? fetchUsersNotInGroup(query, itemsPerPage, currentPage)
       : group === "device"
-        ? fetchDevicesNotInGroup(itemsPerPage, currentPage)
-        : fetchDeptsNotInGroup(itemsPerPage, currentPage),
+        ? fetchDevicesNotInGroup(query, itemsPerPage, currentPage)
+        : fetchDeptsNotInGroup(query, itemsPerPage, currentPage),
     group === "user"
-      ? fetchUsersNotInGroupPages(itemsPerPage)
+      ? fetchUsersNotInGroupPages(query, itemsPerPage)
       : group === "device"
-        ? fetchDeviesNotInGroupPages(itemsPerPage)
-        : fetchDeptsNotInGroupPages(itemsPerPage),
+        ? fetchDeviesNotInGroupPages(query, itemsPerPage)
+        : fetchDeptsNotInGroupPages(query, itemsPerPage),
   ]);
 
-  const outGroup = { currentPage: currentPage, totalPages: totalPages, members: outGroupData };
-  const inGroup = { currentPage: 0, totalPages: 0, members: [] };
+  const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
 
   const groupBreadcrumbs: {
     device: IBreadCrums[];
@@ -96,6 +96,8 @@ export default async function Page(props: {
     title_grouping: t("common.grouping"),
     group_member: t("group.group_members"),
     none_group_member: t("group.none_group_members"),
+    serach_placeholder_in_group: t("group.serach_placeholder_in_group"),
+    serach_placeholder_in_nonegroup: t("group.serach_placeholder_in_nonegroup")
   };
 
   const contentsItems: { device: ISection[], security: ISection[] } = {
@@ -167,9 +169,7 @@ export default async function Page(props: {
           buttons={buttonItems}
           translated={translated}
           outGroup={outGroup}
-          inGroup={inGroup}
-          // columns={columnItems.device}
-          // locale={locale}
+          inGroup={null}
           action={createDeviceGroup}
         />
       )}

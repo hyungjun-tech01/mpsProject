@@ -5,7 +5,8 @@ export interface ISearch {
 };
 
 export interface IGroupSearch {
-  query?: string;
+  queryOutGroup?: string;
+  queryInGroup?: string;
   itemsPerPage?: string;
   outGroupPage?: string;
   inGroupPage?: string;

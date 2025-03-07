@@ -4,22 +4,27 @@ import { useEffect, useState } from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined, SearchOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
+import Search from './search';
 import { Device } from '../lib/definitions';
 
 
 export default function Grouping({
     title,
     noneGroupMemberTitle,
+    noneGroupSearchPlaceholder,
     groupMemberTitle,
+    groupSearchPlaceholder,
     outGroup,
     inGroup,
     onlyOutGroup
 }: {
     title: string;
     noneGroupMemberTitle: string;
+    noneGroupSearchPlaceholder: string;
     groupMemberTitle: string;
+    groupSearchPlaceholder: string;
     outGroup: { paramName: string, totalPages: number, members: Device[] };
-    inGroup: { paramName: string, totalPages: number, members: Device[] };
+    inGroup: { paramName: string, totalPages: number, members: Device[] } | null;
     onlyOutGroup?: boolean;
 }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -112,7 +117,7 @@ export default function Grouping({
     );
 
     const [nonGroup, setNonGroup] = useState(outGroup.members);
-    const [group, setGroup] = useState(inGroup.members);
+    const [group, setGroup] = useState(!!inGroup ? inGroup.members : []);
     const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<Device | null>(null);
     const [selectedInGroup, setSelectedInGroup] = useState<Device | null>(null);
 
@@ -199,7 +204,7 @@ export default function Grouping({
         const updatedOutGroup = outGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1);
         setNonGroup(updatedOutGroup);
 
-        const updatedInGroup = [...inGroup.members, ...group];
+        const updatedInGroup = !!inGroup ? [...inGroup.members, ...group] : [];
         setGroup(updatedInGroup);
     }, [outGroup, inGroup]);
 
@@ -209,9 +214,12 @@ export default function Grouping({
                 <div className='mb-5 text-xl font-semibold'>{title}</div>
             </div>
             <div className='w-full flex'>
-                <div className='flex-1 p-2 flex-col'>
-                    <div className='mb-2 pl-2 font-semibold'>{noneGroupMemberTitle}</div>
-                    <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
+                <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
+                    <div className='flex-none pl-2 font-semibold'>{noneGroupMemberTitle}</div>
+                    <div className='flex-none'>
+                        <Search pageName='pageOutGroup' queryName='queryOutGroup' placeholder={noneGroupSearchPlaceholder} />
+                    </div>
+                    <div className='grow p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {nonGroup.map((member, idx) => {
                             if (!!selectedInNoneGroup && selectedInNoneGroup.id === member.id) {
                                 return (
@@ -240,7 +248,7 @@ export default function Grouping({
                             )}
                         })}
                     </div>
-                    <div className="flex justify-center py-2">
+                    <div className="flex-none flex justify-center py-2">
                         <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
                     </div>
                 </div>
@@ -258,9 +266,13 @@ export default function Grouping({
                         <ArrowBackOutlined />
                     </Button>
                 </div>
-                <div className='flex-1 p-2 flex-col'>
-                    <div className='mb-2 pl-2 font-semibold'>{groupMemberTitle}</div>
-                    <div className='h-64 p-2 border rounded-lg bg-white flex-col overflow-auto'>
+                <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
+                    <div className='flex-none pl-2 font-semibold'>{groupMemberTitle}</div>
+                    {!!inGroup && <div className='flex-none'>
+                            <Search pageName='pageOutGroup' queryName='queryOutGroup' placeholder={groupSearchPlaceholder} />
+                        </div>
+                    }
+                    <div className='grow p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {group.map((member, idx) => {
                             const memberName = "member_" + idx;
                             if (!!selectedInGroup && selectedInGroup.id === member.id) {
@@ -279,7 +291,7 @@ export default function Grouping({
                                 )
                             } else {
                                 return (
-                                    <div key={idx}>
+                                    <div key={idx} className='flex justify-between'>
                                         <div
                                             id={`name@${member.id}`}
                                             className='bg-white text-black font-light pl-1 cursor-default'
@@ -295,8 +307,8 @@ export default function Grouping({
                         })}
                         <input type="hidden" name="member_length" value={group.length} />
                     </div>
-                    {!!onlyOutGroup &&
-                        <div className="flex justify-center py-2">
+                    {!!inGroup &&
+                        <div className="flex-none flex justify-center py-2">
                             <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
                         </div>
                     }

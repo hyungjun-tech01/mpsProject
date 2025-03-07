@@ -7,10 +7,10 @@ import { generatePagination } from '@/app/lib/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function Pagination({
-    paramName,
+    paramName = 'page',
     totalPages
 }: {
-    paramName: string;
+    paramName?: string;
     totalPages: number
 }) {
     const pathname = usePathname();
