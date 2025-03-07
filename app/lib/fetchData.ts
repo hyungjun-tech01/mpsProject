@@ -1,6 +1,6 @@
 import pg from "pg";
 import { BASE_PATH } from "@/constans";
-import { UserField } from "@/app/lib/definitions";
+import { UserField, AuditLogField } from "@/app/lib/definitions";
 import { generateStrOf30Days } from "./utils";
 
 const client = new pg.Client({
@@ -558,12 +558,47 @@ export async function fetchLatestDeviceStatus() {
 
 /*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
+    query:string,
     itemsPerPage: number,
     currentPage: number,
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
     try {
-        const response = await client.query(`
+        const auditLogs = 
+            query !== "" 
+            ? await client.query(`
+            select job_log_id ,
+                job_type ,
+                printer_serial_number ,
+                job_id      ,
+                user_name ,
+                destination ,
+                send_time,
+                file_name ,
+                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                copies  ,
+                original_pages ,
+                CASE WHEN detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                substr(privacy_text,0,100) privacy_text,
+                image_archive_path ,
+                text_archive_path ,
+                original_job_id  ,
+                document_name,
+                total_pages,
+                color_total_pages
+            from tbl_audit_job_log
+            WHERE (
+                printer_serial_number ILIKE '${`%${query}%`}' OR
+                user_name ILIKE '${`%${query}%`}' OR
+                document_name ILIKE '${`%${query}%`}' OR
+                privacy_text ILIKE '${`%${query}%`}' 
+                )			
+            ORDER BY send_time DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+            : await client.query(`
             select job_log_id ,
                 job_type ,
                 printer_serial_number ,
@@ -588,9 +623,14 @@ export async function fetchFilteredAuditLogs(
             from tbl_audit_job_log			
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
-        `);
+            `);
 
-        return response.rows;
+            const converted = auditLogs.rows.map((data: AuditLogField) => ({
+                ...data,
+                id: data.job_log_id,
+            }));
+            return converted;
+
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch audit logs");
@@ -598,10 +638,23 @@ export async function fetchFilteredAuditLogs(
 };
 
 export async function fetchFilteredAuditLogPages(
+    query,
     itemsPerPage: number
 ) {
     try {
-        const count = await client.query(`
+        const count = 
+            query !== ""
+            ? await client.query(`
+                SELECT COUNT(*) FROM tbl_audit_job_log
+                 WHERE 
+                    (
+                        printer_serial_number ILIKE '${`%${query}%`}' OR
+                        user_name ILIKE '${`%${query}%`}' OR
+                        document_name ILIKE '${`%${query}%`}' OR
+                        privacy_text ILIKE '${`%${query}%`}'                        
+                    )
+            `)
+            : await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log
             `);
 

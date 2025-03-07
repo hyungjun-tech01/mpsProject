@@ -485,7 +485,11 @@ const koResource = {
             document_name : '문서이름',
             status: '상태',
             detect_privacy: '검출여부',
-            privacy_text: '검출 결과'
+            privacy_text: '검출 결과',
+            query_condition:'사용자이름,시리얼번호,문서이름, 검출결과로 조회하세요 '
+        },
+        fax:{
+            fax: '팩스',
         }
     },
 }

@@ -33,8 +33,8 @@ export default async function Page(props: {
         //fetchFilteredDeviceUsageLogs(query, itemsPerPage, currentPage),
         //fetchFilteredApplicationLogPages(itemsPerPage),
         //fetchFilteredApplicationLogs(itemsPerPage, currentPage),
-        fetchFilteredAuditLogPages(itemsPerPage),
-        fetchFilteredAuditLogs(itemsPerPage, currentPage)
+        fetchFilteredAuditLogPages(query, itemsPerPage),
+        fetchFilteredAuditLogs(query, itemsPerPage, currentPage)
     ]);
     const subTitles = [
      //   { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },
@@ -75,10 +75,10 @@ export default async function Page(props: {
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">{t('device.device')}</h1>
+                <h1 className="text-2xl">{t('logs.auditlogs')}</h1>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search placeholder="Search Devices..." />
+                <Search placeholder={t('logs.query_condition')}/>
             </div>
             <Table
                 columns={auditlogColumns}
@@ -87,6 +87,7 @@ export default async function Page(props: {
                 totalPages={auditlogPages}
                 locale={locale}
                 category='auditlogs'
+                editable={false}
             />
         </div>
 

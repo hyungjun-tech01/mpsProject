@@ -87,3 +87,36 @@ export type Device = {
   serial_number: string | null;
   deleted: string | null;
 };
+
+export type AuditLogField ={
+  job_log_id: string|null;
+  job_type: string|null;
+  printer_serial_number: string|null;
+  job_id: string|null;
+  user_name: string|null;
+  destination: string|null;
+  send_time: string|null;
+  file_name: string|null;
+  send_date: string|null;
+  copies: number|null;
+  original_pages: number|null;
+  privacy_text: string|null;
+  image_archive_path: string|null;
+  text_archive_path: string|null;
+  original_job_id: string|null;
+  document_name: string|null;
+  total_pages: number|null;
+  color_total_pages: number|null;
+};
+
+export type Fax ={
+  fax_line_id: string|null;
+  fax_line_name: string|null;
+  printer_id: string|null;
+  fax_line_user_id: string|null;
+  fax_line_shared_group_id: string|null;
+  created_date: Date|null;
+  created_by: string|null;
+  deleted_date: Date|null;
+  deleted_by: string|null;
+};
