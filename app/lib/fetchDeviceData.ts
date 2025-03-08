@@ -158,6 +158,31 @@ export async function fetchDeviceById(id:string){
     }
 }
 
+export async function fetchDeviceFaxLineById(id:string){
+    try{
+        const faxLine =  await client.query(`
+        SELECT 
+            fax_line_id,
+            fax_line_name,
+            printer_id,
+            fax_line_user_id,
+            fax_line_shared_group_id,
+            created_date,
+            created_by,
+            deleted_date,
+            deleted_by
+        from tbl_fax_line_info tfli
+        WHERE 1=1 
+        AND deleted_date is null
+        AND tfli.printer_id = $1
+    `,[id]);
+    return  faxLine;
+    }catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to get device by id.");
+    }
+}
+
 export async function fetchCreateDevice(newDevice: any) {
     try {
 

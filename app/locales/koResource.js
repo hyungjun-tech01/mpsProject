@@ -491,7 +491,7 @@ const koResource = {
             query_condition:'사용자이름,시리얼번호,문서이름, 검출결과로 조회하세요 '
         },
         fax:{
-            fax: '팩스',
+            fax: '팩스 라인',
         }
     },
 }

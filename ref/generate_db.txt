@@ -2732,3 +2732,15 @@ CREATE TABLE tbl_group_member_info
     group_admin_end_date    timestamp,
     PRIMARY KEY (group_id, member_id)
 );
+
+-- 2025.03.08 tbl_group_info 'user' 그룹 추가 
+insert into tbl_group_info
+(group_name, group_type, created_date, created_by, modified_date, modified_by )
+values('All Users', 'user', now(), 'admin', now(), 'admin');
+
+-- aeba55ee-7539-4178-8768-ade4168a0aea : tbl_group_info의 group_id 
+
+-- 2025.03.08 tbl_fax_line_info 데이터 sample data 입력 
+
+insert into tbl_fax_line_info(fax_line_name,printer_id, fax_line_user_id, fax_line_shared_group_id, created_date, created_by )
+values('Test Line', '1001', '1001', 'aeba55ee-7539-4178-8768-ade4168a0aea', now(), 'admin');
