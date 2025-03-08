@@ -28,7 +28,10 @@ export interface ISection {
 
 export interface IButtonInfo {
   cancel: { title: string, link: string },
-  go: { title: string }
+  go: { title: string },
+  save: {title:string},
+  delete: {title:string},
+  add:{title:string}
 };
 
 export function EditItem({

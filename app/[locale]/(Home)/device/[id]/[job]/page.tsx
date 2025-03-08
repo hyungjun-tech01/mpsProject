@@ -4,9 +4,11 @@ import getDictionary from '@/app/locales/dictionaries';
 import {
     fetchDeviceById,
     fetchPrinterGroup,
+    fetchDeviceFaxLineById
 } from '@/app/lib/fetchDeviceData';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
+import FormFax from '@/app/components/device/create-form-fax';
 import {modifyDevice} from '@/app/components/device/actions';
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 
@@ -22,10 +24,11 @@ export default async function Page(props: {
     const locale = params.locale;
     const searchParams = await props.searchParams;
 
-    const [t, device, printerGroup] = await Promise.all([
+    const [t, device, printerGroup, fax] = await Promise.all([
         getDictionary(locale),
         fetchDeviceById(id),
         fetchPrinterGroup(),
+        fetchDeviceFaxLineById(id)
     ]);
 
     const editItems: ISection[] = [
@@ -63,12 +66,33 @@ export default async function Page(props: {
                 },
             ]
         },
-
+       
     ];
+
+    const editFaxItems: ISection[] =  fax.length > 0 
+    ? fax.map((faxLine, index) => ({
+        title: `${t('fax.fax_line')}`, // 여러 개일 경우 번호 추가
+        description: t('fax.fax_line_desc'),
+        items: [
+            { name: `fax_line_name_${index}`, title: `${t('fax.fax_line_name')} ${index+1}` , type: 'input', defaultValue: faxLine.fax_line_name, placeholder: t('fax.fax_line_name') },
+            { name: `fax_line_user_id_${index}`, title: t('fax.fax_line_user'), type: 'input', defaultValue: `${faxLine.full_name}(${faxLine.user_name})`, placeholder: t('fax.fax_line_user') },
+            { name: `fax_line_shared_group_id_${index}`, title: t('fax.fax_line_shared_group'), type: 'input', defaultValue: faxLine.group_name, placeholder: t('fax.fax_line_shared_group') },
+            { name: `space_line_${index}`, title: t('fax.fax_line_shared_group'), type: 'input', defaultValue: faxLine.fax_line_shared_group_id, placeholder: t('fax.fax_line_shared_group') },
+        ]
+    }))
+    : [{ title: t('fax.fax_line'), description: t('fax.fax_line_desc'), items: [] }];
+
     const buttonItems = {
             cancel: { title: t('common.cancel'), link: '/device' },
             go: { title: t('device.udpate_device') },
     };
+
+    const buttonFaxItems = {
+        save: { title: t('fax.save') },
+        add: { title: t('fax.add') },
+        delete: { title: t('fax.delete') },
+    };
+
     return (
         <main>
             <Breadcrumbs
@@ -82,6 +106,9 @@ export default async function Page(props: {
                 ]}
             />
              {job === 'edit' && <Form id={id} items={editItems} buttons={buttonItems} action={modifyDevice}/>}
+             { fax && job === 'edit' && editFaxItems.length > 0 && (
+                <FormFax id={id} items={editFaxItems} buttons={buttonFaxItems} action={modifyDevice}/>
+              )}
         </main>
     );
 }
