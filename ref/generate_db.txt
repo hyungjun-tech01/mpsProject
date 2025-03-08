@@ -2743,4 +2743,6 @@ values('All Users', 'user', now(), 'admin', now(), 'admin');
 -- 2025.03.08 tbl_fax_line_info 데이터 sample data 입력 
 
 insert into tbl_fax_line_info(fax_line_name,printer_id, fax_line_user_id, fax_line_shared_group_id, created_date, created_by )
-values('Test Line', '1001', '1001', 'aeba55ee-7539-4178-8768-ade4168a0aea', now(), 'admin');
+values('024601066', '1001', '1001', 'aeba55ee-7539-4178-8768-ade4168a0aea', now(), 'admin');
+
+

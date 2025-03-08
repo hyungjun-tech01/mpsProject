@@ -2,7 +2,7 @@
 
 import pg from 'pg';
 import { BASE_PATH } from '@/constans';
-import { Device } from '@/app/lib/definitions';
+import { Fax } from '@/app/lib/definitions';
 import { revalidatePath } from 'next/cache';
 
 const client = new pg.Client({
@@ -16,7 +16,7 @@ const client = new pg.Client({
 
 await client.connect();
 
-export async function fetchFilteredDevices(
+export async function fetchFilteredFaxes(
     query: string,
     itemsPerPage: number,
     currentPage: number,
@@ -27,53 +27,44 @@ export async function fetchFilteredDevices(
         const device = query !== '' 
             ? await client.query(`
                 SELECT 
-                device_id id,
-                device_id,
-                device_name,
-                location,
-                notes,
-                physical_device_id,
-                device_model,
-                serial_number,
-                deleted,
-                device_status,
-                device_type,
-                ext_device_function
-                from tbl_device_info
+                    fax_line_id,
+                    fax_line_name,
+                    printer_id,
+                    fax_line_user_id,
+                    fax_line_shared_group_id,
+                    created_date,
+                    created_by,
+                    deleted_date,
+                    deleted_by
+                from tbl_fax_line_info tfli
                 WHERE
                 1=1 AND
                     (
-                        tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.device_model ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.deleted ILIKE '${`%${query}%`}'
+                        tfli.fax_line_name ILIKE '${`%${query}%`}'
                     )
-                ORDER BY tbl_device_info.modified_date DESC
+                ORDER BY tfli.created_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
                 SELECT 
-                    device_id id,
-                    device_id,
-                    device_name,
-                    location,
-                    notes,
-                    physical_device_id,
-                    device_model,
-                    serial_number,
-                    deleted,
-                    device_status,
-                    device_type,
-                    ext_device_function
-                FROM tbl_device_info
+                    fax_line_id,
+                    fax_line_name,
+                    printer_id,
+                    fax_line_user_id,
+                    fax_line_shared_group_id,
+                    created_date,
+                    created_by,
+                    deleted_date,
+                    deleted_by
+                from tbl_fax_line_info tfli
                 WHERE
                 1=1
-                ORDER BY tbl_device_info.modified_date DESC
+                ORDER BY tfli.created_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
         ;
         
-        const converted = device.rows.map((data:Device) => ({
+        const converted = device.rows.map((data:Fax) => ({
             ...data,
         }));
         return converted;
@@ -83,7 +74,7 @@ export async function fetchFilteredDevices(
     }
 }
 
-export async function fetchDevicesPages(
+export async function fetchFaxesPages(
     query: string,
     itemsPerPage: number,
 ) {
@@ -91,18 +82,15 @@ export async function fetchDevicesPages(
         const count = query !== '' 
             ? await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer_info
+                FROM tbl_fax_line_info
                 WHERE
                 1=1 AND
                 (
-                    tbl_printer_info.display_name ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.device_type ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.server_name ILIKE '${`%${query}%`}'                    )
+                    tfli.fax_line_name ILIKE '${`%${query}%`}'                 )
                 `)
             : await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer_info
+                FROM tbl_fax_line_info
             `)
         ;
 
@@ -114,7 +102,7 @@ export async function fetchDevicesPages(
     }
 }
 
-export async function fetchDeviceById(id:string){
+export async function fetchFaxById(id:string){
     try {
         const device = await client.query(`
             SELECT
@@ -158,37 +146,7 @@ export async function fetchDeviceById(id:string){
     }
 }
 
-export async function fetchDeviceFaxLineById(id:string){
-    try{
-        const faxLine =  await client.query(`
-        SELECT 
-            tfli.fax_line_id,
-            tfli.fax_line_name,
-            tfli.printer_id,
-            tfli.fax_line_user_id,
-            tfli.fax_line_shared_group_id,
-            tfli.created_date,
-            tfli.created_by,
-            tfli.deleted_date,
-            tfli.deleted_by,
-            tui.user_name,
-            tui.full_name,
-            tgi.group_name
-        from tbl_fax_line_info tfli
-        LEFT JOIN tbl_user_info tui ON tfli.fax_line_user_id = tui.user_id
-        LEFT JOIN tbl_group_info tgi ON tfli.fax_line_shared_group_id = tgi.group_id
-        WHERE 1=1 
-        AND tfli.deleted_date is null
-        AND tfli.printer_id = $1
-    `,[id]);
-    return  faxLine.rows;
-    }catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to get device by id.");
-    }
-}
-
-export async function fetchCreateDevice(newDevice: any) {
+export async function fetchCreateFax(newDevice: any) {
     try {
 
         // 트랜잭션 시작
@@ -239,23 +197,8 @@ export async function fetchCreateDevice(newDevice: any) {
     }
 }
 
-export async function fetchPrinterGroup() {
-    try {
-        const response = await client.query(`
-           select null group_id, null group_name
-           union all
-           select group_id, group_name
-             from tbl_group_info
-             where group_type = 'device';
-        `);
-        return response.rows;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer group");
-    }
-};
 
-export async function fetchDeleteDevice(id: string) {
+export async function fetchDeleteFax(id: string) {
     try {
         console.log(id);
         const result = await client.query(`
@@ -275,7 +218,7 @@ export async function fetchDeleteDevice(id: string) {
         };
     };
 }
-export async function fetchModifyDevice(newDevice: any) {
+export async function fetchModifyFax(newDevice: any) {
 
     try {
         // 트랜잭션 시작

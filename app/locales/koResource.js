@@ -491,7 +491,14 @@ const koResource = {
             query_condition:'사용자이름,시리얼번호,문서이름, 검출결과로 조회하세요 '
         },
         fax:{
-            fax: '팩스 라인',
+            fax_line: '팩스 라인',
+            fax_line_desc:'팩스라인을 관리합니다.',
+            save:'저장',
+            add:'회선 추가',
+            delete:'회선 삭제',
+            fax_line_name :'팩스라인 번호',
+            fax_line_user :'회선 사용자',
+            fax_line_shared_group:'회선 공유그룹',
         }
     },
 }
