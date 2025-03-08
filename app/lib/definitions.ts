@@ -71,8 +71,47 @@ export type UserField = {
   secondary_user_source_type: string | null;
   secondary_external_user_name: string | null;
 }
+
+export type Group = {
+  group_id: string;
+  group_name: string;
+  group_type: 'device' | 'user' | 'security';
+  group_notes: string;
+  schedule_period: 'NONE' | 'PER_DAY' | 'PER_WEEK' | 'PER_MONTH' | 'PER_YEAR';
+  schedule_amount: number;
+  schedule_start: number;
+}
+
+export type UserGroup = {
+  id: string;
+  name: string;
+  full_name: string;
+  balance: number;
+  restricted: 'Y' | 'N';
+  total_pages: number;
+  total_jobs: number;
+}
 // ----- End : User ------------------------------------------//
 
+export type SecurityGroup = {
+  id: string;
+  name: string|null;
+  dept_name: string;
+};
+
+export type DeviceGroup = {
+  id: string;
+  name: string|null;
+  device_type: string|null;
+  device_status: string|null;
+  location: string | null;
+  notes: string | null;
+  ext_device_function: string | null;
+  physical_device_id: string | null;
+  device_model: string | null;
+  serial_number: string | null;
+  deleted: string | null;
+};
 
 export type Device = {
   id: string|null;

@@ -175,9 +175,10 @@ export function EditItem({
               onChange={onChange}
             >
               {options &&
-                options.map((item) => <option key={item.value} value={item.value}>
-                  {item.title}
-                </option>
+                options.map((item) =>
+                  <option key={item.value} value={item.value}>
+                    {item.title}
+                  </option>
                 )}
             </select>
           </div>

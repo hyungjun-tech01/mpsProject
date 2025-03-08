@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import { Device } from "@/app/lib/definitions";
+import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
 
@@ -22,11 +22,11 @@ export function EditForm({
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
-  outGroup: { paramName: string, totalPages: number, members: Device[] };
-  inGroup: { paramName: string, totalPages: number, members: Device[] } | null;
+  outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
+  inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
     id: string | undefined,
-    inGroup: Device[] | undefined,
+    inGroup: DeviceGroup[] | undefined,
     prevState: State,
     formData: FormData
   ) => Promise<void>;
@@ -93,9 +93,9 @@ export function EditForm({
         <Grouping
           title={translated.title_grouping}
           noneGroupMemberTitle={translated.none_group_member}
-          noneGroupSearchPlaceholder={translated.serach_placeholder_in_nonegroup}
+          noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
           groupMemberTitle={translated.group_member}
-          groupSearchPlaceholder={translated.serach_placeholder_in_group}
+          groupSearchPlaceholder={translated.search_placeholder_in_group}
           outGroup={outGroup}
           inGroup={inGroup}
         />

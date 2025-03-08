@@ -144,12 +144,16 @@ export async function fetchGroupInfoByID(
     try {
         const resp = await client.query(`
             SELECT
-                g.group_name as group_name,
-                COUNT()
-            FROM tbl_group_info g
-            JOIN tbl_group_member_info gm ON gm.group_id = g.group_id
-            WHERE g.group_type = '${groupType}'
-            AND g.group_id = '${groupId}'
+                group_id id,
+                group_name,
+                group_type,
+                group_notes,
+                schedule_period,
+                schedule_amount,
+                schedule_start
+            FROM tbl_group_info
+            WHERE group_type = '${groupType}'
+            AND group_id = '${groupId}'
         `);
         return resp.rows[0];
     } catch (error) {
@@ -172,7 +176,12 @@ export async function fetchUsersNotInGroup(
         const users = await client.query(`
                 SELECT
                     u.user_id as id,
-                    u.user_name as name
+                    u.user_name as name,
+                    u.full_name,
+                    u.balance,
+                    u.restricted,
+                    u.total_pages,
+                    u.total_jobs
                 FROM tbl_user_info u
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = u.user_id
                 WHERE
@@ -222,11 +231,16 @@ export async function fetchUsersInGroup(
         const users = await client.query(`
                 SELECT
                     u.user_id as id,
-                    u.user_name as name
+                    u.user_name as name,
+                    u.full_name,
+                    u.balance,
+                    u.restricted,
+                    u.total_pages,
+                    u.total_jobs
                 FROM tbl_user_info u
                 JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
                 WHERE
-                    u.deleted='N' AND u.user_id = '${id}'
+                    u.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY u.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
@@ -250,7 +264,7 @@ export async function fetchUsersInGroupPages(
                 FROM tbl_user_info u
                 JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
                 WHERE
-                    u.deleted='N' AND u.user_id = '${id}'
+                    u.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
@@ -334,7 +348,7 @@ export async function fetchDevicesInGroup(
         const devices = await client.query(`
                 SELECT
                     d.device_id id,
-                    d.device_name,
+                    d.device_name name,
                     d.location,
                     d.notes,
                     d.physical_device_id,
@@ -347,7 +361,7 @@ export async function fetchDevicesInGroup(
                 FROM tbl_device_info d
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
                 WHERE
-                    d.deleted='N' AND d.device_id = '${id}'
+                    d.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY d.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
@@ -371,7 +385,7 @@ export async function fetchDevicesInGroupPages(
                 FROM tbl_device_info d
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
                 WHERE
-                    d.deleted='N' AND d.device_id = '${id}'
+                    d.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
@@ -396,7 +410,8 @@ export async function fetchDeptsNotInGroup(
         const depts = await client.query(`
                 SELECT
                     d.dept_id as id,
-                    d.dept_name as name
+                    d.dept_name as name,
+                    d.dept_name as dept_name
                 FROM tbl_dept_info d
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.dept_id
                 WHERE
@@ -445,7 +460,8 @@ export async function fetchDeptsInGroup(
         const depts = await client.query(`
                 SELECT
                     d.dept_id as id,
-                    d.dept_name as name
+                    d.dept_name as name,
+                    d.dempt_name as dept_name
                 FROM tbl_dept_info d
                 JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
                 WHERE

@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { Button } from '@mui/material';
 import { State } from '@/app/lib/actions';
-import { ChangeEvent, useActionState, useState } from 'react';
+import { ChangeEvent, useActionState, useState, useEffect } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
+import { Group, UserGroup } from '@/app/lib/definitions';
 
 
 export function UserForm({
     id,
+    userData,
     locale,
     translated,
     outGroup,
@@ -17,23 +19,24 @@ export function UserForm({
     action,
 }: {
     id?: string;
+    userData: Group;
     locale: string;
     translated: object;
-    outGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
-    inGroup: { paramName: string, totalPages: number, members: { id: string, name: string }[] };
+    outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
+    inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
         id: string | undefined,
-        inGroup: {id:string, name:string}[] | undefined,
+        inGroup: UserGroup[] | undefined,
         prevState: State,
         formData: FormData
     ) => Promise<void>;
 }) {
     const initialState: State = { message: null, errors: {} };
-    const updatedAction = !!id ? action.bind(null, id, inGroup.members) : action;
+    const updatedAction = !!id ? action.bind(null, id, !!inGroup ? inGroup.members : []) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
-    const [schedulePeriod, SetSchedulePeriod] = useState<string>("NONE");
-    const [scheduleStart, SetScheduleStart] = useState<number>(1);
-    const [subScheduleStartSub, SetSubScheduleStart] = useState<number>(1);
+    const [schedulePeriod, SetSchedulePeriod] = useState<string>(userData.schedule_period);
+    const [scheduleStart, SetScheduleStart] = useState<number>(userData.schedule_start % 100);
+    const [subScheduleStartSub, SetSubScheduleStart] = useState<number>(Math.floor(userData.schedule_start/100));
     const [optionsForYearDate, setOptionsForYearDate] = useState<{ title: string, value: number }[]>([]);
 
     const optionsForSchedulePeriod = [
@@ -43,6 +46,7 @@ export function UserForm({
         { title: translated.per_month, value: "PER_MONTH" },
         { title: translated.per_year, value: "PER_YEAR" },
     ];
+
     const optionsForWeek = [
         { title: translated.sunday, value: 0 },
         { title: translated.monday, value: 1 },
@@ -52,6 +56,7 @@ export function UserForm({
         { title: translated.friday, value: 5 },
         { title: translated.saturday, value: 6 },
     ];
+
     const optionsForMonth = [];
     if (locale === 'ko') {
         for (let i = 1; i <= 31; i++) {
@@ -66,6 +71,7 @@ export function UserForm({
             optionsForMonth.push({ title: i.toString() + "th", value: i });
         };
     }
+
     const optionsForYearMonth = [];
     if (locale === 'ko') {
         for (let i = 1; i <= 12; i++) {
@@ -116,9 +122,14 @@ export function UserForm({
         genOptionsForYearDate(chosenValue);
     };
 
-    // useEffect(() => {
-    //     console.log('User form is updated');
-    // }, [schedulePeriod])
+    useEffect(() => {
+        if(userData.schedule_start > 100){
+            SetScheduleStart(Math.floor(userData.schedule_start / 100));
+            SetSubScheduleStart(userData.schedule_start % 100);
+        } else {
+            SetScheduleStart(userData.schedule_start);
+        }
+    }, [userData])
 
     return (
         <form action={formAction}>
@@ -133,7 +144,7 @@ export function UserForm({
                             name="group_name"
                             title={translated.group_name}
                             type="input"
-                            defaultValue=""
+                            defaultValue={userData.group_name}
                             placeholder={translated.placeholder_group_name}
                             error={(!!state?.errors && !!state?.errors.group_name)
                                 ? state?.errors.group_name
@@ -144,7 +155,7 @@ export function UserForm({
                             name="group_notes"
                             title={translated.common_note}
                             type="input"
-                            defaultValue=""
+                            defaultValue={userData.group_notes}
                             error={(!!state?.errors && !!state?.errors.group_name)
                                 ? state?.errors.group_name
                                 : null
@@ -162,7 +173,7 @@ export function UserForm({
                             name="schedule_period"
                             title={translated.group_schedule_period}
                             type="select"
-                            defaultValue=""
+                            defaultValue={userData.schedule_period}
                             options={optionsForSchedulePeriod}
                             onChange={(event: ChangeEvent) => {
                                 SetSchedulePeriod(event.target.value);
@@ -222,7 +233,7 @@ export function UserForm({
                                                 id="schedule_start"
                                                 name="schedule_start"
                                                 className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                                                defaultValue={scheduleStart}
+                                                defaultValue={Math.floor(scheduleStart)}
                                                 aria-describedby={"schedule_start-error"}
                                                 onChange={handleChangeScheduleStart}
                                             >
@@ -266,7 +277,7 @@ export function UserForm({
                             name="schedule_amount"
                             title={translated.group_schedule_amount}
                             type="currency"
-                            defaultValue={0}
+                            defaultValue={userData.schedule_amount}
                             error={(!!state?.errors && !!state?.errors.group_name)
                                 ? state?.errors.group_name
                                 : null
@@ -277,10 +288,11 @@ export function UserForm({
                 <Grouping
                     title={translated.title_grouping}
                     noneGroupMemberTitle={translated.none_group_member}
+                    noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
                     groupMemberTitle={translated.group_member}
+                    groupSearchPlaceholder={translated.search_placeholder_in_group}
                     outGroup={outGroup}
                     inGroup={inGroup}
-                    onlyOutGroup={!!id}
                 />
                 <div id="input-error" aria-live="polite" aria-atomic="true">
                     {!!state?.message &&

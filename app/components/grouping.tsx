@@ -5,7 +5,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined, SearchOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
 import Search from './search';
-import { Device } from '../lib/definitions';
+import { DeviceGroup, UserGroup } from '../lib/definitions';
 
 
 export default function Grouping({
@@ -16,16 +16,14 @@ export default function Grouping({
     groupSearchPlaceholder,
     outGroup,
     inGroup,
-    onlyOutGroup
 }: {
     title: string;
     noneGroupMemberTitle: string;
     noneGroupSearchPlaceholder: string;
     groupMemberTitle: string;
     groupSearchPlaceholder: string;
-    outGroup: { paramName: string, totalPages: number, members: Device[] };
-    inGroup: { paramName: string, totalPages: number, members: Device[] } | null;
-    onlyOutGroup?: boolean;
+    outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] };
+    inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] } | null;
 }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -49,77 +47,164 @@ export default function Grouping({
     };
     const menuId = 'member-detail-menu';
     const [shownMember, setShownMember] = useState<null | Device>(null);
-    const renderMenu = ( !shownMember  ? null :
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Name : </span>
-                    <span className='text-gray-600'>{shownMember.device_name}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Model : </span>
-                    <span className='text-gray-600'>{shownMember.device_model}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Type : </span>
-                    <span className='text-gray-600'>{shownMember.device_type}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Device Funtion : </span>
-                    <span className='text-gray-600'>{shownMember.ext_device_function}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Physical Device ID : </span>
-                    <span className='text-gray-600'>{shownMember.physical_device_id}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Serial No. : </span>
-                    <span className='text-gray-600'>{shownMember.serial_number}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Device Status : </span>
-                    <span className='text-gray-600'>{shownMember.device_status}</span>
-                </div>
-            </MenuItem>
-            <MenuItem>
-                <div>
-                    <span className='mr-3 font-medium'>Deleted : </span>
-                    <span className='text-gray-600'>{shownMember.deleted}</span>
-                </div>
-            </MenuItem>
-        </Menu>
-    );
+    
+    const renderMenu = () => {
+        if(!shownMember) return null;
+        if('device_type' in shownMember) {
+            return (
+                <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    id={menuId}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={isMenuOpen}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Name : </span>
+                            <span className='text-gray-600'>{shownMember.name}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Model : </span>
+                            <span className='text-gray-600'>{shownMember.device_model}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Type : </span>
+                            <span className='text-gray-600'>{shownMember.device_type}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Device Funtion : </span>
+                            <span className='text-gray-600'>{shownMember.ext_device_function}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Physical Device ID : </span>
+                            <span className='text-gray-600'>{shownMember.physical_device_id}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Serial No. : </span>
+                            <span className='text-gray-600'>{shownMember.serial_number}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Device Status : </span>
+                            <span className='text-gray-600'>{shownMember.device_status}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Deleted : </span>
+                            <span className='text-gray-600'>{shownMember.deleted}</span>
+                        </div>
+                    </MenuItem>
+                </Menu>
+            )
+        } else if('full_name' in shownMember) {
+            return (
+                <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    id={menuId}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={isMenuOpen}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>User Name : </span>
+                            <span className='text-gray-600'>{shownMember.user_name}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Full Name : </span>
+                            <span className='text-gray-600'>{shownMember.full_name}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Balance : </span>
+                            <span className='text-gray-600'>{shownMember.balance}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Restricted : </span>
+                            <span className='text-gray-600'>{shownMember.restricted}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Total Pages : </span>
+                            <span className='text-gray-600'>{shownMember.total_pages}</span>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Total Jobs : </span>
+                            <span className='text-gray-600'>{shownMember.total_jobs}</span>
+                        </div>
+                    </MenuItem>
+                </Menu>
+            )
+        } else if('dept_name' in shownMember) {
+            return (
+                <Menu
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    id={menuId}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={isMenuOpen}
+                    onClose={handleMenuClose}
+                >
+                    <MenuItem>
+                        <div>
+                            <span className='mr-3 font-medium'>Dept Name : </span>
+                            <span className='text-gray-600'>{shownMember.dept_name}</span>
+                        </div>
+                    </MenuItem>
+                </Menu>
+            )
+        }
+        return null;
+    };
 
-    const [nonGroup, setNonGroup] = useState(outGroup.members);
-    const [group, setGroup] = useState(!!inGroup ? inGroup.members : []);
-    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<Device | null>(null);
-    const [selectedInGroup, setSelectedInGroup] = useState<Device | null>(null);
+    const [nonGroup, setNonGroup] = useState([]);
+    const [group, setGroup] = useState([]);
+    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<DeviceGroup | UserGroup | null>(null);
+    const [selectedInGroup, setSelectedInGroup] = useState<DeviceGroup | UserGroup | null>(null);
 
     const handleMemberInGroup = () => {
         if (!selectedInNoneGroup) return;
@@ -309,12 +394,12 @@ export default function Grouping({
                     </div>
                     {!!inGroup &&
                         <div className="flex-none flex justify-center py-2">
-                            <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
+                            <Pagination paramName={inGroup.paramName} totalPages={inGroup.totalPages} />
                         </div>
                     }
                 </div>
             </div>
-            { renderMenu }
+            { renderMenu() }
         </div>
     )
 }

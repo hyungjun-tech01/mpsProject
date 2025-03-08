@@ -19,15 +19,19 @@ import {
 
 export default async function Page(props: {
   searchParams?: Promise<IGroupSearch>;
-  params: Promise<{ group: string; category: string; locale: "ko" | "en" }>;
+  params: Promise<{
+    group: 'device' | 'user' | 'security';
+    category: string;
+    locale: "ko" | "en"
+  }>;
 }) {
   const params = await props.params;
   const locale = params.locale;
   const group = params.group;
   const searchParams = await props.searchParams;
   const query = searchParams?.queryOutGroup || '';
-  const currentPage = Number(searchParams?.outGroupPage) || 1;
   const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
+  const currentPage = Number(searchParams?.outGroupPage) || 1;
 
   if (!["device", "user", "security"].includes(group)) {
     notFound();
@@ -46,6 +50,16 @@ export default async function Page(props: {
         ? fetchDeviesNotInGroupPages(query, itemsPerPage)
         : fetchDeptsNotInGroupPages(query, itemsPerPage),
   ]);
+
+  const dummyData = {
+    group_id: "",
+    group_name: "",
+    group_type: group,
+    group_notes: "",
+    schedule_period: "NONE",
+    schedule_amount: 0,
+    schedule_start: 0
+  }
 
   const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
 
@@ -96,8 +110,8 @@ export default async function Page(props: {
     title_grouping: t("common.grouping"),
     group_member: t("group.group_members"),
     none_group_member: t("group.none_group_members"),
-    serach_placeholder_in_group: t("group.serach_placeholder_in_group"),
-    serach_placeholder_in_nonegroup: t("group.serach_placeholder_in_nonegroup")
+    search_placeholder_in_group: t("group.search_placeholder_in_group"),
+    search_placeholder_in_nonegroup: t("group.search_placeholder_in_nonegroup")
   };
 
   const contentsItems: { device: ISection[], security: ISection[] } = {
@@ -173,12 +187,13 @@ export default async function Page(props: {
           action={createDeviceGroup}
         />
       )}
-      {/* {group === "user" && (
+      {group === "user" && (
         <UserForm
           locale={locale}
+          userData={dummyData}
           translated={translated}
           outGroup={outGroup}
-          inGroup={inGroup}
+          inGroup={null}
           action={createUserGroup}
         />
       )}
@@ -188,12 +203,10 @@ export default async function Page(props: {
           buttons={buttonItems}
           translated={translated}
           outGroup={outGroup}
-          inGroup={inGroup}
-          columns={columnItems.security}
-          locale={locale}
+          inGroup={null}
           action={createSecurityGroup}
         />
-      )} */}
+      )}
     </main>
   );
 }
