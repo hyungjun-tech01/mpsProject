@@ -83,10 +83,10 @@ export default async function Page(props: {
       : fetchDeptsInGroupPages(id, queryInGroup, itemsPerPage),
   ]);
 
-  console.log("[Group Edit] data:", data);
+  // console.log("[Group Edit] data:", data);
   // console.log("[Group Edit] Non-Group:", outGroupData);
-  console.log("[Group Edit] Group:", inGroupData);
-  console.log("[Group Edit] Group:", inGroupTotalPages);
+  // console.log("[Group Edit] Group Data:", inGroupData);
+  // console.log("[Group Edit] Group Pages:", inGroupTotalPages);
 
   const outGroup = {
     paramName: "outGroupPage",
@@ -142,6 +142,7 @@ export default async function Page(props: {
     friday: t("common.friday"),
     saturday: t("common.saturday"),
     group_schedule_amount: t("group.schedule_amount"),
+    group_remain_amount: t("group.remain_amount"),
     button_cancel: t("common.cancel"),
     button_go: t("common.apply"),
     title_grouping: t("common.grouping"),
@@ -158,7 +159,7 @@ export default async function Page(props: {
         description: [t("comment.group_edit_group_name")],
         items: [
           {
-            name: "name",
+            name: "group_name",
             title: t("group.group_name"),
             type: "input",
             defaultValue: data.group_name,
@@ -178,7 +179,7 @@ export default async function Page(props: {
         description: [t("comment.group_edit_group_name")],
         items: [
           {
-            name: "name",
+            name: "group_name",
             title: t("group.group_name"),
             type: "input",
             defaultValue: data.group_name,

@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
+import { Group, DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
 
@@ -26,13 +26,12 @@ export function EditForm({
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
     id: string | undefined,
-    inGroup: DeviceGroup[] | undefined,
     prevState: State,
     formData: FormData
   ) => Promise<void>;
 }) {
   const initialState: State = { message: null, errors: {} };
-  const updatedAction = !!id ? action.bind(null, id, !!inGroup ? inGroup.members : []) : action;
+  const updatedAction = !!id ? action.bind(null, id) : action;
   const [state, formAction] = useActionState(updatedAction, initialState);
 
   return (

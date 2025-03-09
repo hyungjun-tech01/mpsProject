@@ -150,7 +150,8 @@ export async function fetchGroupInfoByID(
                 group_notes,
                 schedule_period,
                 schedule_amount,
-                schedule_start
+                schedule_start,
+                remain_amount
             FROM tbl_group_info
             WHERE group_type = '${groupType}'
             AND group_id = '${groupId}'

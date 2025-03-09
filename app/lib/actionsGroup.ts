@@ -28,20 +28,20 @@ export type State = {
 };
 
 const GroupFormSchema = z.object({
-    groupID: z.string(),
     groupName: z.string({
-        invalid_type_error: 'User ID must be string ',
+        invalid_type_error: 'Group Name must be string ',
     }).min(1, { message: "Name is required" }),
     schedulePeriod: z.enum(['NONE','PER_DAY','PER_WEEK', 'PER_MONTH', 'PER_YEAR'], {
         invalid_type_error: "Please select an 'Quota Period' status."
     }),
     scheduleAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
+    remainAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
 });
 
-const CreateDeviceGroup = GroupFormSchema.omit({groupID:true, schedulePeriod:true, scheduleAmount:true});
+const CreateDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createDeviceGroup(prevState: State, formData: FormData) {
-    console.log('Create Group / formData :', formData);
+    // console.log('Create Group / formData :', formData);
     const validatedFields = CreateDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -97,7 +97,7 @@ export async function createDeviceGroup(prevState: State, formData: FormData) {
                     member_id,
                     member_type
                 )
-                VALUES ('${groupId}', '${member}', 'user')`
+                VALUES ('${groupId}', '${member}', 'device')`
             )
         );
 
@@ -115,10 +115,10 @@ export async function createDeviceGroup(prevState: State, formData: FormData) {
     redirect('/group/device');
 };
 
-const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true});
+const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifyDeviceGroup(prevState: State, formData: FormData) {
-    console.log('Create Group / formData :', formData);
+export async function modifyDeviceGroup(id:string, prevState: State, formData: FormData) {
+    // console.log('Modify Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -127,12 +127,12 @@ export async function modifyDeviceGroup(prevState: State, formData: FormData) {
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create User.',
+            message: 'Missing Fields. Failed to Modify User.',
         };
     };
 
     const { groupName } = validatedFields.data;
-    const groupID = formData.get('group_id');
+    const groupID = id;
     const groupNotes = formData.get('group_notes');
     const groupSize = Number(formData.get('member_length'));
     const groupMembers = [];
@@ -143,57 +143,50 @@ export async function modifyDeviceGroup(prevState: State, formData: FormData) {
         groupMembers.push(memberID);
     }
 
-    // Create new group  --------------------------------------
-    // try {
-    //     // 값 배열로 변환
-    //     const groupInputData = [
-    //         groupName,
-    //         "device",
-    //         groupNotes,
-    //     ];
+    console.log('[Modify Device Group] Member :', groupMembers);
 
-    //     await client.query("BEGIN"); // 트랜잭션 시작  
+    // Modify group  --------------------------------------
+    try {
+        await client.query("BEGIN"); // 트랜잭션 시작  
 
-    //     const newGroup = await client.query(`
-    //         INSERT INTO tbl_group_info (
-    //             group_name,
-    //             group_type,
-    //             group_notes,
-    //             created_date,
-    //             created_by,
-    //             modified_date,
-    //             modified_by
-    //         )
-    //         VALUES ($1,$2,$3,NOW(),'admin',NOW(),'admin') RETURNING group_id`
-    //         , groupInputData);
+        await client.query(`
+            UPDATE tbl_group_info
+            SET
+                group_name='${groupName}',
+                group_notes='${groupNotes}',
+                modified_date=NOW(),
+                modified_by='admin'
+            `);
+
+        await client.query(`
+            DELETE FROM tbl_group_member_info
+            WHERE group_id='${groupID}'`)
        
-    //     const groupId = newGroup.rows[0].group_id;
+        groupMembers.forEach(async member => client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ('${groupID}', '${member}', 'device')`
+            )
+        );
 
-    //     groupMembers.forEach(async member => client.query(`
-    //             INSERT INTO tbl_group_member_info (
-    //                 group_id,
-    //                 member_id,
-    //                 member_type
-    //             )
-    //             VALUES ('${groupId}', '${member}', 'user')`
-    //         )
-    //     );
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
-    //     await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Modify Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Modify Group.',
+        };
+    };
 
-    // } catch (error) {
-    //     await client.query("ROLLBACK"); // 에러 발생 시 롤백
-    //     console.log('Create Group / Error : ', error);
-    //     return {
-    //         message: 'Database Error: Failed to Create Group.',
-    //     };
-    // };
-
-    // revalidatePath('/group/device');
-    // redirect('/group/device');
+    revalidatePath('/group/device');
+    redirect('/group/device');
 };
 
-const CreateUserGroup = GroupFormSchema.omit({groupID:true});
+const CreateUserGroup = GroupFormSchema.omit({remainAmount:true});
 
 export async function createUserGroup(prevState: State, formData: FormData) {
     // console.log('Create Group / formData :', formData);
@@ -289,12 +282,13 @@ export async function createUserGroup(prevState: State, formData: FormData) {
 
 const ModifyUserGroup = GroupFormSchema.omit({});
 
-export async function modifyUserGroup(prevState: State, formData: FormData) {
-    // console.log('Create Group / formData :', formData);
+export async function modifyUserGroup(id:string, prevState: State, formData: FormData) {
+    console.log('Modify Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
         schedulePeriod: formData.get('schedule_period'),
         scheduleAmount: formData.get('schedule_amount'),
+        remainAmount: formData.get('remain_amount')
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -305,7 +299,7 @@ export async function modifyUserGroup(prevState: State, formData: FormData) {
         };
     };
 
-    const { groupName, schedulePeriod, scheduleAmount } = validatedFields.data;
+    const { groupName, schedulePeriod, scheduleAmount, remainAmount } = validatedFields.data;
     const scheduleStart = (schedulePeriod === 'NONE' || schedulePeriod === 'PER_DAY')
         ? 0
         : (schedulePeriod === 'PER_YEAR'
@@ -323,65 +317,63 @@ export async function modifyUserGroup(prevState: State, formData: FormData) {
     }
 
     // Create new user group  --------------------------------------
-    // try {
-    //     // 값 배열로 변환
-    //     const groupInputData = [
-    //         groupName,
-    //         "user",
-    //         groupNotes,
-    //         schedulePeriod,
-    //         scheduleAmount,
-    //         0,
-    //         scheduleStart,
-    //     ];
+    try {
+        // 값 배열로 변환
+        const groupInputData = [
+            groupName,
+            groupNotes,
+            schedulePeriod,
+            scheduleAmount,
+            0,
+            scheduleStart,
+        ];
 
-    //     await client.query("BEGIN"); // 트랜잭션 시작  
+        await client.query("BEGIN"); // 트랜잭션 시작  
 
-    //     const newGroup = await client.query(`
-    //         INSERT INTO tbl_group_info (
-    //             group_name,
-    //             group_type,
-    //             group_notes,
-    //             schedule_period,
-    //             schedule_amount,
-    //             remain_amount,
-    //             schedule_start,
-    //             created_date,
-    //             created_by,
-    //             modified_date,
-    //             modified_by
-    //         )
-    //         VALUES ($1,$2,$3,$4,$5,$6,$7,NOW(),'admin',NOW(),'admin') RETURNING group_id`
-    //         , groupInputData);
-
+        await client.query(`
+            UPDATE tbl_group_info
+            SET
+                group_name='${groupName}',
+                group_notes='${groupNotes}',
+                schedule_period='${schedulePeriod}',
+                schedule_amount=${scheduleAmount},
+                remain_amount=${remainAmount},
+                schedule_start='${scheduleStart}',
+                modified_date=NOW(),
+                modified_by='admin'
+            `);
         
-    //     const groupId = newGroup.rows[0].group_id;
+        const groupId = id;
 
-    //     groupMembers.forEach(async member => client.query(`
-    //             INSERT INTO tbl_group_member_info (
-    //                 group_id,
-    //                 member_id,
-    //                 member_type
-    //             )
-    //             VALUES ('${groupId}', '${member}', 'user')`
-    //         )
-    //     );
+        await client.query(`
+            DELETE FROM tbl_group_member_info
+            WHERE group_id='${groupId}'`)
 
-    //     await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+        groupMembers.forEach(async member => client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ('${groupId}', '${member}', 'user')`
+            )
+        );
 
-    // } catch (error) {
-    //     await client.query("ROLLBACK"); // 에러 발생 시 롤백
-    //     console.log('Create Group / Error : ', error);
-    //     return {
-    //         message: 'Database Error: Failed to Create Group.',
-    //     };
-    // };
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
-    // revalidatePath('/group/user');
-    // redirect('/group/user');
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Modify Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Modify Group.',
+        };
+    };
+
+    revalidatePath('/group/user');
+    redirect('/group/user');
 };
 
-const CreateSecurityGroup = GroupFormSchema.omit({groupID:true, schedulePeriod:true, scheduleAmount:true});
+const CreateSecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createSecurityGroup(prevState: State, formData: FormData) {
     console.log('Create Group / formData :', formData);
@@ -444,6 +436,13 @@ export async function createSecurityGroup(prevState: State, formData: FormData) 
             )
         );
 
+        groupMembers.forEach(async member => client.query(`
+            UPDATE tbl_dept_info
+            SET security_group_name='${groupName}'
+            WHERE dept_id='${member}`
+        )
+    );
+
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
@@ -458,9 +457,9 @@ export async function createSecurityGroup(prevState: State, formData: FormData) 
     redirect('/group/security');
 };
 
-const ModifySecurityGroup = GroupFormSchema.omit({groupID:true, schedulePeriod:true, scheduleAmount:true});
+const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifySecurityGroup(prevState: State, formData: FormData) {
+export async function modifySecurityGroup(id: string, prevState: State, formData: FormData) {
     console.log('Create Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')

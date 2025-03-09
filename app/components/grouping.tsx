@@ -5,7 +5,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined, SearchOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
 import Search from './search';
-import { DeviceGroup, UserGroup } from '../lib/definitions';
+import { DeviceGroup, UserGroup, SecurityGroup } from '../lib/definitions';
 
 
 export default function Grouping({
@@ -22,8 +22,8 @@ export default function Grouping({
     noneGroupSearchPlaceholder: string;
     groupMemberTitle: string;
     groupSearchPlaceholder: string;
-    outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] };
-    inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] } | null;
+    outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] };
+    inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] } | null;
 }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -46,7 +46,7 @@ export default function Grouping({
         setShownMember(null);
     };
     const menuId = 'member-detail-menu';
-    const [shownMember, setShownMember] = useState<null | Device>(null);
+    const [shownMember, setShownMember] = useState<null | DeviceGroup | SecurityGroup | UserGroup>(null);
     
     const renderMenu = () => {
         if(!shownMember) return null;
@@ -201,10 +201,10 @@ export default function Grouping({
         return null;
     };
 
-    const [nonGroup, setNonGroup] = useState([]);
-    const [group, setGroup] = useState([]);
-    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<DeviceGroup | UserGroup | null>(null);
-    const [selectedInGroup, setSelectedInGroup] = useState<DeviceGroup | UserGroup | null>(null);
+    const [nonGroup, setNonGroup] = useState<(DeviceGroup | UserGroup | SecurityGroup)[]>([]);
+    const [group, setGroup] = useState<(DeviceGroup | UserGroup | SecurityGroup)[]>([]);
+    const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<DeviceGroup | UserGroup | SecurityGroup | null>(null);
+    const [selectedInGroup, setSelectedInGroup] = useState<DeviceGroup | UserGroup | SecurityGroup | null>(null);
 
     const handleMemberInGroup = () => {
         if (!selectedInNoneGroup) return;
@@ -286,10 +286,12 @@ export default function Grouping({
     };
 
     useEffect(() => {
+        // console.log('Grouping / check Group : ', inGroup);
         const updatedOutGroup = outGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1);
         setNonGroup(updatedOutGroup);
 
-        const updatedInGroup = !!inGroup ? [...inGroup.members, ...group] : [];
+        const checkInGroup = !!inGroup ? inGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
+        const updatedInGroup = [...checkInGroup, ...group];
         setGroup(updatedInGroup);
     }, [outGroup, inGroup]);
 

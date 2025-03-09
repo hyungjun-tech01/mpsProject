@@ -4,7 +4,7 @@ import { IButtonInfo, ISection } from "@/app/components/edit-items";
 import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
-import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
+import { IGroupSearch, IBreadCrums, Group } from "@/app/lib/definitions";
 import { createDeviceGroup, createUserGroup, createSecurityGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import {
@@ -51,7 +51,7 @@ export default async function Page(props: {
         : fetchDeptsNotInGroupPages(query, itemsPerPage),
   ]);
 
-  const dummyData = {
+  const dummyData : Group = {
     group_id: "",
     group_name: "",
     group_type: group,

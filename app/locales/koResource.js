@@ -423,6 +423,7 @@ const koResource = {
             group_name_placeholder: '그룹 이름을 입력하세요',
             group_schedue_start: '출력 쿼터 할당 시작 시점',
             none_group_members: '비그룹원',
+            remain_amount: '잔액',
             schedule_amount: '지정 금액',
             schedule_period: '출력 쿼터 기간',
             schedule_quota: '쿼터 할당 일정',

@@ -420,6 +420,7 @@ const enResource = {
             group_name_placeholder: 'Input group name',
             group_schedue_start: 'Start Point to allot quota',
             non_group_members: 'None-group Member',
+            remain_amount: 'Balance',
             schedule_amount: 'Specified Amount',
             schedule_period: 'Quoto Period',
             schedule_quota: 'Quota Schedule',

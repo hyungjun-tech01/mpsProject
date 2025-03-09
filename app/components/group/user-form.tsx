@@ -26,13 +26,12 @@ export function UserForm({
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
         id: string | undefined,
-        inGroup: UserGroup[] | undefined,
         prevState: State,
         formData: FormData
     ) => Promise<void>;
 }) {
     const initialState: State = { message: null, errors: {} };
-    const updatedAction = !!id ? action.bind(null, id, !!inGroup ? inGroup.members : []) : action;
+    const updatedAction = !!id ? action.bind(null, id) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>(userData.schedule_period);
     const [scheduleStart, SetScheduleStart] = useState<number>(userData.schedule_start % 100);
@@ -283,6 +282,18 @@ export function UserForm({
                                 : null
                             }
                         />
+                        {!!id && 
+                            <EditItem
+                                name="remain_amount"
+                                title={translated.group_remain_amount}
+                                type="currency"
+                                defaultValue={userData.remain_amount}
+                                error={(!!state?.errors && !!state?.errors.group_name)
+                                    ? state?.errors.group_name
+                                    : null
+                                }
+                            />
+                        }
                     </div>
                 </div>
                 <Grouping
