@@ -9,7 +9,7 @@ import LineChart from "@/app/components/lineChart";
 export interface IEditItem {
   name: string;
   title: string;
-  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden";
+  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select";
   defaultValue: string | number;
   placeholder?: string;
   options?: { title: string; value: string | number }[] | null;
@@ -33,6 +33,12 @@ export interface IButtonInfo {
   delete: {title:string},
   add:{title:string}
 };
+
+export interface IOption {
+  label: string|null;
+  value: string|null;
+};
+
 
 export function EditItem({
   name,

@@ -6,6 +6,12 @@ import {
     fetchPrinterGroup,
     fetchDeviceFaxLineById
 } from '@/app/lib/fetchDeviceData';
+
+import {
+    fetchAllUsers, fetchAllUserGroup
+} from '@/app/lib/fetchData';
+
+
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
 import FormFax from '@/app/components/device/create-form-fax';
@@ -24,11 +30,13 @@ export default async function Page(props: {
     const locale = params.locale;
     const searchParams = await props.searchParams;
 
-    const [t, device, printerGroup, fax] = await Promise.all([
+    const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),
         fetchDeviceById(id),
         fetchPrinterGroup(),
-        fetchDeviceFaxLineById(id)
+        fetchDeviceFaxLineById(id),
+        fetchAllUsers(),
+        fetchAllUserGroup(),
     ]);
 
     const editItems: ISection[] = [
@@ -69,15 +77,32 @@ export default async function Page(props: {
        
     ];
 
+    const optionsUser = allUsers.map((x:any) => ( 
+            {'label':`${x.user_name}`, 'value':String(x.user_id)} 
+            ) 
+        );
+    const optionsGroup = allGroups.map((x:any) => ( 
+        {'label':`${x.group_name}`, 'value':String(x.group_id)} 
+        ) 
+    );
+
+
     const editFaxItems: ISection[] =  fax.length > 0 
     ? fax.map((faxLine, index) => ({
         title: `${t('fax.fax_line')}`, // 여러 개일 경우 번호 추가
         description: t('fax.fax_line_desc'),
         items: [
+            { name: `fax_line_id_${index}`, title: `${t('fax.fax_line_id')} ${index+1}` , type: 'hidden', defaultValue: faxLine.fax_line_id, placeholder: t('fax.fax_line_id') },
             { name: `fax_line_name_${index}`, title: `${t('fax.fax_line_name')} ${index+1}` , type: 'input', defaultValue: faxLine.fax_line_name, placeholder: t('fax.fax_line_name') },
-            { name: `fax_line_user_id_${index}`, title: t('fax.fax_line_user'), type: 'input', defaultValue: `${faxLine.full_name}(${faxLine.user_name})`, placeholder: t('fax.fax_line_user') },
-            { name: `fax_line_shared_group_id_${index}`, title: t('fax.fax_line_shared_group'), type: 'input', defaultValue: faxLine.group_name, placeholder: t('fax.fax_line_shared_group') },
-            { name: `space_line_${index}`, title: t('fax.fax_line_shared_group'), type: 'input', defaultValue: faxLine.fax_line_shared_group_id, placeholder: t('fax.fax_line_shared_group') },
+            {
+                name: `fax_line_user_id_${index}`, title:  t('fax.fax_line_user'), type: 'react-select', defaultValue: {value:faxLine.fax_line_user_id, label:faxLine.user_name}, 
+                options: optionsUser
+            },
+            { 
+                name: `fax_line_shared_group_id_${index}`, title: t('fax.fax_line_shared_group'), type: 'react-select', defaultValue: {value:faxLine.group_id, label:faxLine.group_name}, placeholder: t('fax.fax_line_shared_group') ,
+                options: optionsGroup
+            },
+            { name: `space_line_${index}`, title: '', type: 'input', defaultValue: '', placeholder: '' },
         ]
     }))
     : [{ title: t('fax.fax_line'), description: t('fax.fax_line_desc'), items: [] }];
@@ -107,7 +132,12 @@ export default async function Page(props: {
             />
              {job === 'edit' && <Form id={id} items={editItems} buttons={buttonItems} action={modifyDevice}/>}
              { fax && job === 'edit' && editFaxItems.length > 0 && (
-                <FormFax id={id} items={editFaxItems} buttons={buttonFaxItems} action={modifyDevice}/>
+                <FormFax id={id} 
+                    items={editFaxItems} 
+                    optionsUser = {optionsUser} 
+                    optionsGroup ={optionsGroup}
+                    buttons={buttonFaxItems}  
+                    action={modifyDevice}/>
               )}
         </main>
     );
