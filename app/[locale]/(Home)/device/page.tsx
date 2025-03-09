@@ -70,7 +70,7 @@ export default async function Device(
                     currentPage={currentPage}
                     totalPages={totalPages}
                     locale={locale}
-                    category='device'
+                    path='device'
                     deleteAction={deleteDevice}
                 />
             </div>

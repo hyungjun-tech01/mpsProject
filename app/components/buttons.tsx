@@ -28,11 +28,12 @@ export function UpdateButton({ link }: { link: string }) {
 }
 
 export function DeleteButtton({ id, action }: { id: string, action: (id:string) => void }) {
-  const actionWithId = action.bind(null, id);
+  // console.log("DeleteButton / id :", id);
+  const actionWithVariables = action.bind(null, id);
 
   return (
-    <form action={actionWithId}>
-      <button className="rounded-md border p-2 hover:bg-gray-100">
+    <form action={actionWithVariables}>
+      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <DeleteIcon className="w-5" />
       </button>

@@ -61,7 +61,7 @@ export default async function Page(props: {
     schedule_start: 0
   }
 
-  const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
+  const outGroup = { paramName: 'outGroupPage', totalPages: totalPages, members: outGroupData };
 
   const groupBreadcrumbs: {
     device: IBreadCrums[];

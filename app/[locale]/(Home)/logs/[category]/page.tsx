@@ -86,7 +86,7 @@ export default async function Page(props: {
                 currentPage={currentPage}
                 totalPages={auditlogPages}
                 locale={locale}
-                category='auditlogs'
+                path='auditlogs'
                 editable={false}
             />
         </div>

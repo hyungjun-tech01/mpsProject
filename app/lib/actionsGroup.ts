@@ -38,6 +38,8 @@ const GroupFormSchema = z.object({
     remainAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
 });
 
+
+// Device group  ------------------------------------------------
 const CreateDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createDeviceGroup(prevState: State, formData: FormData) {
@@ -187,6 +189,8 @@ export async function modifyDeviceGroup(id:string, prevState: State, formData: F
     redirect('/group/device');
 };
 
+
+// User group  ------------------------------------------------
 const CreateUserGroup = GroupFormSchema.omit({remainAmount:true});
 
 export async function createUserGroup(prevState: State, formData: FormData) {
@@ -365,6 +369,8 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
     redirect('/group/user');
 };
 
+
+// Security group  ------------------------------------------------
 const CreateSecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createSecurityGroup(prevState: State, formData: FormData) {
@@ -535,15 +541,35 @@ export async function modifySecurityGroup(id: string, prevState: State, formData
     redirect('/group/security');
 };
 
+
+// Delete group  ------------------------------------------------
 export async function deleteGroup(id: string) {
+    let category = "";
     try {
-        await client.query(`
-            DELETE FROM tbl_group_info WHERE group_id='${id}
+        await client.query("BEGIN"); // 트랜잭션 시작  
+
+        const selectedGroup = await client.query(`
+            SELECT * FROM tbl_group_info WHERE group_id='${id}'
         `);
+
+        category = selectedGroup.rows[0].group_type;
+
+        await client.query(`
+            DELETE FROM tbl_group_info WHERE group_id='${id}'
+        `);
+
+        await client.query(`
+            DELETE FROM tbl_group_member_info WHERE group_id='${id}'
+        `);
+
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋 
     } catch (error) {
         console.log('Delete Group / Error : ', error);
         return {
             message: 'Database Error: Failed to delete group by group ID.',
         };
     }
+
+    revalidatePath(`/group/${category}`);
+    redirect(`/group/${category}`);
 }

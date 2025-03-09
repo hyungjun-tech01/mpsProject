@@ -67,7 +67,7 @@ export default async function Fax(
                     currentPage={currentPage}
                     totalPages={totalPages}
                     locale={locale}
-                    category='device'
+                    path='device'
                     deleteAction={deleteDevice}
                 />
             </div>

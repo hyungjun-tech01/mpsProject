@@ -42,9 +42,9 @@ interface ITable<DataType> {
     rows: DataType[];
     currentPage: number;
     totalPages: number;
-    category?: string;
+    path?: string;
     locale?: string;
-    deleteAction?: (id: string) => void;
+    deleteAction?: (id: string, type?:string) => void;
     editable?: boolean;
     checkable?: boolean;
 }
@@ -54,7 +54,7 @@ export default function CustomizedTable<DataType>({
     rows,
     currentPage,
     totalPages,
-    category,
+    path,
     locale,
     deleteAction,
     editable = true,
@@ -117,7 +117,7 @@ export default function CustomizedTable<DataType>({
                                             scope="row"
                                         >
                                             <div className="flex justify-end gap-3">
-                                                {category && <UpdateButton link={`${category}/${row.id}/edit`} />}
+                                                {path && <UpdateButton link={`${path}/${row.id}/edit`} />}
                                                 {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
                                             </div>
                                         </StyledTableCell>

@@ -49,7 +49,7 @@ export default async function Page(props: {
                 rows={users}
                 currentPage={currentPage}
                 totalPages={totalPages}
-                category='user'
+                path='user'
                 locale={locale}
                 deleteAction={deleteUser}
             />
