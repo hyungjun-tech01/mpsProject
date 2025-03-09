@@ -5,14 +5,17 @@ import {  State } from './actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
-import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
+import { IButtonInfo, ISection, IEditItem, EditItem , IOption} from '../edit-items';
+import Select, {SingleValue} from 'react-select';
 
 
 export default function FormFax(
-    {id, items,  buttons, action} : 
+    {id, items,  optionsUser,optionsGroup, buttons, action} : 
     {
         id?: string;  
       items: ISection[]; 
+      optionsUser: IOption[];
+      optionsGroup: IOption[];
       buttons?: IButtonInfo;
       action: (prevState: State, formData: FormData) => Promise<void>;
     }
@@ -25,6 +28,18 @@ export default function FormFax(
 
     const [faxItems, setFaxItems] = useState(items[0]?.items || []);
 
+    const handleChange = (newValue: SingleValue<{ value: string; label: string }>) => {
+    if (newValue) {
+        console.log('Selected:', newValue.value);
+        } else {
+        console.log('No selection made');
+        }
+    };      
+
+    const handleSaveFaxLine = ()=>{
+        
+    }
+    
     const handleAddFaxLine = () => {
         console.log('handleAddFaxLine');
         const index = faxItems.length/4 + 1; // 현재 배열 길이를 인덱스로 사용
@@ -34,8 +49,14 @@ export default function FormFax(
         }
         const newFaxLine = [
             { name: `fax_line_name_${index}`, title: `팩스라인 번호 ${index}`, type: 'input', defaultValue: '', placeholder: '팩스라인 번호' },
-            { name: `fax_line_user_id_${index}`, title: '회선 사용자', type: 'input', defaultValue: '', placeholder: '회선 사용자'},
-            { name: `fax_line_shared_group_id_${index}`, title: '회선 공유그룹', type: 'input', defaultValue: '', placeholder: '회선 공유그룹' },
+            { 
+                name: `fax_line_user_id_${index}`, title: '회선 사용자', type: 'react-select', defaultValue: { value: '', label: '-1 없음' }, placeholder: '회선 사용자',
+                options: optionsUser
+            },
+            { 
+                name: `fax_line_shared_group_id_${index}`, title: '회선 공유그룹', type: 'react-select', defaultValue: { value: '', label: '-1 없음' }, placeholder: '회선 공유그룹',
+                options: optionsGroup
+            },
             { name: `space_line_${index}`, title: '회선 공유그룹', type: 'input', defaultValue: '', placeholder: '회선 공유그룹' }
         ];
         setFaxItems([...faxItems, ...newFaxLine]); // 기존 배열에 추가
@@ -91,9 +112,25 @@ export default function FormFax(
                                 </Button>
                             } </div>
                         }
+
                         {faxItems.length > 0 ? (
                             faxItems.map((item: IEditItem) =>
-                                item.name.startsWith('space_line') ? <br key={item.name} /> : (
+                                item.name.startsWith('space_line') ? <br key={item.name} /> : 
+                                (item.type === 'react-select' ? 
+                                    <div key= {item.name} className="mb-4">
+                                    <label htmlFor={item.name} className="mb-2 block text-sm font-semibold">
+                                        {item.title}
+                                    </label>
+                                    <Select
+                                        id={item.name}
+                                        name={item.name}
+                                        defaultValue={item.defaultValue}
+                                        options={item.options}
+                                        onChange={handleChange}
+                                        aria-describedby={`1-error`}
+                                        />
+                                    </div>
+                                    :    
                                     <EditItem
                                         key={item.name}
                                         name={item.name}
@@ -120,7 +157,8 @@ export default function FormFax(
                         <div className="mt-6 flex justify-end gap-4">
                         { !!buttons.save &&
                             <Button
-                            type="submit"
+                            type="button"
+                            onClick={handleSaveFaxLine}
                             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                             >
                             {buttons.save.title}

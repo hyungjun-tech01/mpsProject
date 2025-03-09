@@ -82,6 +82,56 @@ export async function fetchFilteredUsers(
     }
 };
 
+export async function fetchAllUsers() {
+   
+    try {
+        const users =
+            await client.query(`
+            SELECT '' user_id, 
+                   '-1 없음' user_name
+            union all
+            SELECT
+                u.user_id user_id, 
+                u.full_name||'('||u.user_name||')' user_name
+            FROM tbl_user_info u
+            WHERE
+                u.deleted='N'
+            ORDER BY user_name ASC
+            `);
+        const converted = users.rows.map((data: UserField) => ({
+            ...data,
+            id: data.user_id,
+        }));
+        return converted;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users.");
+    }
+};
+
+export async function fetchAllUserGroup() {
+   
+    try {
+        const groups =
+            await client.query(`
+                SELECT '' group_id, 
+                       '-1 없음' group_name
+                union all
+                SELECT
+                    u.group_id,
+                    u.group_name
+                FROM tbl_group_info u
+                WHERE
+                    u.group_type='user'
+                ORDER BY group_name ASC
+            `);
+        return groups.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch group.");
+    }
+};
+
 export async function fetchUsersPages(query: string, itemsPerPage: number) {
     try {
         const count =
