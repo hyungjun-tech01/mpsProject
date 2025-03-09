@@ -145,7 +145,7 @@ export async function modifyDeviceGroup(id:string, prevState: State, formData: F
 
     console.log('[Modify Device Group] Member :', groupMembers);
 
-    // Modify group  --------------------------------------
+    // Modify device group  --------------------------------------
     try {
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -156,6 +156,7 @@ export async function modifyDeviceGroup(id:string, prevState: State, formData: F
                 group_notes='${groupNotes}',
                 modified_date=NOW(),
                 modified_by='admin'
+            WHERE group_id='${groupID}'
             `);
 
         await client.query(`
@@ -299,6 +300,7 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
         };
     };
 
+    const groupID = id;
     const { groupName, schedulePeriod, scheduleAmount, remainAmount } = validatedFields.data;
     const scheduleStart = (schedulePeriod === 'NONE' || schedulePeriod === 'PER_DAY')
         ? 0
@@ -316,17 +318,8 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
         groupMembers.push(memberID);
     }
 
-    // Create new user group  --------------------------------------
+    // Modify user group  --------------------------------------
     try {
-        // 값 배열로 변환
-        const groupInputData = [
-            groupName,
-            groupNotes,
-            schedulePeriod,
-            scheduleAmount,
-            0,
-            scheduleStart,
-        ];
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -341,13 +334,12 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
                 schedule_start='${scheduleStart}',
                 modified_date=NOW(),
                 modified_by='admin'
+            WHERE group_id='${groupID}'
             `);
-        
-        const groupId = id;
 
         await client.query(`
             DELETE FROM tbl_group_member_info
-            WHERE group_id='${groupId}'`)
+            WHERE group_id='${groupID}'`)
 
         groupMembers.forEach(async member => client.query(`
                 INSERT INTO tbl_group_member_info (
@@ -355,7 +347,7 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
                     member_id,
                     member_type
                 )
-                VALUES ('${groupId}', '${member}', 'user')`
+                VALUES ('${groupID}', '${member}', 'user')`
             )
         );
 
@@ -439,7 +431,7 @@ export async function createSecurityGroup(prevState: State, formData: FormData) 
         groupMembers.forEach(async member => client.query(`
             UPDATE tbl_dept_info
             SET security_group_name='${groupName}'
-            WHERE dept_id='${member}`
+            WHERE dept_id='${member}'`
         )
     );
 
@@ -473,6 +465,7 @@ export async function modifySecurityGroup(id: string, prevState: State, formData
         };
     };
 
+    const groupID = id;
     const { groupName } = validatedFields.data;
     const groupNotes = formData.get('group_notes');
     const groupSize = Number(formData.get('member_length'));
@@ -484,54 +477,62 @@ export async function modifySecurityGroup(id: string, prevState: State, formData
         groupMembers.push(memberID);
     }
 
-    // Create new group  --------------------------------------
-    // try {
-    //     // 값 배열로 변환
-    //     const groupInputData = [
-    //         groupName,
-    //         "security",
-    //         groupNotes,
-    //     ];
+    // Modify group  --------------------------------------
+    try {
+        await client.query("BEGIN"); // 트랜잭션 시작  
 
-    //     await client.query("BEGIN"); // 트랜잭션 시작  
+        await client.query(`
+            UPDATE tbl_group_info
+            SET
+                group_name='${groupName}',
+                group_notes='${groupNotes}',
+                modified_date=NOW(),
+                modified_by='admin'
+            WHERE group_id='${groupID}'
+        `);
 
-    //     const newGroup = await client.query(`
-    //         INSERT INTO tbl_group_info (
-    //             group_name,
-    //             group_type,
-    //             group_notes,
-    //             created_date,
-    //             created_by,
-    //             modified_date,
-    //             modified_by
-    //         )
-    //         VALUES ($1,$2,$3,NOW(),'admin',NOW(),'admin') RETURNING group_id`
-    //         , groupInputData);
-       
-    //     const groupId = newGroup.rows[0].group_id;
+        await client.query(`
+            UPDATE tbl_dept_info
+            SET security_group_name=''
+            WHERE dept_id IN (
+                SELECT member_id 
+                FROM tbl_group_member_info 
+                WHERE group_id='${groupID}'
+            )
+        `);
 
-    //     groupMembers.forEach(async member => client.query(`
-    //             INSERT INTO tbl_group_member_info (
-    //                 group_id,
-    //                 member_id,
-    //                 member_type
-    //             )
-    //             VALUES ('${groupId}', '${member}', 'dept')`
-    //         )
-    //     );
+        await client.query(`
+            DELETE FROM tbl_group_member_info
+            WHERE group_id='${groupID}'
+        `);
 
-    //     await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+        groupMembers.forEach(async member => client.query(`
+            INSERT INTO tbl_group_member_info (
+                group_id,
+                member_id,
+                member_type
+            )
+            VALUES ('${groupID}', '${member}', 'dept')`
+        ));
 
-    // } catch (error) {
-    //     await client.query("ROLLBACK"); // 에러 발생 시 롤백
-    //     console.log('Create Group / Error : ', error);
-    //     return {
-    //         message: 'Database Error: Failed to Create Group.',
-    //     };
-    // };
+        groupMembers.forEach(async member => client.query(`
+            UPDATE tbl_dept_info
+            SET security_group_name='${groupName}'
+            WHERE dept_id='${member}'`
+        ));
 
-    // revalidatePath('/group/security');
-    // redirect('/group/security');
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Create Group / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Create Group.',
+        };
+    };
+
+    revalidatePath('/group/security');
+    redirect('/group/security');
 };
 
 export async function deleteGroup(id: string) {

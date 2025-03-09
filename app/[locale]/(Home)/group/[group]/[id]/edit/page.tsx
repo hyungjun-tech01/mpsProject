@@ -85,7 +85,7 @@ export default async function Page(props: {
 
   // console.log("[Group Edit] data:", data);
   // console.log("[Group Edit] Non-Group:", outGroupData);
-  // console.log("[Group Edit] Group Data:", inGroupData);
+  console.log("[Group Edit] Group Data:", inGroupData);
   // console.log("[Group Edit] Group Pages:", inGroupTotalPages);
 
   const outGroup = {
@@ -209,7 +209,7 @@ export default async function Page(props: {
             href: groupBreadcrumbs[group][0].link,
           },
           {
-            label: `${t("group.create_group")}`,
+            label: `${t("group.group_edit")}`,
             href: `${groupBreadcrumbs[group][1].link}`,
             active: true,
           },

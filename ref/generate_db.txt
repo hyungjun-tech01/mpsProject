@@ -2446,9 +2446,9 @@ created_by,
 modified_date::timestamp,
 modified_by  from tbl_group_info_temp;
 
-select * from tbl_group_info;
-
 drop table IF EXISTS tbl_group_info_temp;
+
+select * from tbl_group_info;
 
 --2025.02.22 :: tbl_group_member_info
 
