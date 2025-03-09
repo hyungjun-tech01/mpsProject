@@ -171,8 +171,7 @@ export async function fetchDeviceFaxLineById(id:string){
             tfli.created_by,
             tfli.deleted_date,
             tfli.deleted_by,
-            tui.user_name,
-            tui.full_name,
+            tui.full_name||'('||tui.user_name||')' user_name,
             tgi.group_name
         from tbl_fax_line_info tfli
         LEFT JOIN tbl_user_info tui ON tfli.fax_line_user_id = tui.user_id
