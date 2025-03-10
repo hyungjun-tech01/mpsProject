@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export function CreateButton({ link, title }: { link: string, title: string}) {
@@ -27,15 +27,16 @@ export function UpdateButton({ link }: { link: string }) {
   );
 }
 
-export function DeleteButtton({ id, action }: { id: string, action: (id:string) => void }) {
+export function DeleteButtton({ id, title, action }: { id: string, title:string, action: (id:string) => void }) {
   // console.log("DeleteButton / id :", id);
-  const actionWithVariables = action.bind(null, id);
+  const actionWithId = action.bind(null, id);
 
   return (
-    <form action={actionWithVariables}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete</span>
-        <DeleteIcon className="w-5" />
+    <form action={actionWithId}>
+      <button type="submit" className="rounded-md border px-4 py-1 hover:bg-gray-100">
+        {/* <span className="sr-only">Delete</span> */}
+        {/* <DeleteIcon className="w-5" /> */}
+        {title}
       </button>
     </form>
   );

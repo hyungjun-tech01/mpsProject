@@ -11,6 +11,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
+import { Menu, MenuItem } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
@@ -43,8 +45,8 @@ interface ITable<DataType> {
     currentPage: number;
     totalPages: number;
     path?: string;
-    locale?: string;
-    deleteAction?: (id: string, type?:string) => void;
+    locale?: 'ko' | 'en';
+    deleteAction?: (id: string) => void;
     editable?: boolean;
     checkable?: boolean;
 }
@@ -55,7 +57,7 @@ export default function CustomizedTable<DataType>({
     currentPage,
     totalPages,
     path,
-    locale,
+    locale = 'ko',
     deleteAction,
     editable = true,
     checkable = false,
@@ -69,26 +71,85 @@ export default function CustomizedTable<DataType>({
         router.push(`${pathname}?${params.toString()}`);
     };
 
+    const [chosenID, setChosenID] = React.useState<string>('');
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+        const deletedID = event.currentTarget.id.split('@').at(-1);
+        if(!!deletedID)
+            setChosenID(deletedID);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+        setChosenID('');
+    };
+    const menuId = 'delete-confirm-menu';
+    const translate = {
+        ko: {
+            confirm_delete : '해당 item을 삭제합니다.',
+            cancel: '취소',
+            delete: '삭제',
+        },
+        en: {
+            confirm_delete : 'Are you sure?',
+            cancel: 'Cancel',
+            delete: 'Delete',
+        },
+    }
+    const renderMenu = !deleteAction ? null : (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <div className='px-4 py-2'>{translate[locale].confirm_delete}</div>
+            <div className='mb-2 flex justify-evenly'>
+                <div className='mr-3 font-medium'>
+                    <button className='border border-gray-300 rounded-md px-4 py-1' onClick={handleMenuClose} >
+                        {translate[locale].cancel}
+                    </button>
+                </div>
+                <div className='font-medium'>
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction} />
+                    {/* <Button className='border border-gray-300 rounded-md'>
+                        {translate[locale].delete}
+                    </Button> */}
+                </div>
+            </div>
+        </Menu>
+    )
+
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
             <TableContainer component={Paper}>
                 <Table className="min-w-[700px]" aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            { checkable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
+                            {checkable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                             {columns.map((column, idx) => (
                                 <StyledTableCell key={idx} align={column.align} >
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            { editable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
+                            {editable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.length > 0 && rows.map((row, idx) => {
                             return (
                                 <StyledTableRow key={idx}>
-                                    { checkable && 
+                                    {checkable &&
                                         <StyledTableCell
                                             component="th"
                                             align='center'
@@ -104,13 +165,13 @@ export default function CustomizedTable<DataType>({
                                             align={column.align}
                                             scope="row"
                                         >
-                                            { !column.type && row[column.name]}
-                                            { !!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
-                                            { !!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
-                                            { !!column.type && column.type === 'list' && row[column.name].map((item, idx)=> (<div key={idx}>{item}</div>))}
+                                            {!column.type && row[column.name]}
+                                            {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                            {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
+                                            {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
                                         </StyledTableCell>
                                     ))}
-                                    { editable && 
+                                    {editable &&
                                         <StyledTableCell
                                             component="th"
                                             align='right'
@@ -118,16 +179,25 @@ export default function CustomizedTable<DataType>({
                                         >
                                             <div className="flex justify-end gap-3">
                                                 {path && <UpdateButton link={`${path}/${row.id}/edit`} />}
-                                                {deleteAction && <DeleteButtton id={row.id} action={deleteAction} />}
+                                                {deleteAction && 
+                                                    <div
+                                                        id={`delete@${row.id}`}
+                                                        className="rounded-md border p-2 hover:bg-gray-100"
+                                                        onClick={handleMenuOpen}
+                                                    >
+                                                        <span className="sr-only">Delete</span>
+                                                        <DeleteIcon className="w-5" />
+                                                    </div>
+                                                }
                                             </div>
                                         </StyledTableCell>
                                     }
                                 </StyledTableRow>
                             )
                         })}
-                        {rows.length === 0 && 
+                        {rows.length === 0 &&
                             <StyledTableRow>
-                                <StyledTableCell 
+                                <StyledTableCell
                                     colSpan={editable ? columns.length + 1 : columns.length}
                                     align="center"
                                 >
@@ -146,6 +216,7 @@ export default function CustomizedTable<DataType>({
                     onChange={(event: React.ChangeEvent, page: number) => goSelectedPage(page)}
                 />
             </div>
+            {renderMenu}
         </div>
     );
 }

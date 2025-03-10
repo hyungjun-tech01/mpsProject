@@ -544,6 +544,7 @@ export async function modifySecurityGroup(id: string, prevState: State, formData
 
 // Delete group  ------------------------------------------------
 export async function deleteGroup(id: string) {
+    console.log('[actionsGroup] deleteGroup :', id);
     let category = "";
     try {
         await client.query("BEGIN"); // 트랜잭션 시작  
