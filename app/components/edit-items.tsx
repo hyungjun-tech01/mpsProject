@@ -9,7 +9,7 @@ import LineChart from "@/app/components/lineChart";
 export interface IEditItem {
   name: string;
   title: string;
-  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select";
+  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select" |"button";
   defaultValue: string | number;
   placeholder?: string;
   options?: { title: string; value: string | number }[] | null;
