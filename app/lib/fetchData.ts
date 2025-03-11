@@ -24,53 +24,30 @@ export async function fetchFilteredUsers(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users =
-            query !== ""
-                ? await client.query(`
-                SELECT
-                    u.user_id,
-                    u.user_name,
-                    u.full_name,
-                    u.email,
-                    u.home_directory,
-                    u.disabled_printing,
-                    u.department,
-                    u.total_pages,
-                    u.total_jobs,
-                    null account_id,
-                    u.balance,
-                    u.restricted
-                FROM tbl_user_info u
-                WHERE
-                    u.deleted='N' AND
-                    (
-                        u.user_name ILIKE '${`%${query}%`}' OR
-                        u.full_name ILIKE '${`%${query}%`}' OR
-                        u.email ILIKE '${`%${query}%`}'
-                    )
-                ORDER BY u.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `)
-                : await client.query(`
-                SELECT
-                    u.user_id,
-                    u.user_name,
-                    u.full_name,
-                    u.email,
-                    u.home_directory,
-                    u.disabled_printing,
-                    u.department,
-                    u.total_pages,
-                    u.total_jobs,
-                    null account_id,
-                    u.balance,
-                    u.restricted
-                FROM tbl_user_info u
-                WHERE
-                    u.deleted='N'
-                ORDER BY u.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `);
+        const users =  await client.query(`
+            SELECT
+                u.user_id,
+                u.user_name,
+                u.full_name,
+                u.email,
+                u.home_directory,
+                u.disabled_printing,
+                u.department,
+                u.total_pages,
+                u.total_jobs,
+                null account_id,
+                u.balance,
+                u.restricted
+            FROM tbl_user_info u
+            WHERE
+                u.deleted='N'
+                ${query !== "" ? "AND (u.user_name ILIKE '%" + query + "%' OR"
+                    + "u.user_name ILIKE '%" + query + "%' OR"
+                    + "u.email ILIKE '%" + query + "%')"
+                    : ""}
+            ORDER BY u.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `);
         const converted = users.rows.map((data: UserField) => ({
             ...data,
             id: data.user_id,
@@ -688,7 +665,7 @@ export async function fetchFilteredAuditLogs(
 };
 
 export async function fetchFilteredAuditLogPages(
-    query,
+    query: string,
     itemsPerPage: number
 ) {
     try {
@@ -713,5 +690,84 @@ export async function fetchFilteredAuditLogPages(
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch audit logs");
+    }
+};
+
+
+// ----- Begin : Documnet -------------------------------------------------------//
+export async function fetchFilteredDocumnets(
+    query: string,
+    user_id: string,
+    job_type: 'fax' | 'scan',
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try{
+        const docs = await client.query(`
+            SELECT
+                dj.document_id,
+                dj.created_by,
+                dj.created_date,
+                dj.deleted_date,
+                dj.document_name,
+                dj.total_pages,
+                dj.total_pages,
+                dj.archive_path
+            FROM tbl_document_job_info dj
+            WHERE
+                dj.job_type = '${job_type}'
+                AND (
+                    dj.created_by = '${user_id}'
+                    OR dj.document_id IN (
+                        SELECT document_id 
+                        FROM tbl_document_shared_info 
+                        WHERE shared_to = '${user_id}'
+                    )
+                )
+                ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
+            ORDER BY dj.created_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}`);
+
+            // const converted = users.rows.map((data) => ({
+            //     ...data,
+            //     id: data.user_id,
+            // }));
+            return docs.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch documents.");
+    }
+};
+
+
+export async function fetchFilteredDocumnetPages(
+    query: string,
+    user_id: string,
+    job_type: 'fax' | 'scan',
+    itemsPerPage: number
+) {
+    try{
+        const count = await client.query(`
+            SELECT
+                COUNT(*)
+            FROM tbl_document_job_info
+            WHERE
+                job_type = '${job_type}'
+                AND (
+                    created_by = '${user_id}'
+                    OR document_id IN (
+                        SELECT document_id 
+                        FROM tbl_document_shared_info 
+                        WHERE shared_to = '${user_id}'
+                    )
+                )
+                ${query !== "" ? "AND (document_name ILIKE '%" + query + "%' OR archive_path ILIKE '%" + query + "%')" : ""}
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch depts not in group.");
     }
 };

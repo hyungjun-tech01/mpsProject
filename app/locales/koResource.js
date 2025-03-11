@@ -500,6 +500,14 @@ const koResource = {
             fax_line_name :'팩스라인 번호',
             fax_line_user :'회선 사용자',
             fax_line_shared_group:'회선 공유그룹',
+        },
+        document: {
+            document_name: '문서명',
+            created_date: '생성일',
+            created_by: '작업자',
+            image: '이미지',
+            used_device: '사용기기',
+            shared: '공유여부'
         }
     },
 }

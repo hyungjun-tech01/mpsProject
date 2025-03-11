@@ -458,6 +458,14 @@ const enResource = {
             log_level: 'Log Level',
             printlogs: 'Print Logs',
             server_name: 'Server',
+        },
+        document: {
+            document_name: 'Doc. Name',
+            created_date: 'Created Date',
+            created_by: 'Created By',
+            image: 'Image',
+            used_device: 'Used Device',
+            shared: 'Shared'
         }
     },
 }
