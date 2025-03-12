@@ -102,7 +102,7 @@ export default async function Page(props: {
                 name: `fax_line_shared_group_id_${index}`, title: t('fax.fax_line_shared_group'), type: 'react-select', defaultValue: {value:faxLine.group_id, label:faxLine.group_name}, placeholder: t('fax.fax_line_shared_group') ,
                 options: optionsGroup
             },
-            { name: `button`, title: t('fax.save') , type: 'button', defaultValue: '', placeholder: '' },
+            { name: `button_${index}`, title: t('fax.save') , type: 'button', defaultValue: '', placeholder: '' },
             { name: `space_line_${index}`, title: '', type: 'input', defaultValue: '', placeholder: '' },
         ]
     }))
