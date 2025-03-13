@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useEffect } from 'react';
 import {  State } from './actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
+import {deleteFaxLineInfo} from '@/app/components/device/actions';
 import { IButtonInfo, ISection, IEditItem, EditItem , IOption} from '../edit-items';
 import Select, {SingleValue} from 'react-select';
 
@@ -30,6 +31,8 @@ export default function FormFax(
 
 
     const [faxData, setFaxData] = useState<Record<string, any>>({});
+
+    const [deletedFaxLineId, setDeletedFaxLineId] = useState<string | null>(null);
 
     const handleChange = (name: string, newValue: SingleValue<{ value: string; label: string }>) => {
         setFaxData(prev => ({
@@ -64,16 +67,24 @@ export default function FormFax(
                 (item) => item.type === 'hidden' && item.name.endsWith(`_${indexToRemove}`)
             );
     
-            if (hiddenItem && String(hiddenItem.defaultValue).trim() !== '') {
+            if (hiddenItem && String(hiddenItem.defaultValue).trim() !== '' && id !== undefined) {
                 // 2. defaultValue가 있으면 DB 처리 실행
-                processFaxLineInDB(String(hiddenItem.defaultValue)  );
+                setDeletedFaxLineId(String(hiddenItem.defaultValue));
             }
     
             // 3. 해당 index를 가진 모든 요소 삭제 후 새로운 배열 반환
             return prevItems.filter((item) => !item.name.endsWith(`_${indexToRemove}`));
         });
     };
-    
+
+    // ✅ useEffect에서 `deleteFaxLineInfo` 호출
+    useEffect(() => {
+        if (deletedFaxLineId && id !== undefined) {
+            deleteFaxLineInfo(deletedFaxLineId, id);
+            setDeletedFaxLineId(null); // 한 번 실행 후 초기화
+        }
+    }, [deletedFaxLineId, id]);    
+        
     const handleAddFaxLine = () => {
         console.log('handleAddFaxLine');
 

@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation'
 import { IBM_Plex_Mono } from 'next/font/google';
 
-import { fetchCreateDevice , fetchModifyDevice, fetchDeleteDevice} from '@/app/lib/fetchDeviceData';
+import { fetchCreateDevice , fetchModifyDevice, fetchDeleteDevice, fetchDeleteFaxLineInfo} from '@/app/lib/fetchDeviceData';
 
 export type State = {
     errors?: Record<string, string[]> | null;
@@ -118,6 +118,21 @@ export async function deleteDevice(id : string) {
     revalidatePath('/device');
     redirect('/device');
 }
+
+export async function deleteFaxLineInfo(faxLineid : string, deviceId : string) {
+    const output = await fetchDeleteFaxLineInfo(faxLineid);
+
+    console.log('deleteFaxLineInfo', faxLineid);
+
+    if(!output.result) {
+        return {
+            errors: output.data,
+            message: 'Failed to Delete Fax Line Information',
+        }
+    }
+    redirect(`/device/${deviceId}/edit`);
+}
+
 export async function modifyDevice(prevState: State, formData: FormData) {
 
     if (!(formData instanceof FormData)) {

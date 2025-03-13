@@ -274,6 +274,29 @@ export async function fetchDeleteDevice(id: string) {
         };
     };
 }
+
+export async function fetchDeleteFaxLineInfo(id: string) {
+    try {
+        console.log(id);
+        const result = await client.query(`
+            update tbl_fax_line_info 
+            set deleted_date = now()
+            where fax_line_id=$1
+        `,[id]);
+       
+        // 성공 처리
+        return { result: true, data: result.rows[0] };
+
+    } catch (error) {
+        console.log('Delete device / Error : ', error);
+        return {
+            result: false,
+            data: "Database Error: Failed to Delete fax line information",
+        };
+    };
+}
+
+
 export async function fetchModifyDevice(newDevice: any) {
 
     try {
