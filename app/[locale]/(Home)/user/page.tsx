@@ -6,6 +6,7 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
+import { auth } from '@/auth';
 
 
 export const metadata: Metadata = {
@@ -21,11 +22,14 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    const session = await auth();
+
     const [t, totalPages, users] = await Promise.all([
         getDictionary(locale),
         fetchUsersPages(query, itemsPerPage),
-        fetchFilteredUsers(query, itemsPerPage, currentPage)
+        fetchFilteredUsers(session?.user.name, query, itemsPerPage, currentPage)
     ]);
+    
     const columns: IColumnData[] = [
         { name: 'user_name', title: t('user.user_id'), align: 'center' },
         { name: 'full_name', title: t('user.user_name'), align: 'center' },

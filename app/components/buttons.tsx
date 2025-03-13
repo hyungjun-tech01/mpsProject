@@ -2,6 +2,7 @@ import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 // import DeleteIcon from '@mui/icons-material/Delete';
+import clsx from 'clsx';
 
 
 export function CreateButton({ link, title }: { link: string, title: string}) {
@@ -16,11 +17,14 @@ export function CreateButton({ link, title }: { link: string, title: string}) {
   );
 }
 
-export function UpdateButton({ link }: { link: string }) {
+export function UpdateButton({ link, disabled }: { link: string, disabled: boolean }) {
   return (
     <Link
-      href={link}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      href={disabled ? "" : link}
+      className={clsx("rounded-md border p-2",
+        {"text-gray-200 cursor-default": disabled},
+        {"hover:bg-gray-100": !disabled},
+      )}
     >
       <EditIcon className="w-5" />
     </Link>

@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
+import clsx from 'clsx';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -178,16 +179,27 @@ export default function CustomizedTable<DataType>({
                                             scope="row"
                                         >
                                             <div className="flex justify-end gap-3">
-                                                {path && <UpdateButton link={`${path}/${row.id}/edit`} />}
+                                                {path && <UpdateButton 
+                                                        link={`${path}/${row.id}/edit`}
+                                                        disabled={!row.editable}
+                                                    />}
                                                 {deleteAction && 
-                                                    <div
+                                                    <button
                                                         id={`delete@${row.id}`}
-                                                        className="rounded-md border p-2 hover:bg-gray-100"
+                                                        className={clsx("rounded-md border p-2",
+                                                            {"hover:bg-gray-100": !!row.editable}
+                                                        )}
                                                         onClick={handleMenuOpen}
+                                                        disabled={!row.editable}
                                                     >
                                                         <span className="sr-only">Delete</span>
-                                                        <DeleteIcon className="w-5" />
-                                                    </div>
+                                                        <DeleteIcon 
+                                                            className={clsx("w-5",
+                                                                {"text-gray-200" : !row.editable},
+                                                                {"text-inherit" : !!row.editable}
+                                                            )} 
+                                                        />
+                                                    </button>
                                                 }
                                             </div>
                                         </StyledTableCell>

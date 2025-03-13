@@ -17,6 +17,7 @@ await client.connect();
 // ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredUsers(
+    loginName: string | undefined,
     query: string,
     itemsPerPage: number,
     currentPage: number
@@ -26,7 +27,7 @@ export async function fetchFilteredUsers(
     try {
         const users =  await client.query(`
             SELECT
-                u.user_id,
+                u.user_id id,
                 u.user_name,
                 u.full_name,
                 u.email,
@@ -50,7 +51,7 @@ export async function fetchFilteredUsers(
         `);
         const converted = users.rows.map((data: UserField) => ({
             ...data,
-            id: data.user_id,
+            editable: !!loginName && (loginName === 'admin'),
         }));
         return converted;
     } catch (error) {
@@ -729,11 +730,12 @@ export async function fetchFilteredDocumnets(
             ORDER BY dj.created_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}`);
 
-            // const converted = users.rows.map((data) => ({
-            //     ...data,
-            //     id: data.user_id,
-            // }));
-            return docs.rows;
+            // return docs.rows;
+            const converted = docs.rows.map((data) => ({
+                ...data,
+                unremovable: (data.created_by !== user_id) && (user_id !== 'admin')
+            }));
+            return converted;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch documents.");
