@@ -48,9 +48,31 @@ export default function FormFax(
         console.log( faxData);
         
     }
-    const handleDeleteFaxLine = ()=> {
 
-    }
+    // 4. DB 처리 함수
+    const processFaxLineInDB = (faxLineId: string) => {
+    console.log(`DB 처리 실행: 팩스라인 ID = ${faxLineId}`);
+    // 실제 DB API 호출 로직 추가 필요
+    };
+
+    const handleDeleteFaxLine = (indexToRemove?: number) => {
+        if (indexToRemove === undefined) return; // index가 없으면 함수 종료
+    
+        setFaxItems((prevItems) => {
+            // 1. 해당 index의 hidden 타입 아이템 찾기
+            const hiddenItem = prevItems.find(
+                (item) => item.type === 'hidden' && item.name.endsWith(`_${indexToRemove}`)
+            );
+    
+            if (hiddenItem && String(hiddenItem.defaultValue).trim() !== '') {
+                // 2. defaultValue가 있으면 DB 처리 실행
+                processFaxLineInDB(String(hiddenItem.defaultValue)  );
+            }
+    
+            // 3. 해당 index를 가진 모든 요소 삭제 후 새로운 배열 반환
+            return prevItems.filter((item) => !item.name.endsWith(`_${indexToRemove}`));
+        });
+    };
     
     const handleAddFaxLine = () => {
         console.log('handleAddFaxLine');
@@ -168,7 +190,13 @@ export default function FormFax(
                                             <Button
                                                 name={item.name}
                                                 type="button"
-                                                onClick={handleDeleteFaxLine}
+                                                onClick={() => {
+                                                    const match = item.name.match(/_(\d+)$/);
+                                                    console.log('match',item.name, match);
+                                                    if (match && match[1]) {
+                                                        handleDeleteFaxLine(parseInt(match[1], 10));
+                                                    }
+                                                }}
                                                 className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                                             >
                                             삭제
