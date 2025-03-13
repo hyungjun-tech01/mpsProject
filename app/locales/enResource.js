@@ -465,7 +465,11 @@ const enResource = {
             created_by: 'Created By',
             image: 'Image',
             used_device: 'Used Device',
-            shared: 'Shared'
+            search_placehodler_fax: 'Search in fax box...',
+            search_placehodler_scan: 'Search in scan box...',
+            shared: 'Shared',
+            subTitle_fax: 'Fax Box',
+            subTitle_scan: 'Scan Box',
         }
     },
 }

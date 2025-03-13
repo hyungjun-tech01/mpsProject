@@ -507,7 +507,11 @@ const koResource = {
             created_by: '작업자',
             image: '이미지',
             used_device: '사용기기',
-            shared: '공유여부'
+            search_placehodler_fax: '팩스함에서 찾기...',
+            search_placehodler_scan: '스캔함에서 찾기...',
+            shared: '공유여부',
+            subTitle_fax: '팩스함',
+            subTitle_scan: '스캔함',
         }
     },
 }

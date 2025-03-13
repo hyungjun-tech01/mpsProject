@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import Link from 'next/link';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
-import { CreateButton } from '@/app/components/buttons';
+// import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchFilteredDocumnets, fetchFilteredDocumnetPages } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
+import clsx from 'clsx';
 
 
 export const metadata: Metadata = {
@@ -25,13 +27,31 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
 
-    if(!session?.user) return notFound();
+    if(!session?.user)
+        return notFound();
 
     const [t, totalPages, users] = await Promise.all([
         getDictionary(locale),
         fetchFilteredDocumnetPages(query, session?.user.name, category, itemsPerPage),
         fetchFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
     ]);
+
+    // Tabs ----------------------------------------------------------------------
+    const subTitles = [
+        { category: 'fax', title: t('document.subTitle_fax'), link: `/document/fax` },
+        { category: 'scan', title: t('document.subTitle_scan'), link: `/document/scan` },
+    ];
+
+    // Search Text ---------------------------------------------------------------------
+    const groupTexts = {
+        fax : {
+            keySearchPlaceholder : t('document.search_placehodler_fax'),
+        },
+        scan : {
+            keySearchPlaceholder : t('document.search_placehodler_scan'),
+        },
+    };
+
     const columns: IColumnData[] = [
         { name: 'archive_path', title: t('document.image'), align: 'center' },
         { name: 'created_date', title: t('document.created_date'), align: 'center' },
@@ -42,22 +62,30 @@ export default async function Page(props: {
     ];
 
     return (
-        <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">Documents</h1>
+        <div className='w-full flex-col justify-start'>
+            <div className="pl-2">
+            {subTitles.map(item => {
+                return <Link key={item.category} href={item.link}
+                    className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
+                        { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === category },
+                        { "text-gray-300  bg-white border-2": item.category !== category },
+                    )}>{item.title}</Link>;
+            })}
             </div>
-            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search placeholder="Search document..." />
+            <div className="w-full px-4 bg-gray-50 rounded-md">
+                <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
+                    <Search placeholder={groupTexts[category].keySearchPlaceholder} />
+                </div>
+                <Table
+                    columns={columns}
+                    rows={users}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    path='user'
+                    locale={locale}
+                    deleteAction={deleteUser}
+                />
             </div>
-            <Table
-                columns={columns}
-                rows={users}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                path='user'
-                locale={locale}
-                deleteAction={deleteUser}
-            />
         </div>
     );
 }
