@@ -2478,7 +2478,7 @@ CREATE TABLE tbl_document_job_info (
 	total_pages int4 ,
 	paper_size varchar(20) ,
 	document_name varchar(255) NOT NULL,
-	archive_path varchar(30) ,
+	archive_path varchar(255) ,
 	file_size_kb int4 ,
 	shared bpchar(1) );					
 
@@ -2746,3 +2746,63 @@ insert into tbl_fax_line_info(fax_line_name,printer_id, fax_line_user_id, fax_li
 values('024601066', '1001', '1001', 'aeba55ee-7539-4178-8768-ade4168a0aea', now(), 'admin');
 
 
+-- 2025.03.14, archive_path 잘못 만들었음.
+alter table tbl_document_job_info alter column archive_path type varchar(255);
+
+insert into tbl_document_job_info (
+    created_by,
+    created_date,
+    printer_id,
+    job_type,
+    gray_scale,
+    dpi,
+    total_pages,
+    paper_size,
+    document_name,
+    archive_path,
+    file_size_kb,
+    shared )
+select b.user_id created_by,
+    now() created_date,
+    device_id,
+    'SCAN',
+    'N',
+    '300',
+    a.total_pages,
+    'A4',
+    a.document_name,
+    a.image_archive_path,
+    100,
+    'Y'
+from tbl_audit_job_log a, tbl_user_info b
+where a.user_name = b.user_name
+and a.job_log_id <= '200';
+
+insert into tbl_document_job_info (
+    created_by,
+    created_date,
+    printer_id,
+    job_type,
+    gray_scale,
+    dpi,
+    total_pages,
+    paper_size,
+    document_name,
+    archive_path,
+    file_size_kb,
+    shared )
+select b.user_id created_by,
+    now() created_date,
+    device_id,
+    'FAX',
+    'N',
+    '300',
+    a.total_pages,
+    'A4',
+    a.document_name,
+    a.image_archive_path,
+    100,
+    'Y'
+from tbl_audit_job_log a, tbl_user_info b
+where a.user_name = b.user_name
+and a.job_log_id > '200';
