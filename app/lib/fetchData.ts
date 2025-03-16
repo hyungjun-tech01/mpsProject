@@ -717,23 +717,19 @@ export async function fetchFilteredDocumnets(
                 dj.archive_path
             FROM tbl_document_job_info dj
             WHERE
-                dj.job_type = '${job_type}'
-                AND (
-                    dj.created_by = '${user_id}'
-                    OR dj.document_id IN (
-                        SELECT document_id 
-                        FROM tbl_document_shared_info 
-                        WHERE shared_to = '${user_id}'
-                    )
-                )
+                dj.job_type = '${job_type.toUpperCase()}'
+                ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
+                    + ' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = '
+                    + user_id + '))'}
                 ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             ORDER BY dj.created_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}`);
 
             // return docs.rows;
+            console.log("Check : ", docs.rows);
             const converted = docs.rows.map((data) => ({
                 ...data,
-                unremovable: (data.created_by !== user_id) && (user_id !== 'admin')
+                editable: (data.created_by === user_id) || (user_id === 'admin')
             }));
             return converted;
     } catch (error) {
@@ -753,18 +749,13 @@ export async function fetchFilteredDocumnetPages(
         const count = await client.query(`
             SELECT
                 COUNT(*)
-            FROM tbl_document_job_info
+            FROM tbl_document_job_info dj
             WHERE
-                job_type = '${job_type}'
-                AND (
-                    created_by = '${user_id}'
-                    OR document_id IN (
-                        SELECT document_id 
-                        FROM tbl_document_shared_info 
-                        WHERE shared_to = '${user_id}'
-                    )
-                )
-                ${query !== "" ? "AND (document_name ILIKE '%" + query + "%' OR archive_path ILIKE '%" + query + "%')" : ""}
+                dj.job_type = '${job_type.toUpperCase()}'
+                ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
+                    + ' OR dj.document_id IN ( SELECT document_id FROM tbl_document_shared_info  WHERE shared_to = '
+                    + user_id + '))'}
+                ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;

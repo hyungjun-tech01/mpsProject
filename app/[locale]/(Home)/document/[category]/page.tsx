@@ -30,7 +30,7 @@ export default async function Page(props: {
     if(!session?.user)
         return notFound();
 
-    const [t, totalPages, users] = await Promise.all([
+    const [t, totalPages, docs] = await Promise.all([
         getDictionary(locale),
         fetchFilteredDocumnetPages(query, session?.user.name, category, itemsPerPage),
         fetchFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
@@ -54,7 +54,7 @@ export default async function Page(props: {
 
     const columns: IColumnData[] = [
         { name: 'archive_path', title: t('document.image'), align: 'center' },
-        { name: 'created_date', title: t('document.created_date'), align: 'center' },
+        { name: 'created_date', title: t('document.created_date'), align: 'center', type: 'date' },
         { name: 'created_by', title: t('document.created_by'), align: 'center', type: 'currency' },
         { name: 'device_name', title: t('document.used_device'), align: 'center' },
         { name: 'total_pages', title: t('logs.original_pages'), align: 'center' },
@@ -78,7 +78,7 @@ export default async function Page(props: {
                 </div>
                 <Table
                     columns={columns}
-                    rows={users}
+                    rows={docs}
                     currentPage={currentPage}
                     totalPages={totalPages}
                     path='user'
