@@ -19,6 +19,7 @@ import {modifyDevice} from '@/app/components/device/actions';
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 
 
+
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
     params: Promise<{ id: string, job: string, locale: "ko" | "en" }>
@@ -29,6 +30,8 @@ export default async function Page(props: {
     const job = params.job;
     const locale = params.locale;
     const searchParams = await props.searchParams;
+    
+
 
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),

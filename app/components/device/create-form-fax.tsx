@@ -5,7 +5,7 @@ import {  State } from './actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
-import {deleteFaxLineInfo} from '@/app/components/device/actions';
+import {deleteFaxLineInfo, saveFaxLineInfo} from '@/app/components/device/actions';
 import { IButtonInfo, ISection, IEditItem, EditItem , IOption} from '../edit-items';
 import Select, {SingleValue} from 'react-select';
 
@@ -47,16 +47,34 @@ export default function FormFax(
         }));
     };    
 
-    const handleSaveFaxLine = ()=>{
-        console.log( faxData);
+    const handleSaveFaxLine = (indexToSave?: number)=>{
+        if (indexToSave === undefined) return; // index가 없으면 함수 종료
+
+        // 1. 해당 index의 팩스라인 번호, 회선 사용자, 회선 공유그룹 찾기
+        const faxLindId = faxData[`fax_line_id_${indexToSave}`] || "";
+        // const faxLineNumber = faxItems.find(item => item.name === `fax_line_name_${indexToSave}`)?.defaultValue;
+        const faxLineNumber = faxData[`fax_line_name_${indexToSave}`] || "";
+        const faxLineUser = faxData[`fax_line_user_id_${indexToSave}`] || "";
+        const faxLineGroup = faxData[`fax_line_shared_group_id_${indexToSave}`] || "";
+
+        if (!faxLineNumber || faxLineNumber.trim() === "") {
+            alert("팩스라인 번호를 입력해주세요.");
+            return;
+        }
+    
+        const saveFaxLineData  = {
+            fax_line_id : faxLindId,
+            fax_line_name : faxLineNumber,
+            fax_line_user_id : faxLineUser,
+            fax_line_shared_group_id : faxLineGroup,
+            printer_id : id,
+        }
+
+        if (saveFaxLineData && id !== undefined) {
+            saveFaxLineInfo(saveFaxLineData, id);
+        }
         
     }
-
-    // 4. DB 처리 함수
-    const processFaxLineInDB = (faxLineId: string) => {
-    console.log(`DB 처리 실행: 팩스라인 ID = ${faxLineId}`);
-    // 실제 DB API 호출 로직 추가 필요
-    };
 
     const handleDeleteFaxLine = (indexToRemove?: number) => {
         if (indexToRemove === undefined) return; // index가 없으면 함수 종료
@@ -116,7 +134,7 @@ export default function FormFax(
                 options: optionsGroup
             },
             { name: `button_${index}`, title: '저장' , type: 'button', defaultValue: '', placeholder: '' },
-            { name: `space_line_${index}`, title: '회선 공유그룹', type: 'input', defaultValue: '', placeholder: '회선 공유그룹' }
+            { name: `space_line_${index}`, title: 'Line 띄우기', type: 'input', defaultValue: '', placeholder: '회선 공유그룹' }
         ];
         setFaxItems([...faxItems, ...newFaxLine]); // 기존 배열에 추가
 
@@ -203,7 +221,6 @@ export default function FormFax(
                                                 type="button"
                                                 onClick={() => {
                                                     const match = item.name.match(/_(\d+)$/);
-                                                    console.log('match',item.name, match);
                                                     if (match && match[1]) {
                                                         handleDeleteFaxLine(parseInt(match[1], 10));
                                                     }
@@ -215,7 +232,12 @@ export default function FormFax(
                                             <Button
                                                 name={item.name}
                                                 type="button"
-                                                onClick={handleSaveFaxLine}
+                                                onClick={() => {
+                                                    const match = item.name.match(/_(\d+)$/);
+                                                    if (match && match[1]) {
+                                                        handleSaveFaxLine(parseInt(match[1], 10));
+                                                    }
+                                                }}
                                                 className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                                             >
                                             저장

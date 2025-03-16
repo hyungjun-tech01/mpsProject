@@ -128,6 +128,14 @@ export type Device = {
   deleted: string | null;
 };
 
+export type FaxLineInfo = {
+  fax_line_id: string|null,
+  fax_line_name: string|null,
+  fax_line_user_id: string|null,
+  fax_line_shared_group_id: string|null,
+  printer_id : string|null,
+}
+
 export type AuditLogField ={
   job_log_id: string|null;
   job_type: string|null;
