@@ -4,7 +4,7 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 // import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { deleteUser } from '@/app/lib/actions';
+import { deleteDocument } from '@/app/lib/actions';
 import { fetchFilteredDocumnets, fetchFilteredDocumnetPages } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
 import { notFound } from "next/navigation";
@@ -81,9 +81,10 @@ export default async function Page(props: {
                     rows={docs}
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    path='user'
+                    path='document'
                     locale={locale}
-                    deleteAction={deleteUser}
+                    editable = {false}
+                    deleteAction={deleteDocument}
                 />
             </div>
         </div>

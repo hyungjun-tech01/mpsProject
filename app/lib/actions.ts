@@ -4,6 +4,7 @@ import pg from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+// import * as c from 'express';
 
 
 const client = new pg.Client({
@@ -172,7 +173,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     const newCardNo1 = formData.get('userCardNumber');
     const newCardNo2 = formData.get('userCardNumber2');
 
-
     // Prepare data for updating the database
     try {
         // First, get current data
@@ -252,39 +252,16 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
 };
 
 export async function deleteUser(id: string) {
-    // First, get account id through tbl_user_account
-    // let foundAccountID = null;
-    // try {
-    //     const response = client.query(`
-    //         SELECT * FROM tbl_user_account WHERE user_id='${id}
-    //     `);
-    //     if (response.rows.length === 0) {
-    //         return {
-    //             message: 'Cannot find account by user ID',
-    //         };
-    //     };
-    //     foundAccountID = response.rows[0].account_id;
-    // } catch (error) {
-    //     console.log('Delete User / Error : ', error);
-    //     return {
-    //         message: 'Database Error: Failed to get account by user ID.',
-    //     };
-    // };
-
     // Then, Delete user_account, account and user
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
-        // await client.query(`
-        //     DELETE FROM tbl_user_account WHERE user_id='${id}
-        // `);
-        // await client.query(`
-        //     DELETE FROM tbl_account WHERE account_id='${foundAccountID}
-        // `)
+
         await client.query(`
             update tbl_user_info 
             set deleted = 'Y', deleted_date = now()
             WHERE user_id='${id}'
         `);
+
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
@@ -419,4 +396,38 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     };
 
     revalidatePath(`/user/${id}/charge`);
+};
+
+export async function deleteDocument(id: string) {
+    let selected_job_type = '';
+    try {
+        await client.query("BEGIN"); // 트랜잭션 시작
+
+        const doc_job = await client.query(`
+            SELECT job_type FROM tbl_document_job_info
+            WHERE document_id='${id}'
+        `);
+        selected_job_type = doc_job.rows[0].job_type.toLowerCase();;
+
+        await client.query(`
+            DELETE FROM tbl_document_shared_info
+            WHERE document_id='${id}'
+        `);
+
+        await client.query(`
+            UPDATE tbl_document_job_info
+            SET deleted_date = now()
+            WHERE document_id='${id}'
+        `);
+
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋  
+    } catch (error) {
+        await client.query("ROLLBACK"); // 에러 발생 시 롤백
+        console.log('Delete document / Error : ', error);
+        return {
+            message: 'Database Error: Failed to get account by user ID.',
+        };
+    };
+
+    revalidatePath(`/document/${selected_job_type}`);
 };

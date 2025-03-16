@@ -707,17 +707,16 @@ export async function fetchFilteredDocumnets(
     try{
         const docs = await client.query(`
             SELECT
-                dj.document_id,
+                dj.document_id id,
                 dj.created_by,
                 dj.created_date,
-                dj.deleted_date,
                 dj.document_name,
                 dj.total_pages,
                 dj.total_pages,
                 dj.archive_path
             FROM tbl_document_job_info dj
             WHERE
-                dj.job_type = '${job_type.toUpperCase()}'
+                dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
                 ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
                     + ' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = '
                     + user_id + '))'}
@@ -726,7 +725,6 @@ export async function fetchFilteredDocumnets(
             LIMIT ${itemsPerPage} OFFSET ${offset}`);
 
             // return docs.rows;
-            console.log("Check : ", docs.rows);
             const converted = docs.rows.map((data) => ({
                 ...data,
                 editable: (data.created_by === user_id) || (user_id === 'admin')

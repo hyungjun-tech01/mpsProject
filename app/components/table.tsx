@@ -49,6 +49,7 @@ interface ITable<DataType> {
     locale?: 'ko' | 'en';
     deleteAction?: (id: string) => void;
     editable?: boolean;
+    deletable?: boolean;
     checkable?: boolean;
 }
 
@@ -61,6 +62,7 @@ export default function CustomizedTable<DataType>({
     locale = 'ko',
     deleteAction,
     editable = true,
+    deletable = true,
     checkable = false,
 }: ITable<DataType>) {
     const pathname = usePathname();
@@ -97,7 +99,7 @@ export default function CustomizedTable<DataType>({
             cancel: 'Cancel',
             delete: 'Delete',
         },
-    }
+    };
     const renderMenu = !deleteAction ? null : (
         <Menu
             anchorEl={anchorEl}
@@ -122,7 +124,7 @@ export default function CustomizedTable<DataType>({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction} />
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction}/>
                     {/* <Button className='border border-gray-300 rounded-md'>
                         {translate[locale].delete}
                     </Button> */}
@@ -143,7 +145,7 @@ export default function CustomizedTable<DataType>({
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            {editable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
+                            {(editable || deletable) && <StyledTableCell align='right'>{' '}</StyledTableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -172,18 +174,18 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
                                         </StyledTableCell>
                                     ))}
-                                    {editable &&
+                                    {(editable || deletable) &&
                                         <StyledTableCell
                                             component="th"
                                             align='right'
                                             scope="row"
                                         >
                                             <div className="flex justify-end gap-3">
-                                                {path && <UpdateButton 
+                                                {editable && path && <UpdateButton 
                                                         link={`${path}/${row.id}/edit`}
                                                         disabled={!row.editable}
                                                     />}
-                                                {deleteAction && 
+                                                {deletable && deleteAction &&
                                                     <button
                                                         id={`delete@${row.id}`}
                                                         className={clsx("rounded-md border p-2",
