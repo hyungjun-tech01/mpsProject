@@ -17,6 +17,7 @@ const client = new pg.Client({
 await client.connect();
 
 export async function fetchFilteredDevices(
+    loginName: string | undefined,
     query: string,
     itemsPerPage: number,
     currentPage: number,
@@ -75,6 +76,7 @@ export async function fetchFilteredDevices(
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
+            editable: !!loginName && (loginName === 'admin')
         }));
         return converted;
     } catch (error) {

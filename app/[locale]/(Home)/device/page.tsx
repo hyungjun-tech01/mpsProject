@@ -13,6 +13,8 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import LogTable from '@/app/components/table';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { notFound } from "next/navigation";
+import { auth } from "@/auth"
 
 export const metadata: Metadata = {
     title: 'Device',
@@ -39,10 +41,16 @@ export default async function Device(
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const session = await auth();
+
+    if(!session?.user)
+        return notFound();
+    
     const [t, totalPages, devices] = await Promise.all([
         getDictionary(locale),
         fetchDevicesPages(query, itemsPerPage),
-        fetchFilteredDevices(query, itemsPerPage, currentPage)
+        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage)
     ]);
 
     const columns: IColumnData[] = [
