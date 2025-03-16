@@ -17,6 +17,7 @@ const client = new pg.Client({
 await client.connect();
 
 export async function fetchFilteredDevices(
+    loginName: string | undefined,
     query: string,
     itemsPerPage: number,
     currentPage: number,
@@ -75,6 +76,7 @@ export async function fetchFilteredDevices(
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
+            editable: !!loginName && (loginName === 'admin')
         }));
         return converted;
     } catch (error) {
@@ -345,6 +347,61 @@ export async function fetchModifyDevice(newDevice: any) {
             values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
         }
 
+        // 모든 쿼리 성공 시 커밋
+        await client.query('COMMIT');
+
+        // 성공 처리
+        return { result: true, data: result.rows[0] };
+
+    }catch (error) {
+       // 오류 발생 시 롤백
+       await client.query('ROLLBACK');
+
+        console.log('Modify device / Error : ', error);
+        return {
+            result: false,
+            data: "Database Error",
+        };
+    };
+}
+
+export async function fetchSaveFaxLineInfo(saveFaxLineData:any, created_by:any){
+    try {
+        console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);
+        // 트랜잭션 시작
+        await client.query('BEGIN');
+
+        let result ;
+
+        if (saveFaxLineData.fax_line_id === null || saveFaxLineData.fax_line_id  === ''){
+            result = await client.query(`
+            insert into tbl_fax_line_info(fax_line_name, 
+                                        printer_id, 
+                                        fax_line_user_id, 
+                                        fax_line_shared_group_id, 
+                                        created_by)
+            values($1,$2,$3,$4,$5)`,
+            [saveFaxLineData.fax_line_name, 
+            saveFaxLineData.printer_id,
+            saveFaxLineData.fax_line_user_id, 
+            saveFaxLineData.fax_line_shared_group_id,
+            created_by
+            ]);
+
+        }else{
+            result = await client.query(`
+                update tbl_fax_line_info 
+                set fax_line_name = $1, 
+                    fax_line_user_id = $2,
+                    fax_line_shared_group_id = $3
+                where fax_line_id = $4
+            `,[saveFaxLineData.fax_line_name, 
+               saveFaxLineData.fax_line_user_id, 
+               saveFaxLineData.fax_line_shared_group_id,
+               saveFaxLineData.fax_line_id
+            ]);
+        }
+        
         // 모든 쿼리 성공 시 커밋
         await client.query('COMMIT');
 
