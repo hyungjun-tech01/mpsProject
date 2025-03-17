@@ -30,6 +30,7 @@ const convertSchedulePeriod = {
 
 // ----- Begin : Group -------------------------------------------------------//
 export async function fetchGroupsBy(
+    loginName: string | undefined,
     query: string,
     groupType: string,
     itemsPerPage: number,
@@ -93,12 +94,19 @@ export async function fetchGroupsBy(
     try {
         const resp = await client.query(queryString);
         if(groupType !== 'user') {
-            return resp.rows;
+            const converted = resp.rows.map(item => {
+                return {
+                    ...item,
+                    editable: !!loginName && (loginName === 'admin'),
+                }
+            });
+            return converted;
         } else {
             const converted = resp.rows.map(item => {
                 return {
                     ...item,
-                    schedule_period: convertSchedulePeriod[locale][item.schedule_period]
+                    schedule_period: convertSchedulePeriod[locale][item.schedule_period],
+                    editable: !!loginName && (loginName === 'admin'),
                 }    
             });
             return converted;

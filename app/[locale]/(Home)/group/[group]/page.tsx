@@ -14,6 +14,7 @@ import {
 import {
     deleteGroup
 } from '@/app/lib/actionsGroup';
+import { auth } from "@/auth"
 
 
 export const metadata: Metadata = {
@@ -32,15 +33,18 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    const session = await auth();
 
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
 
+    if(!session?.user) return notFound();
+
     const [t, totalPages, groupData] = await Promise.all([
         getDictionary(locale),
         fetchGroupPagesBy(query, group, itemsPerPage),
-        fetchGroupsBy(query, group, itemsPerPage, currentPage, locale),
+        fetchGroupsBy(session?.user.name, query, group, itemsPerPage, currentPage, locale),
     ]);
 
     // Tabs ----------------------------------------------------------------------
