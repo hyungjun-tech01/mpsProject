@@ -447,6 +447,7 @@ const koResource = {
             device_name:'장비이름',
             device_model:'모델명',
             device_type: '타입',
+            app_type:'앱타입',
             notes:'비고',
             open_api:'OpenAPI',
             workpath_sdk:'Workpath SDK',

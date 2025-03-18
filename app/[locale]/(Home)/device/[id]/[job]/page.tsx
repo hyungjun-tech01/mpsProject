@@ -49,7 +49,8 @@ export default async function Page(props: {
             items: [
                 { name: 'device_id', title: t('device.device_id'), type: 'hidden', defaultValue: device.device_id, placeholder: t('device.device_id') },             
                 {
-                    name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: device.device_type, options: [
+                    name: ' ', title: t('device.app_type'), type: 'select', defaultValue: device.app_type, 
+                    options: [
                         { title: t('device.open_api'), value: 'OpenAPI' },
                         { title: t('device.workpath_sdk'), value: 'Workpath SDK' }
                     ]

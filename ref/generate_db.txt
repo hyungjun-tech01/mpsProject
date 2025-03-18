@@ -2811,3 +2811,20 @@ and a.job_log_id > '200';
 select distinct b.user_name
 from tbl_document_job_info a, tbl_user_info b
 where a.created_by = b.user_id;
+
+-- 2025.03.18 
+-- tbl_device_info 테이블 컬럼 추가 
+alter table tbl_device_info add column    total_color_pages          int4;
+alter table tbl_device_info add column    black_toner_percentage     int4;
+alter table tbl_device_info add column    cyan_toner_percentage      int4;
+alter table tbl_device_info add column    magenta_toner_percentage   int4;                  
+alter table tbl_device_info add column    yellow_toner_percentage    int4;             
+alter table tbl_device_info add column    app_type                   varchar(255);           
+                  
+-- tbl_device_info app_type 수정 
+update tbl_device_info    
+set app_type = device_type;
+       
+
+-- tbl_device_info device_type 수정 => mono_printer/color_printer/mono_mfd/color_mfd
+

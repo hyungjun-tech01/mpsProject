@@ -126,6 +126,7 @@ export type Device = {
   device_model: string | null;
   serial_number: string | null;
   deleted: string | null;
+  app_type: string | null;
 };
 
 export type FaxLineInfo = {

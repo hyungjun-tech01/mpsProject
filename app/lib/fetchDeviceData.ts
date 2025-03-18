@@ -39,6 +39,7 @@ export async function fetchFilteredDevices(
                 deleted,
                 device_status,
                 device_type,
+                app_type,
                 ext_device_function
                 from tbl_device_info
                 WHERE
@@ -65,6 +66,7 @@ export async function fetchFilteredDevices(
                     deleted,
                     device_status,
                     device_type,
+                    app_type,
                     ext_device_function
                 FROM tbl_device_info
                 WHERE
@@ -131,6 +133,7 @@ export async function fetchDeviceById(id:string){
                 t.deleted,
                 t.device_status,
                 t.device_type,
+                t.app_type,
                 tgi.group_id, 
                 tgi.group_name,
                 CASE 
