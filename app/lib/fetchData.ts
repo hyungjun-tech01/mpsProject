@@ -710,7 +710,7 @@ export async function fetchFilteredDocumnets(
                 dj.document_id id,
                 dj.created_by,
                 dj.created_date,
-                dj.document_name,
+                dj.document_name name,
                 dj.total_pages,
                 dj.total_pages,
                 dj.archive_path

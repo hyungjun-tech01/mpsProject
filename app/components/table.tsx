@@ -172,6 +172,7 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
                                             {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                             {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
+                                            {!!column.type && column.type === 'file' && row[column.name]}
                                         </StyledTableCell>
                                     ))}
                                     {(editable || deletable) &&
