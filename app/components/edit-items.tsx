@@ -270,9 +270,9 @@ export function EditItem({
             { options?.map( (item, idx) => <div key={idx} className='w-full flex py-1'>
                 <div className='flex-0 w-[5rem] text-sm font-light'>{item.title}</div>
                 <div className='flex-1 rounded-full bg-white'>
-                  <div className={item.suffix} style={{width: `${item.value}%`}} >{' '}</div>
+                  <div className={item.suffix} style={{width: `${item.value || 0}%`}} >{' '}</div>
                 </div>
-                <div className='flex-0 w-[5rem] text-sm font-light text-right'>{item.value}%</div>
+                <div className='flex-0 w-[5rem] text-sm font-light text-right'>{item.value || 0}%</div>
               </div>
             )}
           </div>
