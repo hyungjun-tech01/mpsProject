@@ -444,7 +444,8 @@ const enResource = {
             ext_device_function:'Functions',
             model_name: 'Model Name',
             server_name:'Host Name',
-            status:'Deleted'
+            status:'Deleted',
+            toner_status: 'Toner Status',
         },
         security: {
             dept_count: 'Dept. Count',

@@ -474,6 +474,7 @@ const koResource = {
             udpate_device:'장비 변경하기',
             serial_number:'시리얼번호',
             deleted:'삭제여부',
+            toner_status: '토너 상태',
         },
         security: {
             dept_count: '부서 수',

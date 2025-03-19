@@ -17,6 +17,7 @@ import Form  from '@/app/components/device/create-form';
 import FormFax from '@/app/components/device/create-form-fax';
 import {modifyDevice} from '@/app/components/device/actions';
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
+import clsx from 'clsx';
 
 
 
@@ -62,6 +63,13 @@ export default async function Page(props: {
                 { name: 'notes', title: t('device.notes'), type: 'input', defaultValue: device.notes, placeholder: t('device.notes') },
                 { name: 'device_model', title: t('device.device_model'), type: 'input', defaultValue: device.device_model, placeholder: t('device.device_model') },
                 { name: 'serial_number', title: t('device.serial_number'), type: 'input', defaultValue: device.serial_number, placeholder: t('device.serial_number') },
+                { name: 'toner_status', title: t('device.toner_status'), type: 'status_bar', defaultValue: "",
+                    options: [ {title: 'Black', value: device.black_toner_percentage, suffix: 'h-full rounded-full bg-black' },
+                        {title: 'Cyan', value: device.cyan_toner_percentage, suffix: 'h-full rounded-full bg-cyan-300' },
+                        {title: 'Magenta', value: device.magenta_toner_percentage, suffix: 'h-full rounded-full bg-pink-300' },
+                        {title: 'Yellow', value: device.yellow_toner_percentage, suffix: 'h-full rounded-full bg-yellow-300' }
+                    ]
+                },
             ]
         },
         {

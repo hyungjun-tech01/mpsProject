@@ -9,10 +9,10 @@ import LineChart from "@/app/components/lineChart";
 export interface IEditItem {
   name: string;
   title: string;
-  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select" |"button";
+  type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select" | "button" | "status_bar";
   defaultValue: string | number;
   placeholder?: string;
-  options?: { title: string; value: string | number }[] | null;
+  options?: { title: string; value: string | number; suffix?: string }[] | null;
   locale?: string;
   error?: string[];
   chartData?: { xlabels: string[], ydata: number[], maxY: number };
@@ -257,6 +257,24 @@ export function EditItem({
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
             </div>
+          </div>
+        </div>
+      );
+    case "status_bar":
+      return (
+        <div className="mb-4">
+          <label htmlFor={name} className="mb-2 block text-sm font-semibold">
+            {title}
+          </label>
+          <div className="relative flex flex-col">
+            { options?.map( (item, idx) => <div key={idx} className='w-full flex py-1'>
+                <div className='flex-0 w-[5rem] text-sm font-light'>{item.title}</div>
+                <div className='flex-1 rounded-full bg-white'>
+                  <div className={item.suffix} style={{width: `${item.value}%`}} >{' '}</div>
+                </div>
+                <div className='flex-0 w-[5rem] text-sm font-light text-right'>{item.value}%</div>
+              </div>
+            )}
           </div>
         </div>
       );

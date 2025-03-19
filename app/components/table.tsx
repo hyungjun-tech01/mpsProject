@@ -10,14 +10,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Pagination from '@mui/material/Pagination';
-import { Menu, MenuItem } from '@mui/material';
+import Pagination from './pagination';
+import { Menu } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 import clsx from 'clsx';
-import Image from 'next/image';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -244,13 +243,8 @@ export default function CustomizedTable<DataType>({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="flex justify-center">
-                <Pagination
-                    count={totalPages}
-                    shape="rounded"
-                    page={currentPage}
-                    onChange={(event: React.ChangeEvent, page: number) => goSelectedPage(page)}
-                />
+            <div className="flex justify-center py-3">
+                <Pagination totalPages={totalPages} />
             </div>
             {renderMenu}
         </div>

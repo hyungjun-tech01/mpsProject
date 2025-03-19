@@ -169,9 +169,7 @@ export default function FormFax(
         <div>
             <form action={formAction}>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
-            <div key={1} className={clsx('w-full p-2 flex flex-col md:flex-row',
-              { 'border-b': 1 !== items.length - 1 }
-            )}>
+            <div key={1} className={clsx('w-full p-2 flex flex-col md:flex-row')}>
                 <div  className='w-full md:w-1/3 pb-4 md:pr-6'>
                     <div className='mb-5 text-xl font-semibold'>{items[0].title}</div>
                     <div className='text-sm'>{items[0].description}</div>

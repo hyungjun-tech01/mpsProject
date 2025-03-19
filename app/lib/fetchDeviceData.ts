@@ -134,6 +134,10 @@ export async function fetchDeviceById(id:string){
                 t.device_status,
                 t.device_type,
                 t.app_type,
+                t.black_toner_percentage,
+                t.cyan_toner_percentage,
+                t.magenta_toner_percentage,
+                t.yellow_toner_percentage,
                 tgi.group_id, 
                 tgi.group_name,
                 CASE 
