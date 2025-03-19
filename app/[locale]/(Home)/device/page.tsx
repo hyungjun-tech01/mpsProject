@@ -54,9 +54,9 @@ export default async function Device(
     ]);
 
     const columns: IColumnData[] = [
+        { name: 'device_type_img', title: t('device.device_type'), align: 'center' , type:'icon'},
         { name: 'device_name', title: t('device.printer_name') },
         { name: 'device_model', title: t('device.device_model'), align: 'center' },
-        { name: 'device_type', title: t('device.device_type'), align: 'center' },
         { name: 'app_type', title: t('device.app_type'), align: 'center' },
         { name: 'ext_device_function', title: t('device.ext_device_function'), align: 'center' },
         { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center' },

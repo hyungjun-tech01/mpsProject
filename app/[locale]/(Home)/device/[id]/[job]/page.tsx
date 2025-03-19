@@ -57,6 +57,14 @@ export default async function Page(props: {
                     ]
                 },
                 { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: device.device_name, placeholder: t('device.device_name') },
+                { name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: device.device_type, 
+                    options: [
+                        { title: t('device.color_mfd'), value: 'color_mfd' },
+                        { title: t('device.mono_mfd'), value: 'mono_mfd' },
+                        { title: t('device.color_printer'), value: 'color_printer' },
+                        { title: t('device.mono_printer'), value: 'mono_printer' },
+                    ]
+                },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: device.location, placeholder: t('device.location') },
                 { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: device.physical_device_id, placeholder: t('device.physical_device_id') },
                 { name: 'device_status', title: t('device.device_status'), type: 'input', defaultValue: device.device_status, placeholder: t('device.device_status') },

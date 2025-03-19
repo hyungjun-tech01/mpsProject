@@ -164,6 +164,8 @@ export default function CustomizedTable<DataType>({
                     </TableHead>
                     <TableBody>
                         {rows.length > 0 && rows.map((row, idx) => {
+
+                            
                             return (
                                 <StyledTableRow key={idx}>
                                     {checkable &&
@@ -175,7 +177,8 @@ export default function CustomizedTable<DataType>({
                                             <input type="checkbox" id={row.id} name={row.id} />
                                         </StyledTableCell>
                                     }
-                                    {columns.map((column) => (
+                                    {columns.map((column) => {
+                                        return(
                                         <StyledTableCell
                                             key={column.name}
                                             component="th"
@@ -191,10 +194,12 @@ export default function CustomizedTable<DataType>({
                                                     onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
                                             }
                                             {!!column.type && column.type === 'icon' &&
-                                                <div className='flex justify-center'>{column.values[row[column.name]]}</div>
+                                                <div className='flex justify-center'><img  src={`/${row[column.name]}`}  alt="icon" className="w-6 h-6" /></div>
                                             }
                                         </StyledTableCell>
-                                    ))}
+                                    )}
+                                    
+                                    )}
                                     {(editable || deletable) &&
                                         <StyledTableCell
                                             component="th"
