@@ -40,7 +40,13 @@ export async function fetchFilteredDevices(
                 device_status,
                 device_type,
                 app_type,
-                ext_device_function
+                ext_device_function,
+                CASE 
+                    WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
+                    WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
+                    WHEN device_type = 'mono_mfd' THEN 'Black_MFD01.png'
+                    ELSE 'Color_MFD01.png'
+                    END AS device_type_img
                 from tbl_device_info
                 WHERE
                 1=1 AND
@@ -67,7 +73,13 @@ export async function fetchFilteredDevices(
                     device_status,
                     device_type,
                     app_type,
-                    ext_device_function
+                    ext_device_function,
+                    CASE 
+                    WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
+                    WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
+                    WHEN device_type = 'mono_mfd' THEN 'Black_MFD01.png'
+                    ELSE 'Color_MFD01.png'
+                    END AS device_type_img
                 FROM tbl_device_info
                 WHERE
                 1=1
@@ -78,7 +90,7 @@ export async function fetchFilteredDevices(
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
-            editable: !!loginName && (loginName === 'admin')
+            editable: !!loginName && (loginName === 'admin'),
         }));
         return converted;
     } catch (error) {

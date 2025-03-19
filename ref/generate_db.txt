@@ -2825,6 +2825,53 @@ alter table tbl_device_info add column    app_type                   varchar(255
 update tbl_device_info    
 set app_type = device_type;
        
+update   tbl_device_info
+set app_type = 'Workpath SDK'
+where app_type = 'OpenAPI'
+and ctid in (
+    SELECT ctid FROM tbl_device_info 
+    WHERE app_type = 'OpenAPI'
+    LIMIT 10
+);
 
 -- tbl_device_info device_type 수정 => mono_printer/color_printer/mono_mfd/color_mfd
+
+update tbl_device_info
+set device_type = null;
+
+/* update tbl_device_info 
+set device_type = 'mono_printer'
+where device_type is null
+rownum <= 5; */
+
+UPDATE tbl_device_info 
+SET device_type = 'mono_printer'
+WHERE device_type IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_type IS NULL
+    LIMIT 5
+);
+
+UPDATE tbl_device_info 
+SET device_type = 'color_printer'
+WHERE device_type IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_type IS NULL
+    LIMIT 5
+);
+
+UPDATE tbl_device_info 
+SET device_type = 'mono_mfd'
+WHERE device_type IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_type IS NULL
+    LIMIT 5
+);
+
+UPDATE tbl_device_info 
+SET device_type = 'color_mfd'
+WHERE device_type IS NULL;
 

@@ -474,6 +474,10 @@ const koResource = {
             udpate_device:'장비 변경하기',
             serial_number:'시리얼번호',
             deleted:'삭제여부',
+            color_mfd:'컬러복합기',
+            mono_mfd:'흑백복합기',
+            color_printer:'컬러프린터',
+            mono_printer:'흑벡프린터',
         },
         security: {
             dept_count: '부서 수',
