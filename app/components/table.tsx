@@ -17,6 +17,7 @@ import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -131,7 +132,21 @@ export default function CustomizedTable<DataType>({
                 </div>
             </div>
         </Menu>
-    )
+    );
+
+    const handleFileClick = async (filePath: string) => {
+        // console.log("Check file path: ", filePath);
+        const onlyfilename = filePath.split("\\").at(-1);
+        const encodedPath = encodeURIComponent(filePath);
+        const response = await fetch(`/api/file?filename=${encodedPath}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = onlyfilename || "download_file";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      };
 
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
@@ -172,7 +187,10 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
                                             {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                             {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
-                                            {!!column.type && column.type === 'file' && row[column.name]}
+                                            {!!column.type && column.type === 'file' &&
+                                                <div className='hover:cursor-pointer'
+                                                    onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
+                                            }
                                         </StyledTableCell>
                                     ))}
                                     {(editable || deletable) &&

@@ -713,7 +713,8 @@ export async function fetchFilteredDocumnets(
                 dj.document_name name,
                 dj.total_pages,
                 dj.total_pages,
-                dj.archive_path
+                dj.archive_path,
+                dj.shared
             FROM tbl_document_job_info dj
             WHERE
                 dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL

@@ -36,25 +36,6 @@ export default async function Page(props: {
         fetchFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
     ]);
 
-    const convDocs = docs.map(async doc =>{
-        const response = await fetch(`/api/files`);
-        // , {
-        //     method: 'GET',
-        //     headers: {'Content-Type':'application/x-www-urlencoded'},
-        //     body: `path=${doc.archive_path}`
-        // });
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = '20230702_181049.jpg';
-        // window.URL.revokeObjectURL(url);
-        return {
-            ...doc,
-            download_path: link
-        };
-    })
-
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
         { category: 'fax', title: t('document.subTitle_fax'), link: `/document/fax` },
@@ -72,9 +53,9 @@ export default async function Page(props: {
     };
 
     const columns: IColumnData[] = [
-        { name: 'download_path', title: t('document.image'), align: 'center', type: 'file' },
+        { name: 'archive_path', title: t('document.file'), align: 'center', type: 'file' },
         { name: 'created_date', title: t('document.created_date'), align: 'center', type: 'date' },
-        { name: 'created_by', title: t('document.created_by'), align: 'center', type: 'currency' },
+        { name: 'created_by', title: t('document.created_by'), align: 'center' },
         { name: 'device_name', title: t('document.used_device'), align: 'center' },
         { name: 'total_pages', title: t('logs.original_pages'), align: 'center' },
         { name: 'shared', title: t('document.shared'), align: 'center' },
@@ -97,7 +78,7 @@ export default async function Page(props: {
                 </div>
                 <Table
                     columns={columns}
-                    rows={convDocs}
+                    rows={docs}
                     currentPage={currentPage}
                     totalPages={totalPages}
                     path='document'

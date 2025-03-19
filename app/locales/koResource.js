@@ -506,6 +506,7 @@ const koResource = {
             document_name: '문서명',
             created_date: '생성일',
             created_by: '작업자',
+            file: '파일',
             image: '이미지',
             used_device: '사용기기',
             search_placehodler_fax: '팩스함에서 찾기...',

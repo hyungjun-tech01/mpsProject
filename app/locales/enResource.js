@@ -463,6 +463,7 @@ const enResource = {
             document_name: 'Doc. Name',
             created_date: 'Created Date',
             created_by: 'Created By',
+            file: 'File',
             image: 'Image',
             used_device: 'Used Device',
             search_placehodler_fax: 'Search in fax box...',
