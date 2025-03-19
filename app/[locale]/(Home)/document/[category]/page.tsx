@@ -10,6 +10,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
 import clsx from 'clsx';
+import { LinkOutlined, LinkOffOutlined } from '@mui/icons-material';
 
 
 export const metadata: Metadata = {
@@ -58,7 +59,7 @@ export default async function Page(props: {
         { name: 'created_by', title: t('document.created_by'), align: 'center' },
         { name: 'device_name', title: t('document.used_device'), align: 'center' },
         { name: 'total_pages', title: t('logs.original_pages'), align: 'center' },
-        { name: 'shared', title: t('document.shared'), align: 'center' },
+        { name: 'shared', title: t('document.shared'), align: 'center', type: 'icon', values: { 'Y': <LinkOutlined/>, 'N': <LinkOffOutlined/>} },
     ];
 
     return (

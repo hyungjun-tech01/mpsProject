@@ -191,6 +191,9 @@ export default function CustomizedTable<DataType>({
                                                 <div className='hover:cursor-pointer text-lime-700'
                                                     onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
                                             }
+                                            {!!column.type && column.type === 'icon' &&
+                                                <div className='flex justify-center'>{column.values[row[column.name]]}</div>
+                                            }
                                         </StyledTableCell>
                                     ))}
                                     {(editable || deletable) &&
