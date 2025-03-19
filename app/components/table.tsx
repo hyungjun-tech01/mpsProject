@@ -188,7 +188,7 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                             {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
                                             {!!column.type && column.type === 'file' &&
-                                                <div className='hover:cursor-pointer'
+                                                <div className='hover:cursor-pointer text-lime-700'
                                                     onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
                                             }
                                         </StyledTableCell>
