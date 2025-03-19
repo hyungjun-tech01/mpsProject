@@ -7,6 +7,7 @@ import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
 import { auth } from '@/auth';
+import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default async function Page(props: {
         { name: 'user_name', title: t('user.user_id'), align: 'center' },
         { name: 'full_name', title: t('user.user_name'), align: 'center' },
         { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
-        { name: 'restricted', title: t('user.limited'), align: 'center' },
+        { name: 'restricted', title: t('user.limited'), align: 'center', type: 'icon', values: {Y: <DoNotDisturbOnOutlined/>, N: <DoNotDisturbOffOutlined/>} },
         { name: 'total_pages', title: t('common.page'), align: 'center' },
         { name: 'total_jobs', title: t('user.job'), align: 'center' },
     ];
