@@ -56,7 +56,6 @@ interface ITable<DataType> {
 export default function CustomizedTable<DataType>({
     columns,
     rows,
-    currentPage,
     totalPages,
     path,
     locale = 'ko',
@@ -65,15 +64,6 @@ export default function CustomizedTable<DataType>({
     deletable = true,
     checkable = false,
 }: ITable<DataType>) {
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const goSelectedPage = (page: number) => {
-        const params = new URLSearchParams(searchParams);
-        params.set('page', page.toString());
-        router.push(`${pathname}?${params.toString()}`);
-    };
-
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -125,9 +115,6 @@ export default function CustomizedTable<DataType>({
                 </div>
                 <div className='font-medium'>
                     <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction}/>
-                    {/* <Button className='border border-gray-300 rounded-md'>
-                        {translate[locale].delete}
-                    </Button> */}
                 </div>
             </div>
         </Menu>
@@ -195,6 +182,9 @@ export default function CustomizedTable<DataType>({
                                             }
                                             {!!column.type && column.type === 'icon' &&
                                                 <div className='flex justify-center'><img  src={`/${row[column.name]}`}  alt="icon" className="w-6 h-6" /></div>
+                                            }
+                                            {!!column.type && column.type === 'enum_icon' &&
+                                                <div className='flex justify-center'>{column.values[row[column.name]]}</div>
                                             }
                                         </StyledTableCell>
                                     )}

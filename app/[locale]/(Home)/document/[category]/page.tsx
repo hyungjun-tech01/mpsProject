@@ -59,7 +59,7 @@ export default async function Page(props: {
         { name: 'created_by', title: t('document.created_by'), align: 'center' },
         { name: 'device_name', title: t('document.used_device'), align: 'center' },
         { name: 'total_pages', title: t('logs.original_pages'), align: 'center' },
-        { name: 'shared', title: t('document.shared'), align: 'center', type: 'icon', values: { 'Y': <LinkOutlined/>, 'N': <LinkOffOutlined/>} },
+        { name: 'shared', title: t('document.shared'), align: 'center', type: 'enum_icon', values: { 'Y': <LinkOutlined/>, 'N': <LinkOffOutlined/>} },
     ];
 
     return (
