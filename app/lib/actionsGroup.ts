@@ -145,7 +145,7 @@ export async function modifyDeviceGroup(id:string, prevState: State, formData: F
         groupMembers.push(memberID);
     }
 
-    console.log('[Modify Device Group] Member :', groupMembers);
+    //console.log('[Modify Device Group] Member :', groupMembers);
 
     // Modify device group  --------------------------------------
     try {

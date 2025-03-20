@@ -65,6 +65,8 @@ export default async function Page(props: {
                         { title: t('device.mono_printer'), value: 'mono_printer' },
                     ]
                 },
+                { name: 'device_administrator', title: t('device.device_administrator'), type: 'input', defaultValue: device.device_administrator, placeholder: t('device.device_administrator') },
+                { name: 'device_administrator_password', title: t('device.device_administrator_password'), type: 'password', defaultValue: '', placeholder: t('device.device_administrator_password') },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: device.location, placeholder: t('device.location') },
                 { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: device.physical_device_id, placeholder: t('device.physical_device_id') },
                 { name: 'device_status', title: t('device.device_status'), type: 'input', defaultValue: device.device_status, placeholder: t('device.device_status') },

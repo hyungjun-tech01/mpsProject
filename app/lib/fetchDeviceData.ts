@@ -159,6 +159,7 @@ export async function fetchDeviceById(id:string){
                 t.device_status,
                 t.device_type,
                 t.app_type,
+                t.device_administrator,
                 t.black_toner_percentage,
                 t.cyan_toner_percentage,
                 t.magenta_toner_percentage,
@@ -290,7 +291,7 @@ export async function fetchPrinterGroup() {
 
 export async function fetchDeleteDevice(id: string) {
     try {
-        console.log(id);
+        //console.log(id);
         const result = await client.query(`
             update tbl_device_info
             set deleted ='Y'
@@ -311,7 +312,7 @@ export async function fetchDeleteDevice(id: string) {
 
 export async function fetchDeleteFaxLineInfo(id: string) {
     try {
-        console.log(id);
+        //console.log(id);
         const result = await client.query(`
             update tbl_fax_line_info 
             set deleted_date = now()
@@ -346,17 +347,31 @@ export async function fetchModifyDevice(newDevice: any) {
 
         const result = await client.query(`
             update tbl_device_info
-            set device_type = $1, device_name = $2, 
-                location = $3, physical_device_id = $4, 
-                device_status = $5, notes = $6,
-                device_model = $7, serial_number = $8, 
-                ext_device_function = $9, deleted = $10
-            where device_id = $11
-        `,[ newDevice.device_type, newDevice.device_name, newDevice.location, 
+            set device_type = $1, 
+                device_name = $2, 
+                location = $3, 
+                physical_device_id = $4, 
+                device_status = $5, 
+                notes = $6,
+                device_model = $7, 
+                serial_number = $8, 
+                ext_device_function = $9, 
+                deleted = $10,
+                device_administrator = $11,
+                device_administrator_password = $12
+            where device_id = $13
+        `,[ newDevice.device_type, 
+            newDevice.device_name, 
+            newDevice.location, 
             newDevice.physical_device_id, 
-            newDevice.device_status, newDevice.notes, 
-            newDevice.device_model, newDevice.serial_number,
-            ext_device_function, newDevice.deleted, 
+            newDevice.device_status, 
+            newDevice.notes, 
+            newDevice.device_model, 
+            newDevice.serial_number,
+            ext_device_function, 
+            newDevice.deleted, 
+            newDevice.device_administrator,
+            newDevice.device_administrator_password,
             newDevice.device_id]);
 
         // tbl_group_member_info 데이터가 있으면, update 
@@ -399,7 +414,7 @@ export async function fetchModifyDevice(newDevice: any) {
 
 export async function fetchSaveFaxLineInfo(saveFaxLineData:any, created_by:any){
     try {
-        console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);
+        //console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);
         // 트랜잭션 시작
         await client.query('BEGIN');
 

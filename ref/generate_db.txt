@@ -2875,3 +2875,8 @@ UPDATE tbl_device_info
 SET device_type = 'color_mfd'
 WHERE device_type IS NULL;
 
+update tbl_device_info
+set black_toner_percentage = random()*100,
+cyan_toner_percentage = random()*100,
+magenta_toner_percentage = random()*100,
+yellow_toner_percentage = random()*100

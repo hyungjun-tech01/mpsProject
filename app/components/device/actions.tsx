@@ -25,6 +25,8 @@ const FormSchema = z.object({
         invalid_type_error: 'Device name is required',
     }).min(1, 'Device name is required'),
     location : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    device_administrator : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    device_administrator_password : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     notes : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     physical_device_id :z.string({
         invalid_type_error: 'Host Name or Ip address is required',
@@ -75,7 +77,7 @@ export async function createDevice(prevState: State, formData: FormData) {
         location: formData.get('location'),
         notes: formData.get('notes'),
         physical_device_id: formData.get('physical_device_id'),
-        device_administrator_name: formData.get('device_administrator_name'),
+        device_administrator: formData.get('device_administrator'),
         device_administrator_password: formData.get('device_administrator_password'),
         ext_device_function_printer: formData.get('ext_device_function_printer'),
         ext_device_function_scan: formData.get('ext_device_function_scan'),
@@ -179,6 +181,8 @@ export async function modifyDevice(prevState: State, formData: FormData) {
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
         device_status: formData.get('device_status'),
+        device_administrator: formData.get('device_administrator'),
+        device_administrator_password: formData.get('device_administrator_password'),
         location: formData.get('location'),
         notes: formData.get('notes'),
         physical_device_id: formData.get('physical_device_id'),
@@ -202,12 +206,19 @@ export async function modifyDevice(prevState: State, formData: FormData) {
     // Prepare data for insertion into the database
     const newDevice = validatedFields.data;
 
+    if ( newDevice.device_administrator !== null && newDevice.device_administrator_password === null){
+        return {
+            errors: 'Device administrator password missing',
+            message: 'Device administrator password missing',
+        }
+    }
+
     const output = await fetchModifyDevice(newDevice);
 
     if(!output.result) {
         return {
             errors: output.data,
-            message: 'Failed to Delete Device',
+            message: 'Failed to Modify Device',
         }
     }
 

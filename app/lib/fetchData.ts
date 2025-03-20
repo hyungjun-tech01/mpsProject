@@ -158,7 +158,7 @@ export async function fetchUserById(id: string) {
             WHERE u.user_id='${id}'
         `);
 
-        console.log(user.rows[0]);
+        //console.log(user.rows[0]);
         return user.rows[0];
     } catch (error) {
         console.error("Database Error:", error);

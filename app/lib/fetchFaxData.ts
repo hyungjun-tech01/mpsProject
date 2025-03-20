@@ -200,7 +200,7 @@ export async function fetchCreateFax(newDevice: any) {
 
 export async function fetchDeleteFax(id: string) {
     try {
-        console.log(id);
+        //console.log(id);
         const result = await client.query(`
             update tbl_device_info
             set deleted ='Y'

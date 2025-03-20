@@ -104,7 +104,7 @@ export default function FormFax(
     }, [deletedFaxLineId, id]);    
         
     const handleAddFaxLine = () => {
-        console.log('handleAddFaxLine');
+        //console.log('handleAddFaxLine');
 
         const hasEmptyHiddenValue = faxItems.some(
             (item) => item.type === 'hidden' && (typeof item.defaultValue !== 'string' || item.defaultValue.trim() === '')
@@ -164,7 +164,7 @@ export default function FormFax(
         setEnablePrintChecked(e.target.checked);
     };
 
-    console.log('create form');
+    //console.log('create form');
     return (
         <div>
             <form action={formAction}>

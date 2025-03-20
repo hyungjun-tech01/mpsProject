@@ -47,7 +47,7 @@ export default function Form(
         setEnablePrintChecked(e.target.checked);
     };
 
-    console.log('create form');
+    //console.log('create form');
     return (
         <div>
             <form action={formAction}>

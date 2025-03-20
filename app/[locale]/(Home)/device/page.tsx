@@ -46,7 +46,7 @@ export default async function Device(
         fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage)
     ]);
 
-    console.log('Check : ', devices);
+    //console.log('Check : ', devices);
 
     const columns: IColumnData[] = [
         { name: 'device_type_img', title: t('device.device_type'), align: 'center' , type:'icon'},
