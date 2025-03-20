@@ -41,6 +41,10 @@ export async function fetchFilteredDevices(
                 device_type,
                 app_type,
                 ext_device_function,
+                cyan_toner_percentage,
+                magenta_toner_percentage,
+                yellow_toner_percentage,
+                black_toner_percentage,
                 CASE 
                     WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
                     WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
@@ -74,6 +78,11 @@ export async function fetchFilteredDevices(
                     device_type,
                     app_type,
                     ext_device_function,
+                    ext_device_function,
+                    cyan_toner_percentage,
+                    magenta_toner_percentage,
+                    yellow_toner_percentage,
+                    black_toner_percentage,
                     CASE 
                     WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
                     WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
@@ -90,6 +99,10 @@ export async function fetchFilteredDevices(
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
+            cyan_toner_percentage: data.cyan_toner_percentage + ' %',
+            magenta_toner_percentage: data.magenta_toner_percentage + ' %',
+            yellow_toner_percentage: data.yellow_toner_percentage + ' %',
+            black_toner_percentage: data.black_toner_percentage + ' %',
             editable: !!loginName && (loginName === 'admin'),
         }));
         return converted;

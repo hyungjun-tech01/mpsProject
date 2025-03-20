@@ -19,7 +19,7 @@ export type IBreadCrums = {
 
 export type IColumnData = {
   name: string;
-  title: string;
+  title: string | React.JSX.Element;
   type?: string;
   values?: object;
   align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
@@ -128,6 +128,10 @@ export type Device = {
   serial_number: string | null;
   deleted: string | null;
   app_type: string | null;
+  cyan_toner_percentage: string | null;
+  magenta_toner_percentage: string | null;
+  yellow_toner_percentage: string | null;
+  black_toner_percentage: string | null;
 };
 
 export type FaxLineInfo = {

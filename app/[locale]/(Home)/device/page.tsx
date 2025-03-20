@@ -1,20 +1,14 @@
 import type { Metadata } from "next";
-import { Suspense } from 'react';
 import getDictionary from '@/app/locales/dictionaries';
-import { IEditItem } from '@/app/components/edit-items';
 import { fetchDevicesPages, fetchFilteredDevices } from '@/app/lib/fetchDeviceData';
 import { IColumnData } from '@/app/lib/definitions';
-import { UserTableSkeleton } from '@/app/components/user/skeletons';
 import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
-import Breadcrumbs from '@/app/components/breadcrumbs';
-import LogTable from '@/app/components/table';
-import Link from 'next/link';
-import clsx from 'clsx';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
+import { Circle } from "@mui/icons-material";
 
 export const metadata: Metadata = {
     title: 'Device',
@@ -30,12 +24,11 @@ interface ISearchDevice {
 export default async function Device(
     props: { 
         searchParams?: Promise<ISearchDevice>;
-        params: Promise<{  job: string,  locale: "ko" | "en" }>;
+        params: Promise<{ locale: "ko" | "en" }>;
     }
 ){
     const params = await props.params;
     const locale = params.locale;
-    const job = params.job;
 
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';
@@ -53,16 +46,20 @@ export default async function Device(
         fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage)
     ]);
 
+    console.log('Check : ', devices);
+
     const columns: IColumnData[] = [
         { name: 'device_type_img', title: t('device.device_type'), align: 'center' , type:'icon'},
         { name: 'device_name', title: t('device.printer_name') },
-        { name: 'device_model', title: t('device.device_model'), align: 'center' },
-        { name: 'app_type', title: t('device.app_type'), align: 'center' },
-        { name: 'ext_device_function', title: t('device.ext_device_function'), align: 'center' },
         { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center' },
-        { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
+        { name: 'cyan_toner_percentage', title: <Circle className="text-cyan-300"/>, align: 'center'},
+        { name: 'magenta_toner_percentage', title: <Circle className="text-pink-300"/>, align: 'center'},
+        { name: 'yellow_toner_percentage', title: <Circle className="text-yellow-300"/>, align: 'center'},
+        { name: 'black_toner_percentage', title: <Circle className="text-white"/>, align: 'center'},
         { name: 'device_status', title: t('device.device_status'), align: 'center' },
-        { name: 'deleted', title: t('device.deleted'), align: 'center' },
+        { name: 'device_model', title: t('device.device_model'), align: 'center' },
+        { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
+        { name: 'app_type', title: t('device.app_type'), align: 'center' },
     ];
     return (
             <div className="w-full">
