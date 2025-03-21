@@ -1,8 +1,6 @@
 import {
   PaidOutlined,
-  ScheduleOutlined,
   AccountCircleOutlined,
-  InboxOutlined,
   PrintOutlined,
   FileCopyOutlined,
 } from "@mui/icons-material";
@@ -33,6 +31,7 @@ export default async function CardWrapper() {
 
   let normalDeviceCount = 0;
   let abnormalDeviceCount = 0;
+
   devices.forEach(device => {
     const foundIdx = latestDeviceStatus.findIndex(status => status.printer_id === device.printer_id);
     if (foundIdx === -1) {
@@ -45,6 +44,7 @@ export default async function CardWrapper() {
       }
     }
   });
+
   const devicesInfo = [
     { title: 'Total', value: devices.length },
     { title: 'Normal', value: normalDeviceCount },
@@ -84,27 +84,25 @@ export function Card({
         </p>
       }
       {typeof value === 'object' &&
-        <div className="flex justify-between">
+        <div className="flex flex-col">
           {
             value.map((item, idx) => {
               if (idx === value.length - 1) {
                 return (
-                  <div key={idx} className="flex-1 truncate rounded-xl bg-white px-2 py-4 text-center" >
+                  <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 items-center" >
                     <div className="text-l">{item.title}</div>
                     <div className="text-2xl">{item.value}</div>
                   </div>
                 );
               } else {
                 return (
-                  <div key={idx} className="flex-1 truncate rounded-xl bg-white px-2 py-4 text-center mr-2" >
+                  <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 mb-2 items-center" >
                     <div className="text-l">{item.title}</div>
                     <div className="text-2xl">{item.value}</div>
                   </div>
                 )
               }
-            }
-
-            )
+            })
           }
         </div>
       }
