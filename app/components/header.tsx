@@ -99,7 +99,7 @@ export default function Header({ extendSideNav }: IHeader) {
                         MPS Next
                     </Typography>
                     <Box className="grow" />
-                    <Box className="hidden gap-2 md:flex">
+                    {/* <Box className="hidden gap-2 md:flex">
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={4} color="error">
                                 <MailIcon className="text-lime-50" />
@@ -125,7 +125,7 @@ export default function Header({ extendSideNav }: IHeader) {
                         >
                             <AccountCircle className="text-lime-50" />
                         </IconButton>
-                    </Box>
+                    </Box> */}
                     <Box className="hidden md:flex">
                         <IconButton
                             size="large"
