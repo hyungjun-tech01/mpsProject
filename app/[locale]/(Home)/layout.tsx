@@ -13,9 +13,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen flex-col md:overflow-hidden">
       <Header extendSideNav={() => extendSideNav(!sideNavExtended)} />
       <div className="flex h-full flex-col md:flex-row md:overflow-hidden">
-        <div className={clsx("w-full flex-none duration-150",
-          { "md:w-16": !sideNavExtended,
-            "md:w-64": sideNavExtended,
+        <div className={clsx("w-full flex-none duration-150", {
+          "md:w-16": !sideNavExtended,
+          "md:w-64": sideNavExtended,
         })}>
           <SideNav extended={sideNavExtended}/>
         </div>

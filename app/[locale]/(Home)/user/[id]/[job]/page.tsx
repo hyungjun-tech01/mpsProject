@@ -21,8 +21,7 @@ import { formatCurrency } from "@/app/lib/utils";
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
     params: Promise<{ id: string, job: string, locale: "ko" | "en" }>
-}
-) {
+}) {
     const params = await props.params;
     const id = params.id;
     const job = params.job;

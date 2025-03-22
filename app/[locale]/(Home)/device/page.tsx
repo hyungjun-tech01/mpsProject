@@ -67,8 +67,8 @@ export default async function Device(
                     <h1 className="text-2xl">{t('device.device')}</h1>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                    <Search placeholder="Search Devices..." />
-                    <CreateButton link="/device/create" title="Create Device" />
+                    <Search placeholder={t("comment.search_devices")} />
+                    <CreateButton link="/device/create" title={t("device.create_device")} />
                 </div>
                 <Table
                     columns={columns}

@@ -11,6 +11,8 @@ import {
   fetchTodayTotalPageSum,
   fetchLatestDeviceStatus,
 } from "@/app/lib/fetchData";
+import getDictionary from "@/app/locales/dictionaries";
+
 
 const iconMap = {
   collected: PaidOutlined,
@@ -19,7 +21,8 @@ const iconMap = {
   pages: FileCopyOutlined,
 };
 
-export default async function CardWrapper() {
+
+export default async function CardWrapper({ trans }: {trans : (key:string) => string}) {
   const [numberOfUsers, devices, totalPages, todayPages, latestDeviceStatus] =
     await Promise.all([
       fetchUserCount(),
@@ -46,17 +49,17 @@ export default async function CardWrapper() {
   });
 
   const devicesInfo = [
-    { title: 'Total', value: devices.length },
-    { title: 'Normal', value: normalDeviceCount },
-    { title: 'Error', value: abnormalDeviceCount }
+    { title: trans('dashboard.total_device'), value: devices.length },
+    { title: trans('dashboard.normal_device'), value: normalDeviceCount },
+    { title: trans('dashboard.error_device'), value: abnormalDeviceCount }
   ];
 
   return (
     <>
-      <Card title="Users" value={numberOfUsers} type="users" />
-      <Card title="Devices" value={devicesInfo} type="devices" />
-      <Card title="Total Pages" value={totalPages || 0} type="pages" />
-      <Card title="Today Pages" value={todayPages || 0} type="pages" />
+      <Card title={trans("common.user")} value={numberOfUsers} type="users" />
+      <Card title={trans("device.device")} value={devicesInfo} type="devices" />
+      <Card title={trans("dashboard.total_pages")} value={totalPages || 0} type="pages" />
+      <Card title={trans("dashboard.today_pages")} value={todayPages || 0} type="pages" />
     </>
   );
 }

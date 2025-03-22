@@ -1,8 +1,11 @@
+'use server';
+
 import { fetchTotalPagesPerDayFor30Days } from "@/app/lib/fetchData";
 import LineChart from '../lineChart';
+import t from '@/app/locales/dictionaries';
 
 
-export default async function PageChartWrapper() {
+export default async function PageChartWrapper({ trans }: {trans : (key:string) => string}) {
   const fetchedData = await fetchTotalPagesPerDayFor30Days();
 
   if(!fetchedData || fetchedData.date.length === 0) {
@@ -12,11 +15,11 @@ export default async function PageChartWrapper() {
   return (
     <div className="w-full md:col-span-4">
       <h2 className='mb-4 text-xl md:text-2xl'>
-        Recent Printed Pages
+        {trans("dashboard.recent_printed_page")}
       </h2>
       <div className="rounded-xl bg-gray-50 p-4">
         <LineChart
-          title='Printed Pages'
+          title={trans('dashboard.printed_page')}
           xlabels={fetchedData.date}
           ydata={fetchedData.pages}
           maxY={Number(fetchedData.maxY)}
