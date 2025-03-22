@@ -2880,3 +2880,60 @@ set black_toner_percentage = random()*100,
 cyan_toner_percentage = random()*100,
 magenta_toner_percentage = random()*100,
 yellow_toner_percentage = random()*100
+
+--2025.03.21
+-- device_status update 
+UPDATE tbl_device_info 
+SET device_status =  null;
+
+UPDATE tbl_device_info 
+SET device_status = '정상'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+    LIMIT 5
+);
+
+UPDATE tbl_device_info 
+SET device_status = '토너부족'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+    LIMIT 2
+);
+
+UPDATE tbl_device_info 
+SET device_status = '경고'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+    LIMIT 2
+);
+UPDATE tbl_device_info 
+SET device_status = '오류'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+    LIMIT 2
+);
+
+UPDATE tbl_device_info 
+SET device_status = '오프라인'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+    LIMIT 2
+);
+
+UPDATE tbl_device_info 
+SET device_status = '정상'
+WHERE device_status IS NULL
+AND ctid IN (
+    SELECT ctid FROM tbl_device_info 
+    WHERE device_status IS NULL
+);
