@@ -252,8 +252,8 @@ export async function fetchDevices() {
     try {
         const response = await client.query(`
             SELECT
-                printer_id
-            FROM tbl_printer_info p
+                device_id
+            FROM tbl_device_info p
             WHERE
                 p.deleted='N'
         `);
