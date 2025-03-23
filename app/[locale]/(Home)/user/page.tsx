@@ -43,11 +43,11 @@ export default async function Page(props: {
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">Users</h1>
+                <h1 className="text-2xl">{t("common.user")}</h1>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search placeholder="Search users..." />
-                <CreateButton link="/user/create" title="Create User" />
+                <Search placeholder={t("comment.search_users")} />
+                <CreateButton link="/user/create" title={t("user.create_user")} />
             </div>
             <Table
                 columns={columns}
