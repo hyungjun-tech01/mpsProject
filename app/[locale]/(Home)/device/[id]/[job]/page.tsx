@@ -110,7 +110,7 @@ export default async function Page(props: {
 
 
     const editFaxItems: ISection[] =  fax.length > 0 
-    ? fax.map((faxLine, index) => ({
+    ? fax.map((faxLine:any, index) => ({
         title: `${t('fax.fax_line')}`, // 여러 개일 경우 번호 추가
         description: t('fax.fax_line_desc'),
         items: [

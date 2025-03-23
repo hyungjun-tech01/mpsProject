@@ -2937,3 +2937,15 @@ AND ctid IN (
     SELECT ctid FROM tbl_device_info 
     WHERE device_status IS NULL
 );
+
+
+-- 2025.03.23 additional job
+
+
+alter table tbl_audit_job_log add column device_id  varchar(36);
+alter table tbl_audit_job_log add column total_pages  integer;
+alter table tbl_audit_job_log add column color_total_pages integer;
+alter table tbl_audit_job_log add column document_name varchar(255);
+alter table tbl_audit_job_log add column status varchar(100);
+
+
