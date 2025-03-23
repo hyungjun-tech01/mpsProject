@@ -131,7 +131,7 @@ export async function fetchDevicesPages(
                 `)
             : await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printetbl_device_info_info
+                FROM tbl_device_info
             `)
         ;
 
