@@ -120,18 +120,18 @@ export async function fetchDevicesPages(
         const count = query !== '' 
             ? await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer_info
+                FROM tbl_device_info
                 WHERE
                 1=1 AND
                 (
-                    tbl_printer_info.display_name ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.device_type ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                    tbl_printer_info.server_name ILIKE '${`%${query}%`}'                    )
+                    tbl_device_info.display_name ILIKE '${`%${query}%`}' OR
+                    tbl_device_info.device_type ILIKE '${`%${query}%`}' OR
+                    tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
+                    tbl_device_info.server_name ILIKE '${`%${query}%`}'                    )
                 `)
             : await client.query(`
                 SELECT COUNT(*)
-                FROM tbl_printer_info
+                FROM tbl_printetbl_device_info_info
             `)
         ;
 
