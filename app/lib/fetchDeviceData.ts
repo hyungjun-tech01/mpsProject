@@ -4,6 +4,10 @@ import pg from 'pg';
 import { BASE_PATH } from '@/constans';
 import { Device } from '@/app/lib/definitions';
 import { revalidatePath } from 'next/cache';
+import { encrypt } from '@/app/lib/cryptoFunc';
+
+
+
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -344,6 +348,7 @@ export async function fetchModifyDevice(newDevice: any) {
         ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
+        const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
 
         const result = await client.query(`
             update tbl_device_info
@@ -371,7 +376,7 @@ export async function fetchModifyDevice(newDevice: any) {
             ext_device_function, 
             newDevice.deleted, 
             newDevice.device_administrator,
-            newDevice.device_administrator_password,
+            encrypt_device_admin_pwd,
             newDevice.device_id]);
 
         // tbl_group_member_info 데이터가 있으면, update 
