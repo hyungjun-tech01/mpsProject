@@ -62,8 +62,9 @@ export async function fetchFilteredDevices(
                         tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
                         tbl_device_info.device_model ILIKE '${`%${query}%`}' OR
                         tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.deleted ILIKE '${`%${query}%`}'
+                        tbl_device_info.physical_device_id ILIKE '${`%${query}%`}'    
                     )
+                AND deleted = 'N'
                 ORDER BY tbl_device_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
@@ -96,6 +97,7 @@ export async function fetchFilteredDevices(
                 FROM tbl_device_info
                 WHERE
                 1=1
+                AND deleted = 'N'
                 ORDER BY tbl_device_info.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
@@ -128,14 +130,17 @@ export async function fetchDevicesPages(
                 WHERE
                 1=1 AND
                 (
-                    tbl_device_info.display_name ILIKE '${`%${query}%`}' OR
+                    tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
                     tbl_device_info.device_type ILIKE '${`%${query}%`}' OR
                     tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                    tbl_device_info.server_name ILIKE '${`%${query}%`}'                    )
+                    tbl_device_info.physical_device_id ILIKE '${`%${query}%`}'
+                )
+                AND deleted = 'N'
                 `)
             : await client.query(`
                 SELECT COUNT(*)
                 FROM tbl_device_info
+                where deleted = 'N'
             `)
         ;
 
