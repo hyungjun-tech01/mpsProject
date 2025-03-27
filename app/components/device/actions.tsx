@@ -18,6 +18,9 @@ export type State = {
 
 const FormSchema = z.object({
     device_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    app_type : z.string({
+        invalid_type_error: 'Please select app type',
+    }),
     device_type : z.string({
         invalid_type_error: 'Please select device type',
     }),
@@ -71,6 +74,7 @@ export async function createDevice(prevState: State, formData: FormData) {
     // }
 
     const validatedFields = CreateDevice.safeParse({
+        app_type: formData.get('app_type'),
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
         device_status: formData.get('device_status'),
@@ -178,6 +182,7 @@ export async function modifyDevice(prevState: State, formData: FormData) {
 
     const validatedFields = CreateDevice.safeParse({
         device_id : formData.get('device_id'),
+        app_type: formData.get('app_type'),
         device_type: formData.get('device_type'),
         device_name: formData.get('device_name'),
         device_status: formData.get('device_status'),

@@ -243,13 +243,18 @@ export async function fetchCreateDevice(newDevice: any) {
         INSERT INTO tbl_device_info (
           device_type, device_name, location, physical_device_id, 
           ext_device_function, deleted, web_print_enabled, notes, device_model, serial_number,
-          created_date, created_by, modified_date, modified_by
+          created_date, created_by, modified_date, modified_by,
+          app_type, device_administrator, device_administrator_password,
+          black_toner_percentage, cyan_toner_percentage, magenta_toner_percentage, yellow_toner_percentage  
         ) VALUES (
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-            now(), -1, now(), -1
+            now(), -1, now(), -1,
+            $11, $12, $13,
+            0,0,0,0
         ) RETURNING *`, [newDevice.device_type,newDevice.device_name, newDevice.location, 
             newDevice.physical_device_id,ext_device_function,'N', 'N', newDevice.notes,
-            newDevice.device_model,newDevice.serial_number
+            newDevice.device_model,newDevice.serial_number,
+            newDevice.app_type, newDevice.device_administrator, newDevice.device_administrator_password 
         ]);
 
         const newDeviceId = result.rows[0].device_id;
@@ -356,20 +361,18 @@ export async function fetchModifyDevice(newDevice: any) {
                 device_name = $2, 
                 location = $3, 
                 physical_device_id = $4, 
-                device_status = $5, 
-                notes = $6,
-                device_model = $7, 
-                serial_number = $8, 
-                ext_device_function = $9, 
-                deleted = $10,
-                device_administrator = $11,
-                device_administrator_password = $12
-            where device_id = $13
+                notes = $5,
+                device_model = $6, 
+                serial_number = $7, 
+                ext_device_function = $8, 
+                deleted = $9,
+                device_administrator = $10,
+                device_administrator_password = $11
+            where device_id = $12
         `,[ newDevice.device_type, 
             newDevice.device_name, 
             newDevice.location, 
             newDevice.physical_device_id, 
-            newDevice.device_status, 
             newDevice.notes, 
             newDevice.device_model, 
             newDevice.serial_number,
