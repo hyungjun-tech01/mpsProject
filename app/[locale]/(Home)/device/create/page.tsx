@@ -23,14 +23,24 @@ export default async function CreateDevice(
         {
             title: t('device.create_device'), 
             description: t('device.create_description'), 
-            items: [             
+            items: [       
                 {
-                    name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: "OpenAPI", options: [
+                    name: 'app_type', title: t('device.app_type'), type: 'select', defaultValue: "OpenAPI", 
+                    options: [
                         { title: t('device.open_api'), value: 'OpenAPI' },
                         { title: t('device.workpath_sdk'), value: 'Workpath SDK' }
                     ]
-                },
+                },      
                 { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: "", placeholder: t('device.device_name') },
+                {
+                    name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: "OpenAPI", 
+                    options: [
+                        { title: t('device.color_mfd'), value: 'color_mfd' },
+                        { title: t('device.mono_mfd'), value: 'mono_mfd' },
+                        { title: t('device.color_printer'), value: 'color_printer' },
+                        { title: t('device.mono_printer'), value: 'mono_printer' },
+                    ]
+                },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: "", placeholder: t('device.location') },
                 { name: 'notes', title: t('device.notes'), type: 'input', defaultValue: "", placeholder: t('device.notes') },
                 { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: "", placeholder: t('device.physical_device_id') },
