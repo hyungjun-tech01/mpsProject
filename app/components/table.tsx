@@ -17,6 +17,7 @@ import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -181,7 +182,7 @@ export default function CustomizedTable<DataType>({
                                                     onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
                                             }
                                             {!!column.type && column.type === 'icon' &&
-                                                <div className='flex justify-center'><img  src={`/${row[column.name]}`}  alt="icon" className="w-6 h-6" /></div>
+                                                <div className='flex justify-center'><Image  src={`/${row[column.name]}`}  alt="icon" width={24} height={24} className="w-6 h-6"/></div>
                                             }
                                             {!!column.type && column.type === 'enum_icon' &&
                                                 <div className='flex justify-center'>{column.values[row[column.name]]}</div>

@@ -495,6 +495,9 @@ const koResource = {
             status: '상태',
             detect_privacy: '검출여부',
             privacy_text: '검출 결과',
+            send_date:'작업시간',
+            user_name:'작업자',
+            serial_number:'출력장비',
             query_condition:'사용자이름,시리얼번호,문서이름, 검출결과로 조회하세요 '
         },
         fax:{

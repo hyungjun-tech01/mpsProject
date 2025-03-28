@@ -583,6 +583,23 @@ export async function fetchLatestDeviceStatus() {
 //     }
 // };
 
+export function parsePrivacyText(privacy_text:string|null): string {
+    if (!privacy_text) return ''; // Check for null or empty string
+
+    try {
+        const nameMatch = privacy_text.match(/name:"([^"]+)"/);
+        const textMatch = privacy_text.match(/text:\["([^"]+)"\]/);
+
+        const name = nameMatch ? nameMatch[1] : '';
+        const text = textMatch ? textMatch[1] : '';
+
+        return `Name: ${name}, Text: ${text} ....`;
+
+    } catch (error) {
+        console.error('Failed to parse privacy_text:', error);
+        return '';
+    }
+  }
 
 /*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
@@ -609,7 +626,7 @@ export async function fetchFilteredAuditLogs(
                 CASE WHEN detect_privacy THEN 'Y' 
                 ELSE 'N' 
                 END AS detect_privacy,
-                substr(privacy_text,0,100) privacy_text,
+                privacy_text,
                 image_archive_path ,
                 text_archive_path ,
                 original_job_id  ,
@@ -641,7 +658,7 @@ export async function fetchFilteredAuditLogs(
                 CASE WHEN detect_privacy THEN 'Y' 
                 ELSE 'N' 
                 END AS detect_privacy,
-                substr(privacy_text,0,100) privacy_text,
+                privacy_text,
                 image_archive_path ,
                 text_archive_path ,
                 original_job_id  ,
@@ -656,6 +673,7 @@ export async function fetchFilteredAuditLogs(
             const converted = auditLogs.rows.map((data: AuditLogField) => ({
                 ...data,
                 id: data.job_log_id,
+                privacy_text: parsePrivacyText(data.privacy_text),
             }));
             return converted;
 

@@ -58,16 +58,15 @@ export default async function Page(props: {
     //     { name: 'message', title: t('common.message'), align: 'left' },
     // ];
     const auditlogColumns: IColumnData[] = [
-        { name: 'send_date', title: t('common.date'), align: 'center' },
-        { name: 'user_name', title: t('user.user_name'), align: 'center' },
+        { name: 'jog_log_id', title: t('common.date'), align: 'center', type:'hidden' },    
+        { name: 'send_date', title: t('logs.send_date'), align: 'center' },
+        { name: 'user_name', title: t('logs.user_name'), align: 'center' },
         { name: 'destination', title: t('logs.destination'), align: 'center',  },
-        { name: 'printer_serial_number', title: t('device.serial_number'), align: 'center',  },
+        { name: 'printer_serial_number', title: t('logs.serial_number'), align: 'center',  },
         { name: 'copies', title: t('logs.copies'), align: 'center',  },
         { name: 'original_pages', title: t('logs.original_pages'), align: 'center',  },
         { name: 'total_pages', title: t('logs.total_pages'), align: 'center',  }, 
         { name: 'color_total_pages', title: t('logs.color_total_pages'), align: 'center',  }, 
-        { name: 'document_name', title: t('logs.document_name'), align: 'center',  }, 
-        { name: 'status', title: t('logs.status'), align: 'center',  }, 
         { name: 'detect_privacy', title: t('logs.detect_privacy'), align: 'center',  },
         { name: 'privacy_text', title: t('logs.privacy_text'), align: 'center',  },
     ];
