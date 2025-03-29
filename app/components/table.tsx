@@ -184,6 +184,9 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'icon' &&
                                                 <div className='flex justify-center'><Image  src={`/${row[column.name]}`}  alt="icon" width={24} height={24} className="w-6 h-6"/></div>
                                             }
+                                            {!!column.type && column.type === 'image' &&
+                                                <div className='flex justify-center'><img  src={`/${row[column.name]}`}  alt="image"  className="w-36 h-24"/></div>
+                                            }
                                             {!!column.type && column.type === 'enum_icon' &&
                                                 <div className='flex justify-center'>{column.values[row[column.name]]}</div>
                                             }

@@ -58,7 +58,7 @@ export default async function Page(props: {
     //     { name: 'message', title: t('common.message'), align: 'left' },
     // ];
     const auditlogColumns: IColumnData[] = [
-        { name: 'jog_log_id', title: t('common.date'), align: 'center', type:'hidden' },    
+        { name: 'image_archive_path', title: t('logs.image'), align: 'center', type:'image' },    
         { name: 'send_date', title: t('logs.send_date'), align: 'center' },
         { name: 'user_name', title: t('logs.user_name'), align: 'center' },
         { name: 'destination', title: t('logs.destination'), align: 'center',  },

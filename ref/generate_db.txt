@@ -2949,3 +2949,7 @@ alter table tbl_audit_job_log add column document_name varchar(255);
 alter table tbl_audit_job_log add column status varchar(100);
 
 
+-- 2025.03.28 : 이미지 파일 update 
+update tbl_audit_job_log t
+set image_archive_path = '2023\09\C2K0910023024050914190.epdf'
+where ctid in (select ctid from tbl_audit_job_log LIMIT 5)

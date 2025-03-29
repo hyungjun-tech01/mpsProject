@@ -601,6 +601,20 @@ export function parsePrivacyText(privacy_text:string|null): string {
     }
   }
 
+  export function renderImageCell(imagePath: string|null): string {
+    if (!imagePath) return '';
+
+    const found_idx = imagePath.lastIndexOf('.');
+      if(found_idx !== -1){
+        //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
+        const nameWithoutExtension = imagePath.substring(0, found_idx);
+        const thumbnail_src = 'api/file?filename=ImageLog/'+ nameWithoutExtension + '_thumbnail.png'; 
+        const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
+        return replace_thumbnail_src;
+      }else{    
+        return '';
+      }
+}
 /*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
     query:string,
@@ -674,6 +688,7 @@ export async function fetchFilteredAuditLogs(
                 ...data,
                 id: data.job_log_id,
                 privacy_text: parsePrivacyText(data.privacy_text),
+                image_archive_path: renderImageCell(data.image_archive_path),
             }));
             return converted;
 

@@ -485,6 +485,7 @@ const koResource = {
             manager_count: '관리자 수',
         },
         logs: {
+            image:'이미지',
             destination: '전송처',
             auditlogs: '감사 Log',
             copies: '부수',
