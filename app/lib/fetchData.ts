@@ -601,7 +601,7 @@ export function parsePrivacyText(privacy_text:string|null): string {
     }
   }
 
-  export function renderImageCell(imagePath: string|null): string {
+export function renderImageCell(imagePath: string|null): string {
     if (!imagePath) return '';
 
     const found_idx = imagePath.lastIndexOf('.');
@@ -613,8 +613,27 @@ export function parsePrivacyText(privacy_text:string|null): string {
         return replace_thumbnail_src;
       }else{    
         return '';
-      }
+    }
 }
+const handleDecryptFile = async () => {
+    try {
+      const response = await fetch(`/api/decryptFile?filepath=${encodeURIComponent(filePath)}`);
+      if (!response.ok) {
+        throw new Error('Failed to decrypt file');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'decrypted.PDF';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error decrypting file:', error);
+    }
+  };
 /*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
     query:string,

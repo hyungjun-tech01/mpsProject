@@ -2953,3 +2953,30 @@ alter table tbl_audit_job_log add column status varchar(100);
 update tbl_audit_job_log t
 set image_archive_path = '2023\09\C2K0910023024050914190.epdf'
 where ctid in (select ctid from tbl_audit_job_log LIMIT 5)
+
+
+-- 2025.03.31
+create or replace view tbl_printer_toner_v as
+select t.printer_id, t.printer_name, sum(t.toner_cyan) toner_cyan, 
+sum(t.toner_magenta) toner_magenta, sum(t.toner_yellow) toner_yellow, 
+sum(t.toner_black) toner_black
+from 
+(select b.printer_id, b.printer_name,
+case when a.attrib_name = 'toner.cyan' then a.attrib_value::numeric
+     else 0.0
+     end toner_cyan ,
+case when a.attrib_name = 'toner.magenta' then a.attrib_value::numeric
+     else 0.0
+     end toner_magenta, 
+case when a.attrib_name = 'toner.yellow' then a.attrib_value::numeric
+     else 0.0
+     end toner_yellow, 
+case when a.attrib_name = 'toner.black' then attrib_value::numeric
+     else 0.0
+     end toner_black 	
+from tbl_printer_attribute a , tbl_printer b
+where a.attrib_name like '%toner%'
+and a.printer_id = b.printer_id
+and b.deleted = 'N') t
+group by t.printer_id, t.printer_name
+order by 1,2,3,4,5,6;
