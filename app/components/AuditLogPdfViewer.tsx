@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
 
@@ -20,7 +17,7 @@ const AuditLogPdfViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewe
     setNumPages(pdf.numPages);
   };
 
- console.log(pdfUrl);
+ console.log('pdfUrl', pdfUrl);
   return(
     <div style={{ height: '75vh', overflow: 'auto' }}>
     { auditPdfContent &&   
