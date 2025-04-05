@@ -19,7 +19,12 @@ import { UpdateButton, DeleteButtton } from './buttons';
 import clsx from 'clsx';
 import Image from 'next/image';
 import ImageNotSupportedTwoToneIcon from '@mui/icons-material/ImageNotSupportedTwoTone';
+import AuditLogPdfViewer from './AuditLogPdfViewer';
+import { Button, Modal } from '@mui/material';
 
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -68,6 +73,12 @@ export default function CustomizedTable<DataType>({
 }: ITable<DataType>) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [isPdfModalOpen, setIsPdfModalOpen] = React.useState(false);
+    const [pdfUrl, setPdfUrl] = React.useState<string | undefined>(undefined);
+    const [auditPdfContent, setAuditPdfContent] = React.useState<Blob | null>(null);
+    
+    const closePdfModal = React.useCallback(() => setIsPdfModalOpen(false), []);
+
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -136,6 +147,55 @@ export default function CustomizedTable<DataType>({
         window.URL.revokeObjectURL(url);
       };
 
+    const replaceThumbnailSrc = (imagePath:string|null):string => {
+
+       if (!imagePath) return '';
+
+        const found_idx = imagePath.lastIndexOf('.');
+        if(found_idx !== -1){
+            //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
+            const nameWithoutExtension = imagePath.substring(0, found_idx);
+            const thumbnail_src = 'api/file?filename=ImageLog/'+ nameWithoutExtension + '_thumbnail.png'; 
+            const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
+            return replace_thumbnail_src;
+        }else{    
+            return '';
+        }
+    }
+    //const openPdfModal = ((value:any) => {
+        //setpdfUrl(value);
+        //queryPdfContent(value);
+        //setIsPdfModalOpen(true)}, []);
+
+    const handleThumnailClick = async (imagePath:string|null) => {
+        try {
+            console.log('imagePath', imagePath);
+
+            if (!imagePath) {
+              throw new Error('Invalid image path');
+            }
+            const src = '/api/file?filepath=ImageLog/'+imagePath;
+            const replace_src = src.replace(/\\/g,'/');
+            const response = await fetch(replace_src);
+            if (!response.ok) {
+              throw new Error('Failed to decrypt file');
+            }
+            const blob = await response.blob();
+
+            const url = URL.createObjectURL(blob);
+
+
+            setAuditPdfContent(blob);
+
+            setPdfUrl(url);
+            setIsPdfModalOpen(true);
+
+
+          } catch (error) {
+            console.error('Error decrypting file:', error);
+          }
+    }
+    const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
             <TableContainer component={Paper}>
@@ -188,15 +248,19 @@ export default function CustomizedTable<DataType>({
                                             {!!column.type && column.type === 'image' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
                                                 <img 
-                                                src={`/${row[column.name]}`} 
+                                                src={`/${replaceThumbnailSrc(row[column.name])}`} 
                                                 alt="No Image"  
                                                 className="w-24 h-18"
+                                                onClick={() => handleThumnailClick(row[column.name])}
                                                 onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
                                               />
                                               </div>
                                             }
                                             {!!column.type && column.type === 'enum_icon' &&
                                                 <div className='flex justify-center'>{column.values[row[column.name]]}</div>
+                                            }
+                                            { !!column.type && column.type === 'hidden' &&
+                                                <div className='flex justify-center'>{row[column.name]}</div>
                                             }
                                         </StyledTableCell>
                                     )}
@@ -254,6 +318,36 @@ export default function CustomizedTable<DataType>({
                 <Pagination totalPages={totalPages} />
             </div>
             {renderMenu}
-        </div>
+
+        <Modal
+        open={isPdfModalOpen}
+        onClose={closePdfModal}
+        style={{ width: '800px',
+            height: '85vh',
+            backgroundColor: '#ffffff',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            border: '5px solid #000' }}
+        >
+        <>
+          <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closePdfModal} />
+          {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={closePdfModal}
+              sx={{ mt: 3, mb: 2 , 
+                  backgroundColor:"rgba(25,137,43,255)",
+                  ":hover": { backgroundColor: "rgba(13,118,33,255)" }
+                  }}
+            >닫기
+            </Button>
+          </div>
+        </>
+      </Modal>            
+        </div>        
     );
 }

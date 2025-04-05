@@ -3,6 +3,9 @@ import { BASE_PATH } from "@/constans";
 import { UserField, AuditLogField } from "@/app/lib/definitions";
 import { generateStrOf30Days } from "./utils";
 
+import path from 'path';
+import fs from 'fs';
+
 const client = new pg.Client({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -601,39 +604,70 @@ export function parsePrivacyText(privacy_text:string|null): string {
     }
   }
 
-export function renderImageCell(imagePath: string|null): string {
-    if (!imagePath) return '';
 
-    const found_idx = imagePath.lastIndexOf('.');
-      if(found_idx !== -1){
-        //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
-        const nameWithoutExtension = imagePath.substring(0, found_idx);
-        const thumbnail_src = 'api/file?filename=ImageLog/'+ nameWithoutExtension + '_thumbnail.png'; 
-        const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
-        return replace_thumbnail_src;
-      }else{    
-        return '';
-    }
-}
-const handleDecryptFile = async () => {
-    try {
-      const response = await fetch(`/api/decryptFile?filepath=${encodeURIComponent(filePath)}`);
-      if (!response.ok) {
-        throw new Error('Failed to decrypt file');
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = 'decrypted.PDF';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error decrypting file:', error);
-    }
-  };
+// export function decryptoFile(filepath:string) {
+    
+
+//     try {
+//         // console.log('decryptoFile...', filepath);
+//         const algorithm = process.env.CRYPTO_ALGORITHM;
+//         const encryptedFilePath = path.join(filepath);
+
+//         const cryptoPassword = process.env.CRYPTO_PASSWORD;
+//         if (!cryptoPassword) {
+//         throw new Error('CRYPTO_PASSWORD environment variable is not set.');
+//         }
+
+//         let key = Buffer.alloc(32);
+//         Buffer.from(cryptoPassword).copy(key);
+
+//         // let key = Buffer.alloc(32);
+//         // Buffer.from(process.env.CRYPTO_PASSWORD).copy(key);
+
+//         if (fs.existsSync(encryptedFilePath)) {
+            
+//             //const base64Data = fsUpper.readFileSync(encryptedFilePath, 'utf8'); // 파일을 메모리로 읽어오기 (Base64 데이터)
+            
+
+//             const cryptoIV = process.env.CRYPTO_IV;
+//             if (!cryptoIV) {
+//                 throw new Error('CRYPTO_PASSWORD environment variable is not set.');
+//             }
+    
+//             let key = Buffer.alloc(32);
+//             Buffer.from(cryptoIV).copy(key);
+
+//             // Base64 디코딩
+//             //const encryptedData = Buffer.from(base64Data, 'base64');
+//             const encryptedData = fs.readFileSync(encryptedFilePath); 
+
+
+//             // 복호화 스트림 생성
+//             const decipher = crypto.createDecipheriv(algorithm, key, cryptoIV);
+//             decipher.setAutoPadding(true);  // PKCS7 패딩 사용
+
+//             const decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+
+//             // 복호화된 데이터를 파일로 저장
+//             //fsUpper.writeFileSync(decryptedFilePath, decryptedData);
+
+//             //console.log('복호화 완료: ', decryptedFilePath);
+//             //res.send('파일 복호화 완료');
+            
+//             res.setHeader('Content-Disposition', 'attachment; filename="decrypted.PDF"');
+//             res.setHeader('Content-Type', 'application/pdf');  // 파일 형식에 따라 변경 가능
+            
+//             res.send(decryptedData);  // 복호화된 데이터를 직접 전송
+
+//         } else {
+//             res.status(404).send('파일을 찾을 수 없습니다.');
+//         }
+
+//     } catch (err) {
+//         console.log(err.message);
+//         res.status(500).send(err.message);
+//     }
+// });
 /*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
     query:string,
@@ -707,8 +741,9 @@ export async function fetchFilteredAuditLogs(
                 ...data,
                 id: data.job_log_id,
                 privacy_text: parsePrivacyText(data.privacy_text),
-                image_archive_path: renderImageCell(data.image_archive_path),
+                image_archive_path: data.image_archive_path,
             }));
+           
             return converted;
 
     } catch (error) {
