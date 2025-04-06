@@ -679,7 +679,7 @@ export async function fetchFilteredAuditLogs(
         const auditLogs = 
             query !== "" 
             ? await client.query(`
-            select job_log_id ,
+            select job_log_id,
                 job_type ,
                 printer_serial_number ,
                 job_id      ,
@@ -711,7 +711,7 @@ export async function fetchFilteredAuditLogs(
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
             : await client.query(`
-            select job_log_id ,
+            select job_log_id,
                 job_type ,
                 printer_serial_number ,
                 job_id      ,
