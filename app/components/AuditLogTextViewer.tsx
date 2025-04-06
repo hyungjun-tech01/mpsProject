@@ -9,7 +9,7 @@ interface IAuditLogPdfViewer {
     auditPdfContent: Blob|null,
     onClose : (value:boolean) => void,
   };
-const AuditLogPdfViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewer) => {
+const AuditLogTextViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewer) => {
   const [numPages, setNumPages] = useState<number|null>(null);
 
   const onDocumentLoadSuccess = (pdf: PDFDocumentProxy) => {
@@ -34,4 +34,4 @@ const AuditLogPdfViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewe
   )
 };
 
-export default AuditLogPdfViewer;
+export default AuditLogTextViewer;

@@ -143,6 +143,7 @@ export type FaxLineInfo = {
 }
 
 export type AuditLogField ={
+  id: string|null;
   job_log_id: string|null;
   job_type: string|null;
   printer_serial_number: string|null;
