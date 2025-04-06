@@ -6,16 +6,17 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
+// import Badge from '@mui/material/Badge';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import { useColorScheme } from '@mui/material/styles';
+import Link from 'next/link';
 
 interface IHeader {
     extendSideNav: () => void;
@@ -99,8 +100,8 @@ export default function Header({ extendSideNav }: IHeader) {
                         MPS Next
                     </Typography>
                     <Box className="grow" />
-                    {/* <Box className="hidden gap-2 md:flex">
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                    <Box className="hidden gap-2 md:flex">
+                        {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={4} color="error">
                                 <MailIcon className="text-lime-50" />
                             </Badge>
@@ -113,19 +114,18 @@ export default function Header({ extendSideNav }: IHeader) {
                             <Badge badgeContent={17} color="error">
                                 <NotificationsIcon className="text-lime-50" />
                             </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
+                        </IconButton> */}
+                        <Link
                             aria-label="account of current user"
                             aria-controls={menuId}
                             aria-haspopup="true"
+                            href={`/account`}
                             // onClick={handleProfileMenuOpen}
-                            color="inherit"
+                            className="inherit"
                         >
                             <AccountCircle className="text-lime-50" />
-                        </IconButton>
-                    </Box> */}
+                        </Link>
+                    </Box>
                     <Box className="hidden md:flex">
                         <IconButton
                             size="large"
