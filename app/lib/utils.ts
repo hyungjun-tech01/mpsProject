@@ -1,7 +1,7 @@
 // import { Revenue } from './definitions';
 
 export const formatCurrency = (
-  amount: number | string,
+  amount: number | string | null,
   locale: string = "ko"
 ) => {
   let currency = "KRW";
@@ -15,6 +15,14 @@ export const formatCurrency = (
     default:
       check_locale = "ko-KR";
       break;
+  }
+
+  if(!amount) {
+    const temp = 0;
+    return temp.toLocaleString(check_locale, {
+      style: "currency",
+      currency: currency,
+    });
   }
 
   return amount.toLocaleString(check_locale, {
