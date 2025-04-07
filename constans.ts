@@ -2,7 +2,6 @@ import {
     SpaceDashboardOutlined,
     PersonOutlined,
     PrintOutlined,
-    FaxOutlined,
     PeopleOutline,
     PlagiarismOutlined,
     Inventory2Outlined

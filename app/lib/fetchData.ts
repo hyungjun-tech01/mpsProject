@@ -169,6 +169,33 @@ export async function fetchUserById(id: string) {
     }
 };
 
+export async function fetchUserByName(name: string) {
+    try {
+        const user = await client.query(`
+            SELECT
+                u.user_name,
+                u.full_name,
+                u.email,
+                u.home_directory,
+                u.disabled_printing,
+                u.department,
+                u.card_number,
+                u.card_number2,
+                null account_id,
+                u.balance,
+                u.restricted
+            FROM tbl_user_info u
+            WHERE u.user_name='${name}'
+        `);
+
+        //console.log(user.rows[0]);
+        return user.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to get user by id.");
+    }
+};
+
 export async function fetchCreateUser(newUser: object) {
     try {
         const inputData = {

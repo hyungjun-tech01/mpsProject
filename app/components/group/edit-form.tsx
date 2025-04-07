@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { State } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
-import { Group, DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
+import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
 

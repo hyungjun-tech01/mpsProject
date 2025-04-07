@@ -30,7 +30,8 @@ export type User = {
   user_id: string;
   user_name: string;
   email: string | null;
-  attrib_value: string;
+  role: string;
+  password: string;
 };
 
 export type UserField = {

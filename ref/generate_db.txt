@@ -2980,3 +2980,47 @@ and a.printer_id = b.printer_id
 and b.deleted = 'N') t
 group by t.printer_id, t.printer_name
 order by 1,2,3,4,5,6;
+
+
+-- 2025.04.07 : tbl_user_info에 user_role 추가
+-- Add user_role column with enum constraint
+ALTER TABLE tbl_user_info ADD COLUMN user_role VARCHAR(10);
+-- ALTER TABLE tbl_user_info ADD CONSTRAINT user_role_check CHECK (user_role IN ('admin', 'user')); // 제한할지 말자 나중에
+
+-- Set default value for existing rows
+UPDATE tbl_user_info SET user_role = 'user';
+
+-- Make column not null after setting defaults
+ALTER TABLE tbl_user_info ALTER COLUMN user_role SET NOT NULL;
+
+
+-- 2025.04.07 : tbl_user_info에 admin 계정 추가
+INSERT INTO tbl_user_info (
+    user_id,
+    user_name,
+    external_user_name,
+    full_name,
+    user_role,
+    email,
+    department,
+    home_directory,
+    card_number,
+    card_number2,
+    deleted,
+    created_date,
+    modified_date
+) VALUES (
+    '0001',
+    'admin',
+    'admin',
+    'admin', 
+    'admin',
+    '',
+    '',
+    '',
+    '',
+    '',
+    'N',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);

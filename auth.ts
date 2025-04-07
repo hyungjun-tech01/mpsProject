@@ -24,11 +24,11 @@ async function getUserAttr(name: string): Promise<User | undefined> {
       SELECT
         u.user_id id,
         u.user_name name,
+        u.user_role rol,
         u.email,
-        ua.attrib_value
-      FROM tbl_user_attribute ua
-      JOIN tbl_user u ON u.user_id=ua.user_id
-      WHERE u.user_name='${name}' AND ua.attrib_name='internal_password'`
+        u.password
+      FROM tbl_user_info u
+      WHERE u.user_name='${name}'`
     );
     return user.rows[0];
   } catch (error) {
@@ -56,7 +56,7 @@ export const { auth, signIn, signOut } = NextAuth({
             const userAttr = await getUserAttr(user_name);
             if (!userAttr) return null;
 
-            const userPassword = userAttr.attrib_value.split(":")[1];
+            const userPassword = userAttr.password;
             const passwordsMatch = await bcrypt.compare(user_password, userPassword);
   
             if (passwordsMatch)
@@ -64,12 +64,14 @@ export const { auth, signIn, signOut } = NextAuth({
                 id: userAttr.user_id,
                 name: userAttr.user_name,
                 email: userAttr.email,
+                role: userAttr.role
               };
           } else {
             return {
-              id: '0000',
+              id: '0001',
               name: user_name,
               email: "",
+              role: "admin",
             };
           }
         }
