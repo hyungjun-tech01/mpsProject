@@ -67,7 +67,7 @@ export default async function Page(props: {
             {
                 title: t('user.secTitle_details'), description: t('comment.user_edit_details_description'),
                 items: [
-                    { name: 'userName', title: 'ID', type: 'input', defaultValue: user.user_name },
+                    { name: 'userName', title: 'ID', type: 'label', defaultValue: user.user_name },
                     { name: 'userFullName', title: t('user.full_name'), type: 'input', defaultValue: user.full_name, placeholder: t('user.placeholder_full_name') },
                     { name: 'userEmail', title: t('common.email'), type: 'input', defaultValue: user.email, placeholder: t('user.placeholder_email') },
                     { name: 'userHomeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },

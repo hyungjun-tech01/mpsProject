@@ -140,9 +140,11 @@ export async function createUser(prevState: State, formData: FormData) {
     redirect('/user');
 };
 
-const ModifyUser = UserFormSchema.omit({ userBalanceCurrent: true });
+const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
 export async function modifyUser(id: string, prevState: State, formData: FormData) {
+
+    
     if (!formData.has('userDisabledPrinting')) {
         formData.set('userDisabledPrinting', 'N');
     }
@@ -162,7 +164,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         };
     };
     
-    const newUserName = formData.get('UserName');
     const newFullName = formData.get('userFullName');
     const newEmail = formData.get('userEmail');
     const newHomeDir = formData.get('userHomeDirectory');
@@ -177,7 +178,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         // First, get current data
         const resp = await client.query(`
             SELECT
-                u.user_name,
                 u.full_name,
                 u.email,
                 u.home_directory,
@@ -190,7 +190,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
             WHERE u.user_id='${id}'
         `);
         
-        const currUserName = resp.rows[0].user_name;
         const currFullName = resp.rows[0].full_name;
         const currEmail = resp.rows[0].email;
         const currHomeDir = resp.rows[0].home_directory;
@@ -201,7 +200,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         const currRestricted = resp.rows[0].restricted;
 
         let checkNeedUpdate = false;
-        checkNeedUpdate ||= newUserName !== currUserName;
         checkNeedUpdate ||= newFullName !== currFullName;
         checkNeedUpdate ||= newEmail !== currEmail;
         checkNeedUpdate ||= newHomeDir !== currHomeDir;
@@ -223,7 +221,6 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
                 await client.query(`
                     UPDATE tbl_user_info
                     SET
-                        user_name='${newUserName}',
                         full_name='${newFullName}',
                         email='${newEmail}',
                         home_directory='${newHomeDir}',
