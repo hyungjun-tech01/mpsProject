@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { authConfig } from "./auth.config";
 import type { User } from "@/app/lib/definitions";
 
+const salt = bcrypt.genSalt(11);
 
 const client = new pg.Client({
   user: process.env.DB_USER,
@@ -24,7 +25,6 @@ async function getUserAttr(name: string): Promise<User | undefined> {
       SELECT
         u.user_id id,
         u.user_name name,
-        u.user_role rol,
         u.email,
         u.password
       FROM tbl_user_info u
@@ -36,7 +36,6 @@ async function getUserAttr(name: string): Promise<User | undefined> {
     throw new Error("Failed to fetch user.");
   }
 };
-
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -52,7 +51,7 @@ export const { auth, signIn, signOut } = NextAuth({
 
           // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
 
-          if(user_name != 'admin') {
+          // if(user_name != 'admin') {
             const userAttr = await getUserAttr(user_name);
             if (!userAttr) return null;
 
@@ -64,16 +63,16 @@ export const { auth, signIn, signOut } = NextAuth({
                 id: userAttr.user_id,
                 name: userAttr.user_name,
                 email: userAttr.email,
-                role: userAttr.role
+                image: ""
               };
-          } else {
-            return {
-              id: '0001',
-              name: user_name,
-              email: "",
-              role: "admin",
-            };
-          }
+          // } else {
+          //   return {
+          //     id: '0001',
+          //     name: user_name,
+          //     email: "",
+          //     image: ""
+          //   };
+          // }
         }
 
         console.log("Invalid credentials");

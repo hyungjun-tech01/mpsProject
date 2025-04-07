@@ -4,8 +4,10 @@ import pg from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-// import * as c from 'express';
+import bcrypt from "bcrypt";
 
+
+const salt = await bcrypt.genSalt(11);
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -143,8 +145,6 @@ export async function createUser(prevState: State, formData: FormData) {
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
 export async function modifyUser(id: string, prevState: State, formData: FormData) {
-
-    
     if (!formData.has('userDisabledPrinting')) {
         formData.set('userDisabledPrinting', 'N');
     }
@@ -430,4 +430,158 @@ export async function deleteDocument(id: string) {
     };
 
     revalidatePath(`/document/${selected_job_type}`);
+};
+
+
+//------- Account -----------------------------------------------------------------------------
+const AccountFormSchema = z.object({
+    userName: z.string({
+        invalid_type_error: 'User ID must be string ',
+    }).min(1, { message: "Name is required" }),
+    userPwdNew: z.string().min(6),
+    userPwdNewAgain: z.string().min(6)
+});
+
+const UpdateAccount = AccountFormSchema.omit({ userName : true});
+
+export async function updateAccount(id: string, prevState: State, formData: FormData) {
+    console.log('[Account] Update account : ', formData);
+
+    const validatedFields = UpdateAccount.safeParse({
+        userPwdNew: formData.get('userPwdNew'),
+        userPwdNewAgain: formData.get('userPwdNewAgain'),
+    });
+
+    // If form validation fails, return errors early. Otherwise, continue.
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create User.',
+        };
+    };
+
+    const newPwd = formData.get('userPwdNew');
+    const newPwdAgain = formData.get('userPwdNewAgain');
+    const changePwd = !!newPwd || !!newPwdAgain;
+    if(changePwd && (newPwd !== newPwdAgain)) {
+        return {
+            errors: ["Password Missmatch"],
+            message: 'Input passwords are not the same',
+        };
+    };
+
+    const newFullName = formData.get('userFullName');
+    const newEmail = formData.get('userEmail');
+    // const newHomeDir = formData.get('userHomeDirectory');
+    const newDept = formData.get('userDepartment');
+    const newCardNo1 = formData.get('userCardNumber');
+    const newCardNo2 = formData.get('userCardNumber2'); 
+
+    // Prepare data for updating the database
+    try {
+        // First, get current data
+        const resp = await client.query(`
+            SELECT
+                u.user_name,
+                u.full_name,
+                u.email,
+                u.department,
+                u.card_number,
+                u.card_number2,
+                u.password
+            FROM tbl_user_info u
+            WHERE u.user_id='${id}'
+        `);
+
+        const { 
+            currFullName,
+            currEmail,
+            // currHomeDir,
+            currDept,
+            currCardNo1,
+            currCardNo2,
+            currPassword
+        } = resp.rows[0];
+
+        let checkNeedUpdate = false;
+        let sqlText = "UPDATE tbl_user_info SET";
+
+        if(newFullName !== currFullName) {
+            sqlText += ` full_name='${newFullName}'`;
+            checkNeedUpdate = true;
+        }
+        if(newEmail !== currEmail) {
+            if(checkNeedUpdate) {
+                sqlText += `, email='${newEmail}'`;
+            } else {
+                sqlText += ` email='${newEmail}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newDept !== currDept) {
+            if(checkNeedUpdate) {
+                sqlText += `, department='${newDept}'`;
+            } else {
+                sqlText += ` department='${newDept}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newCardNo1 !== currCardNo1) {
+            if(checkNeedUpdate) {
+                sqlText += `, card_number='${newCardNo1}'`;
+            } else {
+                sqlText += ` card_number='${newCardNo1}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newCardNo2 !== currCardNo2) {
+            if(checkNeedUpdate) {
+                sqlText += `, card_number2='${newCardNo2}'`;
+            } else {
+                sqlText += ` card_number2='${newCardNo2}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(changePwd) {
+            console.log("Check :", currPassword);
+            const isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);
+            console.log("Check :", isMatched);
+            if(!isMatched) {
+                const hashed = await bcrypt.hash(String(newPwd), salt);
+                if(checkNeedUpdate) {
+                    sqlText += `, password='${hashed}'`;
+                } else {
+                    sqlText += ` password='${hashed}'`;
+                    checkNeedUpdate = true;
+                }
+            }
+        }
+
+        if (!checkNeedUpdate ) {
+            return {
+                message: 'Info: No changed data',
+            };
+        };
+
+        if(checkNeedUpdate) {
+            sqlText += `, modified_date=NOW(), modified_by='${resp.rows[0].user_name}' WHERE user_id='${id}'`;
+            console.log('[Account] Update account / sql text : ', sqlText);
+            try {
+                await client.query(sqlText);
+            } catch (error) {
+                console.log('Update Account / Error : ', error);
+                return {
+                    message: 'Database Error: Failed to update account data.',
+                };
+            };
+        };
+
+    } catch (error) {
+        console.log('Update Account / Error : ', error);
+        return {
+            message: 'Database Error: Failed to update account.',
+        };
+    };
+    
+    revalidatePath(`/account`);
 };

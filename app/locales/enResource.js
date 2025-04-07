@@ -227,6 +227,7 @@ const enResource = {
             taxinvoice_multi_query:'Invoice Multi Query',
         },
         common:{
+            account: 'Account',
             actions: 'Actions',
             activity: 'Activity',
             add: 'Add',
@@ -370,6 +371,7 @@ const enResource = {
             secTitle_account_details: 'Details',
             secTitle_details: 'Account',
             secTitle_etc: 'Etc',
+            secTitle_password: 'Change Password',
             secTitle_statistics: 'Statistics',
             remain_amount:'Remained Amount',
             subTitle_budget: 'Control & Charge',

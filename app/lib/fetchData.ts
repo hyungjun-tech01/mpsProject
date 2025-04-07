@@ -146,6 +146,7 @@ export async function fetchUserById(id: string) {
     try {
         const user = await client.query(`
             SELECT
+                u.user_id,
                 u.user_name,
                 u.full_name,
                 u.email,
@@ -173,6 +174,7 @@ export async function fetchUserByName(name: string) {
     try {
         const user = await client.query(`
             SELECT
+                u.user_id,
                 u.user_name,
                 u.full_name,
                 u.email,

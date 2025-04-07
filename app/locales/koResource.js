@@ -228,6 +228,7 @@ const koResource = {
             taxinvoice_multi_query:'계산서 다중검색',
         },
         common:{
+            account: '계정',
             actions: 'Action',
             activity: '활동',
             add: '추가',
@@ -365,6 +366,7 @@ const koResource = {
             mobile:'휴대전화',
             new_user:'사용자등록',
             password:'비밀번호',
+            password_again: '비밀번호 재입력',
             password_change:'변경 비밀번호',
             password_change_confirm:'변경 비밀번호 학인',
             password_current:'현재 비밀번호',
@@ -374,6 +376,7 @@ const koResource = {
             secTitle_account_details: '계정 내역',
             secTitle_details: '상세 내역',
             secTitle_etc: '관련 내역',
+            secTitle_password: '비밀번호 변경',
             secTitle_statistics: '통계',
             subTitle_budget: '조절 및 과금',
             subTitle_detail: '상세내역',
@@ -393,6 +396,8 @@ const koResource = {
             placeholder_email: '사용자 이메일을 입력하세요',
             placeholder_home_directory: '사용자 홈디렉토리를 입력하세요',
             placeholder_user_name : "사용자의 ID를 입력하세요",
+            placeholder_password_new : "새 비밀번호를 입력하세요",
+            placeholder_password_new_again : "비밀번호를 다시 입력하세요",
         },
         account: {
             balance:'잔액',
