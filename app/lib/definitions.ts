@@ -27,8 +27,8 @@ export type IColumnData = {
 
 // ----- Begin : User ----------------------------------------//
 export type User = {
-  user_id: string;
-  user_name: string;
+  id: string;
+  name: string;
   email: string | null;
   role: string;
   password: string;

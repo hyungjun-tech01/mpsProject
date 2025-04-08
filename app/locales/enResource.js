@@ -362,6 +362,8 @@ const enResource = {
             mobile:'Mobile Phone',
             new_user:'New User',
             password:'Password',
+            password_new:'New Password',
+            password_new_again: 'New Password Again',
             password_change: 'Change Password',
             password_change_confirm: 'Change Password Confirm',
             password_current: 'Current Password',
@@ -392,6 +394,8 @@ const enResource = {
             placeholder_full_name: "Enter User's Full Name",
             placeholder_home_directory: "Enter User's Home Directory",
             placeholder_user_name : "Enter User's ID",
+            placeholder_password_new : "Enter new password",
+            placeholder_password_new_again : "Enter new password again",
         },
         account: {
             balance:'Balance',

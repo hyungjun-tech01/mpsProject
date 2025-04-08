@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 import { authConfig } from "./auth.config";
 import type { User } from "@/app/lib/definitions";
 
-const salt = bcrypt.genSalt(11);
 
 const client = new pg.Client({
   user: process.env.DB_USER,
@@ -19,14 +18,16 @@ const client = new pg.Client({
 
 await client.connect();
 
+
 async function getUserAttr(name: string): Promise<User | undefined> {
   try {
     const user = await client.query<User>(`
       SELECT
-        u.user_id,
-        u.user_name ,
-        u.email,
-        u.password
+        u.user_id id,
+        u.user_name name,
+        u.user_role role,
+        u.user_email email,
+        u.password password
       FROM tbl_user_info u
       WHERE u.user_name='${name}'`
     );
@@ -60,9 +61,10 @@ export const { auth, signIn, signOut } = NextAuth({
   
             if (passwordsMatch)
               return {
-                id: userAttr.user_id,
-                name: userAttr.user_name,
+                id: userAttr.id,
+                name: userAttr.name,
                 email: userAttr.email,
+                role: userAttr.role,
                 image: ""
               };
           // } else {
