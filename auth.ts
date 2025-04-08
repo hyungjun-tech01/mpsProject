@@ -26,7 +26,7 @@ async function getUserAttr(name: string): Promise<User | undefined> {
         u.user_id id,
         u.user_name name,
         u.user_role role,
-        u.user_email email,
+        u.email email,
         u.password password
       FROM tbl_user_info u
       WHERE u.user_name='${name}'`
@@ -64,7 +64,7 @@ export const { auth, signIn, signOut } = NextAuth({
                 id: userAttr.id,
                 name: userAttr.name,
                 email: userAttr.email,
-                role: userAttr.role,
+                role: userAttr.role ?? "user",
                 image: ""
               };
           // } else {
@@ -82,4 +82,10 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  // callbacks: {
+  //   session({ session, user }) {
+  //     session.user.role = user.role
+  //     return session
+  //   }
+  // }
 });

@@ -28,7 +28,6 @@ export default async function Page(props: {
         fetchUserByName(session.user.name)
     ]);
 
-    
     // Items -------------------------------------------------------------------
     const items: ISection[] = [
         {
