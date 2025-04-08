@@ -28,6 +28,8 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
 
+    console.log(session?.user.name, 'session?.user');
+
     if(!session?.user)
         return notFound();
 
