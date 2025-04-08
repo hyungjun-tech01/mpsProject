@@ -26,7 +26,7 @@ async function getUserAttr(name: string): Promise<User | undefined> {
         u.user_id id,
         u.user_name name,
         u.user_role role,
-        u.user_email email,
+        u.email email,
         u.password password
       FROM tbl_user_info u
       WHERE u.user_name='${name}'`
