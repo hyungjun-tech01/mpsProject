@@ -23,8 +23,8 @@ async function getUserAttr(name: string): Promise<User | undefined> {
   try {
     const user = await client.query<User>(`
       SELECT
-        u.user_id id,
-        u.user_name name,
+        u.user_id,
+        u.user_name ,
         u.email,
         u.password
       FROM tbl_user_info u
