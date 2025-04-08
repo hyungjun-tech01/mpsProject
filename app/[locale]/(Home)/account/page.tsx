@@ -45,8 +45,8 @@ export default async function Page(props: {
         {
             title: t('user.secTitle_password'), description: "",
             items: [
-                { name: 'userPwdNew', title: t('user.password'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new') },
-                { name: 'userPwdNewAgain', title: t('user.password_again'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new_again') },
+                { name: 'userPwdNew', title: t('user.password_new'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new') },
+                { name: 'userPwdNewAgain', title: t('user.password_new_again'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new_again') },
             ]
         },
     ];
