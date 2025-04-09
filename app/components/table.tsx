@@ -181,8 +181,10 @@ export default function CustomizedTable<DataType>({
             }
             const blob = await response.blob();
 
+            
             const url = URL.createObjectURL(blob);
 
+            setAuditPdfContent(blob);
             setPdfUrl(url);
             setIsPdfModalOpen(true);
 
