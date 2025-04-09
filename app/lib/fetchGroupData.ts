@@ -312,7 +312,13 @@ export async function fetchDevicesNotInGroup(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
-                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
+                    ${query !== "" 
+                        ? "AND (d.device_name ILIKE '%" + query
+                            + "%' OR d.location ILIKE '%" + query
+                            + "%' OR d.physical_device_id ILIKE '%" + query
+                            + "%')"
+                        : ""
+                    }
                 ORDER BY d.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -335,7 +341,13 @@ export async function fetchDeviesNotInGroupPages(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
-                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
+                    ${query !== "" 
+                        ? "AND (d.device_name ILIKE '%" + query
+                            + "%' OR d.location ILIKE '%" + query
+                            + "%' OR d.physical_device_id ILIKE '%" + query
+                            + "%')"
+                        : ""
+                    }
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;

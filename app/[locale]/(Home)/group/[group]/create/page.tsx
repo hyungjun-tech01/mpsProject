@@ -110,8 +110,8 @@ export default async function Page(props: {
     title_grouping: t("common.grouping"),
     group_member: t("group.group_members"),
     none_group_member: t("group.none_group_members"),
-    search_placeholder_in_group: t("group.search_placeholder_in_group"),
-    search_placeholder_in_nonegroup: t("group.search_placeholder_in_nonegroup")
+    search_placeholder_in_group: group === 'device' ? t("device.search_placeholder_grouping") : t("group.search_placeholder_in_group"),
+    search_placeholder_in_nonegroup: group === 'device' ? t("device.search_placeholder_grouping") : t("group.search_placeholder_in_nonegroup")
   };
 
   const contentsItems: { device: ISection[], security: ISection[] } = {

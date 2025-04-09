@@ -438,7 +438,8 @@ const enResource = {
             subTitle_device: 'Device Group',
             subTitle_user: 'User Group',
             subTitle_security: 'Security Group',
-            update_group: 'Update Gropup'
+            update_group: 'Update Gropup',
+            search_placeholder_grouping: 'Search device with device name, location or IP address...',
         },
         device :{
             create_device: 'Create Device',

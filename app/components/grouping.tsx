@@ -335,9 +335,6 @@ export default function Grouping({
                             )}
                         })}
                     </div>
-                    <div className="flex-none flex justify-center py-2">
-                        <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
-                    </div>
                 </div>
                 <div className='w-20 flex-0 flex flex-col justify-center'>
                     <Button
@@ -394,10 +391,21 @@ export default function Grouping({
                         })}
                         <input type="hidden" name="member_length" value={group.length} />
                     </div>
-                    {!!inGroup &&
+                </div>
+            </div>
+            <div className='w-full flex'>
+                <div className='flex-1 p-2 flex flex-col gap-2'>
+                    <div className="flex-none flex justify-center py-2">
+                        <Pagination paramName={outGroup.paramName} totalPages={outGroup.totalPages} />
+                    </div>
+                </div>
+                <div className='w-20 flex-0 flex flex-col justify-center'>{' '}</div>
+                <div className='flex-1 p-2 flex flex-col gap-2'>
+                    {!!inGroup ?
                         <div className="flex-none flex justify-center py-2">
                             <Pagination paramName={inGroup.paramName} totalPages={inGroup.totalPages} />
                         </div>
+                        : ' '
                     }
                 </div>
             </div>

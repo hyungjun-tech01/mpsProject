@@ -484,6 +484,7 @@ const koResource = {
             mono_mfd:'흑백복합기',
             color_printer:'컬러프린터',
             mono_printer:'흑벡프린터',
+            search_placeholder_grouping: '장치이름, 위치, IP주소로 조회할 수 있습니다.',
         },
         security: {
             dept_count: '부서 수',
