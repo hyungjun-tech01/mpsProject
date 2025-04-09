@@ -50,13 +50,14 @@ export default async function Device(
 
     const columns: IColumnData[] = [
         { name: 'device_type_img', title: t('device.device_type'), align: 'center' , type:'icon'},
-        { name: 'device_name', title: t('device.printer_name') },
-        { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center' },
+        { name: 'device_name', title: t('device.printer_name'), type: 'edit' },
+        { name: 'physical_device_id', title: t('device.physical_device_id'), align: 'center', type: 'edit' },
         { name: 'cyan_toner_percentage', title: <Circle className="text-cyan-300"/>, align: 'center'},
         { name: 'magenta_toner_percentage', title: <Circle className="text-pink-300"/>, align: 'center'},
         { name: 'yellow_toner_percentage', title: <Circle className="text-yellow-300"/>, align: 'center'},
         { name: 'black_toner_percentage', title: <Circle className="text-white"/>, align: 'center'},
         { name: 'device_status', title: t('device.device_status'), align: 'center' },
+        { name: 'location', title: t('device.location'), align: 'center' },
         { name: 'device_model', title: t('device.device_model'), align: 'center' },
         { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
         { name: 'app_type', title: t('device.app_type'), align: 'center' },
@@ -78,6 +79,7 @@ export default async function Device(
                     locale={locale}
                     path='device'
                     deleteAction={deleteDevice}
+                    editable={false}
                 />
             </div>
     );

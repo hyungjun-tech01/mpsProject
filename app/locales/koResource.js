@@ -20,7 +20,7 @@ const koResource = {
             unknownError: '알 수 없는 오류가 발생하였습니다, 나중에 다시 시도하세요.',
         },
         dashboard: {
-            dashboard: '대시보드',
+            dashboard: '대쉬보드',
             error_device: '비정상',
             normal_device: '정상',
             printed_page: '출력 페이지',

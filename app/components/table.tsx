@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,14 +17,14 @@ import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 import clsx from 'clsx';
 import Image from 'next/image';
-import ImageNotSupportedTwoToneIcon from '@mui/icons-material/ImageNotSupportedTwoTone';
 import AuditLogPdfViewer from './AuditLogPdfViewer';
 import AuditLogTextViewer from './AuditLogTextViewer';
 import { Button, Modal } from '@mui/material';
 
-import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import Link from 'next/link';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -284,7 +283,7 @@ export default function CustomizedTable<DataType>({
                                               />
                                               </div>
                                             }
-                                              {!!column.type && column.type === 'auditLogDate' &&
+                                            {!!column.type && column.type === 'auditLogDate' &&
                                                 <div className='flex justify-center' onClick={()=>handleAuditLogDateClick(row.text_archive_path)}>
                                                     {formatTimeToLocal(row[column.name], locale)}
                                                 </div>
@@ -294,6 +293,9 @@ export default function CustomizedTable<DataType>({
                                             }
                                             { !!column.type && column.type === 'hidden' &&
                                                 <div className='flex justify-center'>{row[column.name]}</div>
+                                            }
+                                            { !!column.type && column.type === 'edit' &&
+                                                <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
                                             }
                                         </StyledTableCell>
                                     )}
