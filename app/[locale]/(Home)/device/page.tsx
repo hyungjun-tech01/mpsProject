@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import getDictionary from '@/app/locales/dictionaries';
 import { fetchDevicesPages, fetchFilteredDevices } from '@/app/lib/fetchDeviceData';
+import { fetchGroupsBy } from "@/app/lib/fetchGroupData";
 import { IColumnData } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
@@ -9,6 +10,8 @@ import { deleteDevice } from '@/app/components/device/actions';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
 import { Circle } from "@mui/icons-material";
+import ModalButton from '@/app/components/device/modalButton';
+
 
 export const metadata: Metadata = {
     title: 'Device',
@@ -18,6 +21,7 @@ interface ISearchDevice {
     query?: string;
     itemsPerPage?: string;
     page?: string;
+    groupPage?:string;
 }
 
 
@@ -34,16 +38,18 @@ export default async function Device(
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    const currentGroupPage = Number(searchParams?.groupPage) || 1;
 
     const session = await auth();
 
     if(!session?.user)
         return notFound();
     
-    const [t, totalPages, devices] = await Promise.all([
+    const [t, totalPages, devices, deviceGroup] = await Promise.all([
         getDictionary(locale),
         fetchDevicesPages(query, itemsPerPage),
-        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage)
+        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage),
+        fetchGroupsBy(session?.user.name ?? undefined, "", "device", itemsPerPage, currentGroupPage, locale)
     ]);
 
     //console.log('Check : ', devices);
@@ -68,6 +74,7 @@ export default async function Device(
                     <h1 className="text-2xl">{t('device.device')}</h1>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                    <ModalButton list={deviceGroup}/>
                     <Search placeholder={t("comment.search_devices")} />
                     <CreateButton link="/device/create" title={t("device.create_device")} />
                 </div>

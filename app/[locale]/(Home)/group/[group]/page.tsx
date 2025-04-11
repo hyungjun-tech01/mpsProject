@@ -14,8 +14,7 @@ import {
 import {
     deleteGroup
 } from '@/app/lib/actionsGroup';
-import { auth } from "@/auth"
-
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
     title: 'Group',
