@@ -9,14 +9,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Pagination from './pagination';
+import Pagination from '../pagination';
 import { Menu } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
-import { formatCurrency, formatTimeToLocal } from '../lib/utils';
-import { UpdateButton, DeleteButtton } from './buttons';
+import { formatCurrency, formatTimeToLocal } from '../../lib/utils';
+import { UpdateButton, DeleteButtton } from '../buttons';
 import clsx from 'clsx';
 import Image from 'next/image';
+import AuditLogPdfViewer from './AuditLogPdfViewer';
+import AuditLogTextViewer from './AuditLogTextViewer';
+import { Button, Modal } from '@mui/material';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
@@ -70,6 +73,13 @@ export default function CustomizedTable<DataType>({
 }: ITable<DataType>) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [isPdfModalOpen, setIsPdfModalOpen] = React.useState(false);
+    const [pdfUrl, setPdfUrl] = React.useState<string | undefined>(undefined);
+    const [auditPdfContent, setAuditPdfContent] = React.useState<Blob | null>(null);
+    const [isTextModalOpen, setIsTextModalOpen] = React.useState(false);
+
+    const closePdfModal = React.useCallback(() => setIsPdfModalOpen(false), []);
+    const closeTextModal = React.useCallback(() => setIsTextModalOpen(false), []);
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -139,6 +149,80 @@ export default function CustomizedTable<DataType>({
         window.URL.revokeObjectURL(url);
       };
 
+    const replaceThumbnailSrc = (imagePath:string|null):string => {
+
+       if (!imagePath) return '';
+
+        const found_idx = imagePath.lastIndexOf('.');
+        if(found_idx !== -1){
+            //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
+            const nameWithoutExtension = imagePath.substring(0, found_idx);
+            const thumbnail_src = 'api/file?filename=ImageLog/'+ nameWithoutExtension + '_thumbnail.png'; 
+            const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
+            return replace_thumbnail_src;
+        }else{    
+            return '';
+        }
+    }
+
+    const handleThumnailClick = async (imagePath:string|null) => {
+        try {
+            console.log('imagePath', imagePath);
+
+            if (!imagePath) {
+              throw new Error('Invalid image path');
+            }
+            const src = '/api/file?filepath=ImageLog/'+imagePath;
+            const replace_src = src.replace(/\\/g,'/');
+            const response = await fetch(replace_src);
+            if (!response.ok) {
+              throw new Error('Failed to decrypt file');
+            }
+            const blob = await response.blob();
+
+            
+            const url = URL.createObjectURL(blob);
+
+            setAuditPdfContent(blob);
+            setPdfUrl(url);
+            setIsPdfModalOpen(true);
+
+
+          } catch (error) {
+            console.error('Error decrypting file:', error);
+          }
+    }
+
+    const handleAuditLogDateClick = async (textfilename:string|null) => {
+        try {
+
+
+            
+            console.log('handleAuditLogDateClick', textfilename);
+
+            if (!textfilename) {
+                throw new Error('Invalid text file path');
+              }
+              const src = '/api/file?textfilename=ImageLog/'+textfilename;
+              const replace_src = src.replace(/\\/g,'/');
+              const response = await fetch(replace_src);
+              if (!response.ok) {
+                throw new Error('Failed to decrypt file');
+              }
+              const decryptText = await response.text();
+  
+              
+              //const url = URL.createObjectURL(blob);
+  
+              //setAuditPdfContent(blob);
+              //setPdfUrl(url);
+              setIsPdfModalOpen(true);
+
+
+          } catch (error) {
+            console.error('Error decrypting file:', error);
+          }
+    }    
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
@@ -188,6 +272,22 @@ export default function CustomizedTable<DataType>({
                                             }
                                             {!!column.type && column.type === 'icon' &&
                                                 <div className='flex justify-center'><Image  src={`/${row[column.name]}`}  alt="icon" width={24} height={24} className="w-6 h-6"/></div>
+                                            }
+                                            {!!column.type && column.type === 'auditLogImage' &&
+                                                <div className='flex justify-center  bg-gray-200 border'>
+                                                <img 
+                                                src={`/${replaceThumbnailSrc(row[column.name])}`} 
+                                                alt="No Image"  
+                                                className="w-24 h-18"
+                                                onClick={() => handleThumnailClick(row[column.name])}
+                                                onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                              />
+                                              </div>
+                                            }
+                                            {!!column.type && column.type === 'auditLogDate' &&
+                                                <div className='flex justify-center' onClick={()=>handleAuditLogDateClick(row.text_archive_path)}>
+                                                    {formatTimeToLocal(row[column.name], locale)}
+                                                </div>
                                             }
                                             {!!column.type && column.type === 'enum_icon' &&
                                                 <div className='flex justify-center'>{column.values[row[column.name]]}</div>
@@ -253,7 +353,67 @@ export default function CustomizedTable<DataType>({
             <div className="flex justify-center py-3">
                 <Pagination totalPages={totalPages} />
             </div>
-            {renderMenu}     
+            {renderMenu}
+
+        <Modal
+            open={isPdfModalOpen}
+            onClose={closePdfModal}
+            style={{ width: '800px',
+                height: '85vh',
+                backgroundColor: '#ffffff',
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                border: '5px solid #000' }}
+        >
+        <>
+          <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closePdfModal} />
+          {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={closePdfModal}
+              sx={{ mt: 3, mb: 2 , 
+                  backgroundColor:"rgba(25,137,43,255)",
+                  ":hover": { backgroundColor: "rgba(13,118,33,255)" }
+                  }}
+            >닫기
+            </Button>
+          </div>
+        </>
+       </Modal>   
+
+        <Modal
+            open={isTextModalOpen}
+            onClose={closeTextModal}
+            style={{ width: '800px',
+                height: '85vh',
+                backgroundColor: '#ffffff',
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                border: '5px solid #000' }}
+        >
+        <>
+          <AuditLogTextViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closeTextModal} />
+          {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={closeTextModal}
+              sx={{ mt: 3, mb: 2 , 
+                  backgroundColor:"rgba(25,137,43,255)",
+                  ":hover": { backgroundColor: "rgba(13,118,33,255)" }
+                  }}
+            >닫기
+            </Button>
+          </div>
+        </>
+       </Modal>         
         </div>        
     );
 }

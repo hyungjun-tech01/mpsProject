@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from 'next/link';
 import clsx from 'clsx';
-import Table from '@/app/components/table';
+import Table from '@/app/components/log/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
 import { //fetchFilteredDeviceUsageLogPages,

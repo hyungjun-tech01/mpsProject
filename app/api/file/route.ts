@@ -13,7 +13,7 @@ const contentTypeFromExt = {
     png : 'image/png',
 }
 
-async function handleRouteRequest(filename: string) {
+async function handlePMGFileRequest(filename: string) {
 
     const filePath = path.join(process.cwd(), 'upload', filename);
 
@@ -40,7 +40,7 @@ async function handleRouteRequest(filename: string) {
     });
 }
 
-async function handleDecryptFileRequest(filepath: string) {
+async function handleDecryptPDFFileRequest(filepath: string) {
     try {
       const algorithm = process.env.CRYPTO_ALGORITHM;
       const cryptoPassword = process.env.CRYPTO_PASSWORD;
@@ -80,25 +80,72 @@ async function handleDecryptFileRequest(filepath: string) {
     }
   }
   
+  async function handleDecryptTextFileRequest(filepath: string) {
+    try {
+      const algorithm = process.env.CRYPTO_ALGORITHM;
+      const cryptoPassword = process.env.CRYPTO_PASSWORD;
+      const cryptoIV = process.env.CRYPTO_IV;
+
+      console.log("Decrypt Text File Request :", filepath);
+  
+      if (!cryptoPassword || !cryptoIV || !algorithm) {
+        throw new Error('Environment variables for decryption are not set properly.');
+      }
+      
+  
+      const encryptedFilePath = path.join(process.cwd(), 'upload', filepath);
+  
+      let key = Buffer.alloc(32);
+      Buffer.from(cryptoPassword).copy(key);
+  
+      if (fs.existsSync(encryptedFilePath)) {
+        const encryptedData = fs.readFileSync(encryptedFilePath);
+  
+        let iv = Buffer.alloc(16);
+        Buffer.from(cryptoIV).copy(iv);
+  
+        const decipher = crypto.createDecipheriv(algorithm, key, iv);
+        decipher.setAutoPadding(true);
+  
+        const decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+   
+        const response = new NextResponse(decryptedData);
+        response.headers.set('Content-Disposition', 'attachment; filename="decrypted.txt"');
+        response.headers.set('Content-Type', 'application/plain');
+        
+        return response;
+      } else {
+        return new NextResponse(JSON.stringify({ error: 'File not found' }), { status: 404 });
+      }
+    } catch (err) {
+      console.error(err.message);
+      return new NextResponse(JSON.stringify({ error: err.message }), { status: 500 });
+    }
+  }
+
 
   export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const filepath = searchParams.get('filepath');
     const filename = searchParams.get('filename');
+    const textfilename = searchParams.get('textfilename');
 
 
-    if (filename === null && filepath === null) {
+    if (filename === null && filepath === null && textfilename === null) {
       return new NextResponse(JSON.stringify({ error: 'Invalid filepath or filename' }), { status: 400 });
     }
   
 
 
     if (filename !== null) {
-        return await handleRouteRequest(filename);
+        return await handlePMGFileRequest(filename);
     }
     if(filepath !== null) {
-        return await handleDecryptFileRequest(filepath);
+        return await handleDecryptPDFFileRequest(filepath);
     }
+    if(textfilename !== null) {
+      return await handleDecryptTextFileRequest(textfilename);
+  }
     // if (filename === 'route') {
     //   return await handleRouteRequest(filepath);
     // } else if (filename === 'decryptFile') {
