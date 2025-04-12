@@ -89,53 +89,5 @@ export default async function Page(props: {
                 editable={false}
             />
         </div>
-
-        // <div className="w-full">
-        //     <div className='w-full pl-2 flex justify-start'>
-        //         {subTitles.map((item, idx) => {
-        //             return <Link key={idx} href={item.link}
-        //                 className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
-        //                     { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === category },
-        //                     { "text-gray-300  bg-white border-2": item.category !== category },
-        //                 )}>{item.title}</Link>;
-        //         })}
-        //     </div>
-        //     {category === 'printlogs' &&
-        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        //             <Table
-        //                 columns={printlogColumns}
-        //                 rows={printlogs}
-        //                 currentPage={currentPage}
-        //                 totalPages={printlogPages}
-        //                 locale={locale}
-        //                 editable={false}
-        //             />
-        //         </div>
-        //     }
-        //     {category === 'applogs' &&
-        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        //             <Table
-        //                 columns={applogColumns}
-        //                 rows={applogs}
-        //                 currentPage={currentPage}
-        //                 totalPages={applogPages}
-        //                 locale={locale}
-        //                 editable={false}
-        //             />
-        //         </div>
-        //     }
-        //     {category === 'auditlogs' &&
-        //         <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        //             <Table
-        //                 columns={auditlogColumns}
-        //                 rows={auditlogs}
-        //                 currentPage={currentPage}
-        //                 totalPages={auditlogPages}
-        //                 locale={locale}
-        //                 editable={false}
-        //             />
-        //         </div>
-        //     }
-        // </div>
     );
 }

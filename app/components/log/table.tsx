@@ -76,6 +76,7 @@ export default function CustomizedTable<DataType>({
     const [isPdfModalOpen, setIsPdfModalOpen] = React.useState(false);
     const [pdfUrl, setPdfUrl] = React.useState<string | undefined>(undefined);
     const [auditPdfContent, setAuditPdfContent] = React.useState<Blob | null>(null);
+    const [auditContent, setAuditContent] = React.useState<string | null>(null);
     const [isTextModalOpen, setIsTextModalOpen] = React.useState(false);
 
     const closePdfModal = React.useCallback(() => setIsPdfModalOpen(false), []);
@@ -196,8 +197,6 @@ export default function CustomizedTable<DataType>({
     const handleAuditLogDateClick = async (textfilename:string|null) => {
         try {
 
-
-            
             console.log('handleAuditLogDateClick', textfilename);
 
             if (!textfilename) {
@@ -214,9 +213,9 @@ export default function CustomizedTable<DataType>({
               
               //const url = URL.createObjectURL(blob);
   
-              //setAuditPdfContent(blob);
+              setAuditContent(decryptText);
               //setPdfUrl(url);
-              setIsPdfModalOpen(true);
+              setIsTextModalOpen(true);
 
 
           } catch (error) {
@@ -398,8 +397,7 @@ export default function CustomizedTable<DataType>({
                 border: '5px solid #000' }}
         >
         <>
-          <AuditLogTextViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closeTextModal} />
-          {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
+          <AuditLogTextViewer Url={pdfUrl} auditContent={auditContent} onClose={closeTextModal} />
           <div style={{ textAlign: 'right' }}>
             <Button
               type="submit"
