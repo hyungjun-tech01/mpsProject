@@ -21,6 +21,7 @@ interface ISearchDevice {
     query?: string;
     itemsPerPage?: string;
     page?: string;
+    groupId?:string;
     groupPage?:string;
 }
 
@@ -39,6 +40,7 @@ export default async function Device(
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
     const currentGroupPage = Number(searchParams?.groupPage) || 1;
+    const groupId = searchParams?.groupId;
 
     const session = await auth();
 
@@ -48,7 +50,7 @@ export default async function Device(
     const [t, totalPages, devices, deviceGroup] = await Promise.all([
         getDictionary(locale),
         fetchDevicesPages(query, itemsPerPage),
-        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage),
+        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage, groupId),
         fetchGroupsBy(session?.user.name ?? undefined, "", "device", itemsPerPage, currentGroupPage, locale)
     ]);
 
@@ -74,7 +76,7 @@ export default async function Device(
                     <h1 className="text-2xl">{t('device.device')}</h1>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                    <ModalButton list={deviceGroup}/>
+                    <ModalButton list={deviceGroup} modalId={groupId} />
                     <Search placeholder={t("comment.search_devices")} />
                     <CreateButton link="/device/create" title={t("device.create_device")} />
                 </div>
