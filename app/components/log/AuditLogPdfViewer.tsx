@@ -16,7 +16,6 @@ const AuditLogPdfViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewe
     setNumPages(pdf.numPages);
   };
 
- console.log('pdfUrl', pdfUrl);
   return(
     <div style={{ height: '75vh', overflow: 'auto' }}>
     { auditPdfContent &&   

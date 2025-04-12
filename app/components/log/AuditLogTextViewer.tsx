@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
-import { Document, Page, pdfjs } from 'react-pdf';
 import { Box } from '@mui/material';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
 
 interface IAuditLogTextViewer {
     Url: string | undefined,
@@ -13,11 +9,6 @@ interface IAuditLogTextViewer {
 const AuditLogTextViewer = ({Url, auditContent, onClose}: IAuditLogTextViewer) => {
   const [numPages, setNumPages] = useState<number|null>(null);
 
-  const onDocumentLoadSuccess = (pdf: PDFDocumentProxy) => {
-    setNumPages(pdf.numPages);
-  };
-
- console.log('pdfUrl', Url);
   return(
     <Box sx={{ position: 'absolute' as 'absolute',
           top: '50%',

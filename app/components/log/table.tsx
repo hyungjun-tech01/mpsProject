@@ -168,7 +168,6 @@ export default function CustomizedTable<DataType>({
 
     const handleThumnailClick = async (imagePath:string|null) => {
         try {
-            console.log('imagePath', imagePath);
 
             if (!imagePath) {
               throw new Error('Invalid image path');
@@ -181,7 +180,6 @@ export default function CustomizedTable<DataType>({
             }
             const blob = await response.blob();
 
-            
             const url = URL.createObjectURL(blob);
 
             setAuditPdfContent(blob);
@@ -189,38 +187,31 @@ export default function CustomizedTable<DataType>({
             setIsPdfModalOpen(true);
 
 
-          } catch (error) {
+        } catch (error) {
             console.error('Error decrypting file:', error);
-          }
+        }
     }
 
     const handleAuditLogDateClick = async (textfilename:string|null) => {
         try {
 
-            console.log('handleAuditLogDateClick', textfilename);
-
             if (!textfilename) {
                 throw new Error('Invalid text file path');
-              }
-              const src = '/api/file?textfilename=ImageLog/'+textfilename;
-              const replace_src = src.replace(/\\/g,'/');
-              const response = await fetch(replace_src);
-              if (!response.ok) {
-                throw new Error('Failed to decrypt file');
-              }
-              const decryptText = await response.text();
-  
-              
-              //const url = URL.createObjectURL(blob);
-  
-              setAuditContent(decryptText);
-              //setPdfUrl(url);
-              setIsTextModalOpen(true);
+            }
+            const src = '/api/file?textfilename=ImageLog/'+textfilename;
+            const replace_src = src.replace(/\\/g,'/');
+            const response = await fetch(replace_src);
+            if (!response.ok) {
+            throw new Error('Failed to decrypt file');
+            }
+            const decryptText = await response.text();
 
+            setAuditContent(decryptText);
+            setIsTextModalOpen(true);
 
-          } catch (error) {
+        } catch (error) {
             console.error('Error decrypting file:', error);
-          }
+        }
     }    
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
