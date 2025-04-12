@@ -86,8 +86,7 @@ export default async function Device(
                     locale={locale}
                     path='device'
                     deleteAction={deleteDevice}
-                    editable={true}
-                    deletable={true}
+                    editable={false}
                 />  
             </div>
     );

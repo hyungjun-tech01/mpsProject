@@ -3030,3 +3030,4 @@ INSERT INTO tbl_user_info (
 update tbl_audit_job_log t
 set text_archive_path = '2023\09\C2K0910023024050914190.etxt'
 where image_archive_path like '%C2K0910023024050914190%';
+

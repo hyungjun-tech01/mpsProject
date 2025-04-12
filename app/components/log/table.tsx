@@ -210,8 +210,10 @@ export default function CustomizedTable<DataType>({
             setIsTextModalOpen(true);
 
         } catch (error) {
-            console.error('Error decrypting file:', error);
-        }
+            console.log('Error decrypting file:', error);
+            setAuditContent(null);
+            setIsTextModalOpen(false);
+        } 
     }    
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
