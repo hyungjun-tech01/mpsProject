@@ -1,10 +1,8 @@
 import pg from "pg";
 import { BASE_PATH } from "@/constans";
-import { UserField, AuditLogField } from "@/app/lib/definitions";
+import { UserField, AuditLogField, Account } from "@/app/lib/definitions";
 import { generateStrOf30Days } from "./utils";
 
-import path from 'path';
-import fs from 'fs';
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -279,6 +277,32 @@ export async function fetchUserCount() {
         throw new Error("Failed to fetch user count.");
     }
 };
+// ----- End : User -------------------------------------------------------//
+
+
+// ----- Begin : Account -------------------------------------------------------//
+export async function getAccount(name: string): Promise<Account | undefined> {
+    try {
+      const account = await client.query<Account>(`
+        SELECT
+          u.user_id id,
+          u.user_name name,
+          u.user_role role,
+          u.email email,
+          u.password password
+        FROM tbl_user_info u
+        WHERE u.user_name='${name}'`
+      );
+      return account.rows[0];
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      throw new Error("Failed to fetch user.");
+    }
+  };
+// ----- End : Account -------------------------------------------------------//
+
+
+
 
 export async function fetchDevices() {
     try {

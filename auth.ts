@@ -1,45 +1,26 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import pg from "pg";
 import bcrypt from "bcrypt";
-import { authConfig } from "./auth.config";
-import type { User } from "@/app/lib/definitions";
+import { getAccount } from "@/app/lib/fetchData";
 
-
-const client = new pg.Client({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS,
-});
-
-await client.connect();
-
-
-async function getUserAttr(name: string): Promise<User | undefined> {
-  try {
-    const user = await client.query<User>(`
-      SELECT
-        u.user_id id,
-        u.user_name name,
-        u.user_role role,
-        u.email email,
-        u.password password
-      FROM tbl_user_info u
-      WHERE u.user_name='${name}'`
-    );
-    return user.rows[0];
-  } catch (error) {
-    console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user.");
+declare module "next-auth" {
+  interface User {
+    role?: string;
   }
-};
 
-export const { auth, signIn, signOut } = NextAuth({
-  ...authConfig,
+  interface Session {
+    user: {
+      role?: string;
+    } & DefaultSession["user"];
+  }
+}
+
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  pages: {
+    signIn: '/login',
+  },
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -52,29 +33,20 @@ export const { auth, signIn, signOut } = NextAuth({
 
           // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
 
-          // if(user_name != 'admin') {
-            const userAttr = await getUserAttr(user_name);
-            if (!userAttr) return null;
+          const userAttr = await getAccount(user_name);
+          if (!userAttr) return null;
 
-            const userPassword = userAttr.password;
-            const passwordsMatch = await bcrypt.compare(user_password, userPassword);
-  
-            if (passwordsMatch)
-              return {
-                id: userAttr.id,
-                name: userAttr.name,
-                email: userAttr.email,
-                role: userAttr.role ?? "user",
-                image: ""
-              };
-          // } else {
-          //   return {
-          //     id: '0001',
-          //     name: user_name,
-          //     email: "",
-          //     image: ""
-          //   };
-          // }
+          const userPassword = userAttr.password;
+          const passwordsMatch = await bcrypt.compare(user_password, userPassword);
+
+          if (passwordsMatch)
+            return {
+              id: userAttr.id,
+              name: userAttr.name,
+              email: userAttr.email,
+              role: userAttr.role ?? "user",
+              image: ""
+            };
         }
 
         console.log("Invalid credentials");
@@ -82,10 +54,29 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  // callbacks: {
-  //   session({ session, user }) {
-  //     session.user.role = user.role
-  //     return session
-  //   }
-  // }
+  callbacks: {
+    authorized: ({ auth, request: { nextUrl } }) => {
+      const isLoggedIn = !!auth?.user;
+      const isOnProtected = !(nextUrl.pathname.startsWith('/login'));
+      if (isOnProtected) {
+        if (isLoggedIn) return true;
+        return Response.redirect(new URL('/login', nextUrl));
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL('/', nextUrl));
+      }
+      return true;
+    },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session.user) {
+        session.user.role = token.role as string | undefined;
+      }
+      return session;
+    }
+  }
 });
