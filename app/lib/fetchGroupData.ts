@@ -1,15 +1,5 @@
-import pg from "pg";
+import type { Pool } from "pg";
 
-const client = new pg.Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS,
-});
-
-await client.connect();
 
 const convertSchedulePeriod = {
     en: {
@@ -28,9 +18,10 @@ const convertSchedulePeriod = {
     }
 }
 
+
 // ----- Begin : Group -------------------------------------------------------//
-export async function fetchGroupsBy(
-    loginName: string | undefined,
+export async function fetchFilteredGroups(
+    client: Pool,
     query: string,
     groupType: string,
     itemsPerPage: number,
@@ -93,23 +84,16 @@ export async function fetchGroupsBy(
 
     try {
         const resp = await client.query(queryString);
-        if(groupType !== 'user') {
-            const converted = resp.rows.map(item => {
-                return {
-                    ...item,
-                    editable: !!loginName && (loginName === 'admin'),
-                }
-            });
-            return converted;
-        } else {
+        if(groupType === 'user') {
             const converted = resp.rows.map(item => {
                 return {
                     ...item,
                     schedule_period: convertSchedulePeriod[locale][item.schedule_period],
-                    editable: !!loginName && (loginName === 'admin'),
                 }    
             });
             return converted;
+        } else {
+            return resp.rows;
         }
     } catch (error) {
         console.error("Database Error:", error);
@@ -117,7 +101,8 @@ export async function fetchGroupsBy(
     }
 };
 
-export async function fetchGroupPagesBy(
+export async function fetchFilteredGroupsPages(
+    client: Pool,
     query: string,
     groupType: string,
     itemsPerPage: number,
@@ -145,7 +130,33 @@ export async function fetchGroupPagesBy(
     }
 };
 
-export async function fetchGroupInfoByID(
+export async function fetchGroupsByType(
+    client: Pool,
+    groupType: string,
+) {
+    try {
+        const groups =
+            await client.query(`
+                SELECT '' group_id, 
+                       '-1 없음' group_name
+                union all
+                SELECT
+                    u.group_id,
+                    u.group_name
+                FROM tbl_group_info u
+                WHERE
+                    u.group_type='${groupType}'
+                ORDER BY group_name ASC
+            `);
+        return groups.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch group.");
+    }
+};
+
+export async function fetchGroupInfoById(
+    client: Pool,
     groupId: string,
     groupType: string,
 ) {
@@ -173,8 +184,26 @@ export async function fetchGroupInfoByID(
 
 // ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
+// export async function fetchDevices(
+//     client: Pool,
+// ) {
+//     try {
+//         const response = await client.query(`
+//             SELECT
+//                 device_id
+//             FROM tbl_device_info p
+//             WHERE
+//                 p.deleted='N'
+//         `);
+//         return response.rows;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch printer count.");
+//     }
+// };
 
 export async function fetchUsersNotInGroup(
+    client: Pool,
     query: string,
     itemsPerPage: number,
     currentPage: number
@@ -207,6 +236,7 @@ export async function fetchUsersNotInGroup(
 };
 
 export async function fetchUsersNotInGroupPages(
+    client: Pool,
     query: string,
     itemsPerPage: number
 ) {
@@ -229,6 +259,7 @@ export async function fetchUsersNotInGroupPages(
 };
 
 export async function fetchUsersInGroup(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number,
@@ -262,6 +293,7 @@ export async function fetchUsersInGroup(
 };
 
 export async function fetchUsersInGroupPages(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number
@@ -288,6 +320,7 @@ export async function fetchUsersInGroupPages(
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchDevicesNotInGroup(
+    client: Pool,
     query: string,
     itemsPerPage: number,
     currentPage: number
@@ -329,7 +362,8 @@ export async function fetchDevicesNotInGroup(
     }
 };
 
-export async function fetchDeviesNotInGroupPages(
+export async function fetchDevicesNotInGroupPages(
+    client: Pool,
     query: string,
     itemsPerPage: number
 ) {
@@ -358,6 +392,7 @@ export async function fetchDeviesNotInGroupPages(
 };
 
 export async function fetchDevicesInGroup(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number,
@@ -395,6 +430,7 @@ export async function fetchDevicesInGroup(
 };
 
 export async function fetchDevicesInGroupPages(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number
@@ -421,6 +457,7 @@ export async function fetchDevicesInGroupPages(
 // const ITEMS_PER_PAGE = 10;
 
 export async function fetchDeptsNotInGroup(
+    client: Pool,
     query: string,
     itemsPerPage: number,
     currentPage: number
@@ -448,6 +485,7 @@ export async function fetchDeptsNotInGroup(
 };
 
 export async function fetchDeptsNotInGroupPages(
+    client: Pool,
     query: string,
     itemsPerPage: number
 ) {
@@ -470,6 +508,7 @@ export async function fetchDeptsNotInGroupPages(
 };
 
 export async function fetchDeptsInGroup(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number,
@@ -498,6 +537,7 @@ export async function fetchDeptsInGroup(
 };
 
 export async function fetchDeptsInGroupPages(
+    client: Pool,
     id: string,
     query: string,
     itemsPerPage: number

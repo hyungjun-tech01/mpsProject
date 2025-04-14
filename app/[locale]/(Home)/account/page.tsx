@@ -5,9 +5,7 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 
 import getDictionary from '@/app/locales/dictionaries';
 import { updateAccount } from '@/app/lib/actions';
-import {
-    fetchUserByName,
-} from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth"
 
 
@@ -22,10 +20,10 @@ export default async function Page(props: {
         return notFound();
 
     // console.log('[Account] current user :', session.user);
-
+    const adapter = MyDBAdapter();
     const [t, user] = await Promise.all([
         getDictionary(locale),
-        fetchUserByName(session.user.name)
+        adapter.getUserByName(session.user.name)
     ]);
 
     // Items -------------------------------------------------------------------

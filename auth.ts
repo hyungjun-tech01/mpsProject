@@ -2,7 +2,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { getAccount } from "@/app/lib/fetchData";
+import MyDBAdapter from '@/app/lib/adapter';
 
 declare module "next-auth" {
   interface User {
@@ -32,8 +32,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const { user_name, user_password } = parsedCredentials.data;
 
           // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
-
-          const userAttr = await getAccount(user_name);
+          const adapter = MyDBAdapter();
+          const userAttr = await adapter.getAccount(user_name);
+          console.log('Account : ', userAttr);
           if (!userAttr) return null;
 
           const userPassword = userAttr.password;

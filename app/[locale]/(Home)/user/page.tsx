@@ -4,7 +4,7 @@ import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
-import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 
@@ -23,10 +23,11 @@ export default async function Page(props: {
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
 
+    const adapter = MyDBAdapter();
     const [t, totalPages, users] = await Promise.all([
         getDictionary(locale),
-        fetchUsersPages(query, itemsPerPage),
-        fetchFilteredUsers(query, itemsPerPage, currentPage)
+        adapter.getFilteredUsersPages(query, itemsPerPage),
+        adapter.getFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     
     const columns: IColumnData[] = [

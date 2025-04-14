@@ -7,9 +7,7 @@ import {
     fetchDeviceFaxLineById
 } from '@/app/lib/fetchDeviceData';
 
-import {
-    fetchAllUsers, fetchAllUserGroup
-} from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 
 
 import Breadcrumbs from '@/app/components/breadcrumbs';
@@ -33,14 +31,14 @@ export default async function Page(props: {
     const searchParams = await props.searchParams;
     
 
-
+    const adapter = MyDBAdapter();
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),
         fetchDeviceById(id),
         fetchPrinterGroup(),
         fetchDeviceFaxLineById(id),
-        fetchAllUsers(),
-        fetchAllUserGroup(),
+        adapter.getAllUsers(),
+        adapter.getGroupsByType('user'),
     ]);
 
     const editItems: ISection[] = [

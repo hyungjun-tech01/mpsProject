@@ -7,10 +7,7 @@ import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
-import {
-    fetchGroupsBy,
-    fetchGroupPagesBy
-} from '@/app/lib/fetchGroupData';
+import MyDBAdapter from '@/app/lib/adapter';
 import {
     deleteGroup
 } from '@/app/lib/actionsGroup';
@@ -40,10 +37,11 @@ export default async function Page(props: {
 
     if(!session?.user) return notFound();
 
+    const adapter = MyDBAdapter();
     const [t, totalPages, groupData] = await Promise.all([
         getDictionary(locale),
-        fetchGroupPagesBy(query, group, itemsPerPage),
-        fetchGroupsBy(session?.user.name, query, group, itemsPerPage, currentPage, locale),
+        adapter.getFilteredGroupsPages(query, group, itemsPerPage),
+        adapter.getFilteredGroups(query, group, itemsPerPage, currentPage, locale),
     ]);
 
     // Tabs ----------------------------------------------------------------------

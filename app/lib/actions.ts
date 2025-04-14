@@ -10,12 +10,12 @@ import bcrypt from "bcrypt";
 const salt = await bcrypt.genSalt(11);
 
 const client = new pg.Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
+    user: String(process.env.DB_USER),
+    password: String(process.env.DB_PASSWORD),
+    host: String(process.env.DB_HOST),
+    port: Number(process.env.DB_PORT),
+    database: String(process.env.DB_NAME),
+    connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS)
 });
 
 await client.connect();

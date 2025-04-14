@@ -10,11 +10,7 @@ import LogTable from '@/app/components/table';
 import getDictionary from '@/app/locales/dictionaries';
 import { changeBalance, modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import {
-    fetchUserById,
-    fetchPrinterUsageLogByUserId,
-    fetchPrinterUsageLogPagesByUserId
-} from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import { formatCurrency } from "@/app/lib/utils";
 
 
@@ -30,11 +26,12 @@ export default async function Page(props: {
     // const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const adapter = MyDBAdapter();
     const [t, user] = await Promise.all([
         getDictionary(locale),
-        fetchUserById(id)
+        adapter.getUserById(id)
     ]);
-    console.log('Check : ', user);
 
     if (!user) {
         notFound();
@@ -45,8 +42,8 @@ export default async function Page(props: {
     }
 
     const [printerUsageInfo, printerUsageCount] = await Promise.all([
-        fetchPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
-        fetchPrinterUsageLogPagesByUserId(id, itemsPerPage)
+        adapter.getPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
+        adapter.getPrinterUsageLogByUserIdPages(id, itemsPerPage)
     ]);
 
     // Manipluate Process --------------------------------------------------------

@@ -14,7 +14,7 @@ export default async function Page(props: {
   const t = await getDictionary(locale);
 
   const session = await auth();
-  // console.log("[Dashboard] session :", session?.user);
+  console.log("[Dashboard] session :", session?.user);
 
   return (
     <main>
