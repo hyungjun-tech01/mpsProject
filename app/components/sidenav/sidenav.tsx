@@ -1,8 +1,7 @@
 import React from 'react';
+import { SessionProvider } from "next-auth/react";
 import clsx from 'clsx';
-import {
-    PowerSettingsNew
-} from '@mui/icons-material';
+import { PowerSettingsNew } from '@mui/icons-material';
 import NavLinks from './nav-links';
 import { logout } from '@/app/components/auth/actions';
 
@@ -11,7 +10,9 @@ export default function SideNav({ extended }: { extended : boolean}) {
     return (
         <div className="flex h-full flex-col px-3 py-4 md:px-2">
             <div className="grid grid-cols-auto-fit gap-2 md:flex md:flex-col md:grow md:justify-between">
-                <NavLinks extended={extended} />
+                <SessionProvider>
+                    <NavLinks extended={extended} />
+                </SessionProvider>
                 <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
                 <form action={logout}>
                     <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 text-gray-500 p-3 text-base font-medium hover:bg-lime-100 hover:text-lime-700 md:flex-none md:justify-start md:p-2 md:px-3">

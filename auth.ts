@@ -56,12 +56,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     authorized: ({ auth, request: { nextUrl } }) => {
+      // check login --------------------------------------------
       const isLoggedIn = !!auth?.user;
       const isOnProtected = !(nextUrl.pathname.startsWith('/login'));
       if (isOnProtected) {
         if (isLoggedIn) return true;
         return Response.redirect(new URL('/login', nextUrl));
       } else if (isLoggedIn) {
+        return Response.redirect(new URL('/', nextUrl));
+      }
+
+      // check admin --------------------------------------------
+      const isAdmin = auth?.user.role === "admin";
+      const onlyAdminPermitted = nextUrl.pathname.startsWith('/user');
+      if(onlyAdminPermitted) {
+        if(isAdmin) return true;
         return Response.redirect(new URL('/', nextUrl));
       }
       return true;
