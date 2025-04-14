@@ -75,7 +75,7 @@ export default function CustomizedTable<DataType>({
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
         const deletedID = event.currentTarget.id.split('@').at(-1);
-        if(!!deletedID)
+        if (!!deletedID)
             setChosenID(deletedID);
     };
     const handleMenuClose = () => {
@@ -85,12 +85,12 @@ export default function CustomizedTable<DataType>({
     const menuId = 'delete-confirm-menu';
     const translate = {
         ko: {
-            confirm_delete : '해당 item을 삭제합니다.',
+            confirm_delete: '해당 item을 삭제합니다.',
             cancel: '취소',
             delete: '삭제',
         },
         en: {
-            confirm_delete : 'Are you sure?',
+            confirm_delete: 'Are you sure?',
             cancel: 'Cancel',
             delete: 'Delete',
         },
@@ -119,7 +119,7 @@ export default function CustomizedTable<DataType>({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction}/>
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction} />
                 </div>
             </div>
         </Menu>
@@ -137,9 +137,8 @@ export default function CustomizedTable<DataType>({
         link.download = onlyfilename || "download_file";
         link.click();
         window.URL.revokeObjectURL(url);
-      };
+    };
 
-    const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
             <TableContainer component={Paper}>
@@ -156,9 +155,7 @@ export default function CustomizedTable<DataType>({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.length > 0 && rows.map((row, idx) => {
-
-                            
+                        {rows.length > 0 ? rows.map((row, idx) => {
                             return (
                                 <StyledTableRow key={idx}>
                                     {checkable &&
@@ -171,37 +168,36 @@ export default function CustomizedTable<DataType>({
                                         </StyledTableCell>
                                     }
                                     {columns.map((column) => {
-                                        return(
-                                        <StyledTableCell
-                                            key={column.name}
-                                            component="th"
-                                            align={column.align}
-                                            scope="row"
-                                        >
-                                            {!column.type && row[column.name]}
-                                            {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
-                                            {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
-                                            {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
-                                            {!!column.type && column.type === 'file' &&
-                                                <div className='hover:cursor-pointer text-lime-700'
-                                                    onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
-                                            }
-                                            {!!column.type && column.type === 'icon' &&
-                                                <div className='flex justify-center'><Image  src={`/${row[column.name]}`}  alt="icon" width={24} height={24} className="w-6 h-6"/></div>
-                                            }
-                                            {!!column.type && column.type === 'enum_icon' &&
-                                                <div className='flex justify-center'>{column.values[row[column.name]]}</div>
-                                            }
-                                            { !!column.type && column.type === 'hidden' &&
-                                                <div className='flex justify-center'>{row[column.name]}</div>
-                                            }
-                                            { !!column.type && column.type === 'edit' &&
-                                                <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
-                                            }
-                                        </StyledTableCell>
-                                    )}
-                                    
-                                    )}
+                                        return (
+                                            <StyledTableCell
+                                                key={column.name}
+                                                component="th"
+                                                align={column.align}
+                                                scope="row"
+                                            >
+                                                {!column.type && row[column.name]}
+                                                {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                                {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
+                                                {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
+                                                {!!column.type && column.type === 'file' &&
+                                                    <div className='hover:cursor-pointer text-lime-700'
+                                                        onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
+                                                }
+                                                {!!column.type && column.type === 'icon' &&
+                                                    <div className='flex justify-center'><Image src={`/${row[column.name]}`} alt="icon" width={24} height={24} className="w-6 h-6" /></div>
+                                                }
+                                                {!!column.type && column.type === 'enum_icon' &&
+                                                    <div className='flex justify-center'>{column.values[row[column.name]]}</div>
+                                                }
+                                                {!!column.type && column.type === 'hidden' &&
+                                                    <div className='flex justify-center'>{row[column.name]}</div>
+                                                }
+                                                {!!column.type && column.type === 'edit' &&
+                                                    <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
+                                                }
+                                            </StyledTableCell>
+                                        )
+                                    })}
                                     {(editable || deletable) &&
                                         <StyledTableCell
                                             component="th"
@@ -209,25 +205,17 @@ export default function CustomizedTable<DataType>({
                                             scope="row"
                                         >
                                             <div className="flex justify-end gap-3">
-                                                {editable && path && <UpdateButton 
-                                                        link={`${path}/${row.id}/edit`}
-                                                        disabled={!row.editable}
-                                                    />}
+                                                {editable && path && <UpdateButton
+                                                    link={`${path}/${row.id}/edit`}
+                                                />}
                                                 {deletable && deleteAction &&
                                                     <button
                                                         id={`delete@${row.id}`}
-                                                        className={clsx("rounded-md border p-2",
-                                                            {"hover:bg-gray-100": !!row.editable}
-                                                        )}
+                                                        className="rounded-md border p-2 hover:bg-gray-100"
                                                         onClick={handleMenuOpen}
-                                                        disabled={!row.editable}
                                                     >
                                                         <span className="sr-only">Delete</span>
-                                                        <DeleteIcon 
-                                                            className={clsx("w-5",
-                                                                {"text-gray-200" : !row.editable},
-                                                                {"text-inherit" : !!row.editable}
-                                                            )} 
+                                                        <DeleteIcon className="w-5 text-inherit"
                                                         />
                                                     </button>
                                                 }
@@ -235,9 +223,8 @@ export default function CustomizedTable<DataType>({
                                         </StyledTableCell>
                                     }
                                 </StyledTableRow>
-                            )
-                        })}
-                        {rows.length === 0 &&
+                        )})
+                        :
                             <StyledTableRow>
                                 <StyledTableCell
                                     colSpan={editable ? columns.length + 1 : columns.length}
@@ -253,7 +240,7 @@ export default function CustomizedTable<DataType>({
             <div className="flex justify-center py-3">
                 <Pagination totalPages={totalPages} />
             </div>
-            {renderMenu}     
-        </div>        
+            {renderMenu}
+        </div>
     );
 }

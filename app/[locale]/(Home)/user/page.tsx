@@ -6,7 +6,6 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import { deleteUser } from '@/app/lib/actions';
 import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
 import getDictionary from '@/app/locales/dictionaries';
-import { auth } from '@/auth';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 
 
@@ -23,12 +22,11 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const session = await auth();
 
     const [t, totalPages, users] = await Promise.all([
         getDictionary(locale),
         fetchUsersPages(query, itemsPerPage),
-        fetchFilteredUsers(session?.user.name, query, itemsPerPage, currentPage)
+        fetchFilteredUsers(query, itemsPerPage, currentPage)
     ]);
     
     const columns: IColumnData[] = [
@@ -57,6 +55,8 @@ export default async function Page(props: {
                 path='user'
                 locale={locale}
                 deleteAction={deleteUser}
+                editable={true}
+                deletable={true}
             />
         </div>
     );

@@ -34,6 +34,7 @@ export default async function Page(props: {
         getDictionary(locale),
         fetchUserById(id)
     ]);
+    console.log('Check : ', user);
 
     if (!user) {
         notFound();
@@ -92,6 +93,13 @@ export default async function Page(props: {
                     { name: 'userDepartment', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
                     { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
                     { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
+                ]
+            },
+            {
+                title: t('user.secTitle_password'), description: "",
+                items: [
+                    { name: 'userPwdNew', title: t('user.password_new'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new') },
+                    { name: 'userPwdNewAgain', title: t('user.password_new_again'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new_again') },
                 ]
             },
         ],

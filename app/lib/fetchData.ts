@@ -18,7 +18,6 @@ await client.connect();
 // ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredUsers(
-    loginName: string | undefined,
     query: string,
     itemsPerPage: number,
     currentPage: number
@@ -50,11 +49,7 @@ export async function fetchFilteredUsers(
             ORDER BY u.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `);
-        const converted = users.rows.map((data: UserField) => ({
-            ...data,
-            editable: !!loginName && (loginName === 'admin'),
-        }));
-        return converted;
+        return users.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch users.");
