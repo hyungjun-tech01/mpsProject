@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from "next-auth/react"
 import clsx from 'clsx';
 import { SideMenuList } from '@/constans';
 
@@ -9,11 +10,15 @@ import { SideMenuList } from '@/constans';
 export default function NavLinks({ extended }: { extended: boolean }) {
   const pathname = usePathname();
   const category = usePathname().split('/')[1];
+  const { data: session } = useSession();
 
   return (
     <>
       {SideMenuList.map((link) => {
+        if(session?.user?.role !== "admin" && link.name === 'user') return;
+
         const LinkIcon = link.icon;
+        
         return (
           <Link
             key={link.name}

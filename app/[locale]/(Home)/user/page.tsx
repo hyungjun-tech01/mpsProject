@@ -3,10 +3,8 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { deleteUser } from '@/app/lib/actions';
-import { fetchUsersPages, fetchFilteredUsers } from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
-import { auth } from '@/auth';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 
 
@@ -23,13 +21,18 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const session = await auth();
 
+    const adapter = MyDBAdapter();
     const [t, totalPages, users] = await Promise.all([
         getDictionary(locale),
-        fetchUsersPages(query, itemsPerPage),
-        fetchFilteredUsers(session?.user.name, query, itemsPerPage, currentPage)
+        adapter.getFilteredUsersPages(query, itemsPerPage),
+        adapter.getFilteredUsers(query, itemsPerPage, currentPage)
     ]);
+
+    // const handleDelete = async (userId: string) => {
+    //     'use server';
+    //     await adapter.deleteUser(userId);
+    //   };
     
     const columns: IColumnData[] = [
         { name: 'user_name', title: t('user.user_id'), align: 'center' },
@@ -56,7 +59,9 @@ export default async function Page(props: {
                 totalPages={totalPages}
                 path='user'
                 locale={locale}
-                deleteAction={deleteUser}
+                deleteAction={adapter.deleteUser}
+                editable={true}
+                deletable={true}
             />
         </div>
     );

@@ -1,6 +1,6 @@
 'use server';
 
-import pg from 'pg';
+import type { Pool } from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -9,19 +9,19 @@ import bcrypt from "bcrypt";
 
 const salt = await bcrypt.genSalt(11);
 
-const client = new pg.Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
-});
+// const client = new pg.Client({
+//     user: String(process.env.DB_USER),
+//     password: String(process.env.DB_PASSWORD),
+//     host: String(process.env.DB_HOST),
+//     port: Number(process.env.DB_PORT),
+//     database: String(process.env.DB_NAME),
+//     connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS)
+// });
 
-await client.connect();
+// await client.connect();
 
 
-export type State = {
+export type UserState = {
     errors?: {
         userName?: string[];
         userDisabledPrinting?: string[];
@@ -33,18 +33,18 @@ export type State = {
 
 const UserFormSchema = z.object({
     userName: z.string({
-        invalid_type_error: 'User ID must be string ',
-    }).min(1, { message: "Name is required" }),
+        invalid_type_error: '사용자 ID는 문자여야 합니다.',
+    }).min(1, { message: "사용자 ID는 필수 입력 항목입니다." }),
     userDisabledPrinting: z.enum(['N', 'Y'], {
         invalid_type_error: "Please select an 'Disabled Printing' status."
     }),
     userBalanceCurrent: z.coerce.number()
-        .min(0, { message: 'Please enter a balance not less than 0.' }),
+        .min(0, { message: '금액은 0 이상이어야 합니다.' }),
 });
 
 const CreateUser = UserFormSchema.omit({});
 
-export async function createUser(prevState: State, formData: FormData) {
+export async function createUser(client: Pool, prevState: UserState, formData: FormData) {
     const validatedFields = CreateUser.safeParse({
         userName: formData.get('userName'),
         userDisabledPrinting: formData.get('userDisabledPrinting'),
@@ -55,7 +55,7 @@ export async function createUser(prevState: State, formData: FormData) {
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create User.',
+            message: '필수 입력 누락. 새 사용자를 만들지 못했습니다.',
         };
     };
 
@@ -144,7 +144,8 @@ export async function createUser(prevState: State, formData: FormData) {
 
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
-export async function modifyUser(id: string, prevState: State, formData: FormData) {
+export async function modifyUser(client: Pool, id: string, prevState: UserState, formData: FormData) {
+    console.log('ModifyUser :', formData);
     if (!formData.has('userDisabledPrinting')) {
         formData.set('userDisabledPrinting', 'N');
     }
@@ -160,7 +161,7 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create User.',
+            message: '필수 입력 누락. 사용자 정보를 갱신하지 못했습니다..',
         };
     };
     
@@ -172,6 +173,24 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     const newDept = formData.get('userDepartment');
     const newCardNo1 = formData.get('userCardNumber');
     const newCardNo2 = formData.get('userCardNumber2');
+    const newPwd = formData.get('userPwdNew');
+    const newPwdAgain = formData.get('userPwdNewAgain');
+
+    const changePwd = (!!newPwd && newPwd !== '') && (!!newPwdAgain && newPwdAgain !== '');
+
+    if(changePwd && (newPwd.toString().length < 6 || newPwdAgain.toString().length < 6)) {
+        return {
+            errors: ["암호 길이 작음"],
+            message: '암호는 6자리 이상이어야 합니다.',
+        };
+    };
+
+    if(changePwd && (newPwd !== newPwdAgain)) {
+        return {
+            errors: ["입력 암호 불일치"],
+            message: '입력 암호가 일치하지 않습니다.',
+        };
+    };
 
     // Prepare data for updating the database
     try {
@@ -185,11 +204,12 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
                 u.department,
                 u.card_number,
                 u.card_number2,
-                u.restricted
+                u.restricted,
+                u.password
             FROM tbl_user_info u
             WHERE u.user_id='${id}'
         `);
-        
+        console.log('Modify User / current db :', resp.rows[0]);
         const currFullName = resp.rows[0].full_name;
         const currEmail = resp.rows[0].email;
         const currHomeDir = resp.rows[0].home_directory;
@@ -198,46 +218,99 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
         const currCardNo1 = resp.rows[0].card_number;
         const currCardNo2 = resp.rows[0].card_number2;
         const currRestricted = resp.rows[0].restricted;
+        const currPassword = resp.rows[0].password;
 
         let checkNeedUpdate = false;
-        checkNeedUpdate ||= newFullName !== currFullName;
-        checkNeedUpdate ||= newEmail !== currEmail;
-        checkNeedUpdate ||= newHomeDir !== currHomeDir;
-        checkNeedUpdate ||= newDisabledPrinting !== currDisabledPrinting;
-        checkNeedUpdate ||= newDept !== currDept;
-        checkNeedUpdate ||= newCardNo1 !== currCardNo1;
-        checkNeedUpdate ||= newCardNo2 !== currCardNo2;
-        checkNeedUpdate ||= newRestricted !== currRestricted;
+        let sqlText = "UPDATE tbl_user_info SET";
 
+        if(newFullName !== currFullName) {
+            sqlText += ` full_name='${newFullName}'`;
+            checkNeedUpdate = true;
+        }
+        if(newEmail !== currEmail) {
+            if(checkNeedUpdate) {
+                sqlText += `, email='${newEmail}'`;
+            } else {
+                sqlText += ` email='${newEmail}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newHomeDir !== currHomeDir) {
+            if(checkNeedUpdate) {
+                sqlText += `, home_directory='${newHomeDir}'`;
+            } else {
+                sqlText += ` home_directory='${newHomeDir}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newDisabledPrinting !== currDisabledPrinting) {
+            if(checkNeedUpdate) {
+                sqlText += `, disabled_printing='${newHomeDir}'`;
+            } else {
+                sqlText += ` disabled_printing='${newHomeDir}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newDept !== currDept) {
+            if(checkNeedUpdate) {
+                sqlText += `, department='${newDept}'`;
+            } else {
+                sqlText += ` department='${newDept}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newCardNo1 !== currCardNo1) {
+            if(checkNeedUpdate) {
+                sqlText += `, card_number='${newCardNo1}'`;
+            } else {
+                sqlText += ` card_number='${newCardNo1}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newCardNo2 !== currCardNo2) {
+            if(checkNeedUpdate) {
+                sqlText += `, card_number2='${newCardNo2}'`;
+            } else {
+                sqlText += ` card_number2='${newCardNo2}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(newRestricted !== currRestricted) {
+            if(checkNeedUpdate) {
+                sqlText += `, restricted='${newCardNo2}'`;
+            } else {
+                sqlText += ` restricted='${newCardNo2}'`;
+                checkNeedUpdate = true;
+            }
+        }
+        if(changePwd) {
+            // console.log("Check :", currPassword);
+            const isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);
+            // console.log("Check :", isMatched);
+            if(!isMatched) {
+                const hashed = await bcrypt.hash(String(newPwd), salt);
+                if(checkNeedUpdate) {
+                    sqlText += `, password='${hashed}'`;
+                } else {
+                    sqlText += ` password='${hashed}'`;
+                    checkNeedUpdate = true;
+                }
+            }
+        }
 
         if (!checkNeedUpdate ) {
             return {
-                message: 'Info: No changed data',
+                message: '변경 사항이 없습니다.',
             };
         };
 
-        if(checkNeedUpdate) {
-            try {
-                await client.query(`
-                    UPDATE tbl_user_info
-                    SET
-                        full_name='${newFullName}',
-                        email='${newEmail}',
-                        home_directory='${newHomeDir}',
-                        disabled_printing='${newDisabledPrinting}',
-                        department='${newDept}',
-                        card_number='${newCardNo1}',
-                        card_number2='${newCardNo2}',
-                        restricted = '${newRestricted}',
-                        modified_date=NOW(),
-                        modified_by='admin'
-                    WHERE user_id='${id}'
-                `)
-            } catch (error) {
-                console.log('Update User / Error : ', error);
-                return {
-                    message: 'Database Error: Failed to update user data.',
-                };
+        try {
+            console.log('Update User / query : ', sqlText);
+            await client.query(sqlText);
+        } catch (error) {
+            console.log('Update User / Error : ', error);
+            return {
+                message: 'Database Error: Failed to update user data.',
             };
         };
 
@@ -251,7 +324,7 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     revalidatePath(`/user/${id}/edit`);
 };
 
-export async function deleteUser(id: string) {
+export async function deleteUser(client: Pool, id: string) {
     // Then, Delete user_account, account and user
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
@@ -281,7 +354,7 @@ const ChangeBalance = z.object({
     }).min(0, { message: 'Please enter a balance not less than 0.' }),
 });
 
-export async function changeBalance(id: string, prevState: State, formData: FormData) {
+export async function changeBalance(client: Pool, id: string, prevState: UserState, formData: FormData) {
     const validatedFields = ChangeBalance.safeParse({
         balanceNew: formData.get('balanceNew')
     });
@@ -295,7 +368,7 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     };
 
     const { balanceNew } = validatedFields.data;
-    const txnComment = formData.get('txnComment');
+    // const txnComment = formData.get('txnComment');
 
     // First, get account id through tbl_user_account
     // let foundAccountID = null;
@@ -398,7 +471,7 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     revalidatePath(`/user/${id}/charge`);
 };
 
-export async function deleteDocument(id: string) {
+export async function deleteDocument(client: Pool, id: string) {
     let selected_job_type = '';
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
@@ -434,39 +507,24 @@ export async function deleteDocument(id: string) {
 
 
 //------- Account -----------------------------------------------------------------------------
-const AccountFormSchema = z.object({
-    userName: z.string({
-        invalid_type_error: 'User ID must be string ',
-    }).min(1, { message: "Name is required" }),
-    userPwdNew: z.string().min(6),
-    userPwdNewAgain: z.string().min(6)
-});
+export async function updateAccount(client: Pool, id: string, prevState: UserState, formData: FormData) {
+    // console.log('[Account] Update account : ', formData);
+    const newPwd = formData.get('userPwdNew');
+    const newPwdAgain = formData.get('userPwdNewAgain');
+    
+    const changePwd = (!!newPwd && newPwd !== '') && (!!newPwdAgain && newPwdAgain !== '');
 
-const UpdateAccount = AccountFormSchema.omit({ userName : true});
-
-export async function updateAccount(id: string, prevState: State, formData: FormData) {
-    console.log('[Account] Update account : ', formData);
-
-    const validatedFields = UpdateAccount.safeParse({
-        userPwdNew: formData.get('userPwdNew'),
-        userPwdNewAgain: formData.get('userPwdNewAgain'),
-    });
-
-    // If form validation fails, return errors early. Otherwise, continue.
-    if (!validatedFields.success) {
+    if(changePwd && (newPwd.toString().length < 6 || newPwdAgain.toString().length < 6)) {
         return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create User.',
+            errors: ["암호 길이 작음"],
+            message: '암호는 6자리 이상이어야 합니다.',
         };
     };
 
-    const newPwd = formData.get('userPwdNew');
-    const newPwdAgain = formData.get('userPwdNewAgain');
-    const changePwd = !!newPwd || !!newPwdAgain;
     if(changePwd && (newPwd !== newPwdAgain)) {
         return {
-            errors: ["Password Missmatch"],
-            message: 'Input passwords are not the same',
+            errors: ["암호 불일치"],
+            message: '입력한 암호가 서로 일치하지 않습니다.',
         };
     };
 
@@ -493,15 +551,12 @@ export async function updateAccount(id: string, prevState: State, formData: Form
             WHERE u.user_id='${id}'
         `);
 
-        const { 
-            currFullName,
-            currEmail,
-            // currHomeDir,
-            currDept,
-            currCardNo1,
-            currCardNo2,
-            currPassword
-        } = resp.rows[0];
+        const currFullName = resp.rows[0].full_name;
+        const currEmail = resp.rows[0].email;
+        const currDept = resp.rows[0].department;
+        const currCardNo1 = resp.rows[0].card_number;
+        const currCardNo2 = resp.rows[0].card_number2;
+        const currPassword = resp.rows[0].password;
 
         let checkNeedUpdate = false;
         let sqlText = "UPDATE tbl_user_info SET";
@@ -542,10 +597,11 @@ export async function updateAccount(id: string, prevState: State, formData: Form
                 checkNeedUpdate = true;
             }
         }
+        
         if(changePwd) {
-            console.log("Check :", currPassword);
+            // console.log("Check :", currPassword);
             const isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);
-            console.log("Check :", isMatched);
+            // console.log("Check :", isMatched);
             if(!isMatched) {
                 const hashed = await bcrypt.hash(String(newPwd), salt);
                 if(checkNeedUpdate) {
@@ -563,16 +619,14 @@ export async function updateAccount(id: string, prevState: State, formData: Form
             };
         };
 
-        if(checkNeedUpdate) {
-            sqlText += `, modified_date=NOW(), modified_by='${resp.rows[0].user_name}' WHERE user_id='${id}'`;
-            console.log('[Account] Update account / sql text : ', sqlText);
-            try {
-                await client.query(sqlText);
-            } catch (error) {
-                console.log('Update Account / Error : ', error);
-                return {
-                    message: 'Database Error: Failed to update account data.',
-                };
+        sqlText += `, modified_date=NOW(), modified_by='${resp.rows[0].user_name}' WHERE user_id='${id}'`;
+        console.log('[Account] Update account / sql text : ', sqlText);
+        try {
+            await client.query(sqlText);
+        } catch (error) {
+            console.log('Update Account / Error : ', error);
+            return {
+                message: 'Database Error: Failed to update account data.',
             };
         };
 

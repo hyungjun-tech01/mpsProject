@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@mui/material';
-import { State } from '@/app/lib/actions';
+import type { UserState } from '@/app/lib/actions';
 import { ChangeEvent, useActionState, useState, useEffect } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
@@ -26,16 +26,16 @@ export function UserForm({
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
         id: string | undefined,
-        prevState: State,
+        prevState: UserState,
         formData: FormData
     ) => Promise<void>;
 }) {
-    const initialState: State = { message: null, errors: {} };
+    const initialState: UserState = { message: null, errors: {} };
     const updatedAction = !!id ? action.bind(null, id) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>(userData.schedule_period);
     const [scheduleStart, SetScheduleStart] = useState<number>(userData.schedule_start % 100);
-    const [subScheduleStartSub, SetSubScheduleStart] = useState<number>(Math.floor(userData.schedule_start/100));
+    const [subScheduleStartSub, SetSubScheduleStart] = useState<number>(Math.floor(userData.schedule_start / 100));
     const [optionsForYearDate, setOptionsForYearDate] = useState<{ title: string, value: number }[]>([]);
 
     const optionsForSchedulePeriod = [
@@ -122,7 +122,7 @@ export function UserForm({
     };
 
     useEffect(() => {
-        if(userData.schedule_start > 100){
+        if (userData.schedule_start > 100) {
             SetScheduleStart(Math.floor(userData.schedule_start / 100));
             SetSubScheduleStart(userData.schedule_start % 100);
         } else {
@@ -282,7 +282,7 @@ export function UserForm({
                                 : null
                             }
                         />
-                        {!!id && 
+                        {!!id &&
                             <EditItem
                                 name="remain_amount"
                                 title={translated.group_remain_amount}

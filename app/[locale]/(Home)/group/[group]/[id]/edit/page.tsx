@@ -5,27 +5,9 @@ import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
-import {
-  modifyDeviceGroup,
-  modifyUserGroup,
-  modifySecurityGroup,
-} from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
-import {
-  fetchGroupInfoByID,
-  fetchUsersNotInGroup,
-  fetchUsersNotInGroupPages,
-  fetchDevicesNotInGroup,
-  fetchDeviesNotInGroupPages,
-  fetchDeptsNotInGroup,
-  fetchDeptsNotInGroupPages,
-  fetchUsersInGroup,
-  fetchUsersInGroupPages,
-  fetchDevicesInGroup,
-  fetchDevicesInGroupPages,
-  fetchDeptsInGroup,
-  fetchDeptsInGroupPages,
-} from "@/app/lib/fetchGroupData";
+import MyDBAdapter from '@/app/lib/adapter';
+
 
 export default async function Page(props: {
   searchParams?: Promise<IGroupSearch>;
@@ -51,6 +33,7 @@ export default async function Page(props: {
     notFound();
   }
 
+  const adapter = MyDBAdapter();
   const [
     t,
     data,
@@ -60,27 +43,27 @@ export default async function Page(props: {
     inGroupTotalPages,
   ] = await Promise.all([
     getDictionary(locale),
-    fetchGroupInfoByID(id, group),
+    adapter.getGroupInfoById(id, group),
     group === "user"
-      ? fetchUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+      ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
       : group === "device"
-      ? fetchDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-      : fetchDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
+      ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+      : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
     group === "user"
-      ? fetchUsersNotInGroupPages(queryOutGroup, itemsPerPage)
+      ? adapter.getUsersNotInGroupPages(queryOutGroup, itemsPerPage)
       : group === "device"
-      ? fetchDeviesNotInGroupPages(queryOutGroup, itemsPerPage)
-      : fetchDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
+      ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
+      : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
     group === "user"
-      ? fetchUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+      ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
       : group === "device"
-      ? fetchDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
-      : fetchDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
+      ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+      : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
     group === "user"
-      ? fetchUsersInGroupPages(id, queryInGroup, itemsPerPage)
+      ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
       : group === "device"
-      ? fetchDevicesInGroupPages(id, queryInGroup, itemsPerPage)
-      : fetchDeptsInGroupPages(id, queryInGroup, itemsPerPage),
+      ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
+      : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
   ]);
 
   // console.log("[Group Edit] data:", data);
@@ -223,7 +206,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifyDeviceGroup}
+          action={adapter.modifyDeviceGroup}
         />
       )}
       {group === "user" && (
@@ -234,7 +217,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifyUserGroup}
+          action={adapter.modifyUserGroup}
         />
       )}
       {group === "security" && (
@@ -245,7 +228,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifySecurityGroup}
+          action={adapter.modifySecurityGroup}
         />
       )}
     </main>

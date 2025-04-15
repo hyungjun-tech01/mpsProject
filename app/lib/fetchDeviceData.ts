@@ -25,83 +25,50 @@ export async function fetchFilteredDevices(
     query: string,
     itemsPerPage: number,
     currentPage: number,
+    groupId?: string
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const device = query !== '' 
-            ? await client.query(`
-                SELECT 
-                device_id id,
-                device_id,
-                device_name,
-                location,
-                notes,
-                physical_device_id,
-                device_model,
-                serial_number,
-                deleted,
-                device_status,
-                device_type,
-                app_type,
-                ext_device_function,
-                cyan_toner_percentage,
-                magenta_toner_percentage,
-                yellow_toner_percentage,
-                black_toner_percentage,
+        const device = await client.query(`
+            SELECT
+                d.device_id AS id,
+                d.device_id,
+                d.device_name,
+                d.location,
+                d.notes,
+                d.physical_device_id,
+                d.device_model,
+                d.serial_number,
+                d.deleted,
+                d.device_status,
+                d.device_type,
+                d.app_type,
+                d.ext_device_function,
+                d.cyan_toner_percentage,
+                d.magenta_toner_percentage,
+                d.yellow_toner_percentage,
+                d.black_toner_percentage,
                 CASE 
-                    WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
-                    WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
-                    WHEN device_type = 'mono_mfd' THEN 'Black_MFD01.png'
+                    WHEN d.device_type = 'color_printer' THEN 'Color_Printer01.png'
+                    WHEN d.device_type = 'mono_printer' THEN 'Black_Printer01.png'
+                    WHEN d.device_type = 'mono_mfd' THEN 'Black_MFD01.png'
                     ELSE 'Color_MFD01.png'
-                    END AS device_type_img
-                from tbl_device_info
-                WHERE
-                1=1 AND
-                    (
-                        tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.device_model ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                        tbl_device_info.physical_device_id ILIKE '${`%${query}%`}'    
-                    )
-                AND deleted = 'N'
-                ORDER BY tbl_device_info.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `)
-            : await client.query(`
-                SELECT 
-                    device_id id,
-                    device_id,
-                    device_name,
-                    location,
-                    notes,
-                    physical_device_id,
-                    device_model,
-                    serial_number,
-                    deleted,
-                    device_status,
-                    device_type,
-                    app_type,
-                    ext_device_function,
-                    ext_device_function,
-                    cyan_toner_percentage,
-                    magenta_toner_percentage,
-                    yellow_toner_percentage,
-                    black_toner_percentage,
-                    CASE 
-                    WHEN device_type = 'color_printer' THEN 'Color_Printer01.png'
-                    WHEN device_type = 'mono_printer' THEN 'Black_Printer01.png'
-                    WHEN device_type = 'mono_mfd' THEN 'Black_MFD01.png'
-                    ELSE 'Color_MFD01.png'
-                    END AS device_type_img
-                FROM tbl_device_info
-                WHERE
-                1=1
-                AND deleted = 'N'
-                ORDER BY tbl_device_info.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
-            `)
-        ;
+                END AS device_type_img
+            FROM tbl_device_info d
+            ${!!groupId ? "INNER JOIN tbl_group_member_info gm ON d.device_id = gm.member_id" : ""}
+            WHERE 1=1 
+            ${query === "" ? "" :
+                "AND ( d.device_name ILIKE '%" + query + "%' "
+                + "OR d.device_model ILIKE '%" + query + "%' "
+                + "OR d.ext_device_function ILIKE '%" + query + "%' "
+                + "OR d.physical_device_id ILIKE '%" + query + "%')"
+            }
+            AND deleted = 'N'
+            ${!!groupId ? "AND gm.group_id = '" + groupId + "'" : ""}
+            ORDER BY d.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `);
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
@@ -114,7 +81,7 @@ export async function fetchFilteredDevices(
         return converted;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch device.');
+        throw new Error('Failed to fetch devices.');
     }
 }
 

@@ -4,9 +4,12 @@ import { useState } from 'react';
 import { DensitySmallOutlined } from '@mui/icons-material';
 import DeviceModal from './deviceModal';
 
+interface ModalButtonProps {
+    list: any[];
+    modalId: string | undefined;
+}
 
-export default function ModalButton(props) {
-    const { list } = props;
+export default function ModalButton({list, modalId}: ModalButtonProps) {
     const [showModal, setShowModal] = useState(false);
     const clickModal = () => setShowModal(!showModal);
     return (
@@ -18,7 +21,7 @@ export default function ModalButton(props) {
             <DensitySmallOutlined className='w-6 h-6 text-gray-400' />
         </div>
         {showModal && 
-            <DeviceModal clickModal={clickModal} groupList={list}/>
+            <DeviceModal clickModal={clickModal} groupList={list} groupId={modalId} />
         }
         </>
     )

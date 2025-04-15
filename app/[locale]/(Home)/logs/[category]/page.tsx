@@ -4,13 +4,7 @@ import clsx from 'clsx';
 import Table from '@/app/components/log/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
-import { //fetchFilteredDeviceUsageLogPages,
-    //fetchFilteredDeviceUsageLogs,
-    //fetchFilteredApplicationLogPages,
-    // fetchFilteredApplicationLogs,
-    fetchFilteredAuditLogPages,
-    fetchFilteredAuditLogs
-} from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 
 
@@ -27,14 +21,16 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const adapter = MyDBAdapter();
     const [t, /* printlogPages, printlogs, applogPages, applogs,*/ auditlogPages, auditlogs] = await Promise.all([
         getDictionary(locale),
         //fetchFilteredDeviceUsageLogPages(itemsPerPage),
         //fetchFilteredDeviceUsageLogs(query, itemsPerPage, currentPage),
         //fetchFilteredApplicationLogPages(itemsPerPage),
         //fetchFilteredApplicationLogs(itemsPerPage, currentPage),
-        fetchFilteredAuditLogPages(query, itemsPerPage),
-        fetchFilteredAuditLogs(query, itemsPerPage, currentPage)
+        adapter.getFilteredAuditLogsPages(query, itemsPerPage),
+        adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage)
     ]);
     const subTitles = [
      //   { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },

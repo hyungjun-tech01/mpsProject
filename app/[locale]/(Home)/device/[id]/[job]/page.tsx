@@ -7,17 +7,12 @@ import {
     fetchDeviceFaxLineById
 } from '@/app/lib/fetchDeviceData';
 
-import {
-    fetchAllUsers, fetchAllUserGroup
-} from '@/app/lib/fetchData';
-
-
+import MyDBAdapter from '@/app/lib/adapter';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
 import FormFax from '@/app/components/device/create-form-fax';
 import {modifyDevice} from '@/app/components/device/actions';
 import { ISection } from '@/app/components/edit-items';
-import clsx from 'clsx';
 
 
 
@@ -33,14 +28,14 @@ export default async function Page(props: {
     const searchParams = await props.searchParams;
     
 
-
+    const adapter = MyDBAdapter();
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),
         fetchDeviceById(id),
         fetchPrinterGroup(),
         fetchDeviceFaxLineById(id),
-        fetchAllUsers(),
-        fetchAllUserGroup(),
+        adapter.getAllUsers(),
+        adapter.getGroupsByType('user'),
     ]);
 
     const editItems: ISection[] = [

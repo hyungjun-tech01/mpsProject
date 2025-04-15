@@ -1,0 +1,272 @@
+import type { Pool } from "pg";
+import { AuditLogField } from "@/app/lib/definitions";
+import { generateStrOf30Days } from "./utils";
+
+
+
+/*================= tbl_printer_usage_log =======================*/
+export async function fetchPrinterUsageLogByUserId(
+    client: Pool,
+    userId: string,
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const response = await client.query(`
+            SELECT to_char(TO_TIMESTAMP(pul.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') usage_date,
+                td.device_name display_name,
+                pul.total_pages pages,
+                pul.color_total_pages color_total_pages,
+                (pul.total_pages - pul.color_total_pages) black_total_pages,
+                pul.document_name document_name,
+                pul.status status
+            FROM tbl_audit_job_log pul, tbl_user_info tu, tbl_device_info td
+            WHERE pul.user_name = tu.user_name
+            and pul.device_id = td.device_id
+            and tu.user_id='${userId}'
+            ORDER BY usage_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `);
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch transaction by account id.");
+    }
+};
+
+export async function fetchPrinterUsageLogByUserIdPages(
+    client: Pool,
+    userId: string,
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+                SELECT COUNT(*) 
+                FROM tbl_audit_job_log pul, tbl_user_info tu
+                WHERE pul.user_name = tu.user_name
+                  and tu.user_id ='${userId}'
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch transaction by account id.");
+    }
+};
+
+export async function fetchAllTotalPageSum(
+    client: Pool,
+) {
+    try {
+        const sum = await client.query(`
+            SELECT SUM(total_pages)
+            FROM tbl_audit_job_log
+        `);
+        return sum.rows[0].sum;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
+
+export async function fetchTodayTotalPageSum(
+    client: Pool,
+) {
+    try {
+        const todayPages = await client.query(`
+            SELECT SUM(total_pages)
+            FROM tbl_audit_job_log
+            WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
+            AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
+        `);
+        return todayPages.rows[0].sum;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
+
+export async function fetchTotalPagesPerDayFor30Days(
+    client: Pool,
+) {
+    try {
+        const response = await client.query(`
+        SELECT 
+        TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
+            SUM(total_pages) AS pages
+        FROM tbl_audit_job_log
+        WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+        GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
+        ORDER BY used_day ASC`);
+
+        let maxVal = 0;
+        const dataFromDB: { used_day: string, pages: number }[] = [];
+        response.rows.forEach(
+            (item: { used_day: Date, pages: number }) => {
+                if (maxVal < item.pages) maxVal = item.pages;
+                dataFromDB.push({
+                    used_day: item.used_day.toISOString().split('T')[0],
+                    pages: item.pages
+                });
+            }
+        );
+
+        // if(dataFromDB.length === 0) return null;
+
+        const str30days = generateStrOf30Days();
+        const xData: string[] = [];
+        const yData: number[] = [];
+        for (let i = 0; i < 30; i++) {
+            const tempDayStr = str30days.at(i) || "";
+            if (i % 4 === 0) {
+                xData.push(tempDayStr);
+            } else {
+                xData.push("");
+            }
+
+            const foundIdx = dataFromDB.findIndex(data => data.used_day === tempDayStr);
+            yData.push(foundIdx === -1 ? 0 : dataFromDB[foundIdx].pages);
+        }
+        return { date: xData, pages: yData, maxY: maxVal };
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch card data.");
+    }
+};
+
+export function parsePrivacyText(
+    privacy_text: string | null
+): string {
+    if (!privacy_text) return ''; // Check for null or empty string
+
+    try {
+        const nameMatch = privacy_text.match(/name:"([^"]+)"/);
+        const textMatch = privacy_text.match(/text:\["([^"]+)"\]/);
+
+        const name = nameMatch ? nameMatch[1] : '';
+        const text = textMatch ? textMatch[1] : '';
+
+        return `Name: ${name}, Text: ${text} ....`;
+
+    } catch (error) {
+        console.error('Failed to parse privacy_text:', error);
+        return '';
+    }
+}
+
+/*========================== tbl_audit_log =========================*/
+export async function fetchFilteredAuditLogs(
+    client: Pool,
+    query: string,
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const auditLogs =
+            query !== ""
+                ? await client.query(`
+            select job_log_id,
+                job_type ,
+                printer_serial_number ,
+                job_id      ,
+                user_name ,
+                destination ,
+                send_time,
+                file_name ,
+                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                copies  ,
+                original_pages ,
+                CASE WHEN detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                privacy_text,
+                image_archive_path ,
+                text_archive_path ,
+                original_job_id  ,
+                document_name,
+                total_pages,
+                color_total_pages
+            from tbl_audit_job_log
+            WHERE (
+                printer_serial_number ILIKE '${`%${query}%`}' OR
+                user_name ILIKE '${`%${query}%`}' OR
+                document_name ILIKE '${`%${query}%`}' OR
+                privacy_text ILIKE '${`%${query}%`}' 
+                )			
+            ORDER BY send_time DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+            `)
+                : await client.query(`
+            select job_log_id,
+                job_type ,
+                printer_serial_number ,
+                job_id      ,
+                user_name ,
+                destination ,
+                send_time,
+                file_name ,
+                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                copies  ,
+                original_pages ,
+                CASE WHEN detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                privacy_text,
+                image_archive_path ,
+                text_archive_path ,
+                original_job_id  ,
+                document_name,
+                total_pages,
+                color_total_pages
+            from tbl_audit_job_log			
+            ORDER BY send_time DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+
+        const converted = auditLogs.rows.map((data: AuditLogField) => ({
+            ...data,
+            id: data.job_log_id,
+            privacy_text: parsePrivacyText(data.privacy_text),
+            image_archive_path: data.image_archive_path,
+        }));
+
+        return converted;
+
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
+    }
+};
+
+export async function fetchFilteredAuditLogPages(
+    client: Pool,
+    query: string,
+    itemsPerPage: number
+) {
+    try {
+        const count =
+            query !== ""
+                ? await client.query(`
+                SELECT COUNT(*) FROM tbl_audit_job_log
+                 WHERE 
+                    (
+                        printer_serial_number ILIKE '${`%${query}%`}' OR
+                        user_name ILIKE '${`%${query}%`}' OR
+                        document_name ILIKE '${`%${query}%`}' OR
+                        privacy_text ILIKE '${`%${query}%`}'                        
+                    )
+            `)
+                : await client.query(`
+                SELECT COUNT(*) FROM tbl_audit_job_log
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
+    }
+};

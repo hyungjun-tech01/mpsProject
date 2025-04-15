@@ -1,27 +1,12 @@
 import { notFound } from 'next/navigation';
-import clsx from 'clsx';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
 import { EditForm } from '@/app/components/group/edit-form';
 import { UserForm } from '@/app/components/group/user-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import { IGroupSearch, IBreadCrums } from '@/app/lib/definitions';
-import { modifyGroup } from '@/app/lib/actionsGroup';
 import getDictionary from "@/app/locales/dictionaries";
-import {
-    fetchUsersNotInGroup,
-    fetchUsersNotInGroupPages,
-    fetchDevicesNotInGroup,
-    fetchDeviesNotInGroupPages,
-    fetchDeptsNotInGroup,
-    fetchDeptsNotInGroupPages,
-    fetchUsersInGroup,
-    fetchUsersInGroupPages,
-    fetchDevicesInGroup,
-    fetchDevicesInGroupPages,
-    fetchDeptsInGroup,
-    fetchDeptsInGroupPages
-} from "@/app/lib/fetchGroupData";
+import MyDBAdapter from '@/app/lib/adapter';
 
 
 export default async function Page(props: {
@@ -45,28 +30,29 @@ export default async function Page(props: {
         notFound();
     };
 
+    const adapter = MyDBAdapter();
     const [t, outGroupData, outGroupTotalPages, inGroupData, inGroupTotalPages] = await Promise.all([
         getDictionary(locale),
         group === "user"
-            ? fetchUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+            ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
             : group === "device"
-                ? fetchDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-                : fetchDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
+                ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+                : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
         group === "user"
-            ? fetchUsersNotInGroupPages(queryOutGroup, itemsPerPage)
+            ? adapter.getUsersNotInGroupPages(queryOutGroup, itemsPerPage)
             : group === "device"
-                ? fetchDeviesNotInGroupPages(queryOutGroup, itemsPerPage)
-                : fetchDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
+                ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
+                : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
         group === "user"
-            ? fetchUsersInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
+            ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
             : group === "device"
-                ? fetchDevicesInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
-                : fetchDeptsInGroup(id, queryInGroup, itemsPerPage, currentOutPage),
+                ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
+                : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentOutPage),
         group === "user"
-            ? fetchUsersInGroupPages(id, queryInGroup, itemsPerPage)
+            ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
             : group === "device"
-                ? fetchDevicesInGroupPages(id, queryInGroup, itemsPerPage)
-                : fetchDeptsInGroupPages(id, queryInGroup, itemsPerPage),
+                ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
+                : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
     ]);
 
     const outGroup = { paramName: 'outGroupPage', totalPages: outGroupTotalPages, members: outGroupData };
@@ -186,7 +172,7 @@ export default async function Page(props: {
                     totalPages={outGroupTotalPages}
                     outGroup={outGroup}
                     inGroup={inGroup}
-                    action={modifyDeviceGroup}
+                    action={adapter.modifyDeviceGroup}
                 />
             }
             {group === 'members' &&

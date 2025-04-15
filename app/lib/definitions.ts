@@ -95,6 +95,18 @@ export type UserGroup = {
 }
 // ----- End : User ------------------------------------------//
 
+
+
+// ----- Begin : Account ----------------------------------------//
+export type Account = {
+  id: string;
+  name: string;
+  email: string | null;
+  role: string;
+  password: string;
+};
+// ----- End : Account ------------------------------------------//
+
 export type SecurityGroup = {
   id: string;
   name: string|null;

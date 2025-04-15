@@ -1,12 +1,12 @@
 'use server';
 
-import { fetchTotalPagesPerDayFor30Days } from "@/app/lib/fetchData";
+import MyDBAdapter from '@/app/lib/adapter';
 import LineChart from '../lineChart';
-import t from '@/app/locales/dictionaries';
 
 
 export default async function PageChartWrapper({ trans }: {trans : (key:string) => string}) {
-  const fetchedData = await fetchTotalPagesPerDayFor30Days();
+  const adapter = MyDBAdapter();
+  const fetchedData = await adapter.getTotalPagesPerDayFor30Days();
 
   if(!fetchedData || fetchedData.date.length === 0) {
     return <p className="mt-4 text-gray-400">No data available.</p>;

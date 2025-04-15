@@ -2,7 +2,7 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import getDictionary from '@/app/locales/dictionaries';
 import { EditForm } from '@/app/components/user/edit-form';
-import { createUser } from '@/app/lib/actions';
+import MyDBAdapter from '@/app/lib/adapter';
 
 
 export default async function Page(props: {
@@ -10,6 +10,7 @@ export default async function Page(props: {
 ) {
     const params = await props.params;
     const locale = params.locale;
+    const adapter = MyDBAdapter();
     const [ t ] = await Promise.all([
         getDictionary(locale),
     ]);
@@ -61,7 +62,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <EditForm items={formItems} buttons={buttonItems} action={createUser}/>
+            <EditForm items={formItems} buttons={buttonItems} action={adapter.createUser}/>
             {/* <CreateForm items={formItems} /> */}
         </main>
     );

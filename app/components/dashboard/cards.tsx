@@ -4,14 +4,8 @@ import {
   PrintOutlined,
   FileCopyOutlined,
 } from "@mui/icons-material";
-import {
-  fetchUserCount,
-  fetchDevices,
-  fetchAllTotalPageSum,
-  fetchTodayTotalPageSum,
-  fetchLatestDeviceStatus,
-} from "@/app/lib/fetchData";
-import getDictionary from "@/app/locales/dictionaries";
+import MyDBAdapter from "@/app/lib/adapter";
+// import getDictionary from "@/app/locales/dictionaries";
 
 
 const iconMap = {
@@ -22,14 +16,15 @@ const iconMap = {
 };
 
 
-export default async function CardWrapper({ trans }: {trans : (key:string) => string}) {
+export default async function CardWrapper({ trans }: { trans: (key: string) => string }) {
+  const adapter = MyDBAdapter();
   const [numberOfUsers, devices, totalPages, todayPages, latestDeviceStatus] =
     await Promise.all([
-      fetchUserCount(),
-      fetchDevices(),
-      fetchAllTotalPageSum(),
-      fetchTodayTotalPageSum(),
-      fetchLatestDeviceStatus(),
+      adapter.getUserCount(),
+      adapter.getAllDeviceIds(),
+      adapter.getAllTotalPageSum(),
+      adapter.getTodayTotalPageSum(),
+      adapter.getLatestDeviceStatus(),
     ]);
 
   let normalDeviceCount = 0;

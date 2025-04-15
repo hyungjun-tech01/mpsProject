@@ -8,13 +8,8 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
-import { changeBalance, modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import {
-    fetchUserById,
-    fetchPrinterUsageLogByUserId,
-    fetchPrinterUsageLogPagesByUserId
-} from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import { formatCurrency } from "@/app/lib/utils";
 
 
@@ -30,9 +25,11 @@ export default async function Page(props: {
     // const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const adapter = MyDBAdapter();
     const [t, user] = await Promise.all([
         getDictionary(locale),
-        fetchUserById(id)
+        adapter.getUserById(id)
     ]);
 
     if (!user) {
@@ -44,8 +41,8 @@ export default async function Page(props: {
     }
 
     const [printerUsageInfo, printerUsageCount] = await Promise.all([
-        fetchPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
-        fetchPrinterUsageLogPagesByUserId(id, itemsPerPage)
+        adapter.getPrinterUsageLogByUserId(id, itemsPerPage, currentPage),
+        adapter.getPrinterUsageLogByUserIdPages(id, itemsPerPage)
     ]);
 
     // Manipluate Process --------------------------------------------------------
@@ -92,6 +89,13 @@ export default async function Page(props: {
                     { name: 'userDepartment', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
                     { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
                     { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
+                ]
+            },
+            {
+                title: t('user.secTitle_password'), description: "",
+                items: [
+                    { name: 'userPwdNew', title: t('user.password_new'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new') },
+                    { name: 'userPwdNewAgain', title: t('user.password_new_again'), type: 'password', defaultValue: "", placeholder: t('user.placeholder_password_new_again') },
                 ]
             },
         ],
@@ -149,8 +153,8 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
-            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={changeBalance}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.modifyUser}/>}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.changeBalance}/>}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

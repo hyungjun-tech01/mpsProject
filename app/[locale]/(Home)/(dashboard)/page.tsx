@@ -3,6 +3,7 @@ import CardWrapper from "@/app/components/dashboard/cards";
 import { CardsSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
 import getDictionary from '@/app/locales/dictionaries';
+import { auth } from "@/auth"
 
 
 export default async function Page(props: {
@@ -11,6 +12,9 @@ export default async function Page(props: {
   const params = await props.params;
   const locale = params.locale;
   const t = await getDictionary(locale);
+
+  const session = await auth();
+  console.log("[Dashboard] session :", session?.user);
 
   return (
     <main>

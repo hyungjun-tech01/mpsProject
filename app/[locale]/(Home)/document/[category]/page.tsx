@@ -4,8 +4,7 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 // import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { deleteDocument } from '@/app/lib/actions';
-import { fetchFilteredDocumnets, fetchFilteredDocumnetPages } from '@/app/lib/fetchData';
+import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
@@ -26,17 +25,16 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    
     const session = await auth();
-
-    console.log(session?.user.name, 'session?.user');
-
     if(!session?.user)
         return notFound();
 
+    const adapter = MyDBAdapter();
     const [t, totalPages, docs] = await Promise.all([
         getDictionary(locale),
-        fetchFilteredDocumnetPages(query, session?.user.name, category, itemsPerPage),
-        fetchFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
+        adapter.getFilteredDocumnetsPages(query, session?.user.name, category, itemsPerPage),
+        adapter.getFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
     ]);
 
     // Tabs ----------------------------------------------------------------------
@@ -87,7 +85,7 @@ export default async function Page(props: {
                     path='document'
                     locale={locale}
                     editable = {false}
-                    deleteAction={deleteDocument}
+                    deleteAction={adapter.deleteDocument}
                 />
             </div>
         </div>
