@@ -1,23 +1,23 @@
 'use server';
 
-import pg from 'pg';
+import type { Pool } from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const client = new pg.Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
-});
+// const client = new pg.Client({
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     host: process.env.DB_HOST,
+//     port: process.env.DB_PORT,
+//     database: process.env.DB_NAME,
+//     connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
+// });
 
-await client.connect();
+// await client.connect();
 
 
-export type State = {
+export type GroupState = {
     errors?: {
         schedulePreiod?: string[];
         scheduleStart?: string[];
@@ -42,7 +42,7 @@ const GroupFormSchema = z.object({
 // Device group  ------------------------------------------------
 const CreateDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function createDeviceGroup(prevState: State, formData: FormData) {
+export async function createDeviceGroup(client: Pool, prevState: GroupState, formData: FormData) {
     // console.log('Create Group / formData :', formData);
     const validatedFields = CreateDeviceGroup.safeParse({
         groupName: formData.get('group_name')
@@ -119,7 +119,7 @@ export async function createDeviceGroup(prevState: State, formData: FormData) {
 
 const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifyDeviceGroup(id:string, prevState: State, formData: FormData) {
+export async function modifyDeviceGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
     // console.log('Modify Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
@@ -193,7 +193,7 @@ export async function modifyDeviceGroup(id:string, prevState: State, formData: F
 // User group  ------------------------------------------------
 const CreateUserGroup = GroupFormSchema.omit({remainAmount:true});
 
-export async function createUserGroup(prevState: State, formData: FormData) {
+export async function createUserGroup(client: Pool, prevState: GroupState, formData: FormData) {
     // console.log('Create Group / formData :', formData);
     const validatedFields = CreateUserGroup.safeParse({
         groupName: formData.get('group_name'),
@@ -287,7 +287,7 @@ export async function createUserGroup(prevState: State, formData: FormData) {
 
 const ModifyUserGroup = GroupFormSchema.omit({});
 
-export async function modifyUserGroup(id:string, prevState: State, formData: FormData) {
+export async function modifyUserGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
     console.log('Modify Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
@@ -373,7 +373,7 @@ export async function modifyUserGroup(id:string, prevState: State, formData: For
 // Security group  ------------------------------------------------
 const CreateSecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function createSecurityGroup(prevState: State, formData: FormData) {
+export async function createSecurityGroup(client: Pool, prevState: GroupState, formData: FormData) {
     console.log('Create Group / formData :', formData);
     const validatedFields = CreateSecurityGroup.safeParse({
         groupName: formData.get('group_name')
@@ -457,7 +457,7 @@ export async function createSecurityGroup(prevState: State, formData: FormData) 
 
 const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifySecurityGroup(id: string, prevState: State, formData: FormData) {
+export async function modifySecurityGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
     console.log('Create Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')
@@ -543,7 +543,7 @@ export async function modifySecurityGroup(id: string, prevState: State, formData
 
 
 // Delete group  ------------------------------------------------
-export async function deleteGroup(id: string) {
+export async function deleteGroup(client: Pool, id: string) {
     console.log('[actionsGroup] deleteGroup :', id);
     let category = "";
     try {

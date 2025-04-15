@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@mui/material";
-import { State } from "@/app/lib/actions";
+import type { GroupState } from "@/app/lib/actionsGroup";
 import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
@@ -26,11 +26,11 @@ export function EditForm({
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
     id: string | undefined,
-    prevState: State,
+    prevState: GroupState,
     formData: FormData
   ) => Promise<void>;
 }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: GroupState = { message: null, errors: {} };
   const updatedAction = !!id ? action.bind(null, id) : action;
   const [state, formAction] = useActionState(updatedAction, initialState);
 

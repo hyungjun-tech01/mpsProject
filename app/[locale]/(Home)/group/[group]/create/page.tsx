@@ -5,16 +5,8 @@ import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { IGroupSearch, IBreadCrums, Group } from "@/app/lib/definitions";
-import { createDeviceGroup, createUserGroup, createSecurityGroup } from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
-import {
-  fetchUsersNotInGroup,
-  fetchUsersNotInGroupPages,
-  fetchDevicesNotInGroup,
-  fetchDeviesNotInGroupPages,
-  fetchDeptsNotInGroup,
-  fetchDeptsNotInGroupPages
-} from "@/app/lib/fetchGroupData";
+import MyDBAdapter from '@/app/lib/adapter';
 
 
 export default async function Page(props: {
@@ -37,18 +29,19 @@ export default async function Page(props: {
     notFound();
   };
 
+  const adapter = MyDBAdapter();
   const [t, outGroupData, totalPages] = await Promise.all([
     getDictionary(locale),
     group === "user"
-      ? fetchUsersNotInGroup(query, itemsPerPage, currentPage)
+      ? adapter.getUsersNotInGroup(query, itemsPerPage, currentPage)
       : group === "device"
-        ? fetchDevicesNotInGroup(query, itemsPerPage, currentPage)
-        : fetchDeptsNotInGroup(query, itemsPerPage, currentPage),
+        ? adapter.getDevicesNotInGroup(query, itemsPerPage, currentPage)
+        : adapter.getDeptsNotInGroup(query, itemsPerPage, currentPage),
     group === "user"
-      ? fetchUsersNotInGroupPages(query, itemsPerPage)
+      ? adapter.getUsersNotInGroupPages(query, itemsPerPage)
       : group === "device"
-        ? fetchDeviesNotInGroupPages(query, itemsPerPage)
-        : fetchDeptsNotInGroupPages(query, itemsPerPage),
+        ? adapter.getDevicesNotInGroupPages(query, itemsPerPage)
+        : adapter.getDeptsNotInGroupPages(query, itemsPerPage),
   ]);
 
   const dummyData : Group = {
@@ -184,7 +177,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={null}
-          action={createDeviceGroup}
+          action={adapter.createDeviceGroup}
         />
       )}
       {group === "user" && (
@@ -194,7 +187,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={null}
-          action={createUserGroup}
+          action={adapter.createUserGroup}
         />
       )}
       {group === "security" && (
@@ -204,7 +197,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={null}
-          action={createSecurityGroup}
+          action={adapter.createSecurityGroup}
         />
       )}
     </main>

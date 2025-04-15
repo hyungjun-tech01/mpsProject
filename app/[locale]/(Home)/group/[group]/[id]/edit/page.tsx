@@ -5,13 +5,9 @@ import { EditForm } from "@/app/components/group/edit-form";
 import { UserForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
-import {
-  modifyDeviceGroup,
-  modifyUserGroup,
-  modifySecurityGroup,
-} from "@/app/lib/actionsGroup";
 import getDictionary from "@/app/locales/dictionaries";
 import MyDBAdapter from '@/app/lib/adapter';
+
 
 export default async function Page(props: {
   searchParams?: Promise<IGroupSearch>;
@@ -210,7 +206,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifyDeviceGroup}
+          action={adapter.modifyDeviceGroup}
         />
       )}
       {group === "user" && (
@@ -221,7 +217,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifyUserGroup}
+          action={adapter.modifyUserGroup}
         />
       )}
       {group === "security" && (
@@ -232,7 +228,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
-          action={modifySecurityGroup}
+          action={adapter.modifySecurityGroup}
         />
       )}
     </main>

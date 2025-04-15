@@ -4,6 +4,10 @@ import * as Group from "./fetchGroupData";
 import * as Device from "./fetchDeviceData";
 import * as Document from "./fetchDocumentData";
 import * as Log from "./fetchLogData";
+import type { UserState } from "./actions";
+import * as Action from "./actions";
+import type { GroupState } from "./actionsGroup";
+import * as GroupAction from "./actionsGroup";
 
 
 const pool = new Pool({
@@ -26,7 +30,6 @@ export default function MyDBAdapter() {
             itemsPerPage: number,
             currentPage: number
         ) {
-            const offset = (currentPage - 1) * itemsPerPage;
             return User.fetchFilteredUsers(pool, query, itemsPerPage, currentPage);
         },
         async getFilteredUsersPages(query: string, itemsPerPage: number) {
@@ -44,17 +47,28 @@ export default function MyDBAdapter() {
         async getUserCount() {
             return User.fetchUserCount(pool);
         },
-        async createUser(user: object) {
-            return User.fetchCreateUser(pool, user);
+        async createUser(prevState: UserState, formData: FormData) {
+            'use server';
+            return Action.createUser(pool, prevState, formData);
         },
-        async updateUser(user: object) {
-            return User.fetchUpdateUser(pool, user)
+        async modifyUser(id: string, prevState: UserState, formData: FormData) {
+            'use server';
+            return Action.modifyUser(pool, id, prevState, formData);
         },
         async deleteUser(userId: string) {
-            return User.fetchDeleteUser(pool, userId)
+            'use server';
+            return Action.deleteUser(pool, userId)
         },
         async getAccount(userName: string) {
             return User.fetchAccount(pool, userName)
+        },
+        async updateAccount(id: string, prevState: UserState, formData: FormData) {
+            'use server';
+            return Action.updateAccount(pool, id, prevState, formData);
+        },
+        async changeBalance(id: string, prevState: UserState, formData: FormData) {
+            'use server';
+            return Action.changeBalance(pool, id, prevState, formData);
         },
 
         // ----- Group ------------------------------------------
@@ -169,6 +183,34 @@ export default function MyDBAdapter() {
         ) {
             return Group.fetchDeptsInGroupPages(pool, id, query, itemsPerPage);
         },
+        async createDeviceGroup(prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.createDeviceGroup(pool, prevState, formData);
+        },
+        async modifyDeviceGroup(id: string, prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.modifyDeviceGroup(pool, id, prevState, formData);
+        },
+        async createUserGroup(prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.createUserGroup(pool, prevState, formData);
+        },
+        async modifyUserGroup(id: string, prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.modifyUserGroup(pool, id, prevState, formData);
+        },
+        async createSecurityGroup(prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.createUserGroup(pool, prevState, formData);
+        },
+        async modifySecurityGroup(id: string, prevState: GroupState, formData: FormData) {
+            'use server';
+            return GroupAction.modifyUserGroup(pool, id, prevState, formData);
+        },
+        async deleteGroup(id: string) {
+            'use server';
+            return GroupAction.deleteGroup(pool, id);
+        },
 
         // ----- Device --------------------------------------------
         async getFilteredDevices(
@@ -236,6 +278,10 @@ export default function MyDBAdapter() {
             itemsPerPage: number
         ) {
             return Document.fetchFilteredDocumnetPages(pool, query, userId, jobType, itemsPerPage);
+        },
+        async deleteDocument(id: string) {
+            'use server';
+            return Action.deleteDocument(pool, id);
         },
 
         // ----- Log -----------------------------------------------

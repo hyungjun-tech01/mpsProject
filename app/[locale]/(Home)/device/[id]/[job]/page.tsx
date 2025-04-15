@@ -8,14 +8,11 @@ import {
 } from '@/app/lib/fetchDeviceData';
 
 import MyDBAdapter from '@/app/lib/adapter';
-
-
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
 import FormFax from '@/app/components/device/create-form-fax';
 import {modifyDevice} from '@/app/components/device/actions';
 import { ISection } from '@/app/components/edit-items';
-import clsx from 'clsx';
 
 
 

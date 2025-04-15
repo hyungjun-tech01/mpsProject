@@ -1,6 +1,6 @@
 'use server';
 
-import pg from 'pg';
+import type { Pool } from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -9,19 +9,19 @@ import bcrypt from "bcrypt";
 
 const salt = await bcrypt.genSalt(11);
 
-const client = new pg.Client({
-    user: String(process.env.DB_USER),
-    password: String(process.env.DB_PASSWORD),
-    host: String(process.env.DB_HOST),
-    port: Number(process.env.DB_PORT),
-    database: String(process.env.DB_NAME),
-    connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS)
-});
+// const client = new pg.Client({
+//     user: String(process.env.DB_USER),
+//     password: String(process.env.DB_PASSWORD),
+//     host: String(process.env.DB_HOST),
+//     port: Number(process.env.DB_PORT),
+//     database: String(process.env.DB_NAME),
+//     connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS)
+// });
 
-await client.connect();
+// await client.connect();
 
 
-export type State = {
+export type UserState = {
     errors?: {
         userName?: string[];
         userDisabledPrinting?: string[];
@@ -44,7 +44,7 @@ const UserFormSchema = z.object({
 
 const CreateUser = UserFormSchema.omit({});
 
-export async function createUser(prevState: State, formData: FormData) {
+export async function createUser(client: Pool, prevState: UserState, formData: FormData) {
     const validatedFields = CreateUser.safeParse({
         userName: formData.get('userName'),
         userDisabledPrinting: formData.get('userDisabledPrinting'),
@@ -144,7 +144,7 @@ export async function createUser(prevState: State, formData: FormData) {
 
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
-export async function modifyUser(id: string, prevState: State, formData: FormData) {
+export async function modifyUser(client: Pool, id: string, prevState: UserState, formData: FormData) {
     console.log('ModifyUser :', formData);
     if (!formData.has('userDisabledPrinting')) {
         formData.set('userDisabledPrinting', 'N');
@@ -324,7 +324,7 @@ export async function modifyUser(id: string, prevState: State, formData: FormDat
     revalidatePath(`/user/${id}/edit`);
 };
 
-export async function deleteUser(id: string) {
+export async function deleteUser(client: Pool, id: string) {
     // Then, Delete user_account, account and user
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
@@ -354,7 +354,7 @@ const ChangeBalance = z.object({
     }).min(0, { message: 'Please enter a balance not less than 0.' }),
 });
 
-export async function changeBalance(id: string, prevState: State, formData: FormData) {
+export async function changeBalance(client: Pool, id: string, prevState: UserState, formData: FormData) {
     const validatedFields = ChangeBalance.safeParse({
         balanceNew: formData.get('balanceNew')
     });
@@ -471,7 +471,7 @@ export async function changeBalance(id: string, prevState: State, formData: Form
     revalidatePath(`/user/${id}/charge`);
 };
 
-export async function deleteDocument(id: string) {
+export async function deleteDocument(client: Pool, id: string) {
     let selected_job_type = '';
     try {
         await client.query("BEGIN"); // 트랜잭션 시작
@@ -507,7 +507,7 @@ export async function deleteDocument(id: string) {
 
 
 //------- Account -----------------------------------------------------------------------------
-export async function updateAccount(id: string, prevState: State, formData: FormData) {
+export async function updateAccount(client: Pool, id: string, prevState: UserState, formData: FormData) {
     // console.log('[Account] Update account : ', formData);
     const newPwd = formData.get('userPwdNew');
     const newPwdAgain = formData.get('userPwdNewAgain');

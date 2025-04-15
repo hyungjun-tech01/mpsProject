@@ -1,7 +1,5 @@
 import type { Pool } from "pg";
-import { BASE_PATH } from "@/constans";
-import { UserField, AuditLogField, Account } from "@/app/lib/definitions";
-import { generateStrOf30Days } from "./utils";
+import { UserField, Account } from "@/app/lib/definitions";
 
 
 // ----- Begin : User -------------------------------------------------------//
@@ -78,7 +76,6 @@ export async function fetchUsersPages(
         throw new Error("Failed to fetch total number of invoices.");
     }
 };
-
 
 export async function fetchAllUsers(
     client: Pool,
@@ -186,73 +183,6 @@ export async function fetchUserCount(
         throw new Error("Failed to fetch user count.");
     }
 };
-
-export async function fetchCreateUser(
-    client: Pool,
-    newUser: object
-) {
-    // Not yet
-};
-
-export async function fetchUpdateUser(
-    client: Pool,
-    user: object
-) {
-    // Not yet
-};
-
-export async function fetchDeleteUser(
-    client: Pool,
-    userId: string,
-) {
-    // Not yet
-};
-
-
-
-
-// export async function fetchTransactionsByAccountId(
-//     client: Pool,
-//     account_id: string,
-//     itemsPerPage: number,
-//     currentPage: number
-// ) {
-//     const offset = (currentPage - 1) * itemsPerPage;
-//     try {
-//         const transactionInfo = await client.query(`
-//                 SELECT * FROM tbl_account_transaction
-//                 WHERE
-//                     account_id='${account_id}'
-//                 ORDER BY transaction_date DESC
-//                 LIMIT ${itemsPerPage} OFFSET ${offset}
-//             `);
-
-//         return transactionInfo.rows;
-//     } catch (error) {
-//         console.error("Database Error:", error);
-//         throw new Error("Failed to fetch transaction by account id.");
-//     }
-// };
-
-// export async function fetchTransactionsPagesByAccountId(
-//     account_id: string,
-//     itemsPerPage: number
-// ) {
-//     try {
-//         const count = await client.query(`
-//                 SELECT COUNT(*) FROM tbl_account_transaction
-//                 WHERE
-//                     account_id='${account_id}'
-//             `);
-
-//         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-//         return totalPages;
-//     } catch (error) {
-//         console.error("Database Error:", error);
-//         throw new Error("Failed to fetch transaction by account id.");
-//     }
-// };
-
 // ----- End : User -------------------------------------------------------//
 
 

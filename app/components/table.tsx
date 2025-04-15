@@ -15,11 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
-import clsx from 'clsx';
 import Image from 'next/image';
-
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Link from 'next/link';
 
 

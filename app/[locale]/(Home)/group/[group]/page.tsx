@@ -8,9 +8,6 @@ import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
-import {
-    deleteGroup
-} from '@/app/lib/actionsGroup';
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
@@ -110,7 +107,7 @@ export default async function Page(props: {
                     totalPages={totalPages}
                     path={`/group/${group}`}
                     locale={locale}
-                    deleteAction={deleteGroup}
+                    deleteAction={adapter.deleteGroup}
                 />
             </div>
         </div>

@@ -3,7 +3,6 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { deleteUser } from '@/app/lib/actions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
@@ -29,6 +28,11 @@ export default async function Page(props: {
         adapter.getFilteredUsersPages(query, itemsPerPage),
         adapter.getFilteredUsers(query, itemsPerPage, currentPage)
     ]);
+
+    // const handleDelete = async (userId: string) => {
+    //     'use server';
+    //     await adapter.deleteUser(userId);
+    //   };
     
     const columns: IColumnData[] = [
         { name: 'user_name', title: t('user.user_id'), align: 'center' },
@@ -55,7 +59,7 @@ export default async function Page(props: {
                 totalPages={totalPages}
                 path='user'
                 locale={locale}
-                deleteAction={deleteUser}
+                deleteAction={adapter.deleteUser}
                 editable={true}
                 deletable={true}
             />

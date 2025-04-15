@@ -4,7 +4,6 @@ import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 // import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
-import { deleteDocument } from '@/app/lib/actions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { notFound } from "next/navigation";
@@ -26,10 +25,8 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    
     const session = await auth();
-
-    console.log(session?.user.name, 'session?.user');
-
     if(!session?.user)
         return notFound();
 
@@ -88,7 +85,7 @@ export default async function Page(props: {
                     path='document'
                     locale={locale}
                     editable = {false}
-                    deleteAction={deleteDocument}
+                    deleteAction={adapter.deleteDocument}
                 />
             </div>
         </div>

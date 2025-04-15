@@ -4,7 +4,6 @@ import { EditForm } from '@/app/components/user/edit-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 
 import getDictionary from '@/app/locales/dictionaries';
-import { updateAccount } from '@/app/lib/actions';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth"
 
@@ -61,7 +60,7 @@ export default async function Page(props: {
                 ]}
             />
 
-            <EditForm id={user.user_id} items={items} buttons={buttonItems} action={updateAccount}/>
+            <EditForm id={user.user_id} items={items} buttons={buttonItems} action={adapter.updateAccount}/>
         </main>
     );
 }

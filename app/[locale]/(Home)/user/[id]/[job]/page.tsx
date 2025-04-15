@@ -8,7 +8,6 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import LogTable from '@/app/components/table';
 
 import getDictionary from '@/app/locales/dictionaries';
-import { changeBalance, modifyUser } from '@/app/lib/actions';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import { formatCurrency } from "@/app/lib/utils";
@@ -154,8 +153,8 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={modifyUser}/>}
-            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={changeBalance}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.modifyUser}/>}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.changeBalance}/>}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable
