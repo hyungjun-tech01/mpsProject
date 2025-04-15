@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import {
   PaidOutlined,
   AccountCircleOutlined,
@@ -5,8 +6,7 @@ import {
   FileCopyOutlined,
 } from "@mui/icons-material";
 import MyDBAdapter from "@/app/lib/adapter";
-// import getDictionary from "@/app/locales/dictionaries";
-
+import { auth } from "@/auth";
 
 const iconMap = {
   collected: PaidOutlined,
@@ -17,46 +17,65 @@ const iconMap = {
 
 
 export default async function CardWrapper({ trans }: { trans: (key: string) => string }) {
+  const session = await auth();
   const adapter = MyDBAdapter();
-  const [numberOfUsers, devices, totalPages, todayPages, latestDeviceStatus] =
-    await Promise.all([
-      adapter.getUserCount(),
-      adapter.getAllDeviceIds(),
-      adapter.getAllTotalPageSum(),
-      adapter.getTodayTotalPageSum(),
-      adapter.getLatestDeviceStatus(),
-    ]);
 
-  let normalDeviceCount = 0;
-  let abnormalDeviceCount = 0;
+  if (session?.user.role === "admin") {
+    const [numberOfUsers, devices, totalPages, todayPages, latestDeviceStatus] =
+      await Promise.all([
+        adapter.getUserCount(),
+        adapter.getAllDeviceIds(),
+        adapter.getAllTotalPageSum(),
+        adapter.getTodayTotalPageSum(),
+        adapter.getLatestDeviceStatus(),
+      ]);
 
-  devices.forEach(device => {
-    const foundIdx = latestDeviceStatus.findIndex(status => status.printer_id === device.printer_id);
-    if (foundIdx === -1) {
-      normalDeviceCount++;
-    } else {
-      if (latestDeviceStatus.at(foundIdx).hardware_check_status === 'N') {
+    let normalDeviceCount = 0;
+    let abnormalDeviceCount = 0;
+
+    devices.forEach(device => {
+      const foundIdx = latestDeviceStatus.findIndex(status => status.printer_id === device.printer_id);
+      if (foundIdx === -1) {
         normalDeviceCount++;
       } else {
-        abnormalDeviceCount++;
+        if (latestDeviceStatus.at(foundIdx).hardware_check_status === 'N') {
+          normalDeviceCount++;
+        } else {
+          abnormalDeviceCount++;
+        }
       }
-    }
-  });
+    });
 
-  const devicesInfo = [
-    { title: trans('dashboard.total_device'), value: devices.length },
-    { title: trans('dashboard.normal_device'), value: normalDeviceCount },
-    { title: trans('dashboard.error_device'), value: abnormalDeviceCount }
-  ];
+    const devicesInfo = [
+      { title: trans('dashboard.total_device'), value: devices.length },
+      { title: trans('dashboard.normal_device'), value: normalDeviceCount },
+      { title: trans('dashboard.error_device'), value: abnormalDeviceCount }
+    ];
 
-  return (
-    <>
-      <Card title={trans("common.user")} value={numberOfUsers} type="users" />
-      <Card title={trans("device.device")} value={devicesInfo} type="devices" />
-      <Card title={trans("dashboard.total_pages")} value={totalPages || 0} type="pages" />
-      <Card title={trans("dashboard.today_pages")} value={todayPages || 0} type="pages" />
-    </>
-  );
+    return (
+      <>
+        <Card title={trans("common.user")} value={numberOfUsers} type="users" />
+        <Card title={trans("device.device")} value={devicesInfo} type="devices" />
+        <Card title={trans("dashboard.total_pages")} value={totalPages || 0} type="pages" />
+        <Card title={trans("dashboard.today_pages")} value={todayPages || 0} type="pages" />
+      </>
+    );
+  } else {
+    const userName = session?.user.name;
+
+    if(!userName) {
+      notFound();
+    };
+
+    const myUsageStatus = await adapter.getUsageStatusByUser(userName);
+
+    return (
+      <>
+        <Card title={trans("dashboard.print_pages")} value={myUsageStatus.copy_print_total_pages || 0} type="pages" />
+        <Card title={trans("dashboard.scan_pages")} value={myUsageStatus.scan_total_pages || 0} type="pages" />
+      </>
+    );
+  }
 }
 
 export function Card({

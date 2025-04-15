@@ -28,6 +28,8 @@ const koResource = {
             today_pages: '금일 매수',
             total_device: '전체',
             total_pages: '총 매수',
+            scan_pages: '스캔 매수',
+            print_pages: '출력 매수',
         },
         company:{
             account_code:'계좌번호',

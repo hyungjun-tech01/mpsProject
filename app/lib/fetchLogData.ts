@@ -90,14 +90,16 @@ export async function fetchTodayTotalPageSum(
 
 export async function fetchTotalPagesPerDayFor30Days(
     client: Pool,
+    userName: string | null | undefined,
 ) {
     try {
         const response = await client.query(`
         SELECT 
-        TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
+            TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
             SUM(total_pages) AS pages
         FROM tbl_audit_job_log
         WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+        ${!!userName ? `AND user_name = '${userName}'` : ""}
         GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
         ORDER BY used_day ASC`);
 
@@ -270,3 +272,22 @@ export async function fetchFilteredAuditLogPages(
         throw new Error("Failed to fetch audit logs");
     }
 };
+
+export async function fetchUsageStatusByUser(
+    client: Pool,
+    userName: string,
+) {
+    try {
+        const result = await client.query(`
+            SELECT 
+                SUM(CASE WHEN job_type = 'SCAN' THEN total_pages ELSE 0 END) as scan_total_pages,
+                SUM(CASE WHEN job_type IN ('COPY', 'PRINT') THEN total_pages ELSE 0 END) as copy_print_total_pages
+            FROM tbl_audit_job_log
+            WHERE user_name='${userName}'
+        `);
+        return result.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch usage status by user");
+    }
+}

@@ -28,6 +28,8 @@ const enResource = {
             today_pages: 'Today Pages',
             total_device: 'Total',
             total_pages: 'Total Pages',
+            scan_pages: 'Scanned Pages',
+            print_pages: 'Printed Pages',
         },
         company:{
             account_code:'Account Code',
