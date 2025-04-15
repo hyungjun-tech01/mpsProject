@@ -44,7 +44,7 @@ export default async function CreateDevice(
                 { name: 'device_administrator', title: t('device.device_administrator'), type: 'input', defaultValue: '', placeholder: t('device.device_administrator') },
                 { name: 'device_administrator_password', title: t('device.device_administrator_password'), type: 'password', defaultValue: '', placeholder: t('device.device_administrator_password') },                
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: "", placeholder: t('device.location') },
-                { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: "", placeholder: t('device.physical_device_id') },
+                { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: '', placeholder: t('device.physical_device_id') },
                 { name: 'notes', title: t('device.notes'), type: 'input', defaultValue: "", placeholder: t('device.notes') },
                 { name: 'device_model', title: t('device.device_model'), type: 'input', defaultValue: "", placeholder: t('device.device_model') },
                 { name: 'serial_number', title: t('device.serial_number'), type: 'input', defaultValue: "", placeholder: t('device.serial_number') },   

@@ -138,22 +138,26 @@ export async function deleteFaxLineInfo(faxLineid : string, deviceId : string) {
             message: 'Failed to Delete Fax Line Information',
         }
     }
+    revalidatePath(`/device/${deviceId}/edit`);
     redirect(`/device/${deviceId}/edit`);
 }
 
 export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: string){
+    console.log('FaxLineInfo', saveFaxLineData);
     const session = await auth();
 
     if(!session?.user)
         return notFound();
 
     const output = await fetchSaveFaxLineInfo(saveFaxLineData, session.user.name);
+    console.log('saveFaxLineInfo', output);
     if(!output.result) {
         return {
             errors: output.data,
-            message: 'Failed to Delete Fax Line Information',
+            message: 'Failed to Save Fax Line Information',
         }
     }
+    revalidatePath(`/device/${deviceId}/edit`);
     redirect(`/device/${deviceId}/edit`);
 }
 

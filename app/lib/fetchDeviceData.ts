@@ -224,6 +224,7 @@ export async function fetchDeviceFaxLineById(id:string){
         AND tfli.deleted_date is null
         AND tfli.printer_id = $1
     `,[id]);
+    console.log('fetchDeviceFaxLineById', faxLine.rows);
     return  faxLine.rows;
     }catch (error) {
         console.error("Database Error:", error);
@@ -439,8 +440,9 @@ export async function fetchSaveFaxLineInfo(saveFaxLineData:any, created_by:any){
                                         printer_id, 
                                         fax_line_user_id, 
                                         fax_line_shared_group_id, 
+                                        created_date,
                                         created_by)
-            values($1,$2,$3,$4,$5)`,
+            values($1,$2,$3,$4,now(),$5)`,
             [saveFaxLineData.fax_line_name, 
             saveFaxLineData.printer_id,
             saveFaxLineData.fax_line_user_id, 

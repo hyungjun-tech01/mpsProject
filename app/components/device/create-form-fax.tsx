@@ -104,7 +104,7 @@ export default function FormFax(
     }, [deletedFaxLineId, id]);    
         
     const handleAddFaxLine = () => {
-        //console.log('handleAddFaxLine');
+        console.log('handleAddFaxLine', faxItems);
 
         const hasEmptyHiddenValue = faxItems.some(
             (item) => item.type === 'hidden' && (typeof item.defaultValue !== 'string' || item.defaultValue.trim() === '')
@@ -146,23 +146,6 @@ export default function FormFax(
 
     //const [state, formAction] = useActionState(increment, 0);
     
-
-    // 체크박스 상태 변경 핸들러
-    const handlePrinterChange = (e:any) => {
-        setPrinterChecked(e.target.checked);
-    };
-
-    const handleScanChange = (e:any) => {
-        setScanChecked(e.target.checked);
-    };
-
-    const handleFaxChange = (e:any) => {
-            setFaxChecked(e.target.checked);
-    };
-
-    const handleEnablePrintChange = (e:any) => {
-        setEnablePrintChecked(e.target.checked);
-    };
 
     //console.log('create form');
     return (
