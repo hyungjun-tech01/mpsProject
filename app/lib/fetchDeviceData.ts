@@ -191,7 +191,7 @@ export async function fetchDeviceFaxLineById(id:string){
         AND tfli.deleted_date is null
         AND tfli.printer_id = $1
     `,[id]);
-    console.log('fetchDeviceFaxLineById', faxLine.rows);
+   
     return  faxLine.rows;
     }catch (error) {
         console.error("Database Error:", error);

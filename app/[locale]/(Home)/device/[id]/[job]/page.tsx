@@ -12,7 +12,7 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
 import FormFax from '@/app/components/device/create-form-fax';
 import {modifyDevice} from '@/app/components/device/actions';
-import { ISection } from '@/app/components/edit-items';
+import { ISection, IItem } from '@/app/components/edit-items';
 
 
 
@@ -104,10 +104,8 @@ export default async function Page(props: {
     );
 
 
-    const editFaxItems: ISection[] =  fax.length > 0 
+    const editFaxItems: IItem[] =  fax.length > 0 
     ? fax.map((faxLine:any, index:any) => ({
-        title: `${t('fax.fax_line')}`, // 여러 개일 경우 번호 추가
-        description: t('fax.fax_line_desc'),
         items: [
             { name: `fax_line_id_${index}`, title: `${t('fax.fax_line_id')} ${index+1}` , type: 'hidden', defaultValue: faxLine.fax_line_id, placeholder: t('fax.fax_line_id') },
             { name: `fax_line_name_${index}`, title: `${t('fax.fax_line_name')} ${index+1}` , type: 'input', defaultValue: faxLine.fax_line_name, placeholder: t('fax.fax_line_name') },
@@ -123,7 +121,7 @@ export default async function Page(props: {
             { name: `space_line_${index}`, title: '', type: 'input', defaultValue: '', placeholder: '' },
         ]
     }))
-    : [{ title: t('fax.fax_line'), description: t('fax.fax_line_desc'), items: [] }];
+    : [ {items: []} ];
 
     const buttonItems = {
             cancel: { title: t('common.cancel'), link: '/device' },
@@ -136,6 +134,7 @@ export default async function Page(props: {
         delete: { title: t('fax.delete') },
     };
 
+    console.log('editFaxItems', editFaxItems);
     return (
         <main>
             <Breadcrumbs
@@ -151,6 +150,8 @@ export default async function Page(props: {
              {job === 'edit' && <Form id={id} items={editItems} buttons={buttonItems} action={modifyDevice}/>}
              { fax && job === 'edit' && editFaxItems.length > 0 && (
                 <FormFax id={id} 
+                    title = { `${t('fax.fax_line')}` }
+                    description = { t('fax.fax_line_desc') }
                     items={editFaxItems} 
                     optionsUser = {optionsUser} 
                     optionsGroup ={optionsGroup}

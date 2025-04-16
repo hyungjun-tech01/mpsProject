@@ -26,6 +26,9 @@ export interface ISection {
   items: IEditItem[];
 };
 
+export interface IItem {
+  items: IEditItem[];
+};
 export interface IButtonInfo {
   cancel: { title: string, link: string },
   go: { title: string },
