@@ -11,10 +11,11 @@ export default function NavLinks({ extended }: { extended: boolean }) {
   const pathname = usePathname();
   const category = usePathname().split('/')[1];
   const { data: session } = useSession();
+  const userRole = session?.user?.role ?? "user";
 
   return (
     <>
-      {SideMenuList.map((link) => {
+      { SideMenuList[userRole].map((link) => {
         if(session?.user?.role !== "admin" && link.name === 'user') return;
 
         const LinkIcon = link.icon;

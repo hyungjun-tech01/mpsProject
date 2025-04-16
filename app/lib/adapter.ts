@@ -311,8 +311,11 @@ export default function MyDBAdapter() {
         async getTodayTotalPageSum() {
             return Log.fetchTodayTotalPageSum(pool);
         },
-        async getTotalPagesPerDayFor30Days() {
-            return Log.fetchTotalPagesPerDayFor30Days(pool);
+        async getTotalPagesPerDayFor30Days(userName: string | null | undefined) {
+            return Log.fetchTotalPagesPerDayFor30Days(pool, userName);
+        },
+        async getUsageStatusByUser(userName: string) {
+            return Log.fetchUsageStatusByUser(pool, userName);
         }
     }
 }

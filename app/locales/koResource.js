@@ -27,7 +27,10 @@ const koResource = {
             recent_printed_page: '최근 출력 매수',
             today_pages: '금일 매수',
             total_device: '전체',
-            total_pages: '총 매수',
+            total_job_count: '총 출력 작업',
+            total_pages: '총 페이지',
+            scan_pages: '스캔 매수',
+            print_pages: '출력 매수',
         },
         company:{
             account_code:'계좌번호',
