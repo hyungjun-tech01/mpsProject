@@ -67,12 +67,16 @@ export default async function CardWrapper({ trans }: { trans: (key: string) => s
       notFound();
     };
 
-    const myUsageStatus = await adapter.getUsageStatusByUser(userName);
+    const [myUsageStatus, myInfo] = await Promise.all([
+      adapter.getUsageStatusByUser(userName),
+      adapter.getUserByName(userName)
+    ]);
 
     return (
       <>
-        <Card title={trans("dashboard.print_pages")} value={myUsageStatus.copy_print_total_pages || 0} type="pages" />
-        <Card title={trans("dashboard.scan_pages")} value={myUsageStatus.scan_total_pages || 0} type="pages" />
+        <Card title={trans("dashboard.total_job_count")} value={myUsageStatus.total_job_count || 0} type="pages" />
+        <Card title={trans("dashboard.total_pages")} value={myUsageStatus.copy_print_total_pages || 0} type="pages" />
+        <Card title={trans("account.balance")} value={myInfo.balance || 0} type="pages" />
       </>
     );
   }

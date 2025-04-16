@@ -27,6 +27,7 @@ const enResource = {
             recent_printed_page: 'Recent Printed Pages',
             today_pages: 'Today Pages',
             total_device: 'Total',
+            total_job_count: 'Total Job Count',
             total_pages: 'Total Pages',
             scan_pages: 'Scanned Pages',
             print_pages: 'Printed Pages',

@@ -280,7 +280,7 @@ export async function fetchUsageStatusByUser(
     try {
         const result = await client.query(`
             SELECT 
-                SUM(CASE WHEN job_type = 'SCAN' THEN total_pages ELSE 0 END) as scan_total_pages,
+                COUNT(*) as total_job_count,
                 SUM(CASE WHEN job_type IN ('COPY', 'PRINT') THEN total_pages ELSE 0 END) as copy_print_total_pages
             FROM tbl_audit_job_log
             WHERE user_name='${userName}'
