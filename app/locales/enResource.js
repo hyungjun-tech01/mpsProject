@@ -21,8 +21,12 @@ const enResource = {
         },
         dashboard: {
             dashboard: 'Dashboard',
+            device_info: 'Device Info',
             error_device: 'Error',
+            low_supply_device: 'Low Supply',
             normal_device: 'Normal',
+            offline_device: 'Offline',
+            page_info: 'Page Info.',
             printed_page: 'Printed Pages',
             recent_printed_page: 'Recent Printed Pages',
             today_pages: 'Today Pages',
@@ -31,6 +35,7 @@ const enResource = {
             total_pages: 'Total Pages',
             scan_pages: 'Scanned Pages',
             print_pages: 'Printed Pages',
+            warning_device: 'Warning',
         },
         company:{
             account_code:'Account Code',
