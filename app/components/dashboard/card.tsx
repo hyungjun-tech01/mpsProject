@@ -1,0 +1,76 @@
+import {
+    PaidOutlined,
+    AccountCircleOutlined,
+    PrintOutlined,
+    FileCopyOutlined,
+    ErrorOutlined,
+    WarningOutlined
+  } from "@mui/icons-material";
+  import clsx from 'clsx';
+
+  const iconMap = {
+    collected: PaidOutlined,
+    users: AccountCircleOutlined,
+    devices: PrintOutlined,
+    pages: FileCopyOutlined,
+    error: ErrorOutlined,
+    warning: WarningOutlined
+  };
+
+  export default function Card({
+    title,
+    value,
+    type,
+    color,
+  }: {
+    title: string;
+    value: number | string | object;
+    type: "users" | "devices" | "pages" | "collected" | "error" | "warning";
+    color?: string;
+  }) {
+    const Icon = iconMap[type];
+  
+    return (
+      <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+        <div className="flex p-4">
+          {!!Icon && <Icon className={clsx("h-6 w-6", 
+              {"text-gray-700": !color}, 
+              {"text-red-500" : color === "red"},
+              {"text-yellow-500" : color === "yellow"},
+              {"text-blue-500" : color === "blue"},
+            )} 
+          />}
+          <h3 className="ml-2 text-base font-medium">{title}</h3>
+        </div>
+        {typeof value !== 'object' &&
+          <p className={`truncate rounded-xl bg-white px-4 py-6 text-center text-2xl`} >
+            {value}
+          </p>
+        }
+        {typeof value === 'object' &&
+          <div className="flex flex-col">
+            {
+              value.map((item, idx) => {
+                if (idx === value.length - 1) {
+                  return (
+                    <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 items-center" >
+                      <div className="text-lg">{item.title}</div>
+                      <div className="text-2xl">{item.value}</div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 mb-2 items-center" >
+                      <div className="text-lg">{item.title}</div>
+                      <div className="text-2xl">{item.value}</div>
+                    </div>
+                  )
+                }
+              })
+            }
+          </div>
+        }
+      </div>
+    );
+  }
+  

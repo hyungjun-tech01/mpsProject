@@ -296,16 +296,19 @@ export default function MyDBAdapter() {
                 throw new Error("Failed to fetch printer usage logs");
             }
         },
-        async getAllDeviceIds() {
+        async getDevicesStatus() {
             try {
                 const response = await pool.query(`
                     SELECT
-                        device_id
-                    FROM tbl_device_info p
-                    WHERE
-                        p.deleted='N'
+                        SUM(CASE WHEN device_status = '정상' THEN 1 ELSE 0 END) as normal_count,
+                        SUM(CASE WHEN device_status = '오류' THEN 1 ELSE 0 END) as error_count,
+                        SUM(CASE WHEN device_status = '경고' THEN 1 ELSE 0 END) as warning_count,
+                        SUM(CASE WHEN device_status = '토너부족' THEN 1 ELSE 0 END) as low_supply_count,
+                        SUM(CASE WHEN device_status = '오프라인' THEN 1 ELSE 0 END) as offline_count
+                    FROM tbl_device_info
+                    WHERE deleted = 'N'
                 `);
-                return response.rows;
+                return response.rows[0];
             } catch (error) {
                 console.error("Database Error:", error);
                 throw new Error("Failed to fetch printer count.");
@@ -375,6 +378,12 @@ export default function MyDBAdapter() {
         },
         async getTotalPagesPerDayFor30Days(userName: string | null | undefined) {
             return Log.fetchTotalPagesPerDayFor30Days(pool, userName);
+        },
+        async getTop5UserFor30days() {
+            return Log.fetchTop5UserFor30days(pool);
+        },
+        async getTop5DevicesFor30days() {
+            return Log.fetchTop5DevicesFor30days(pool);
         },
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
