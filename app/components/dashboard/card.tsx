@@ -40,7 +40,7 @@ import {
               {"text-blue-500" : color === "blue"},
             )} 
           />}
-          <h3 className="ml-2 text-base font-medium">{title}</h3>
+          <h3 className="ml-2 text-base text-sm">{title}</h3>
         </div>
         {typeof value !== 'object' &&
           <p className={`truncate rounded-xl bg-white px-4 py-6 text-center text-2xl`} >
@@ -54,15 +54,15 @@ import {
                 if (idx === value.length - 1) {
                   return (
                     <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 items-center" >
-                      <div className="text-lg">{item.title}</div>
-                      <div className="text-2xl">{item.value}</div>
+                      <div className="font-medium">{item.title}</div>
+                      <div className="text-xl">{item.value}</div>
                     </div>
                   );
                 } else {
                   return (
                     <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 mb-2 items-center" >
-                      <div className="text-lg">{item.title}</div>
-                      <div className="text-2xl">{item.value}</div>
+                      <div className="font-medium">{item.title}</div>
+                      <div className="text-xl">{item.value}</div>
                     </div>
                   )
                 }

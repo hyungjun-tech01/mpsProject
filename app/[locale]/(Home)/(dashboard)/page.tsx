@@ -17,18 +17,18 @@ export default async function Page(props: {
   return (
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
           <CardDeviceWrapper trans={t}/>
         </Suspense>
-      </div>
-      <div className="mt-6">
-        <PageChartWrapper trans={t}/>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-6">
         <Suspense fallback={<CardsSkeleton />}>
           <CardPageseWrapper trans={t}/>
         </Suspense>
+      </div>
+      <div className="mt-6">
+        <PageChartWrapper trans={t}/>
       </div>
     </main>
   );
