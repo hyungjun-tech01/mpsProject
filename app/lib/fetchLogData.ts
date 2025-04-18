@@ -94,14 +94,15 @@ export async function fetchTotalPagesPerDayFor30Days(
 ) {
     try {
         const response = await client.query(`
-        SELECT 
-            TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
-            SUM(total_pages) AS pages
-        FROM tbl_audit_job_log
-        WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
-        ${!!userName ? `AND user_name = '${userName}'` : ""}
-        GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
-        ORDER BY used_day ASC`);
+            SELECT 
+                TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
+                SUM(total_pages) AS pages
+            FROM tbl_audit_job_log
+            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            ${!!userName ? `AND user_name = '${userName}'` : ""}
+            GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
+            ORDER BY used_day ASC`
+        );
 
         let maxVal = 0;
         const dataFromDB: { used_day: string, pages: number }[] = [];
@@ -138,6 +139,47 @@ export async function fetchTotalPagesPerDayFor30Days(
     }
 };
 
+export async function fetchTop5UserFor30days(client: Pool) {
+    try {
+        const response = await client.query(`
+            SELECT 
+                user_name,
+                SUM(total_pages) AS total_pages_sum
+            FROM tbl_audit_job_log
+            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            GROUP BY  user_name
+            ORDER BY total_pages_sum DESC
+            LIMIT 5`
+        );
+
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch card data.");
+    }
+}
+
+export async function fetchTop5DevicesFor30days(client: Pool) {
+    try {
+        const response = await client.query(`
+            SELECT 
+                d.device_name,
+                SUM(ajl.total_pages) AS total_pages_sum
+            FROM tbl_audit_job_log AS ajl
+            JOIN tbl_device_info AS d ON ajl.device_id = d.device_id
+            WHERE ajl.send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            GROUP BY  d.device_name
+            ORDER BY total_pages_sum DESC
+            LIMIT 5`
+        );
+
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch card data.");
+    }
+}
+
 export function parsePrivacyText(
     privacy_text: string | null
 ): string {
@@ -158,7 +200,6 @@ export function parsePrivacyText(
     }
 }
 
-/*========================== tbl_audit_log =========================*/
 export async function fetchFilteredAuditLogs(
     client: Pool,
     query: string,

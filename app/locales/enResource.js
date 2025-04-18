@@ -30,6 +30,8 @@ const enResource = {
             printed_page: 'Printed Pages',
             recent_printed_page: 'Recent Printed Pages',
             today_pages: 'Today Pages',
+            top5_users: 'The Latest Top 5 User',
+            top5_devices: 'The Latest Top 5 Devices',
             total_device: 'Total',
             total_job_count: 'Total Job Count',
             total_pages: 'Total Pages',

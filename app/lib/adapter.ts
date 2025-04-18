@@ -317,6 +317,12 @@ export default function MyDBAdapter() {
         async getTotalPagesPerDayFor30Days(userName: string | null | undefined) {
             return Log.fetchTotalPagesPerDayFor30Days(pool, userName);
         },
+        async getTop5UserFor30days() {
+            return Log.fetchTop5UserFor30days(pool);
+        },
+        async getTop5DevicesFor30days() {
+            return Log.fetchTop5DevicesFor30days(pool);
+        },
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
         }
