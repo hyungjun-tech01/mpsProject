@@ -1,9 +1,10 @@
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/device/create-form';
-import { fetchPrinterGroup } from '@/app/lib/fetchDeviceData';
+
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import {createDevice} from '@/app/components/device/actions';
+import MyDBAdapter from '@/app/lib/adapter';
 
 export default async function CreateDevice(
     props: { 
@@ -12,10 +13,11 @@ export default async function CreateDevice(
 ) {
     const params = await props.params;
     const locale = params.locale;
+    const adapter = MyDBAdapter();
 
     const [t, printerGroup] = await Promise.all([
         getDictionary(locale),
-        fetchPrinterGroup(),
+        adapter.getPrinterGroup(),
     ]);
 
 

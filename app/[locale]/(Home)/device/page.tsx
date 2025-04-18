@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import getDictionary from '@/app/locales/dictionaries';
-import { fetchDevicesPages, fetchFilteredDevices } from '@/app/lib/fetchDeviceData';
 import MyDBAdapter from '@/app/lib/adapter';
 import { IColumnData } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
@@ -44,14 +43,15 @@ export default async function Device(
 
     const session = await auth();
 
+    const adapter = MyDBAdapter();
+
     if(!session?.user)
         return notFound();
     
-    const adapter = MyDBAdapter();
     const [t, totalPages, devices, deviceGroup] = await Promise.all([
         getDictionary(locale),
-        fetchDevicesPages(query, itemsPerPage),
-        fetchFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage, groupId),
+        adapter.getDevicesPages(query, itemsPerPage),
+        adapter.getFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage, groupId),
         adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale)
     ]);
 

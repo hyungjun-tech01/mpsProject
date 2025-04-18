@@ -1,26 +1,11 @@
-"use server";
+import type { Pool } from "pg";
 
-import pg from 'pg';
-import { BASE_PATH } from '@/constans';
 import { Device } from '@/app/lib/definitions';
-import { revalidatePath } from 'next/cache';
 import { encrypt } from '@/app/lib/cryptoFunc';
 
 
-
-
-const client = new pg.Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
-});
-
-await client.connect();
-
 export async function fetchFilteredDevices(
+    client: Pool,
     loginName: string | undefined,
     query: string,
     itemsPerPage: number,
@@ -85,10 +70,28 @@ export async function fetchFilteredDevices(
     }
 }
 
+// export async function fetchFilteredDevices(
+//     loginName: string | undefined,
+//     query: string,
+//     itemsPerPage: number,
+//     currentPage: number,
+//     groupId?: string
+// ) {
+    
+// }
+
 export async function fetchDevicesPages(
+    client: Pool,
     query: string,
     itemsPerPage: number,
 ) {
+
+    try {
+        await client.query('SELECT 1');
+    } catch (error) {
+        throw new Error('Database connection failed: ' + error.message);
+    }
+
     try {
         const count = query !== '' 
             ? await client.query(`
@@ -115,11 +118,14 @@ export async function fetchDevicesPages(
         return totalPages;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch total number of invoices.');
+        throw new Error('Failed to fetch total number of devices.');
     }
 }
 
-export async function fetchDeviceById(id:string){
+export async function fetchDeviceById(
+    client: Pool,
+    id:string
+    ){
     try {
         const device = await client.query(`
             SELECT
@@ -169,7 +175,10 @@ export async function fetchDeviceById(id:string){
     }
 }
 
-export async function fetchDeviceFaxLineById(id:string){
+export async function fetchDeviceFaxLineById(
+    client: Pool,
+    id:string
+    ){
     try{
         const faxLine =  await client.query(`
         SELECT 
@@ -199,7 +208,10 @@ export async function fetchDeviceFaxLineById(id:string){
     }
 }
 
-export async function fetchCreateDevice(newDevice: any) {
+export async function fetchCreateDevice(
+    client: Pool,
+    newDevice: any
+    ) {
     try {
 
         // 트랜잭션 시작
@@ -255,7 +267,9 @@ export async function fetchCreateDevice(newDevice: any) {
     }
 }
 
-export async function fetchPrinterGroup() {
+export async function fetchPrinterGroup(
+    client: Pool,
+) {
     try {
         const response = await client.query(`
            select null group_id, null group_name
@@ -271,7 +285,10 @@ export async function fetchPrinterGroup() {
     }
 };
 
-export async function fetchDeleteDevice(id: string) {
+export async function fetchDeleteDevice(
+    client: Pool,
+    id: string
+    ) {
     try {
         //console.log(id);
         const result = await client.query(`
@@ -292,7 +309,10 @@ export async function fetchDeleteDevice(id: string) {
     };
 }
 
-export async function fetchDeleteFaxLineInfo(id: string) {
+export async function fetchDeleteFaxLineInfo(
+    client: Pool,
+    id: string
+    ) {
     try {
         //console.log(id);
         const result = await client.query(`
@@ -314,7 +334,10 @@ export async function fetchDeleteFaxLineInfo(id: string) {
 }
 
 
-export async function fetchModifyDevice(newDevice: any) {
+export async function fetchModifyDevice(
+    client: Pool,
+    newDevice: any
+    ) {
 
     try {
         // 트랜잭션 시작
@@ -393,7 +416,10 @@ export async function fetchModifyDevice(newDevice: any) {
     };
 }
 
-export async function fetchSaveFaxLineInfo(saveFaxLineData:any, created_by:any){
+export async function fetchSaveFaxLineInfo(
+    client: Pool,
+    saveFaxLineData:any, 
+    created_by:any){
     try {
         //console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);
         // 트랜잭션 시작

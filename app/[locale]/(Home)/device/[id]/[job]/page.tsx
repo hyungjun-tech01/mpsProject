@@ -1,12 +1,6 @@
 import { ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 
-import {
-    fetchDeviceById,
-    fetchPrinterGroup,
-    fetchDeviceFaxLineById
-} from '@/app/lib/fetchDeviceData';
-
 import MyDBAdapter from '@/app/lib/adapter';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
@@ -31,9 +25,9 @@ export default async function Page(props: {
     const adapter = MyDBAdapter();
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),
-        fetchDeviceById(id),
-        fetchPrinterGroup(),
-        fetchDeviceFaxLineById(id),
+        adapter.getDeviceById(id),
+        adapter.getPrinterGroup(),
+        adapter.getDeviceFaxLineById(id),
         adapter.getAllUsers(),
         adapter.getGroupsByType('user'),
     ]);

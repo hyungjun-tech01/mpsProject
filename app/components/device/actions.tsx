@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import { IBM_Plex_Mono } from 'next/font/google';
 import {FaxLineInfo} from  '@/app/lib/definitions';
 
-import { fetchCreateDevice , fetchModifyDevice, fetchDeleteDevice, fetchDeleteFaxLineInfo, fetchSaveFaxLineInfo} from '@/app/lib/fetchDeviceData';
+import MyDBAdapter from '@/app/lib/adapter';
 
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
@@ -15,6 +15,8 @@ export type State = {
     errors?: Record<string, string[]> | null;
     message?: string|null;
 };
+
+const adapter = MyDBAdapter();
 
 const FormSchema = z.object({
     device_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
@@ -104,7 +106,7 @@ export async function createDevice(prevState: State, formData: FormData) {
     // Prepare data for insertion into the database
     const newDevice = validatedFields.data;
 
-    const output = await fetchCreateDevice(newDevice);
+    const output = await adapter.createDevice(newDevice);
     if(!output.result) {
         return {
             errors: output.data,
@@ -116,7 +118,7 @@ export async function createDevice(prevState: State, formData: FormData) {
     redirect('/device');
 }
 export async function deleteDevice(id : string) {
-    const output = await fetchDeleteDevice(id);
+    const output = await adapter.deleteDevice(id);
 
     if(!output.result) {
         return {
@@ -130,7 +132,7 @@ export async function deleteDevice(id : string) {
 }
 
 export async function deleteFaxLineInfo(faxLineid : string, deviceId : string) {
-    const output = await fetchDeleteFaxLineInfo(faxLineid);
+    const output = await adapter.deleteFaxLineInfo(faxLineid);
 
     if(!output.result) {
         return {
@@ -149,7 +151,7 @@ export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: st
     if(!session?.user)
         return notFound();
 
-    const output = await fetchSaveFaxLineInfo(saveFaxLineData, session.user.name);
+    const output = await adapter.saveFaxLineInfo(saveFaxLineData, session.user.name);
     console.log('saveFaxLineInfo', output);
     if(!output.result) {
         return {
@@ -222,7 +224,7 @@ export async function modifyDevice(prevState: State, formData: FormData) {
         }
     }
 
-    const output = await fetchModifyDevice(newDevice);
+    const output = await adapter.modifyDevice(newDevice);
 
     if(!output.result) {
         return {

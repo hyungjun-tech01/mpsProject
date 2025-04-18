@@ -220,7 +220,58 @@ export default function MyDBAdapter() {
             currentPage: number,
             groupId?: string
         ){
-            return Device.fetchFilteredDevices(loginName, query, itemsPerPage, currentPage, groupId);
+            return Device.fetchFilteredDevices(pool, loginName, query, itemsPerPage, currentPage, groupId);
+        },
+        async getDevicesPages( 
+            query: string,
+            itemsPerPage: number
+        ) {
+            return Device.fetchDevicesPages(pool, query, itemsPerPage);
+        },
+        async getDeviceById(
+            id:string
+        ){
+            return Device.fetchDeviceById(pool, id);
+        },  
+        async getDeviceFaxLineById(
+            id:string
+        ){
+            return Device.fetchDeviceFaxLineById(pool, id);
+        },
+        async createDevice(
+            newDevice: any
+        ) {
+            'use server';
+            return Device.fetchCreateDevice(pool, newDevice);
+        },        
+        async getPrinterGroup(
+        ) {
+            return Device.fetchPrinterGroup(pool);
+        },  
+        async deleteDevice(
+            id: string
+        ) {
+            'use server';
+            return Device.fetchDeleteDevice(pool, id);
+        },   
+        async fetchDeleteFaxLineInfo(
+            id: string
+        ) {
+            'use server';
+            return Device.fetchDeleteFaxLineInfo(pool, id);
+        },   
+        async  modifyDevice(
+            newDevice: any
+        ) {
+            'use server';
+            return Device.fetchModifyDevice(pool, newDevice);
+        },
+        async saveFaxLineInfo(
+            saveFaxLineData:any, 
+            created_by:any
+        ){
+            'use server';
+            return Device.fetchSaveFaxLineInfo(pool, saveFaxLineData, created_by);
         },
         async getLatestDeviceStatus() {
             try {
@@ -260,6 +311,17 @@ export default function MyDBAdapter() {
                 throw new Error("Failed to fetch printer count.");
             }
         },
+
+        async fetchFilteredDevices(
+            loginName: string | undefined,
+            query: string,
+            itemsPerPage: number,
+            currentPage: number,
+            groupId?: string
+        ) {
+            return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
+        },
+
 
         // ----- Document ------------------------------------------
         async getFilteredDocumnets(
