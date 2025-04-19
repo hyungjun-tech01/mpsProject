@@ -3,6 +3,8 @@ import BoardWrapper from "@/app/components/dashboard/board";
 import { CardsSkeleton, ChartSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
 import getDictionary from '@/app/locales/dictionaries';
+import clsx from "clsx";
+import { auth } from "@/auth";
 
 
 export default async function Page(props: {
@@ -11,17 +13,19 @@ export default async function Page(props: {
   const params = await props.params;
   const locale = params.locale;
   const t = await getDictionary(locale);
+  const session = await auth();
+  const isAdmin = session?.user.role === "admin";
 
   return (
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
-      <div className="flex flex-col md:flex-row">
-        <div className="flex flex-col gap-6 mb-6 md:w-1/4">
+      <div className={clsx("flex", {"flex-col md:flex-row": isAdmin}, {"flex-col": !isAdmin})}>
+        <div className={clsx("flex flex-col gap-6 mb-6", {"md:w-1/4": isAdmin})}>
           <Suspense fallback={<CardsSkeleton />}>
             <BoardWrapper trans={t}/>
           </Suspense>
         </div>
-        <div className="flex-1 md:ml-6">
+        <div className={clsx("flex-1", {"md:ml-6": isAdmin})}>
           <Suspense fallback={<ChartSkeleton />}>
             <PageChartWrapper trans={t}/>
           </Suspense>

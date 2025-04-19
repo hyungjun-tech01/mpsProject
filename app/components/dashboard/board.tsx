@@ -100,25 +100,10 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
         boardInfo.push({ title: trans("account.balance"), value: myInfo.balance || 0, type: "collected" });
 
         return (
-            <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-                { boardInfo.map(item => {
-                    const Icon = iconMap[item.type];
-                    return (
-                        <div className="flex p-4 justify-between">
-                            <div className="flex justify-start">
-                                {!!Icon && <Icon className={clsx("h-6 w-6", 
-                                    {"text-gray-700": !item.color}, 
-                                    {"text-red-500" : item.color === "red"},
-                                    {"text-yellow-500" : item.color === "yellow"},
-                                    {"text-blue-500" : item.color === "blue"},
-                                    )} 
-                                />}
-                                <h3 className="ml-2 text-base text-sm">{item.title}</h3>
-                            </div>
-                            <div>{item.value}</div>
-                        </div>
-                    )
-                })}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                { boardInfo.map(item => (
+                    <Card title={item.title} value={item.value} type={item.type} />
+                ))}
             </div>
         )
     }
