@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'auto-fit': 'repeat(auto-fit, minmax(64px, 1fr))',
+        'auto-fit': 'repeat(auto-fit, minmax(128px, 1fr))',
       },
     },
   },

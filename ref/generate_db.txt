@@ -3031,3 +3031,20 @@ update tbl_audit_job_log t
 set text_archive_path = '2023\09\C2K0910023024050914190.etxt'
 where image_archive_path like '%C2K0910023024050914190%';
 
+-- 2025.04.19 : tbl_print_job_info
+
+CREATE TABLE tbl_print_job_info (
+    print_job_id varchar(36) NOT NULL,
+    print_pc_ip varchar(15) NOT NULL,
+    print_job_time timestamp NOT NULL,
+    print_job_user varchar(255) NOT NULL,
+    print_document_name varchar(255) NOT NULL,
+    copies int4 NOT NULL,
+    color_mode varchar(10) NOT NULL,
+    paper_size varchar(5) NOT NULL,
+    duplex varchar(5) NOT NULL,
+    n_up int4 NOT NULL,
+    language varchar(10) NOT NULL,
+    pages int4 NOT NULL,
+    CONSTRAINT pk_print_job_info PRIMARY KEY (print_job_id)
+);

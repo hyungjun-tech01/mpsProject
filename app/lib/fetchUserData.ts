@@ -13,7 +13,7 @@ export async function fetchFilteredUsers(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const users =  await client.query(`
+        const users = await client.query(`
             SELECT
                 u.user_id id,
                 u.user_name,
@@ -31,9 +31,9 @@ export async function fetchFilteredUsers(
             WHERE
                 u.deleted='N'
                 ${query !== "" ? "AND (u.user_name ILIKE '%" + query + "%' OR"
-                    + "u.user_full_name ILIKE '%" + query + "%' OR"
-                    + "u.email ILIKE '%" + query + "%')"
-                    : ""}
+                + "u.user_full_name ILIKE '%" + query + "%' OR"
+                + "u.email ILIKE '%" + query + "%')"
+                : ""}
             ORDER BY u.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `);
@@ -192,20 +192,33 @@ export async function fetchAccount(
     name: string
 ): Promise<Account | undefined> {
     try {
-      const account = await client.query<Account>(`
-        SELECT
-          u.user_id id,
-          u.user_name name,
-          u.user_role role,
-          u.email email,
-          u.password password
-        FROM tbl_user_info u
-        WHERE u.user_name='${name}'`
-      );
-      return account.rows[0];
+        const account = await client.query<Account>(`
+            SELECT
+                u.user_id id,
+                u.user_name name,
+                u.user_role role,
+                u.email email,
+                u.password password
+            FROM tbl_user_info u
+            WHERE u.user_name='${name}'
+        `);
+        const userInfo = account.rows[0];
+        const deviceGroup = await client.query(`
+            SELECT
+                Count(*)
+            FROM tbl_group_member_info
+            WHERE member_id='${userInfo.id}'
+            AND member_type='admin'
+        `);
+        if(deviceGroup.rows[0].count > 0) {
+            if(userInfo.role !== 'admin') {
+                userInfo.role = 'manager';
+            }
+        }
+        return userInfo;
     } catch (error) {
-      console.error("Failed to fetch user:", error);
-      throw new Error("Failed to fetch user.");
+        console.error("Failed to fetch user:", error);
+        throw new Error("Failed to fetch user.");
     }
-  };
+};
 // ----- End : Account -------------------------------------------------------//

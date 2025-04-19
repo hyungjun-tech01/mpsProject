@@ -490,6 +490,15 @@ const enResource = {
             shared: 'Shared',
             subTitle_fax: 'Fax Box',
             subTitle_scan: 'Scan Box',
+        },
+        print: {
+            color_mode: 'Color Mode',
+            copies: 'Copies',
+            duplex: 'Duplex',
+            job_time: 'Request Time',
+            pages: 'Pages',
+            paper_size: 'Paper Size',
+            wating_list: 'Documents In Spool',
         }
     },
 }

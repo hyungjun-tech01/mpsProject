@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 // import Badge from '@mui/material/Badge';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
+// import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import { useColorScheme } from '@mui/material/styles';
 import Link from 'next/link';
+import { signOut } from "next-auth/react"
 
 interface IHeader {
     extendSideNav: () => void;
@@ -68,7 +69,7 @@ export default function Header({ extendSideNav }: IHeader) {
         >
             <MenuItem>
                 <div>
-                    <span className='mr-3 font-medium'>Theme</span>
+                    <span className='mr-3 font-medium'>테마</span>
                     <span className='text-gray-600'>Light</span>
                     <span>
                         <Switch
@@ -78,6 +79,11 @@ export default function Header({ extendSideNav }: IHeader) {
                         />
                     </span>
                     <span className='text-gray-600'>Dark</span>
+                </div>
+            </MenuItem>
+            <MenuItem>
+                <div onClick={() => signOut()}>
+                    <span className='mr-3 font-medium'>로그아웃</span>
                 </div>
             </MenuItem>
         </Menu>

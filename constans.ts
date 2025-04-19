@@ -19,9 +19,14 @@ export const SideMenuList = {
         { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
         { name: 'logs', title: '로그', href: '/logs/auditlogs', icon: PlagiarismOutlined },
     ],
-    user: [
+    manager: [
         { name: 'dashboard', title: '대쉬보드', href: '/', icon: SpaceDashboardOutlined },
         { name: 'device', title: '출력장치', href: '/device', icon: PrintOutlined },
+        { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
+        { name: 'print', title: '출력 리스트', href: '/print', icon: ArticleOutlined },
+    ],
+    user: [
+        { name: 'dashboard', title: '대쉬보드', href: '/', icon: SpaceDashboardOutlined },
         { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
         { name: 'print', title: '출력 리스트', href: '/print', icon: ArticleOutlined },
     ]

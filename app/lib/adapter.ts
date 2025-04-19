@@ -8,6 +8,7 @@ import type { UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
+import * as Spool from "./fetchPrintSpoolData";
 
 
 const pool = new Pool({
@@ -214,13 +215,12 @@ export default function MyDBAdapter() {
 
         // ----- Device --------------------------------------------
         async getFilteredDevices(
-            loginName: string | undefined,
             query: string,
             itemsPerPage: number,
             currentPage: number,
             groupId?: string
         ){
-            return Device.fetchFilteredDevices(pool, loginName, query, itemsPerPage, currentPage, groupId);
+            return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
         },
         async getDevicesPages( 
             query: string,
@@ -237,6 +237,21 @@ export default function MyDBAdapter() {
             id:string
         ){
             return Device.fetchDeviceFaxLineById(pool, id);
+        },
+        async getDevicesbyGroupManager(
+            userId: string,
+            query: string,
+            itemsPerPage: number,
+            currentPage: number
+        ){
+            return Device.fetchDevicesbyGroupManager(pool, userId, query, itemsPerPage, currentPage);
+        },
+        async getDevicesbyGroupManagerPages(
+            userId: string,
+            query: string,
+            itemsPerPage: number
+        ){
+            return Device.fetchDevicesbyGroupManagerPages(pool, userId, query, itemsPerPage);
         },
         async createDevice(
             newDevice: any
@@ -388,6 +403,14 @@ export default function MyDBAdapter() {
         },
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
-        }
+        },
+
+        // ----- Print Spoool --------------------------------------
+        async getFilteredPrintSpoolPages(userName: string, itemsPerPage: number) {
+            return Spool.fetchFilteredPrintSpoolPages(pool, userName, itemsPerPage);
+        },
+        async getFilteredPrintSpool(userName: string, itemsPerPage: number, currentPage: number) {
+            return Spool.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
+        },
     }
 }

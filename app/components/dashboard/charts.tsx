@@ -17,10 +17,11 @@ export default async function PageChartWrapper({ trans }: {trans : (key:string) 
 
   return (
     <div className="w-full md:col-span-4">
-      <h2 className='mb-4 text-xl md:text-2xl'>
-        {trans("dashboard.recent_printed_page")}
-      </h2>
+      
       <div className="rounded-xl bg-gray-50 p-4">
+        <h2 className='mb-4 text-xl'>
+          {trans("dashboard.recent_printed_page")}
+        </h2>
         <LineChart
           title={trans('dashboard.printed_page')}
           xlabels={fetchedData.date}

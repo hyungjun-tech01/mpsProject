@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 import clsx from 'clsx';
 import { SideMenuList } from '@/constans';
 

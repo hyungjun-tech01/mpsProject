@@ -69,8 +69,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       // check admin --------------------------------------------
       const isAdmin = auth?.user.role === "admin";
-      const onlyAdminPermitted = nextUrl.pathname.startsWith('/user');
-      if(onlyAdminPermitted) {
+      const userMenu = nextUrl.pathname.startsWith('/user');
+      const groupMenu = nextUrl.pathname.startsWith('/group');
+      if(userMenu || groupMenu) {
         if(isAdmin) return true;
         return Response.redirect(new URL('/', nextUrl));
       }
@@ -78,12 +79,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     jwt: async ({ token, user }) => {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
       }
       return token;
     },
     session: async ({ session, token }) => {
       if (session.user) {
+        session.user.id = token.id as string;
         session.user.role = token.role as string | undefined;
       }
       return session;
