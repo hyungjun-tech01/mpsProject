@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import BoardWrapper from "@/app/components/dashboard/board";
-import { CardsSkeleton } from "@/app/components/dashboard/skeletons";
+import { CardsSkeleton, ChartSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
 import getDictionary from '@/app/locales/dictionaries';
 
@@ -12,7 +12,6 @@ export default async function Page(props: {
   const locale = params.locale;
   const t = await getDictionary(locale);
 
-
   return (
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
@@ -23,7 +22,9 @@ export default async function Page(props: {
           </Suspense>
         </div>
         <div className="flex-1 md:ml-6">
-          <PageChartWrapper trans={t}/>
+          <Suspense fallback={<ChartSkeleton />}>
+            <PageChartWrapper trans={t}/>
+          </Suspense>
         </div>
       </div>
     </main>

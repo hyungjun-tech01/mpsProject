@@ -103,7 +103,6 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
             <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
                 { boardInfo.map(item => {
                     const Icon = iconMap[item.type];
-    
                     return (
                         <div className="flex p-4 justify-between">
                             <div className="flex justify-start">
