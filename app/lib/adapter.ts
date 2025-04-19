@@ -8,7 +8,9 @@ import type { UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
-import * as Spool from "./fetchPrintSpoolData";
+import * as Print from "./fetchPrintSpoolData";
+import type { PrintState } from "./actionPrint";
+import * as PrintAction from "./actionPrint";
 
 
 const pool = new Pool({
@@ -407,10 +409,26 @@ export default function MyDBAdapter() {
 
         // ----- Print Spoool --------------------------------------
         async getFilteredPrintSpoolPages(userName: string, itemsPerPage: number) {
-            return Spool.fetchFilteredPrintSpoolPages(pool, userName, itemsPerPage);
+            return Print.fetchFilteredPrintSpoolPages(pool, userName, itemsPerPage);
         },
         async getFilteredPrintSpool(userName: string, itemsPerPage: number, currentPage: number) {
-            return Spool.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
+            return Print.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
         },
+        async deleteAll(prevState: PrintState, formData: FormData) {
+            'use server';
+            return PrintAction.deleteAll(pool, prevState, formData);
+        },
+        async deleteChecked(prevState: PrintState, formData: FormData) {
+            'use server';
+            return PrintAction.deleteChecked(pool, prevState, formData);
+        },
+        async printAll(prevState: PrintState, formData: FormData) {
+            'use server';
+            return PrintAction.printAll(pool, prevState, formData);
+        },
+        async printChecked(prevState: PrintState, formData: FormData) {
+            'use server';
+            return PrintAction.printChecked(pool, prevState, formData);
+        }
     }
 }

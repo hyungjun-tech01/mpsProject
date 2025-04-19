@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import Search from '@/app/components/search';
 import Table from '@/app/components/table';
-import { CreateButton } from '@/app/components/buttons';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
-import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 import { auth } from '@/auth';
 import { notFound } from "next/navigation";
 
@@ -54,20 +51,32 @@ export default async function Page(props: {
             </div>
             <div className="flex justify-start mt-6">
                 <div className="mr-12">
-                    <button className="font-medium rounded-md bg-lime-700 text-white py-2 px-3 mr-2">
-                        {t('print.print_all')}
-                    </button>
-                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
-                        {t('print.delete_all')}
-                    </button>
+                    <div className="flex gap-2">
+                        <form action={adapter.printAll}>
+                            <button className="text-[16px] rounded-md bg-lime-700 text-white py-2 px-3">
+                                {t('print.print_all')}
+                            </button>
+                        </form>
+                        <form action={adapter.deleteAll}>
+                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
+                                {t('print.delete_all')}
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <div>
-                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3 mr-2">
-                        {t('print.print_checked')}
-                    </button>
-                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
-                        {t('print.delete_checked')}
-                    </button>
+                    <div className="flex gap-2">
+                        <form action={adapter.deleteAll}>
+                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
+                                {t('print.print_checked')}
+                            </button>
+                        </form>
+                        <form action={adapter.deleteChecked}>
+                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
+                                {t('print.delete_checked')}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <Table
