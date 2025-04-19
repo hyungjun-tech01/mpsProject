@@ -543,10 +543,14 @@ const koResource = {
         print: {
             color_mode: '컬러모드',
             copies: '부수',
+            delete_all: '전체 삭제',
+            delete_checked: '선택 삭제',
             duplex: '앙면출력',
             job_time: '요청 시간',
             pages: '페이지 수',
             paper_size: '용지 크기',
+            print_all: '모두 출력',
+            print_checked: '선택 출력',
             wating_list: '대기 중인 출력 대기 목록',
         }
     },

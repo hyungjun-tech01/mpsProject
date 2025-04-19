@@ -52,6 +52,24 @@ export default async function Page(props: {
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t("print.wating_list")}</h1>
             </div>
+            <div className="flex justify-start mt-6">
+                <div className="mr-12">
+                    <button className="font-medium rounded-md bg-lime-700 text-white py-2 px-3 mr-2">
+                        {t('print.print_all')}
+                    </button>
+                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
+                        {t('print.delete_all')}
+                    </button>
+                </div>
+                <div>
+                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3 mr-2">
+                        {t('print.print_checked')}
+                    </button>
+                    <button className="font-medium rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
+                        {t('print.delete_checked')}
+                    </button>
+                </div>
+            </div>
             <Table
                 columns={columns}
                 rows={prints}

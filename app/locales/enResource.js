@@ -494,10 +494,14 @@ const enResource = {
         print: {
             color_mode: 'Color Mode',
             copies: 'Copies',
+            delete_all: 'Delete All',
+            delete_checked: 'Delete Checked',
             duplex: 'Duplex',
             job_time: 'Request Time',
             pages: 'Pages',
             paper_size: 'Paper Size',
+            print_all: 'Print All',
+            print_checked: 'Print Checked',
             wating_list: 'Documents In Spool',
         }
     },
