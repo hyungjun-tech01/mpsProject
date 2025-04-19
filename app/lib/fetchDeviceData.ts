@@ -424,22 +424,33 @@ export async function fetchSaveFaxLineInfo(
         await client.query('BEGIN');
 
         let result ;
+        let out_fax_line_id = null;
 
         if (saveFaxLineData.fax_line_id === null || saveFaxLineData.fax_line_id  === ''){
+
+            const resp_fax_line_id = await client.query(`SELECT uuid_generate_v4() fax_line_id`);
+            console.log('fax_line_id', resp_fax_line_id.rows[0].fax_line_id);
+
+            const fax_line_id = resp_fax_line_id.rows[0].fax_line_id;
+
             result = await client.query(`
-            insert into tbl_fax_line_info(fax_line_name, 
+            insert into tbl_fax_line_info(fax_line_id, 
+                                        fax_line_name, 
                                         printer_id, 
                                         fax_line_user_id, 
                                         fax_line_shared_group_id, 
                                         created_date,
                                         created_by)
-            values($1,$2,$3,$4,now(),$5)`,
-            [saveFaxLineData.fax_line_name, 
+            values($1,$2,$3,$4,$5, now(),$6)`,
+            [fax_line_id,
+            saveFaxLineData.fax_line_name, 
             saveFaxLineData.printer_id,
             saveFaxLineData.fax_line_user_id, 
             saveFaxLineData.fax_line_shared_group_id,
             created_by
             ]);
+
+            out_fax_line_id = fax_line_id;
 
         }else{
             result = await client.query(`
@@ -453,13 +464,17 @@ export async function fetchSaveFaxLineInfo(
                saveFaxLineData.fax_line_shared_group_id,
                saveFaxLineData.fax_line_id
             ]);
+            out_fax_line_id = saveFaxLineData.fax_line_id;
         }
+
         
         // 모든 쿼리 성공 시 커밋
         await client.query('COMMIT');
 
+        console.log('fetchdevice_out_fax_line_id', out_fax_line_id);
+
         // 성공 처리
-        return { result: true, data: result.rows[0] };
+        return { result: true, data: out_fax_line_id };
 
     }catch (error) {
        // 오류 발생 시 롤백

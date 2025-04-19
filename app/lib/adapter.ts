@@ -273,6 +273,7 @@ export default function MyDBAdapter() {
             id: string
         ) {
             'use server';
+            console.log('adapter fetchDeleteFaxLineInfo', id);
             return Device.fetchDeleteFaxLineInfo(pool, id);
         },   
         async  modifyDevice(
