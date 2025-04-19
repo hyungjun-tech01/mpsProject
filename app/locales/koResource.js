@@ -539,6 +539,15 @@ const koResource = {
             shared: '공유여부',
             subTitle_fax: '팩스함',
             subTitle_scan: '스캔함',
+        },
+        print: {
+            color_mode: '컬러모드',
+            copies: '부수',
+            duplex: '앙면출력',
+            job_time: '요청 시간',
+            pages: '페이지 수',
+            paper_size: '용지 크기',
+            wating_list: '대기 중인 출력 대기 목록',
         }
     },
 }

@@ -8,6 +8,7 @@ import type { UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
+import * as Spool from "./fetchPrintSpoolData";
 
 
 const pool = new Pool({
@@ -401,6 +402,14 @@ export default function MyDBAdapter() {
         },
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
-        }
+        },
+
+        // ----- Print Spoool --------------------------------------
+        async getFilteredPrintSpoolPages(userName: string, itemsPerPage: number) {
+            return Spool.fetchFilteredPrintSpoolPages(pool, userName, itemsPerPage);
+        },
+        async getFilteredPrintSpool(userName: string, itemsPerPage: number, currentPage: number) {
+            return Spool.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
+        },
     }
 }

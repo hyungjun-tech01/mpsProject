@@ -496,7 +496,6 @@ export async function fetchDevicesbyGroupManagerPages(
             AND d.deleted = 'N'
             ORDER BY d.modified_date DESC
         `);
-
         return Math.ceil(Number(count.rows[0].count) / itemsPerPage);
     } catch (error) {
         console.error('Database Error:', error);
@@ -511,6 +510,8 @@ export async function fetchDevicesbyGroupManager(
     itemsPerPage: number,
     currentPage: number,
 ) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
     try {
         const devices = await client.query(`
             SELECT DISTINCT
@@ -548,7 +549,7 @@ export async function fetchDevicesbyGroupManager(
             }
             AND d.deleted = 'N'
             ORDER BY d.modified_date DESC
-            LIMIT ${itemsPerPage} OFFSET ${currentPage}
+            LIMIT ${itemsPerPage} OFFSET ${offset}
         `);
 
         return devices.rows;

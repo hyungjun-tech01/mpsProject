@@ -6,6 +6,8 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
+import { auth } from '@/auth';
+import { notFound } from "next/navigation";
 
 
 export const metadata: Metadata = {
@@ -22,46 +24,43 @@ export default async function Page(props: {
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
 
+    const session = await auth();
+    if(!session?.user)
+        return notFound();
+
     const adapter = MyDBAdapter();
-    const [t, totalPages, users] = await Promise.all([
+    const [t, totalPages, prints] = await Promise.all([
         getDictionary(locale),
-        adapter.getFilteredUsersPages(query, itemsPerPage),
-        adapter.getFilteredUsers(query, itemsPerPage, currentPage)
+        adapter.getFilteredPrintSpoolPages(query, itemsPerPage),
+        adapter.getFilteredPrintSpool(query, itemsPerPage, currentPage)
     ]);
 
-    // const handleDelete = async (userId: string) => {
-    //     'use server';
-    //     await adapter.deleteUser(userId);
-    //   };
     
     const columns: IColumnData[] = [
-        { name: 'user_name', title: t('user.user_id'), align: 'center' },
-        { name: 'full_name', title: t('user.user_name'), align: 'center' },
-        { name: 'balance', title: t('account.balance'), align: 'center', type: 'currency' },
-        { name: 'restricted', title: t('user.limited'), align: 'center', type: 'enum_icon', values: {Y: <DoNotDisturbOnOutlined/>, N: <DoNotDisturbOffOutlined/>} },
-        { name: 'total_pages', title: t('common.page'), align: 'center' },
-        { name: 'total_jobs', title: t('user.job'), align: 'center' },
+        { name: 'print_job_time', title: t('print.job_time'), align: 'center' },
+        { name: 'print_document_name', title: t('document.document_name'), align: 'center' },
+        { name: 'print_pc_ip', title: t('common.ip_address'), align: 'center' },
+        { name: 'pages', title: t('print.pages'), align: 'center' },
+        { name: 'copies', title: t('print.copies'), align: 'center' },
+        { name: 'color_mode', title: t('print.color_mode'), align: 'center' },
+        { name: 'duplex', title: t('print.duplex'), align: 'center' },
+        { name: 'paper_size', title: t('print.paper_size'), align: 'center' },
     ];
 
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">{t("common.user")}</h1>
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search placeholder={t("comment.search_users")} />
-                <CreateButton link="/user/create" title={t("user.create_user")} />
+                <h1 className="text-2xl">{t("print.wating_list")}</h1>
             </div>
             <Table
                 columns={columns}
-                rows={users}
+                rows={prints}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 path='user'
                 locale={locale}
                 deleteAction={adapter.deleteUser}
-                editable={true}
-                deletable={true}
+                checkable={true}
             />
         </div>
     );
