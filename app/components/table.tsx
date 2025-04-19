@@ -134,6 +134,9 @@ export default function CustomizedTable<DataType>({
         link.click();
         window.URL.revokeObjectURL(url);
     };
+    let columnLength = columns.length;
+    if(checkable) columnLength += 1;
+    if((editable || deletable)) columnLength += 1;
 
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
@@ -223,7 +226,7 @@ export default function CustomizedTable<DataType>({
                         :
                             <StyledTableRow>
                                 <StyledTableCell
-                                    colSpan={editable ? columns.length + 1 : columns.length}
+                                    colSpan={columnLength}
                                     align="center"
                                 >
                                     No Data

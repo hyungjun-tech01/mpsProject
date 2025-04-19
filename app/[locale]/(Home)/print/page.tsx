@@ -78,6 +78,8 @@ export default async function Page(props: {
                 path='user'
                 locale={locale}
                 deleteAction={adapter.deleteUser}
+                editable={false}
+                deletable={false}
                 checkable={true}
             />
         </div>
