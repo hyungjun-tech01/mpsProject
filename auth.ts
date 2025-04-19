@@ -69,8 +69,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       // check admin --------------------------------------------
       const isAdmin = auth?.user.role === "admin";
-      const onlyAdminPermitted = nextUrl.pathname.startsWith('/user');
-      if(onlyAdminPermitted) {
+      const userMenu = nextUrl.pathname.startsWith('/user');
+      const groupMenu = nextUrl.pathname.startsWith('/group');
+      if(userMenu || groupMenu) {
         if(isAdmin) return true;
         return Response.redirect(new URL('/', nextUrl));
       }

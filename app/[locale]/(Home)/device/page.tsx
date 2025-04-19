@@ -8,7 +8,7 @@ import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
-import { Circle } from "@mui/icons-material";
+import { AdminPanelSettings, Circle } from "@mui/icons-material";
 import ModalButton from '@/app/components/device/modalButton';
 
 
@@ -42,17 +42,22 @@ export default async function Device(
     const groupId = searchParams?.groupId;
 
     const session = await auth();
-
-    const adapter = MyDBAdapter();
-
+    console.log('Session :', session);
+    
     if(!session?.user)
         return notFound();
-    
+
+    const isAdmin = session?.user.role === 'admin';
+    const userId = session?.user.id;
+
+    const adapter = MyDBAdapter();
     const [t, totalPages, devices, deviceGroup] = await Promise.all([
         getDictionary(locale),
-        adapter.getDevicesPages(query, itemsPerPage),
-        adapter.getFilteredDevices(session?.user.name ?? undefined, query, itemsPerPage, currentPage, groupId),
-        adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale)
+        isAdmin ? adapter.getDevicesPages(query, itemsPerPage)
+            : adapter.getDevicesbyGroupManagerPages(userId, query, itemsPerPage),
+        isAdmin ? adapter.getFilteredDevices(query, itemsPerPage, currentPage, groupId)
+            : adapter.getDevicesbyGroupManager(userId, query, itemsPerPage, currentPage),
+        isAdmin ? adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale) : null
     ]);
 
     //console.log('Check : ', devices);
@@ -77,7 +82,7 @@ export default async function Device(
                     <h1 className="text-2xl">{t('device.device')}</h1>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                    <ModalButton list={deviceGroup} modalId={groupId} />
+                    {!!deviceGroup && <ModalButton list={deviceGroup} modalId={groupId} />}
                     <Search placeholder={t("comment.search_devices")} />
                     <CreateButton link="/device/create" title={t("device.create_device")} />
                 </div>

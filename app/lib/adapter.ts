@@ -214,13 +214,12 @@ export default function MyDBAdapter() {
 
         // ----- Device --------------------------------------------
         async getFilteredDevices(
-            loginName: string | undefined,
             query: string,
             itemsPerPage: number,
             currentPage: number,
             groupId?: string
         ){
-            return Device.fetchFilteredDevices(pool, loginName, query, itemsPerPage, currentPage, groupId);
+            return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
         },
         async getDevicesPages( 
             query: string,
@@ -237,6 +236,21 @@ export default function MyDBAdapter() {
             id:string
         ){
             return Device.fetchDeviceFaxLineById(pool, id);
+        },
+        async getDevicesbyGroupManager(
+            userId: string,
+            query: string,
+            itemsPerPage: number,
+            currentPage: number
+        ){
+            return Device.fetchDevicesbyGroupManager(pool, userId, query, itemsPerPage, currentPage);
+        },
+        async getDevicesbyGroupManagerPages(
+            userId: string,
+            query: string,
+            itemsPerPage: number
+        ){
+            return Device.fetchDevicesbyGroupManagerPages(pool, userId, query, itemsPerPage);
         },
         async createDevice(
             newDevice: any

@@ -6,7 +6,6 @@ import { encrypt } from '@/app/lib/cryptoFunc';
 
 export async function fetchFilteredDevices(
     client: Pool,
-    loginName: string | undefined,
     query: string,
     itemsPerPage: number,
     currentPage: number,
@@ -61,7 +60,6 @@ export async function fetchFilteredDevices(
             magenta_toner_percentage: data.magenta_toner_percentage + ' %',
             yellow_toner_percentage: data.yellow_toner_percentage + ' %',
             black_toner_percentage: data.black_toner_percentage + ' %',
-            editable: !!loginName && (loginName === 'admin'),
         }));
         return converted;
     } catch (error) {
@@ -473,4 +471,89 @@ export async function fetchSaveFaxLineInfo(
             data: "Database Error",
         };
     };
+}
+
+export async function fetchDevicesbyGroupManagerPages(
+    client: Pool,
+    userId: string,
+    query: string,
+    itemsPerPage: number,
+) {
+    try {
+        const count = await client.query(`
+            SELECT DISTINCT
+                COUNT(*)
+            FROM tbl_device_info d
+            INNER JOIN tbl_group_member_info gm_device ON d.device_id = gm_device.member_id
+            INNER JOIN tbl_group_member_info gm_user ON gm_device.group_id = gm_user.group_id
+            WHERE gm_user.member_id = '${userId}'
+            ${query === '' ? '' :
+                'AND (tbl_device_info.device_name ILIKE ' + query + ' OR ' +
+                'tbl_device_info.device_type ILIKE ' + query + ' OR ' +
+                'tbl_device_info.ext_device_function ILIKE ' + query + ' OR ' +
+                'tbl_device_info.physical_device_id ILIKE ILIKE ' + query + ')'
+            }
+            AND d.deleted = 'N'
+            ORDER BY d.modified_date DESC
+        `);
+
+        return Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of devices.');
+    }
+}
+
+export async function fetchDevicesbyGroupManager(
+    client: Pool,
+    userId: string,
+    query: string,
+    itemsPerPage: number,
+    currentPage: number,
+) {
+    try {
+        const devices = await client.query(`
+            SELECT DISTINCT
+                d.device_id AS id,
+                d.device_name,
+                d.location,
+                d.notes,
+                d.physical_device_id,
+                d.device_model,
+                d.serial_number,
+                d.deleted,
+                d.device_status,
+                d.device_type,
+                d.app_type,
+                d.ext_device_function,
+                d.cyan_toner_percentage,
+                d.magenta_toner_percentage,
+                d.yellow_toner_percentage,
+                d.black_toner_percentage,
+                CASE 
+                    WHEN d.device_type = 'color_printer' THEN 'Color_Printer01.png'
+                    WHEN d.device_type = 'mono_printer' THEN 'Black_Printer01.png'
+                    WHEN d.device_type = 'mono_mfd' THEN 'Black_MFD01.png'
+                    ELSE 'Color_MFD01.png'
+                END AS device_type_img
+            FROM tbl_device_info d
+            INNER JOIN tbl_group_member_info gm_device ON d.device_id = gm_device.member_id
+            INNER JOIN tbl_group_member_info gm_user ON gm_device.group_id = gm_user.group_id
+            WHERE gm_user.member_id = '${userId}'
+            ${query === '' ? '' :
+                'AND (tbl_device_info.device_name ILIKE ' + query + ' OR ' +
+                'tbl_device_info.device_type ILIKE ' + query + ' OR ' +
+                'tbl_device_info.ext_device_function ILIKE ' + query + ' OR ' +
+                'tbl_device_info.physical_device_id ILIKE ILIKE ' + query + ')'
+            }
+            AND d.deleted = 'N'
+            ORDER BY d.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${currentPage}
+        `);
+
+        return devices.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of devices.');
+    }
 }
