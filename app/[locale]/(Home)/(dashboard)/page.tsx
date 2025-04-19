@@ -17,12 +17,12 @@ export default async function Page(props: {
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
       <div className="flex flex-col md:flex-row">
-        <div className="flex flex-initial flex-col gap-6">
+        <div className="flex flex-col gap-6 mb-6 md:w-1/4">
           <Suspense fallback={<CardsSkeleton />}>
             <BoardWrapper trans={t}/>
           </Suspense>
         </div>
-        <div className="flex-1 ml-6">
+        <div className="flex-1 md:ml-6">
           <PageChartWrapper trans={t}/>
         </div>
       </div>

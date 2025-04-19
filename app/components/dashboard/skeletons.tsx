@@ -18,6 +18,44 @@ export function CardSkeleton() {
   );
 }
 
+export function BoardItemSkeleton() {
+  return (
+    <div
+      className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm`}
+    >
+      <div className="flex p-4 justify-between">
+        <div className="flex justify-start">
+          <div className="h-5 w-5 rounded-md bg-gray-200" />
+          <div className="ml-2 h-6 w-16 rounded-md bg-gray-200 text-sm font-medium" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function BoardSkeleton() {
+  return (
+    <div
+      className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-50 p-2 shadow-sm`}
+    >
+      <BoardItemSkeleton />
+      <BoardItemSkeleton />
+      <BoardItemSkeleton />
+      <BoardItemSkeleton />
+      <BoardItemSkeleton />
+    </div>
+  );
+}
+
+export function ChartSkeleton() {
+  return (
+    <div
+        className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-50`}
+    >
+    </div>
+  );
+}
+
 export function CardsSkeleton() {
   return (
     <>
@@ -35,15 +73,15 @@ export default function DashboardSkeleton() {
       <div
         className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
       />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        {/* <RevenueChartSkeleton />
-        <LatestInvoicesSkeleton /> */}
+      <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col flex-initial">
+          <BoardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+        <div className="flex-1 ml-6">
+          <ChartSkeleton />
+        </div>
       </div>
     </>
   );
