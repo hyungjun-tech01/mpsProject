@@ -1,5 +1,6 @@
 'use client';
 
+import { SessionProvider } from "next-auth/react";
 import { useState } from 'react';
 import clsx from 'clsx';
 import Header from '@/app/components/header';
@@ -17,7 +18,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           "md:w-16": !sideNavExtended,
           "md:w-64": sideNavExtended,
         })}>
-          <SideNav extended={sideNavExtended}/>
+          <SessionProvider>
+            <SideNav extended={sideNavExtended}/>
+          </SessionProvider>
         </div>
         <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
           {children}
