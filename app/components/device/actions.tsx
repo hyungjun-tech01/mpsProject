@@ -132,7 +132,7 @@ export async function deleteDevice(id : string) {
 }
 
 export async function deleteFaxLineInfo(faxLineid : string, deviceId : string) {
-    const output = await adapter.deleteFaxLineInfo(faxLineid);
+    const output = await adapter.fetchDeleteFaxLineInfo(faxLineid);
 
     if(!output.result) {
         return {
@@ -140,8 +140,8 @@ export async function deleteFaxLineInfo(faxLineid : string, deviceId : string) {
             message: 'Failed to Delete Fax Line Information',
         }
     }
+    // revalidatePath를 비동기적으로 처리
     revalidatePath(`/device/${deviceId}/edit`);
-    redirect(`/device/${deviceId}/edit`);
 }
 
 export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: string){
@@ -152,15 +152,21 @@ export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: st
         return notFound();
 
     const output = await adapter.saveFaxLineInfo(saveFaxLineData, session.user.name);
-    console.log('saveFaxLineInfo', output);
+    console.log('ACTIONS saveFaxLineInfo', output);
     if(!output.result) {
         return {
             errors: output.data,
             message: 'Failed to Save Fax Line Information',
         }
+    }else{
+
+        revalidatePath(`/device/${deviceId}/edit`);
+
+        return {
+            fax_line_id: output.data
+        }
     }
-    revalidatePath(`/device/${deviceId}/edit`);
-    redirect(`/device/${deviceId}/edit`);
+
 }
 
 export async function modifyDevice(prevState: State, formData: FormData) {

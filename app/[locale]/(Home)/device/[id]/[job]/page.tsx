@@ -115,7 +115,7 @@ export default async function Page(props: {
             { name: `space_line_${index}`, title: '', type: 'input', defaultValue: '', placeholder: '' },
         ]
     }))
-    : [ {items: []} ];
+    : [ ];
 
     const buttonItems = {
             cancel: { title: t('common.cancel'), link: '/device' },
@@ -142,7 +142,7 @@ export default async function Page(props: {
                 ]}
             />
              {job === 'edit' && <Form id={id} items={editItems} buttons={buttonItems} action={modifyDevice}/>}
-             { fax && job === 'edit' && editFaxItems.length > 0 && (
+             { fax && job === 'edit' && editFaxItems.length >= 0 && (
                 <FormFax id={id} 
                     title = { `${t('fax.fax_line')}` }
                     description = { t('fax.fax_line_desc') }
