@@ -48,12 +48,12 @@ import {
           </p>
         }
         {typeof value === 'object' &&
-          <div className="flex flex-col">
+          <div className="flex flex-col bg-white">
             {
               value.map((item, idx) => {
                 if (idx === value.length - 1) {
                   return (
-                    <div key={idx} className="flex-1 flex justify-between truncate rounded-xl bg-white px-2 items-center" >
+                    <div key={idx} className="flex-1 flex justify-between truncate rounded-xl px-2 items-center" >
                       <div className="font-medium">{item.title}</div>
                       <div className="text-xl">{item.value}</div>
                     </div>

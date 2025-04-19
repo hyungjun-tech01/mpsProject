@@ -1,6 +1,5 @@
 import { Suspense } from "react";
-import CardDeviceWrapper from "@/app/components/dashboard/cards-device";
-import CardPageseWrapper from "@/app/components/dashboard/cards-page";
+import BoardWrapper from "@/app/components/dashboard/board";
 import { CardsSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
 import getDictionary from '@/app/locales/dictionaries';
@@ -17,18 +16,15 @@ export default async function Page(props: {
   return (
     <main>
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
-      <div className="grid gap-6 grid-cols-4">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardDeviceWrapper trans={t}/>
-        </Suspense>
-      </div>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-6">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardPageseWrapper trans={t}/>
-        </Suspense>
-      </div>
-      <div className="mt-6">
-        <PageChartWrapper trans={t}/>
+      <div className="flex flex-col md:flex-row">
+        <div className="flex flex-initial flex-col gap-6">
+          <Suspense fallback={<CardsSkeleton />}>
+            <BoardWrapper trans={t}/>
+          </Suspense>
+        </div>
+        <div className="flex-1 ml-6">
+          <PageChartWrapper trans={t}/>
+        </div>
       </div>
     </main>
   );
