@@ -414,21 +414,13 @@ export default function MyDBAdapter() {
         async getFilteredPrintSpool(userName: string, itemsPerPage: number, currentPage: number) {
             return Print.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
         },
-        async deleteAll(prevState: PrintState, formData: FormData) {
+        async deleteSelectedPrint(list: string[]) {
             'use server';
-            return PrintAction.deleteAll(pool, prevState, formData);
+            return PrintAction.deleteSelected(pool, list);
         },
-        async deleteChecked(prevState: PrintState, formData: FormData) {
+        async printSelectedPrint(list: string[]) {
             'use server';
-            return PrintAction.deleteChecked(pool, prevState, formData);
-        },
-        async printAll(prevState: PrintState, formData: FormData) {
-            'use server';
-            return PrintAction.printAll(pool, prevState, formData);
-        },
-        async printChecked(prevState: PrintState, formData: FormData) {
-            'use server';
-            return PrintAction.printChecked(pool, prevState, formData);
+            return PrintAction.printSelected(pool, list);
         }
     }
 }

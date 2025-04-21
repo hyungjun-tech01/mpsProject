@@ -101,8 +101,8 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
 
         return (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                { boardInfo.map(item => (
-                    <Card title={item.title} value={item.value} type={item.type} />
+                { boardInfo.map((item, idx) => (
+                    <Card key={idx} title={item.title} value={item.value} type={item.type} />
                 ))}
             </div>
         )

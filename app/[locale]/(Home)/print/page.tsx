@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Table from '@/app/components/table';
+import Table from '@/app/components/print/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
@@ -32,7 +32,6 @@ export default async function Page(props: {
         adapter.getFilteredPrintSpool(query, itemsPerPage, currentPage)
     ]);
 
-    
     const columns: IColumnData[] = [
         { name: 'print_job_time', title: t('print.job_time'), align: 'center' },
         { name: 'print_document_name', title: t('document.document_name'), align: 'center' },
@@ -44,40 +43,17 @@ export default async function Page(props: {
         { name: 'paper_size', title: t('print.paper_size'), align: 'center' },
     ];
 
+    const trans = {
+        deleteAll : t('print.delete_all'),
+        deleteChecked: t('print.delete_checked'),
+        printAll : t('print.print_all'),
+        printChecked: t('print.print_checked'),
+    };
+
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">{t("print.wating_list")}</h1>
-            </div>
-            <div className="flex justify-start mt-6">
-                <div className="mr-12">
-                    <div className="flex gap-2">
-                        <form action={adapter.printAll}>
-                            <button className="text-[16px] rounded-md bg-lime-700 text-white py-2 px-3">
-                                {t('print.print_all')}
-                            </button>
-                        </form>
-                        <form action={adapter.deleteAll}>
-                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
-                                {t('print.delete_all')}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div>
-                    <div className="flex gap-2">
-                        <form action={adapter.deleteAll}>
-                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
-                                {t('print.print_checked')}
-                            </button>
-                        </form>
-                        <form action={adapter.deleteChecked}>
-                            <button className="text-[16px] rounded-md border-2 border-gray-200 text-gray-500 py-2 px-3">
-                                {t('print.delete_checked')}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <h1 className="text-2xl">{t("print.waiting_list")}</h1>
             </div>
             <Table
                 columns={columns}
@@ -85,11 +61,10 @@ export default async function Page(props: {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 path='user'
-                locale={locale}
-                deleteAction={adapter.deleteUser}
-                editable={false}
-                deletable={false}
+                t={trans}
                 checkable={true}
+                printAction={adapter.printSelectedPrint}
+                deleteAction={adapter.deleteSelectedPrint}
             />
         </div>
     );

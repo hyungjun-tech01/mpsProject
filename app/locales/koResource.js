@@ -551,7 +551,7 @@ const koResource = {
             paper_size: '용지 크기',
             print_all: '모두 출력',
             print_checked: '선택 출력',
-            wating_list: '대기 중인 출력 대기 목록',
+            waiting_list: '대기 중인 출력 대기 목록',
         }
     },
 }

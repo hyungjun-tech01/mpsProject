@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import { useColorScheme } from '@mui/material/styles';
 import Link from 'next/link';
-import { signOut } from "next-auth/react"
+import { logout } from "@/app/components/auth/actions";
 
 interface IHeader {
     extendSideNav: () => void;
@@ -82,7 +82,7 @@ export default function Header({ extendSideNav }: IHeader) {
                 </div>
             </MenuItem>
             <MenuItem>
-                <div onClick={() => signOut()}>
+                <div onClick={() => logout()}>
                     <span className='mr-3 font-medium'>로그아웃</span>
                 </div>
             </MenuItem>

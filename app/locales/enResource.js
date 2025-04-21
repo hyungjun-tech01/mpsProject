@@ -502,7 +502,7 @@ const enResource = {
             paper_size: 'Paper Size',
             print_all: 'Print All',
             print_checked: 'Print Checked',
-            wating_list: 'Documents In Spool',
+            waiting_list: 'Documents In Spool',
         }
     },
 }
