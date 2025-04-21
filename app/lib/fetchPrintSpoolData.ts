@@ -24,7 +24,7 @@ export async function fetchFilteredPrintSpool(
                 n_up,
                 language,
                 pages
-            FROM tbl_print_job_info
+            FROM tbl_print_job_spool_info
             WHERE
                 print_job_user='${userName}'
             LIMIT ${itemsPerPage} OFFSET ${offset}
@@ -32,7 +32,7 @@ export async function fetchFilteredPrintSpool(
         return users.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch users.");
+        throw new Error("Failed to fetch print.");
     }
 };
 
@@ -45,7 +45,7 @@ export async function fetchFilteredPrintSpoolPages(
         const count = await client.query(`
             SELECT
                 COUNT(*)
-            FROM tbl_print_job_info
+            FROM tbl_print_job_spool_info
             WHERE
                 print_job_user='${userName}'
         `);

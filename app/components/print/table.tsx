@@ -60,6 +60,24 @@ export default function CustomizedTable<DataType>({
 }: ITable<DataType>) {
     const [ selectedIds, setSelectedIds ] = useState<string[]>([]);
 
+    const handleCheck = (event) => {
+        if(event.target.checked) {
+            const updateSelectedIds = [
+                ...selectedIds,
+                event.target.id
+            ];
+            setSelectedIds(updateSelectedIds);
+        } else {
+            const foundIdx = selectedIds.findIndex(id => id === event.target.id);
+            if(foundIdx !== -1) {
+                const updateSelectedIds = [
+                    ...selectedIds.slice(0, foundIdx),
+                    ...selectedIds.slice(foundIdx + 1,),
+                ];
+                setSelectedIds(updateSelectedIds);
+            }
+        }
+    }
     const handlePrintAll = () => {
         const allIds = rows.map(row => row.id);
         printAction(allIds);
@@ -75,6 +93,7 @@ export default function CustomizedTable<DataType>({
         setSelectedIds([]);
     }
     const handleDeleteChecked = () => {
+        deleteAction(selectedIds);
         setSelectedIds([]);
     }
 
@@ -133,7 +152,13 @@ export default function CustomizedTable<DataType>({
                                                 align='center'
                                                 scope="row"
                                             >
-                                                <input type="checkbox" id={row.id} name={row.id} />
+                                                <input 
+                                                    type="checkbox"
+                                                    id={row.id}
+                                                    name={row.id}
+                                                    defaultChecked={selectedIds.findIndex(id => id === row.id) !== -1}
+                                                    onChange={handleCheck}
+                                                />
                                             </StyledTableCell>
                                         }
                                         {columns.map((column) => {
@@ -163,7 +188,7 @@ export default function CustomizedTable<DataType>({
                             :
                                 <StyledTableRow>
                                     <StyledTableCell
-                                        colSpan={columns.length}
+                                        colSpan={checkable ? columns.length + 1 : columns.length}
                                         align="center"
                                     >
                                         No Data
