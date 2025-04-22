@@ -33,13 +33,13 @@ $ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointMana
 # 확인
 $ choco
 ```
-mkcert 설치, PowerShull에서 실행   
+mkcert 설치, PowerShell에서 실행   
 ```bash
 윈도우
 choco install mkcert
 ```
 
-인증성 생성, 폴더를 하나 만들고 실행, mkcert locahost를 하면 인증서 파일이 생성됨.         
+인증서 생성, 폴더를 하나 만들고 실행, mkcert locahost를 하면 인증서 파일이 생성됨.         
 ```bash
 $ mkcert -install
 $ mkcert localhost
