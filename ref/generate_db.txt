@@ -3032,7 +3032,7 @@ set text_archive_path = '2023\09\C2K0910023024050914190.etxt'
 where image_archive_path like '%C2K0910023024050914190%';
 
 -- 2025.04.21 : tbl_print_job_spool_info
-DROP table if exists tbl_print_job_info
+DROP table if exists tbl_print_job_info;
 
 CREATE TABLE tbl_print_job_spool_info (
     print_job_id varchar(36) NOT NULL default uuid_generate_v4(),

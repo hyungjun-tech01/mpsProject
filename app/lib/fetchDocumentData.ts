@@ -26,8 +26,8 @@ export async function fetchFilteredDocumnets(
             WHERE
                 dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
                 ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
-                    + ' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = \''
-                    + user_id + '\'))'}
+                    + "' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = '"
+                    + user_id + "'))"}
                 ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             ORDER BY dj.created_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}`);
@@ -59,8 +59,8 @@ export async function fetchFilteredDocumnetPages(
             WHERE
                 dj.job_type = '${job_type.toUpperCase()}'
                 ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
-                    + ' OR dj.document_id IN ( SELECT document_id FROM tbl_document_shared_info  WHERE shared_to = '
-                    + user_id + '))'}
+                    + "' OR dj.document_id IN ( SELECT document_id FROM tbl_document_shared_info  WHERE shared_to = '"
+                    + user_id + "'))"}
                 ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
