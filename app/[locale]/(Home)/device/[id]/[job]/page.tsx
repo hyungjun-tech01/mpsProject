@@ -128,7 +128,6 @@ export default async function Page(props: {
         delete: { title: t('fax.delete') },
     };
 
-    console.log('editFaxItems', editFaxItems);
     return (
         <main>
             <Breadcrumbs

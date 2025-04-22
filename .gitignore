@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.pem*
 
 # vercel
 .vercel
@@ -42,3 +43,4 @@ next-env.d.ts
 
 #sql
 sql_.sql
+certificates

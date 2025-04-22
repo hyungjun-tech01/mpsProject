@@ -32,8 +32,6 @@ export default function FormFax(
 
     const router = useRouter();
 
-    console.log('faxItemOriginal', faxItemOriginal);
-
 
     const [faxData, setFaxData] = useState<Record<string, any>>({});
 
@@ -143,8 +141,7 @@ export default function FormFax(
     // }, [deletedFaxLineId, id]);    
         
     const handleAddFaxLine = () => {
-        console.log('handleAddFaxLine', faxItemOriginal);
-
+        
 
         // const hasEmptyHiddenValue = faxItemOriginal.some(
         //     (item) => item.type === 'hidden' && (typeof item.defaultValue !== 'string' || item.defaultValue.trim() === '')

@@ -31,6 +31,7 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
     const userName = session?.user.name;
 
     if (!userName) {
+        console.log("userName is undefined");
         notFound();
     };
 

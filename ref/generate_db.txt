@@ -3035,7 +3035,7 @@ where image_archive_path like '%C2K0910023024050914190%';
 DROP table if exists tbl_print_job_info
 
 CREATE TABLE tbl_print_job_spool_info (
-    print_job_id varchar(36) NOT NULL,
+    print_job_id varchar(36) NOT NULL default uuid_generate_v4(),
     print_pc_ip varchar(15) NOT NULL,
     print_job_time timestamp NOT NULL,
     print_job_user varchar(255) NOT NULL,
