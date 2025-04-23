@@ -351,7 +351,7 @@ const koResource = {
             title_error: '오류',
             msg_not_reg_user: '등록한 사용자만 삭제 가능합니다.',
             msg_delete_confirm:'삭제하시겠습니까?',
-            search_devices: '장비이름, 모델명으로 검색하세요.',
+            search_devices: '장비이름, 모델명, 위치, IP로 검색하세요.',
             search_users: '사용자 아이디, 사용자 이름, 이메일로 검색하세요.',
             user_edit_account_description: "사용자 잔액 설정을 위해 여기에 값을 입력하십시오. 금액을 조절하려면(5크레딧 추가등), '조절'링크를 선택하십시오. 사용자를 '제한'한다는 것은 계정에 크레딧이 없을 시 출력을 할 수 없다는 것을 의미합니다.",
             user_edit_details_description: '이 사용자에 대한 일반정보. 이메일로 공지내용을 보내려면 받는 사람의 이메일을 입력하십시오.',

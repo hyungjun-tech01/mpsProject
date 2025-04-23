@@ -46,7 +46,8 @@ export async function fetchFilteredDevices(
                 "AND ( d.device_name ILIKE '%" + query + "%' "
                 + "OR d.device_model ILIKE '%" + query + "%' "
                 + "OR d.ext_device_function ILIKE '%" + query + "%' "
-                + "OR d.physical_device_id ILIKE '%" + query + "%')"
+                + "OR d.physical_device_id ILIKE '%" + query + "%' "
+                + "OR d.location ILIKE '%" + query + "%')"
             }
             AND deleted = 'N'
             ${!!groupId ? "AND gm.group_id = '" + groupId + "'" : ""}
@@ -101,7 +102,8 @@ export async function fetchDevicesPages(
                     tbl_device_info.device_name ILIKE '${`%${query}%`}' OR
                     tbl_device_info.device_type ILIKE '${`%${query}%`}' OR
                     tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR
-                    tbl_device_info.physical_device_id ILIKE '${`%${query}%`}'
+                    tbl_device_info.physical_device_id ILIKE '${`%${query}%`}' OR
+                    tbl_device_info.location ILIKE '${`%${query}%`}' 
                 )
                 AND deleted = 'N'
                 `)
