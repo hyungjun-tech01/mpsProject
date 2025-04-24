@@ -17,10 +17,10 @@ export default function Loading() {
                         </label>
                         <div className="peer block h-10 w-full bg-gray-100 rounded-md"></div>
                     </div >
-                    {/* <div className="flex h-10 items-center rounded-lg bg-gray-300 px-4 text-base font-medium text-white transition-colors">
+                    <div className="flex h-10 items-center rounded-lg bg-gray-300 px-4 text-base font-medium text-white transition-colors">
                         <span className="hidden w-12 md:block">{' '}</span>{' '}
                         <Add className="h-5 md:ml-4" />
-                    </div> */}
+                    </div>
                 </div>
                 <TableSkeleton />
             </div>

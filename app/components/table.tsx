@@ -203,7 +203,7 @@ export default function CustomizedTable<DataType>({
                                             align='right'
                                             scope="row"
                                         >
-                                            <div className="flex justify-end gap-3">
+                                            <div className="flex justify-center gap-3">
                                                 {editable && path && <UpdateButton
                                                     link={`${path}/${row.id}/edit`}
                                                 />}

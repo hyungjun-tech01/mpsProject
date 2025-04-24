@@ -14,6 +14,9 @@ module.exports = {
       gridTemplateColumns: {
         'auto-fit': 'repeat(auto-fit, minmax(128px, 1fr))',
       },
+      width: {
+        '1/8': '12.5%',
+      }
     },
   },
   plugins: [],
