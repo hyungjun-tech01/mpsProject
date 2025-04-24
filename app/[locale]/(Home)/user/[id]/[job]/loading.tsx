@@ -1,5 +1,10 @@
-import { UserEditSkeleton } from "@/app/components/user/skeletons";
+import { SearchSkeleton, TableSkeleton } from "@/app/components/skeletons";
 
 export default function Loading() {
-    return <UserEditSkeleton />;
+    return (
+        <div className="w-full">
+            <SearchSkeleton />
+            <TableSkeleton />
+        </div>
+    );
 }

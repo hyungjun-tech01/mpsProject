@@ -49,9 +49,15 @@ export function BoardSkeleton() {
 
 export function ChartSkeleton() {
   return (
-    <div
-        className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-50`}
-    >
+    <div className="w-full md:col-span-4">
+      <div className="rounded-xl bg-gray-50 p-4">
+        <div
+            className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
+        >
+        </div>
+        <div className="bg-white p-6 h-96">
+        </div>
+      </div>
     </div>
   );
 }
@@ -59,7 +65,6 @@ export function ChartSkeleton() {
 export function CardsSkeleton() {
   return (
     <>
-      <CardSkeleton />
       <CardSkeleton />
       <CardSkeleton />
       <CardSkeleton />
@@ -73,13 +78,13 @@ export default function DashboardSkeleton() {
       <div
         className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
       />
-      <div className="flex flex-col md:flex-row">
-        <div className="flex flex-col flex-initial">
-          <BoardSkeleton />
+      <div className="flex flex-col">
+        <div className="flex flex-col md:flex-row gap-6 mb-6">
+          <CardSkeleton />
           <CardSkeleton />
           <CardSkeleton />
         </div>
-        <div className="flex-1 ml-6">
+        <div className="flex-1">
           <ChartSkeleton />
         </div>
       </div>

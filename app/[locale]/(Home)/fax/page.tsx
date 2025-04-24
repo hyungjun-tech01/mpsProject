@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from 'react';
 import getDictionary from '@/app/locales/dictionaries';
-import { IEditItem } from '@/app/components/edit-items';
 import { fetchFaxesPages, fetchFilteredFaxes } from '@/app/lib/fetchFaxData';
 import { IColumnData } from '@/app/lib/definitions';
-import { UserTableSkeleton } from '@/app/components/user/skeletons';
+import { TableSkeleton } from '@/app/components/skeletons';
 import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
-import Breadcrumbs from '@/app/components/breadcrumbs';
-import LogTable from '@/app/components/table';
-import Link from 'next/link';
-import clsx from 'clsx';
 
 export const metadata: Metadata = {
     title: 'Fax',

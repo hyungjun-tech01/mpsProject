@@ -8,7 +8,7 @@ import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
 import { notFound } from "next/navigation";
 import { auth } from "@/auth"
-import { AdminPanelSettings, Circle } from "@mui/icons-material";
+import { Circle } from "@mui/icons-material";
 import ModalButton from '@/app/components/device/modalButton';
 
 

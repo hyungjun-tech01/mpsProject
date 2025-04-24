@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import BoardWrapper from "@/app/components/dashboard/board";
-import { CardsSkeleton, ChartSkeleton } from "@/app/components/dashboard/skeletons";
+import { BoardSkeleton, ChartSkeleton } from "@/app/components/dashboard/skeletons";
 import PageChartWrapper from "@/app/components/dashboard/charts";
 import getDictionary from '@/app/locales/dictionaries';
 import clsx from "clsx";
@@ -21,7 +21,7 @@ export default async function Page(props: {
       <h1 className="mb-4 text-xl md:text-2xl">{t("dashboard.dashboard")}</h1>
       <div className={clsx("flex", {"flex-col md:flex-row": isAdmin}, {"flex-col": !isAdmin})}>
         <div className={clsx("flex flex-col gap-6 mb-6", {"md:w-1/4": isAdmin})}>
-          <Suspense fallback={<CardsSkeleton />}>
+          <Suspense fallback={<BoardSkeleton />}>
             <BoardWrapper trans={t}/>
           </Suspense>
         </div>

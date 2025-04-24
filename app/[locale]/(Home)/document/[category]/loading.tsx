@@ -1,5 +1,10 @@
-import { UserTableSkeleton } from "@/app/components/user/skeletons";
+import { SearchSkeleton, TableSkeleton } from "@/app/components/skeletons";
 
 export default function Loading() {
-    return <UserTableSkeleton />;
+    return (
+        <div className="w-full">
+            <SearchSkeleton />
+            <TableSkeleton />
+        </div>
+    );
 }
