@@ -61,6 +61,8 @@ export const formatTimeToLocal = (dateStr: string, locale: string = "ko") => {
       check_locale = "ko-KR";
       break;
   }
+
+  
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
@@ -71,7 +73,14 @@ export const formatTimeToLocal = (dateStr: string, locale: string = "ko") => {
     second: "numeric",
   };
   const formatter = new Intl.DateTimeFormat(check_locale, options);
-  return formatter.format(date);
+  try {
+    return formatter.format(date);
+  }
+  catch(e){
+    console.log('[Error] formatDate / input :', dateStr);
+    console.log(' - converted :', date);
+    return "";
+  }
 };
 
 // export const generateYAxis = (revenue: Revenue[]) => {

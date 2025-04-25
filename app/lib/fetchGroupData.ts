@@ -32,17 +32,20 @@ export async function fetchFilteredGroups(
     let queryString = "";
 
     if(groupType === "device") {
-        queryString = `SELECT 
-                        g.group_id AS id,
-                        g.group_name AS group_name,
-                        COUNT(gm.member_id) AS device_count
-                        FROM tbl_group_info g, tbl_group_member_info gm, tbl_device_info tgi
-                        where  g.group_id = gm.group_id
-                        and g.group_type = 'device'
-                        and gm.member_type = 'device'
-                        and gm.member_id = tgi.device_id
-                        and tgi.deleted = 'N'
-                        GROUP BY g.group_id, g.group_name`;
+        queryString = `
+            SELECT 
+                g.group_id AS id,
+                g.group_name AS group_name,
+                g.created_date AS created_date,
+                COUNT(gm.member_id) AS device_count
+            FROM tbl_group_info g
+            LEFT JOIN tbl_group_member_info gm ON g.group_id = gm.group_id
+            WHERE g.group_type = 'device'
+            ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
+            GROUP BY g.group_id, g.group_name, g.created_date, g.modified_date
+            ORDER BY g.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `;
     } else if(groupType === "user") {
         queryString = `
             SELECT 
