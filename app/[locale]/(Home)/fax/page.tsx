@@ -9,6 +9,7 @@ import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
 
+
 export const metadata: Metadata = {
     title: 'Fax',
 }
@@ -56,15 +57,17 @@ export default async function Fax(
                     <Search placeholder="Search Fax..." />
                     <CreateButton link="/fax/create" title="Create Fax Line" />
                 </div>
-                <Table
-                    columns={columns}
-                    rows={devices}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    locale={locale}
-                    path='device'
-                    deleteAction={deleteDevice}
-                />
+                <Suspense fallback={<TableSkeleton />}>
+                    <Table
+                        columns={columns}
+                        rows={devices}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        locale={locale}
+                        path='device'
+                        deleteAction={deleteDevice}
+                    />
+                </Suspense>
             </div>
     );
 }

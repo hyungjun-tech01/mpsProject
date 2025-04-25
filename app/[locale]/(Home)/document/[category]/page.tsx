@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from 'next/link';
+import { notFound } from "next/navigation";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 // import { CreateButton } from '@/app/components/buttons';
+import { TableSkeleton } from "@/app/components/skeletons";
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
-import { notFound } from "next/navigation";
 import { auth } from "@/auth"
 import clsx from 'clsx';
 import { LinkOutlined, LinkOffOutlined } from '@mui/icons-material';
@@ -77,16 +79,18 @@ export default async function Page(props: {
                 <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
                     <Search placeholder={groupTexts[category].keySearchPlaceholder} />
                 </div>
-                <Table
-                    columns={columns}
-                    rows={docs}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    path='document'
-                    locale={locale}
-                    editable = {false}
-                    deleteAction={adapter.deleteDocument}
-                />
+                <Suspense fallback={<TableSkeleton />}>
+                    <Table
+                        columns={columns}
+                        rows={docs}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        path='document'
+                        locale={locale}
+                        editable = {false}
+                        deleteAction={adapter.deleteDocument}
+                    />
+                </Suspense>
             </div>
         </div>
     );

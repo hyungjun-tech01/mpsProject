@@ -1,11 +1,13 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from 'next/link';
-import clsx from 'clsx';
+// import Link from 'next/link';
+// import clsx from 'clsx';
 import Table from '@/app/components/log/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
+import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
@@ -75,15 +77,17 @@ export default async function Page(props: {
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder={t('logs.query_condition')}/>
             </div>
-            <Table
-                columns={auditlogColumns}
-                rows={auditlogs}
-                currentPage={currentPage}
-                totalPages={auditlogPages}
-                locale={locale}
-                path='auditlogs'
-                editable={false}
-            />
+            <Suspense fallback={<TableSkeleton />}>
+                <Table
+                    columns={auditlogColumns}
+                    rows={auditlogs}
+                    currentPage={currentPage}
+                    totalPages={auditlogPages}
+                    locale={locale}
+                    path='auditlogs'
+                    editable={false}
+                />
+            </Suspense>
         </div>
     );
 }

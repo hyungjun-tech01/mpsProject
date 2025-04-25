@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
@@ -6,6 +7,7 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
+import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
@@ -52,17 +54,19 @@ export default async function Page(props: {
                 <Search placeholder={t("comment.search_users")} />
                 <CreateButton link="/user/create" title={t("user.create_user")} />
             </div>
-            <Table
-                columns={columns}
-                rows={users}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                path='user'
-                locale={locale}
-                deleteAction={adapter.deleteUser}
-                editable={true}
-                deletable={true}
-            />
+            <Suspense fallback={<TableSkeleton />}>
+                <Table
+                    columns={columns}
+                    rows={users}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    path='user'
+                    locale={locale}
+                    deleteAction={adapter.deleteUser}
+                    editable={true}
+                    deletable={true}
+                />
+            </Suspense>
         </div>
     );
 }

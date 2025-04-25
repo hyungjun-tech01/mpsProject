@@ -1,15 +1,17 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { IColumnData } from '@/app/lib/definitions';
-import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
-import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
-import { notFound } from "next/navigation";
+import Search from '@/app/components/search';
+import Table from '@/app/components/table';
+import ModalButton from '@/app/components/device/modalButton';
+import { TableSkeleton } from "@/app/components/skeletons";
 import { auth } from "@/auth"
 import { Circle } from "@mui/icons-material";
-import ModalButton from '@/app/components/device/modalButton';
 
 
 export const metadata: Metadata = {
@@ -42,7 +44,7 @@ export default async function Device(
     const groupId = searchParams?.groupId;
 
     const session = await auth();
-    console.log('Session :', session);
+    // console.log('Session :', session);
     
     if(!session?.user)
         return notFound();
@@ -86,16 +88,18 @@ export default async function Device(
                     <Search placeholder={t("comment.search_devices")} />
                     <CreateButton link="/device/create" title={t("device.create_device")} />
                 </div>
-                <Table
-                    columns={columns}
-                    rows={devices}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    locale={locale}
-                    path='device'
-                    deleteAction={deleteDevice}
-                    editable={false}
-                />  
+                <Suspense fallback={<TableSkeleton />}>
+                    <Table
+                        columns={columns}
+                        rows={devices}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        locale={locale}
+                        path='device'
+                        deleteAction={deleteDevice}
+                        editable={false}
+                    /> 
+                </Suspense>
             </div>
     );
 }

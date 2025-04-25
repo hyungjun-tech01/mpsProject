@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Table from '@/app/components/print/table';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
@@ -5,6 +6,7 @@ import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { auth } from '@/auth';
 import { notFound } from "next/navigation";
+import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
@@ -55,17 +57,19 @@ export default async function Page(props: {
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t("print.waiting_list")}</h1>
             </div>
-            <Table
-                columns={columns}
-                rows={prints}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                path='user'
-                t={trans}
-                checkable={true}
-                printAction={adapter.printSelectedPrint}
-                deleteAction={adapter.deleteSelectedPrint}
-            />
+            <Suspense fallback={<TableSkeleton />}>
+                <Table
+                    columns={columns}
+                    rows={prints}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    path='user'
+                    t={trans}
+                    checkable={true}
+                    printAction={adapter.printSelectedPrint}
+                    deleteAction={adapter.deleteSelectedPrint}
+                />
+            </Suspense>
         </div>
     );
 }

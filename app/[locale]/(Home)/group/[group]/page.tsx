@@ -1,14 +1,17 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import clsx from 'clsx';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import { CreateButton } from '@/app/components/buttons';
+import { TableSkeleton } from "@/app/components/skeletons";
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
+import clsx from 'clsx';
+
 
 export const metadata: Metadata = {
     title: 'Group',
@@ -100,15 +103,17 @@ export default async function Page(props: {
                     <Search placeholder={groupTexts[group].keySearchPlaceholder} />
                     <CreateButton link={`/group/${group}/create`} title={t('group.create_group')} />
                 </div>
-                <Table
-                    columns={groupColumns[group]}
-                    rows={groupData}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    path={`/group/${group}`}
-                    locale={locale}
-                    deleteAction={adapter.deleteGroup}
-                />
+                <Suspense fallback={<TableSkeleton />}>
+                    <Table
+                        columns={groupColumns[group]}
+                        rows={groupData}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        path={`/group/${group}`}
+                        locale={locale}
+                        deleteAction={adapter.deleteGroup}
+                    />
+                </Suspense>
             </div>
         </div>
     );
