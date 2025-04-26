@@ -93,15 +93,16 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
        
         const groupId = newGroup.rows[0].group_id;
 
-        groupMembers.forEach(async member => client.query(`
+        for (const member of groupMembers) {
+            await client.query(`
                 INSERT INTO tbl_group_member_info (
                     group_id,
                     member_id,
                     member_type
                 )
-                VALUES ('${groupId}', '${member}', 'device')`
-            )
-        );
+                VALUES ($1, $2, 'device')
+            `, [groupId, member]);
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
@@ -225,6 +226,8 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
         const memberID = formData.get(tempName);
         groupMembers.push(memberID);
     }
+    console.log('groupMembers :', groupMembers);
+
 
     // Create new user group  --------------------------------------
     try {
@@ -238,6 +241,8 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
             0,
             scheduleStart,
         ];
+
+        console.log('!!! [Create User Group] groupInputData :', groupInputData);
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -261,15 +266,19 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
         
         const groupId = newGroup.rows[0].group_id;
 
-        groupMembers.forEach(async member => client.query(`
+        console.log('!!! [Create User Group] groupId :', groupId);
+
+        // 새로운 그룹 멤버 삽입
+        for (const member of groupMembers) {
+            await client.query(`
                 INSERT INTO tbl_group_member_info (
                     group_id,
                     member_id,
                     member_type
                 )
-                VALUES ('${groupId}', '${member}', 'user')`
-            )
-        );
+                VALUES ($1, $2, 'user')
+            `, [groupId, member]);
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
@@ -343,17 +352,19 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
 
         await client.query(`
             DELETE FROM tbl_group_member_info
-            WHERE group_id='${groupID}'`)
+            WHERE group_id='${groupID}'`);
 
-        groupMembers.forEach(async member => client.query(`
+        // 새로운 그룹 멤버 삽입 -> forEach 에 await 적용을 못하여 for문으로 변경 , await 적용을 못하면 순서를 보장할수 없음.
+        for (const member of groupMembers) {
+            await client.query(`
                 INSERT INTO tbl_group_member_info (
                     group_id,
                     member_id,
                     member_type
                 )
-                VALUES ('${groupID}', '${member}', 'user')`
-            )
-        );
+                VALUES ($1, $2, 'user')
+            `, [groupID, member]);
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
@@ -424,22 +435,26 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
        
         const groupId = newGroup.rows[0].group_id;
 
-        groupMembers.forEach(async member => client.query(`
+
+        // 새로운 그룹 멤버 삽입
+        for (const member of groupMembers) {
+            await client.query(`
                 INSERT INTO tbl_group_member_info (
                     group_id,
                     member_id,
                     member_type
                 )
-                VALUES ('${groupId}', '${member}', 'dept')`
-            )
-        );
+                VALUES ($1, $2, 'user')
+            `, [groupId, member]);
+        }
 
-        groupMembers.forEach(async member => client.query(`
-            UPDATE tbl_dept_info
-            SET security_group_name='${groupName}'
-            WHERE dept_id='${member}'`
-        )
-    );
+
+        for (const member of groupMembers) {
+            await client.query(`
+                UPDATE tbl_dept_info
+                SET security_group_name= $1
+                WHERE dept_id = $2`,[groupName,member] );
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
@@ -512,20 +527,24 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
             WHERE group_id='${groupID}'
         `);
 
-        groupMembers.forEach(async member => client.query(`
-            INSERT INTO tbl_group_member_info (
-                group_id,
-                member_id,
-                member_type
-            )
-            VALUES ('${groupID}', '${member}', 'dept')`
-        ));
+        for (const member of groupMembers) {
+            await client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ($1, $2, 'dept')
+            `, [groupID, member]);
+        }
 
-        groupMembers.forEach(async member => client.query(`
-            UPDATE tbl_dept_info
-            SET security_group_name='${groupName}'
-            WHERE dept_id='${member}'`
-        ));
+        for (const member of groupMembers) {
+            await client.query(`
+                UPDATE tbl_dept_info
+                SET security_group_name=$1
+                WHERE dept_id=$2
+            `, [groupName, member]);
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
