@@ -3049,3 +3049,7 @@ CREATE TABLE tbl_print_job_spool_info (
     pages int4 NOT NULL,
     CONSTRAINT pk_print_job_info PRIMARY KEY (print_job_id)
 );
+
+-- 2025.04.26 group_member 에 device admin 입력
+insert into tbl_group_member_info(group_id, member_id, member_type) 
+values('60a42da8-2836-4f9a-b1f8-12e7f93348d5', 5005, 'admin');  --  renaiss 

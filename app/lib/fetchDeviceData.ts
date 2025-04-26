@@ -511,7 +511,6 @@ export async function fetchDevicesbyGroupManagerPages(
                 'tbl_device_info.physical_device_id ILIKE ILIKE ' + query + ')'
             }
             AND d.deleted = 'N'
-            ORDER BY d.modified_date DESC
         `);
         return Math.ceil(Number(count.rows[0].count) / itemsPerPage);
     } catch (error) {
@@ -548,6 +547,7 @@ export async function fetchDevicesbyGroupManager(
                 d.magenta_toner_percentage,
                 d.yellow_toner_percentage,
                 d.black_toner_percentage,
+                d.modified_date,
                 CASE 
                     WHEN d.device_type = 'color_printer' THEN 'Color_Printer01.png'
                     WHEN d.device_type = 'mono_printer' THEN 'Black_Printer01.png'
