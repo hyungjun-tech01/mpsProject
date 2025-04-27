@@ -1,10 +1,11 @@
-import { TitleSkeleton, LastEditSkeleton, GroupSkeleton } from "@/app/components/skeletons";
+import { TitleSkeleton, LastEditSkeleton, GroupSkeleton, EditSkeleton } from "@/app/components/skeletons";
 
 export default function Loading() {
     return (
         <div className='w-full flex-col justify-start'>
             <TitleSkeleton />
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
+                <EditSkeleton />
                 <LastEditSkeleton />
                 <GroupSkeleton />
             </div>

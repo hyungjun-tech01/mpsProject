@@ -1,4 +1,7 @@
-import { Add, NavigateBeforeOutlined, NavigateNextOutlined } from '@mui/icons-material';
+import { Add,
+  NavigateBeforeOutlined,
+  NavigateNextOutlined
+} from '@mui/icons-material';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 
 // Loading animation
@@ -211,50 +214,108 @@ export function BehindTabSkeleton() {
   );
 }
 
-export function UserEditSkeleton() {
+export function EditItemSkeleton() {
   return (
-    <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'User', href: '/user' },
-          {
-            label: `Edit User :  (  )`,
-            href: `/user/error`,
-            active: true,
-          },
-        ]}
-      />
-      <div className='w-full pl-2 flex justify-start'>
-        <div className="w-24 h-9 rounded-t-lg border-solid font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+    <div className="mb-4">
+      <div className="mb-2 block h-8 w-24 bg-gray-200 rounded-md" />
+      <div className="relative flex">
+        <div className="mb-2 block h-8 w-full bg-white rounded-md" />
       </div>
-      <div className="h-80 rounded-md bg-gray-50" />
-    </main>
+    </div>
   )
 }
 
-export function UserCreateSkeleton() {
+export function EditSkeleton() {
   return (
-    <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'User', href: '/user' },
-          {
-            label: `Create User :  (  )`,
-            href: `/user/error`,
-            active: true,
-          },
-        ]}
-      />
-      <div className='w-full pl-2 flex justify-start'>
-        <div className="w-24 h-9 rounded-t-lg border-solid font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
-        <div className="w-24 h-9 rounded-t-lg border-solid text-gray-300  bg-white border-2" />
+    <div className='w-full p-2 flex flex-col md:flex-row border-b'>
+      <div className='w-full md:w-1/3 pb-4 md:pr-6'>
+        <div
+          className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200 p-2`}
+        />
+        <div
+          className={`${shimmer} h-48 relative overflow-hidden rounded-xl bg-gray-100 p-2`}
+        />
       </div>
-      <div className="h-80 rounded-md bg-gray-50" />
-    </main>
+      <div className='w-full flex flex-col md:w-2/3'>
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+      </div>
+    </div>
+  )
+}
+
+export function LastEditSkeleton() {
+  return (
+    <div className='w-full p-2 flex flex-col md:flex-row'>
+      <div className='w-full md:w-1/3 pb-4 md:pr-6'>
+        <div
+          className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200 p-2`}
+        />
+        <div
+          className={`${shimmer} h-32 relative overflow-hidden rounded-xl bg-gray-100 p-2`}
+        />
+      </div>
+      <div className='w-full flex flex-col md:w-2/3'>
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+      </div>
+    </div>
+  )
+}
+
+export function LongEditSkeleton() {
+  return (
+    <div className='w-full p-2 flex flex-col md:flex-row'>
+      <div className='w-full md:w-1/3 pb-4 md:pr-6'>
+        <div
+          className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200 p-2`}
+        />
+        <div
+          className={`${shimmer} h-48 relative overflow-hidden rounded-xl bg-gray-100 p-2`}
+        />
+      </div>
+      <div className='w-full flex flex-col md:w-2/3'>
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+        <EditItemSkeleton />
+      </div>
+    </div>
+  )
+}
+
+export function GroupSkeleton() {
+  return (
+    <div className='w-full px-2 pt-4 flex flex-col border-t-2'>
+      <div className='w-full'>
+        <div
+            className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200`}
+          />
+      </div>
+      <div className='w-full flex'>
+        <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
+          <div
+            className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200`}
+          />
+          <div className='h-full p-2 border rounded-lg bg-white' />
+        </div>
+        <div className='w-20 flex-0 flex flex-col justify-center'>
+          <div className='h-8 border rounded-lg mb-2 mx-2 bg-gray-200' />
+          <div className='h-8 border rounded-lg mx-2 bg-gray-200' />
+        </div>
+        <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
+          <div
+            className={`${shimmer} h-10 w-64 mb-5 relative overflow-hidden rounded-xl bg-gray-200`}
+          />
+          <div className='h-full p-2 border rounded-lg bg-white' />
+        </div>
+      </div>
+    </div>
   )
 }
