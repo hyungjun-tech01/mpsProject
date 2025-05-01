@@ -207,59 +207,28 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
         const currPassword = resp.rows[0].password;
 
         let checkNeedUpdate = false;
-        let sqlText = "UPDATE tbl_user_info SET";
+//        let sqlText = "UPDATE tbl_user_info SET";
 
         if(newFullName !== currFullName) {
-            sqlText += ` full_name='${newFullName}'`;
             checkNeedUpdate = true;
         }
         if(newEmail !== currEmail) {
-            if(checkNeedUpdate) {
-                sqlText += `, email='${newEmail}'`;
-            } else {
-                sqlText += ` email='${newEmail}'`;
                 checkNeedUpdate = true;
-            }
         }
         if(newHomeDir !== currHomeDir) {
-            if(checkNeedUpdate) {
-                sqlText += `, home_directory='${newHomeDir}'`;
-            } else {
-                sqlText += ` home_directory='${newHomeDir}'`;
-                checkNeedUpdate = true;
-            }
+            checkNeedUpdate = true;
         }
         if(newDisabledPrinting !== currDisabledPrinting) {
-            if(checkNeedUpdate) {
-                sqlText += `, disabled_printing='${newHomeDir}'`;
-            } else {
-                sqlText += ` disabled_printing='${newHomeDir}'`;
-                checkNeedUpdate = true;
-            }
+            checkNeedUpdate = true;
         }
         if(newDept !== currDept) {
-            if(checkNeedUpdate) {
-                sqlText += `, department='${newDept}'`;
-            } else {
-                sqlText += ` department='${newDept}'`;
-                checkNeedUpdate = true;
-            }
+            checkNeedUpdate = true;
         }
         if(newCardNo1 !== currCardNo1) {
-            if(checkNeedUpdate) {
-                sqlText += `, card_number='${newCardNo1}'`;
-            } else {
-                sqlText += ` card_number='${newCardNo1}'`;
-                checkNeedUpdate = true;
-            }
+            checkNeedUpdate = true;
         }
         if(newCardNo2 !== currCardNo2) {
-            if(checkNeedUpdate) {
-                sqlText += `, card_number2='${newCardNo2}'`;
-            } else {
-                sqlText += ` card_number2='${newCardNo2}'`;
-                checkNeedUpdate = true;
-            }
+            checkNeedUpdate = true;
         }
         // if(newRestricted !== currRestricted) {
         //     if(checkNeedUpdate) {
@@ -269,18 +238,15 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
         //         checkNeedUpdate = true;
         //     }
         // }
+        let hashed = null;
+        let isMatched = true;
         if(changePwd) {
             // console.log("Check :", currPassword);
-            const isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);
+            isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);
             // console.log("Check :", isMatched);
             if(!isMatched) {
-                const hashed = await bcrypt.hash(String(newPwd), salt);
-                if(checkNeedUpdate) {
-                    sqlText += `, password='${hashed}'`;
-                } else {
-                    sqlText += ` password='${hashed}'`;
-                    checkNeedUpdate = true;
-                }
+                hashed = await bcrypt.hash(String(newPwd), salt);
+                checkNeedUpdate = true;
 
                 console.log('hased passworkd', hashed);
             }
@@ -293,8 +259,17 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
         };
 
         try {
-            console.log('Update User / query : ', sqlText);
-            await client.query(sqlText);
+            await client.query(`update tbl_user_info 
+            set full_name = $2,
+                email = $3,
+                home_directory = $4,
+                disabled_printing = $5,
+                department= $6,
+                card_number = $7,
+                card_number2 = $8,
+                password = $9
+            where user_id= $1
+            `,[id,newFullName, newEmail, newHomeDir, newDisabledPrinting, newDept, newCardNo1, newCardNo2, changePwd&&!isMatched ? hashed : currPassword]);
         } catch (error) {
             console.log('Update User / Error : ', error);
             return {
