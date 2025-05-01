@@ -84,7 +84,7 @@ export async function createUser(client: Pool, prevState: UserState, formData: F
             'admin',                                          
             'admin',                                          
             userBalanceCurrent,                               
-            userRestricted === 'Y' ? 'Y' : 'N',
+        //    userRestricted === 'Y' ? 'Y' : 'N',
         ];
 
         await client.query("BEGIN"); // 트랜잭션 시작  
@@ -110,12 +110,11 @@ export async function createUser(client: Pool, prevState: UserState, formData: F
                 created_by,        
                 modified_date,     
                 modified_by,       
-                balance,           
-                restricted         
+                balance   
             )
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,now(),$14,now(),$15,NOW(),$16,$17,$18)`
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,now(),$14,now(),$15,NOW(),$16,$17)`
             , userInputData);
-
+//,           restricted      
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
@@ -192,7 +191,6 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
                 u.department,
                 u.card_number,
                 u.card_number2,
-                u.restricted,
                 u.password
             FROM tbl_user_info u
             WHERE u.user_id='${id}'
@@ -205,7 +203,7 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
         const currDept = resp.rows[0].department;
         const currCardNo1 = resp.rows[0].card_number;
         const currCardNo2 = resp.rows[0].card_number2;
-        const currRestricted = resp.rows[0].restricted;
+        // const currRestricted = resp.rows[0].restricted;
         const currPassword = resp.rows[0].password;
 
         let checkNeedUpdate = false;
@@ -263,14 +261,14 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
                 checkNeedUpdate = true;
             }
         }
-        if(newRestricted !== currRestricted) {
-            if(checkNeedUpdate) {
-                sqlText += `, restricted='${newCardNo2}'`;
-            } else {
-                sqlText += ` restricted='${newCardNo2}'`;
-                checkNeedUpdate = true;
-            }
-        }
+        // if(newRestricted !== currRestricted) {
+        //     if(checkNeedUpdate) {
+        //         sqlText += `, restricted='${newCardNo2}'`;
+        //     } else {
+        //         sqlText += ` restricted='${newCardNo2}'`;
+        //         checkNeedUpdate = true;
+        //     }
+        // }
         if(changePwd) {
             // console.log("Check :", currPassword);
             const isMatched = !!currPassword && await bcrypt.compare(String(newPwd), currPassword);

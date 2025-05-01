@@ -25,8 +25,7 @@ export async function fetchFilteredUsers(
                 u.total_pages,
                 u.total_jobs,
                 null account_id,
-                u.balance,
-                u.restricted
+                u.balance
             FROM tbl_user_info u
             WHERE
                 u.deleted='N'
@@ -122,8 +121,7 @@ export async function fetchUserById(
                 u.card_number,
                 u.card_number2,
                 null account_id,
-                u.balance,
-                u.restricted
+                u.balance
             FROM tbl_user_info u
             WHERE u.user_id='${id}'
         `);
@@ -153,8 +151,7 @@ export async function fetchUserByName(
                 u.card_number,
                 u.card_number2,
                 null account_id,
-                u.balance,
-                u.restricted
+                u.balance
             FROM tbl_user_info u
             WHERE u.user_name='${name}'
         `);

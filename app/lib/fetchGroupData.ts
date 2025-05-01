@@ -230,7 +230,6 @@ export async function fetchUsersNotInGroup(
                     u.user_name as name,
                     u.full_name,
                     u.balance,
-                    u.restricted,
                     u.total_pages,
                     u.total_jobs
                 FROM tbl_user_info u
@@ -287,7 +286,6 @@ export async function fetchUsersInGroup(
                     u.user_name as name,
                     u.full_name,
                     u.balance,
-                    u.restricted,
                     u.total_pages,
                     u.total_jobs
                 FROM tbl_user_info u

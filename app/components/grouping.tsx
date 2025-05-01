@@ -155,7 +155,7 @@ export default function Grouping({
                     <MenuItem>
                         <div>
                             <span className='mr-3 font-medium'>Restricted : </span>
-                            <span className='text-gray-600'>{shownMember.restricted}</span>
+                            {/*<span className='text-gray-600'>{shownMember.restricted}</span>*/}
                         </div>
                     </MenuItem>
                     <MenuItem>

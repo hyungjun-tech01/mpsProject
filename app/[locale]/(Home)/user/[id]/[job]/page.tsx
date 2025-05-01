@@ -80,7 +80,7 @@ export default async function Page(props: {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'),
                 items: [
                     { name: 'userBalanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
-                    { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
+                   // { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
