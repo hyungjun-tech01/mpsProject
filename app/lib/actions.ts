@@ -283,6 +283,8 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
                     sqlText += ` password='${hashed}'`;
                     checkNeedUpdate = true;
                 }
+
+                console.log('hased passworkd', hashed);
             }
         }
 

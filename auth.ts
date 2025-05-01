@@ -31,7 +31,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { user_name, user_password } = parsedCredentials.data;
 
-          // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
+          console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
           const adapter = MyDBAdapter();
           const userAttr = await adapter.getAccount(user_name);
           // console.log('Account : ', userAttr);
