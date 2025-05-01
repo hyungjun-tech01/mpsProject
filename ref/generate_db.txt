@@ -3088,5 +3088,7 @@ set sysadmin = 'Y'
 where user_name like 'admin';
 
 
+update tbl_user_info
+set card_number = user_id;
 
 
