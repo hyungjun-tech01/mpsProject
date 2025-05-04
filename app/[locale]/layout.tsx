@@ -8,6 +8,8 @@ import theme from '@/theme';
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { roboto } from '@/app/components/fonts';
 import i18nConfig from '@/i18nConfig';
+
+
 import '@/app/components/global.css';
 
 

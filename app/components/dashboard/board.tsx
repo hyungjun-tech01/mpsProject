@@ -12,6 +12,8 @@ import MyDBAdapter from "@/app/lib/adapter";
 import { auth } from "@/auth";
 import Card from "./card";
 
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
+
 
 const iconMap = {
     collected: PaidOutlined,
@@ -32,7 +34,10 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
 
     if (!userName) {
         console.log("userName is undefined");
-        notFound();
+
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
     };
 
     if (session?.user.role === "admin") {

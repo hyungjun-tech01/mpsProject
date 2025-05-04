@@ -193,7 +193,10 @@ export async function fetchAccount(
             SELECT
                 u.user_id id,
                 u.user_name name,
-                u.user_role role,
+                CASE 
+                    WHEN u.sysadmin = 'Y' THEN 'admin'
+                ELSE 'user'
+                END AS role, 
                 u.email email,
                 u.password password
             FROM tbl_user_info u

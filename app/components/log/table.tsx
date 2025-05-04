@@ -359,7 +359,7 @@ export default function CustomizedTable<DataType>({
                 transform: 'translate(-50%, -50%)',
                 border: '5px solid #000' }}
         >
-        <>
+        <div>
           <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closePdfModal} />
           {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
           <div style={{ textAlign: 'right' }}>
@@ -374,7 +374,7 @@ export default function CustomizedTable<DataType>({
             >닫기
             </Button>
           </div>
-        </>
+        </div>
        </Modal>   
 
         <Modal
