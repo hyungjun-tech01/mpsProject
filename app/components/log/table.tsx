@@ -170,7 +170,7 @@ export default function CustomizedTable<DataType>({
         try {
 
             if (!imagePath) {
-              throw new Error('Invalid image path');
+              throw new Error('Invalid pdf path');
             }
             const src = '/api/file?filepath=ImageLog/'+imagePath;
             const replace_src = src.replace(/\\/g,'/');
@@ -188,7 +188,14 @@ export default function CustomizedTable<DataType>({
 
 
         } catch (error) {
-            console.error('Error decrypting file:', error);
+            if (error instanceof Error) {
+                alert(`Error: ${error.message}`);
+                //console.error('Error decrypting file:', error);
+            } else {
+                alert('An unknown error occurred');
+                console.error('Unknown error:', error);
+            }
+            
         }
     }
 
