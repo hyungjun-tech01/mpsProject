@@ -29,8 +29,8 @@ export async function fetchFilteredUsers(
             FROM tbl_user_info u
             WHERE
                 u.deleted='N'
-                ${query !== "" ? "AND (u.user_name ILIKE '%" + query + "%' OR"
-                + "u.user_full_name ILIKE '%" + query + "%' OR"
+                ${query !== "" ? "AND (u.user_name ILIKE '%" + query + "%' OR "
+                + "u.full_name ILIKE '%" + query + "%' OR "
                 + "u.email ILIKE '%" + query + "%')"
                 : ""}
             ORDER BY u.modified_date DESC

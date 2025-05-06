@@ -132,7 +132,7 @@ export async function createUser(client: Pool, prevState: UserState, formData: F
 const ModifyUser = UserFormSchema.omit({ userName: true, userBalanceCurrent: true });
 
 export async function modifyUser(client: Pool, id: string, prevState: UserState, formData: FormData) {
-    console.log('ModifyUser :', formData);
+    
     if (!formData.has('userDisabledPrinting')) {
         formData.set('userDisabledPrinting', 'N');
     }
@@ -195,7 +195,7 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
             FROM tbl_user_info u
             WHERE u.user_id='${id}'
         `);
-        console.log('Modify User / current db :', resp.rows[0]);
+      
         const currFullName = resp.rows[0].full_name;
         const currEmail = resp.rows[0].email;
         const currHomeDir = resp.rows[0].home_directory;
@@ -248,7 +248,6 @@ export async function modifyUser(client: Pool, id: string, prevState: UserState,
                 hashed = await bcrypt.hash(String(newPwd), salt);
                 checkNeedUpdate = true;
 
-                console.log('hased passworkd', hashed);
             }
         }
 

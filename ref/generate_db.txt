@@ -3091,4 +3091,20 @@ where user_name like 'admin';
 update tbl_user_info
 set card_number = user_id;
 
+-- 2025.05.06
+update tbl_audit_job_log
+set job_type = 'Copy'
+where job_type = 'C';
+
+update tbl_audit_job_log
+set job_type = 'Print'
+where job_type = 'P';
+			        
+update tbl_audit_job_log
+set job_type = 'Fax'
+where job_type = 'F';			
+
+update tbl_audit_job_log
+set job_type = 'Scan'
+where job_type = 'S';	
 

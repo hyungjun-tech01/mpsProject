@@ -318,7 +318,10 @@ export default function MyDBAdapter() {
             try {
                 const response = await pool.query(`
                     SELECT
-                        SUM(CASE WHEN device_status = '정상' THEN 1 ELSE 0 END) as normal_count,
+                        SUM(CASE WHEN device_status = '정상' THEN 1 
+                                when device_status is null then 1
+                                ELSE 0 
+                                END) as normal_count,
                         SUM(CASE WHEN device_status = '오류' THEN 1 ELSE 0 END) as error_count,
                         SUM(CASE WHEN device_status = '경고' THEN 1 ELSE 0 END) as warning_count,
                         SUM(CASE WHEN device_status = '토너부족' THEN 1 ELSE 0 END) as low_supply_count,

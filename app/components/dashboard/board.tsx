@@ -12,6 +12,8 @@ import MyDBAdapter from "@/app/lib/adapter";
 import { auth } from "@/auth";
 import Card from "./card";
 
+import { formatCurrency } from '../../lib/utils';
+
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 
@@ -103,7 +105,7 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
 
         boardInfo.push({ title: trans("dashboard.total_job_count"), value: myUsageStatus.total_job_count || 0, type: "pages" });
         boardInfo.push({ title: trans("dashboard.total_pages"), value: myUsageStatus.copy_print_total_pages || 0, type: "pages" });
-        boardInfo.push({ title: trans("account.balance"), value: myInfo.balance || 0, type: "collected" });
+        boardInfo.push({ title: trans("account.balance"), value: formatCurrency(myInfo.balance || 0, 'ko'), type: "collected" });
 
         return (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
