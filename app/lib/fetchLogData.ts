@@ -146,7 +146,7 @@ export async function fetchTop5UserFor30days(client: Pool) {
                 user_name,
                 SUM(total_pages) AS total_pages_sum
             FROM tbl_audit_job_log
-            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
             GROUP BY  user_name
             ORDER BY total_pages_sum DESC
             LIMIT 5`
@@ -167,7 +167,7 @@ export async function fetchTop5DevicesFor30days(client: Pool) {
                 SUM(ajl.total_pages) AS total_pages_sum
             FROM tbl_audit_job_log AS ajl
             JOIN tbl_device_info AS d ON ajl.device_id = d.device_id
-            WHERE ajl.send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            WHERE ajl.send_time >= TO_CHAR(DATE_TRUNC('day', current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
             GROUP BY  d.device_name
             ORDER BY total_pages_sum DESC
             LIMIT 5`
