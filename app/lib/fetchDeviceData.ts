@@ -14,7 +14,8 @@ export async function fetchFilteredDevices(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const device = await client.query(`
+        const device = query !== '' ? 
+        await client.query(`
             SELECT
                 d.device_id AS id,
                 d.device_id,
@@ -42,18 +43,51 @@ export async function fetchFilteredDevices(
             FROM tbl_device_info d
             ${!!groupId ? "INNER JOIN tbl_group_member_info gm ON d.device_id = gm.member_id" : ""}
             WHERE 1=1 
-            ${query === "" ? "" :
-                "AND ( d.device_name ILIKE '%" + query + "%' "
-                + "OR d.device_model ILIKE '%" + query + "%' "
-                + "OR d.ext_device_function ILIKE '%" + query + "%' "
-                + "OR d.physical_device_id ILIKE '%" + query + "%' "
-                + "OR d.location ILIKE '%" + query + "%')"
-            }
+            AND ( d.device_name ILIKE '${`%${query}%`}' OR 
+                d.device_model ILIKE '${`%${query}%`}' OR 
+                d.ext_device_function ILIKE '${`%${query}%`}' OR 
+                d.physical_device_id ILIKE '${`%${query}%`}' OR 
+                d.location ILIKE '${`%${query}%`}' 
+                )
             AND deleted = 'N'
             ${!!groupId ? "AND gm.group_id = '" + groupId + "'" : ""}
             ORDER BY d.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
-        `);
+        `) :
+        await client.query(`
+            SELECT
+                d.device_id AS id,
+                d.device_id,
+                d.device_name,
+                d.location,
+                d.notes,
+                d.physical_device_id,
+                d.device_model,
+                d.serial_number,
+                d.deleted,
+                d.device_status,
+                d.device_type,
+                d.app_type,
+                d.ext_device_function,
+                d.cyan_toner_percentage,
+                d.magenta_toner_percentage,
+                d.yellow_toner_percentage,
+                d.black_toner_percentage,
+                CASE 
+                    WHEN d.device_type = 'color_printer' THEN 'Color_Printer01.png'
+                    WHEN d.device_type = 'mono_printer' THEN 'Black_Printer01.png'
+                    WHEN d.device_type = 'mono_mfd' THEN 'Black_MFD01.png'
+                    ELSE 'Color_MFD01.png'
+                END AS device_type_img
+            FROM tbl_device_info d
+            ${!!groupId ? "INNER JOIN tbl_group_member_info gm ON d.device_id = gm.member_id" : ""}
+            WHERE 1=1 
+            AND deleted = 'N'
+            ${!!groupId ? "AND gm.group_id = '" + groupId + "'" : ""}
+            ORDER BY d.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `)
+        ;
         
         const converted = device.rows.map((data:Device) => ({
             ...data,
@@ -497,21 +531,31 @@ export async function fetchDevicesbyGroupManagerPages(
     itemsPerPage: number,
 ) {
     try {
-        const count = await client.query(`
+        const count = 
+        query !== "" ? 
+        await client.query(`
             SELECT DISTINCT
                 COUNT(*)
             FROM tbl_device_info d
             INNER JOIN tbl_group_member_info gm_device ON d.device_id = gm_device.member_id
             INNER JOIN tbl_group_member_info gm_user ON gm_device.group_id = gm_user.group_id
             WHERE gm_user.member_id = '${userId}'
-            ${query === '' ? '' :
-                'AND (tbl_device_info.device_name ILIKE ' + query + ' OR ' +
-                'tbl_device_info.device_type ILIKE ' + query + ' OR ' +
-                'tbl_device_info.ext_device_function ILIKE ' + query + ' OR ' +
-                'tbl_device_info.physical_device_id ILIKE ILIKE ' + query + ')'
-            }
+            AND (tbl_device_info.device_name ILIKE '${`%${query}%`}' OR 
+                'tbl_device_info.device_type ILIKE '${`%${query}%`}' OR 
+                'tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR 
+                'tbl_device_info.physical_device_id ILIKE ILIKE '${`%${query}%`}'
+                )
+            AND d.deleted = 'N'`) 
+        : await client.query(`
+            SELECT DISTINCT
+                COUNT(*)
+            FROM tbl_device_info d
+            INNER JOIN tbl_group_member_info gm_device ON d.device_id = gm_device.member_id
+            INNER JOIN tbl_group_member_info gm_user ON gm_device.group_id = gm_user.group_id
+            WHERE gm_user.member_id = '${userId}'
             AND d.deleted = 'N'
-        `);
+        `)
+        ;
         return Math.ceil(Number(count.rows[0].count) / itemsPerPage);
     } catch (error) {
         console.error('Database Error:', error);
