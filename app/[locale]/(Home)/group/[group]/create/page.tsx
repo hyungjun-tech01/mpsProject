@@ -30,8 +30,9 @@ export default async function Page(props: {
   };
 
   const adapter = MyDBAdapter();
-  const [t, outGroupData, totalPages] = await Promise.all([
+  const [t, users, outGroupData, totalPages] = await Promise.all([
     getDictionary(locale),
+    adapter.getAllUsers(),
     group === "user"
       ? adapter.getUsersNotInGroup(query, itemsPerPage, currentPage)
       : group === "device"
@@ -43,6 +44,8 @@ export default async function Page(props: {
         ? adapter.getDevicesNotInGroupPages(query, itemsPerPage)
         : adapter.getDeptsNotInGroupPages(query, itemsPerPage),
   ]);
+
+  const userOptions:{value:string, title:string}[] = users.map(item => ({value: item.user_id, title: item.user_name}));
 
   const dummyData : Group = {
     group_id: "",
@@ -97,6 +100,7 @@ export default async function Page(props: {
     thursday: t("common.thursday"),
     friday: t("common.friday"),
     saturday: t("common.saturday"),
+    group_manager: t("group.group_manager"),
     group_schedule_amount: t("group.schedule_amount"),
     button_cancel: t("common.cancel"),
     button_go: t("common.apply"),
@@ -127,6 +131,19 @@ export default async function Page(props: {
           },
         ],
       },
+      {
+        title: t("group.group_manager"),
+        description: [],
+        items: [
+          {
+            name: "group_manager",
+            title: t("group.group_manager"),
+            type: "select",
+            defaultValue: "",
+            options: userOptions
+          },
+        ],
+      },
     ],
     security: [
       {
@@ -144,6 +161,20 @@ export default async function Page(props: {
             title: t("common.note"),
             type: "input",
             defaultValue: "",
+          },
+        ],
+      },
+      ,
+      {
+        title: t("group.group_manager"),
+        description: [],
+        items: [
+          {
+            name: "group_manager",
+            title: t("group.group_manager"),
+            type: "select",
+            defaultValue: "",
+            options: userOptions
           },
         ],
       },
@@ -185,6 +216,7 @@ export default async function Page(props: {
           locale={locale}
           userData={dummyData}
           translated={translated}
+          candidates={userOptions}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createUserGroup}

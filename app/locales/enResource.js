@@ -431,6 +431,7 @@ const enResource = {
             device_count: 'Device Count',
             group_details: 'Details',
             group_edit: 'Edit Group',
+            group_manager: 'Group Manager',
             group_members: 'Members',
             group_name: 'Group Name',
             group_name_placeholder: 'Input group name',

@@ -14,6 +14,7 @@ export function UserForm({
     userData,
     locale,
     translated,
+    candidates,
     outGroup,
     inGroup,
     action,
@@ -22,6 +23,7 @@ export function UserForm({
     userData: Group;
     locale: string;
     translated: object;
+    candidates: { value: string, title: string }[],
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
@@ -294,6 +296,26 @@ export function UserForm({
                                 }
                             />
                         }
+                    </div>
+                </div>
+                <div className={'w-full p-2 flex flex-col md:flex-row border-b'}>
+                    <div className='w-full md:w-1/3 pb-4 md:pr-6'>
+                        <div className='mb-5 text-xl font-semibold'>{translated.group_manager}</div>
+                        <div className='text-sm'>{" "}</div>
+                    </div>
+                    <div className='w-full md:w-2/3'>
+                        <EditItem
+                            name="group_manager"
+                            title={translated.group_manager}
+                            type="select"
+                            defaultValue={userData.group_manager}
+                            placeholder=""
+                            options={candidates}
+                            error={(!!state?.errors && !!state?.errors.group_manager)
+                                ? state?.errors.group_manager
+                                : null
+                            }
+                        />
                     </div>
                 </div>
                 <Grouping

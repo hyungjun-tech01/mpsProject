@@ -433,6 +433,7 @@ const koResource = {
             device_count: '장치 개수',
             group_details: '세부 사항',
             group_edit: '그룹 편집',
+            group_manager: '그룹관리자',
             group_members: '그룹원',
             group_name: '그룹명',
             group_name_placeholder: '그룹 이름을 입력하세요',
