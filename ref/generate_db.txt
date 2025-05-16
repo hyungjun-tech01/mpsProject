@@ -3108,3 +3108,19 @@ update tbl_audit_job_log
 set job_type = 'Scan'
 where job_type = 'S';	
 
+-- 2025.05.16 : dept_info 추가 
+
+insert into tbl_dept_info
+(dept_name
+)
+values('자재부');
+
+insert into tbl_dept_info
+(dept_name
+)
+values('인사부');
+
+insert into tbl_dept_info
+(dept_name
+)
+values('재경부');

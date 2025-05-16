@@ -43,7 +43,7 @@ const GroupFormSchema = z.object({
 const CreateDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createDeviceGroup(client: Pool, prevState: GroupState, formData: FormData) {
-    // console.log('Create Group / formData :', formData);
+    console.log('createDeviceGroup Group / formData :', formData);
     const validatedFields = CreateDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -121,7 +121,7 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
 const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function modifyDeviceGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
-    // console.log('Modify Group / formData :', formData);
+    console.log('modifyDeviceGroup Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -195,7 +195,7 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
 const CreateUserGroup = GroupFormSchema.omit({remainAmount:true});
 
 export async function createUserGroup(client: Pool, prevState: GroupState, formData: FormData) {
-    // console.log('Create Group / formData :', formData);
+    // console.log('createUserGroup Group / formData :', formData);
     const validatedFields = CreateUserGroup.safeParse({
         groupName: formData.get('group_name'),
         schedulePeriod: formData.get('schedule_period'),
@@ -297,7 +297,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
 const ModifyUserGroup = GroupFormSchema.omit({});
 
 export async function modifyUserGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
-    console.log('Modify Group / formData :', formData);
+    console.log('modifyUserGroup Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
         schedulePeriod: formData.get('schedule_period'),
@@ -385,7 +385,7 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
 const CreateSecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createSecurityGroup(client: Pool, prevState: GroupState, formData: FormData) {
-    console.log('Create Group / formData :', formData);
+    console.log('CreateSecurityGroup / formData :', formData);
     const validatedFields = CreateSecurityGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -473,7 +473,7 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
 const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function modifySecurityGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
-    console.log('Create Group / formData :', formData);
+    console.log('ModifySecurityGroup Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')
     });

@@ -208,7 +208,7 @@ export default function MyDBAdapter() {
         },
         async modifySecurityGroup(id: string, prevState: GroupState, formData: FormData) {
             'use server';
-            return GroupAction.modifyUserGroup(pool, id, prevState, formData);
+            return GroupAction.modifySecurityGroup(pool, id, prevState, formData);
         },
         async deleteGroup(id: string) {
             'use server';
