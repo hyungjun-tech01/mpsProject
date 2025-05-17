@@ -18,11 +18,12 @@ export type State = {
 
 const adapter = MyDBAdapter();
 
+//  app_type : z.string({
+//    invalid_type_error: 'Please select app type',
+// }),
+
 const FormSchema = z.object({
     device_id : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
-    app_type : z.string({
-        invalid_type_error: 'Please select app type',
-    }),
     device_type : z.string({
         invalid_type_error: 'Please select device type',
     }),

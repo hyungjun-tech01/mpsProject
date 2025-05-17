@@ -374,6 +374,7 @@ export async function fetchModifyDevice(
     ) {
 
     try {
+
         // 트랜잭션 시작
         await client.query('BEGIN');
 
@@ -395,10 +396,9 @@ export async function fetchModifyDevice(
                 device_model = $6, 
                 serial_number = $7, 
                 ext_device_function = $8, 
-                deleted = $9,
-                device_administrator = $10,
-                device_administrator_password = $11
-            where device_id = $12
+                device_administrator = $9,
+                device_administrator_password = $10
+            where device_id = $11
         `,[ newDevice.device_type, 
             newDevice.device_name, 
             newDevice.location, 
@@ -407,7 +407,6 @@ export async function fetchModifyDevice(
             newDevice.device_model, 
             newDevice.serial_number,
             ext_device_function, 
-            newDevice.deleted, 
             newDevice.device_administrator,
             encrypt_device_admin_pwd,
             newDevice.device_id]);
