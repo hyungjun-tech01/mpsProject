@@ -15,16 +15,18 @@ export async function fetchFilteredDocumnets(
         const docs = await client.query(`
             SELECT
                 dj.document_id id,
-                dj.created_by,
+                tui.user_name||'/'||tui.full_name created_by,
                 dj.created_date,
                 dj.document_name name,
+                tdi.device_name||'/'||tdi.location device_name,
                 dj.total_pages,
                 dj.total_pages,
                 dj.archive_path,
                 dj.shared
-            FROM tbl_document_job_info dj
-            WHERE
-                dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
+            FROM tbl_document_job_info dj, tbl_device_info tdi, tbl_user_info tui
+            WHERE dj.printer_id = tdi.device_id
+                and dj.created_by = tui.user_id
+                and dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
                 ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
                     + "' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = '"
                     + user_id + "'))"}
