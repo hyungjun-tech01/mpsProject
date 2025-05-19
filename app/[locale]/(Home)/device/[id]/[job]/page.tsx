@@ -85,17 +85,20 @@ export default async function Page(props: {
                 },
             ]
         },
-       
     ];
 
-    const optionsUser = allUsers.map((x:any) => ( 
+    const optionsUser = [
+        {label:'-1 없음', value: ''},
+        ...allUsers.map((x:any) => ( 
             {'label':`${x.user_name}`, 'value':String(x.user_id)} 
-            ) 
-        );
-    const optionsGroup = allGroups.map((x:any) => ( 
+        ))
+    ];
+    const optionsGroup = [
+        {label:'-1 없음', value: ''},
+        allGroups.map((x:any) => ( 
         {'label':`${x.group_name}`, 'value':String(x.group_id)} 
-        ) 
-    );
+        ))
+    ];
 
 
     const editFaxItems: IItem[] =  fax.length > 0 

@@ -446,6 +446,7 @@ const enResource = {
             search_placeholder_in_nonegroup: 'Search in None-Group...',
             search_placehodler_security: 'Search security group...',
             search_placehodler_user: 'Search user group...',
+            select_group_manager: 'Select group manager...',
             subTitle_device: 'Device Group',
             subTitle_user: 'User Group',
             subTitle_security: 'Security Group',

@@ -448,6 +448,7 @@ const koResource = {
             search_placeholder_in_nonegroup: '비그룹원 내 검색...',
             search_placehodler_security: '보안 그룹 찾기...',
             search_placehodler_user: '사용자 그룹 찾기...',
+            select_group_manager: '그룹 관리자 선택...',
             subTitle_device: '장치 그룹',
             subTitle_user: '사용자 그룹',
             subTitle_security: '보안 그룹',

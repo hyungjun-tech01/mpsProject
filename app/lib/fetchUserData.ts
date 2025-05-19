@@ -80,11 +80,7 @@ export async function fetchAllUsers(
     client: Pool,
 ) {
     try {
-        const users =
-            await client.query(`
-            SELECT '' user_id, 
-                   '-1 없음' user_name
-            union all
+        const users = await client.query(`
             SELECT
                 u.user_id user_id, 
                 u.full_name||'('||u.user_name||')' user_name
@@ -92,7 +88,7 @@ export async function fetchAllUsers(
             WHERE
                 u.deleted='N'
             ORDER BY user_name ASC
-            `);
+        `);
         const converted = users.rows.map((data: UserField) => ({
             ...data,
             id: data.user_id,

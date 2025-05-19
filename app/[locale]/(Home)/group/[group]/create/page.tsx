@@ -45,7 +45,11 @@ export default async function Page(props: {
         : adapter.getDeptsNotInGroupPages(query, itemsPerPage),
   ]);
 
-  const userOptions:{value:string, title:string}[] = users.map(item => ({value: item.user_id, title: item.user_name}));
+  const userOptions: {value:string, title:string}[] = [
+    {value:"", title:t("group.select_group_manager")},
+    ...users.map(item => (
+    {value: item.user_id, title: item.user_name}))
+  ];
 
   const dummyData : Group = {
     group_id: "",
