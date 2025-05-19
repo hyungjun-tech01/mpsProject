@@ -58,6 +58,7 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
 
     const { groupName } = validatedFields.data;
     const groupNotes = formData.get('group_notes');
+    const groupManager = formData.get('group_manager');
     const groupSize = Number(formData.get('member_length'));
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
@@ -102,6 +103,18 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
                 )
                 VALUES ($1, $2, 'device')
             `, [groupId, member]);
+        }
+
+        if(groupManager !== "")
+        {
+            await client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ($1, $2, 'admin')
+            `, [groupId, groupManager]);
         }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
@@ -218,6 +231,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
             : Number(formData.get('schedule_start'))
         );
     const groupNotes = formData.get('group_notes');
+    const groupManager = formData.get('group_manager');
     const groupSize = Number(formData.get('member_length'));
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
@@ -261,8 +275,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
                 modified_by
             )
             VALUES ($1,$2,$3,$4,$5,$6,$7,NOW(),'admin',NOW(),'admin') RETURNING group_id`
-            , groupInputData);
-
+        , groupInputData);
         
         const groupId = newGroup.rows[0].group_id;
 
@@ -270,6 +283,9 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
 
         // 새로운 그룹 멤버 삽입
         for (const member of groupMembers) {
+            if(member === groupManager)
+                continue;
+
             await client.query(`
                 INSERT INTO tbl_group_member_info (
                     group_id,
@@ -278,6 +294,17 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
                 )
                 VALUES ($1, $2, 'user')
             `, [groupId, member]);
+        }
+
+        if(groupManager !== "") {
+            await client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ($1, $2, 'admin')
+            `, [groupId, groupManager]);
         }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
@@ -400,6 +427,7 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
 
     const { groupName } = validatedFields.data;
     const groupNotes = formData.get('group_notes');
+    const groupManager = formData.get('group_manager');
     const groupSize = Number(formData.get('member_length'));
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
@@ -448,12 +476,22 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
             `, [groupId, member]);
         }
 
+        if(groupManager !== "") {
+            await client.query(`
+                INSERT INTO tbl_group_member_info (
+                    group_id,
+                    member_id,
+                    member_type
+                )
+                VALUES ($1, $2, 'admin')
+            `, [groupId, groupManager]);
+        }
 
         for (const member of groupMembers) {
             await client.query(`
                 UPDATE tbl_dept_info
                 SET security_group_name= $1
-                WHERE dept_id = $2`,[groupName,member] );
+                WHERE dept_id = $2`,[groupName, member] );
         }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
