@@ -79,6 +79,7 @@ export type Group = {
   group_name: string;
   group_type: 'device' | 'user' | 'security';
   group_notes: string;
+  manager_id: string;
   schedule_period: 'NONE' | 'PER_DAY' | 'PER_WEEK' | 'PER_MONTH' | 'PER_YEAR';
   schedule_amount: number;
   schedule_start: number;

@@ -301,14 +301,14 @@ export function UserForm({
                 <div className={'w-full p-2 flex flex-col md:flex-row border-b'}>
                     <div className='w-full md:w-1/3 pb-4 md:pr-6'>
                         <div className='mb-5 text-xl font-semibold'>{translated.group_manager}</div>
-                        <div className='text-sm'>{" "}</div>
+                        <div className='text-sm'>{' '}</div>
                     </div>
                     <div className='w-full md:w-2/3'>
                         <EditItem
                             name="group_manager"
                             title={translated.group_manager}
                             type="select"
-                            defaultValue={userData.group_manager}
+                            defaultValue={userData.manager_id}
                             placeholder=""
                             options={candidates}
                             error={(!!state?.errors && !!state?.errors.group_manager)

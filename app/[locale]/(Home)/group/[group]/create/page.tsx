@@ -56,6 +56,7 @@ export default async function Page(props: {
     group_name: "",
     group_type: group,
     group_notes: "",
+    manager_id: "",
     schedule_period: "NONE",
     schedule_amount: 0,
     schedule_start: 0

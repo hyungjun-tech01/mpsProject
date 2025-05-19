@@ -174,7 +174,7 @@ export async function fetchGroupInfoById(
     groupType: string,
 ) {
     try {
-        const resp = await client.query(`
+        const group_info = await client.query(`
             SELECT
                 group_id id,
                 group_name,
@@ -188,7 +188,19 @@ export async function fetchGroupInfoById(
             WHERE group_type = '${groupType}'
             AND group_id = '${groupId}'
         `);
-        return resp.rows[0];
+        const group_manager = await client.query(`
+            SELECT
+                member_id id
+            FROM tbl_group_member_info
+            WHERE group_id='${groupId}'
+            AND member_type='admin'
+        `);
+        const finalData = group_info.rows[0];
+        if(group_manager.rows.length > 0)
+            finalData["manager_id"] = group_manager.rows[0].id;
+        else
+            finalData["manager_id"] = "";
+        return finalData;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goup by ID");

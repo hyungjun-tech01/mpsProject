@@ -151,6 +151,7 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
     const groupID = id;
     const groupNotes = formData.get('group_notes');
     const groupSize = Number(formData.get('member_length'));
+    const groupManager = formData.get('group_manager');
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
     {
@@ -188,6 +189,34 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
                 VALUES ('${groupID}', '${member}', 'device')`
             )
         );
+
+        const currentMangerData = await client.query(`
+            SELECT
+                member_id id
+            FROM tbl_group_member_info
+            WHERE group_id='${groupID}
+            AND member_type='admin
+        `);
+        const currentManager = currentMangerData.rows.length > 0 ? 
+            currentMangerData.rows[0].id : "";
+        if(currentManager !== groupManager) {
+            if(currentManager !== "") {
+                await client.query(`
+                    DELETE FROM tbl_group_member_info
+                    WHERE group_id='${groupID}'
+                    AND memeber_id='${currentManager}'
+                `)
+            }
+            if(groupManager !== "") {
+                await client.query(`
+                    INSERT INTO tbl_group_member_info (
+                        group_id,
+                        member_id,
+                        memeber_type
+                    ) VALUES ('${groupID}', '${groupManager}', 'admin')
+                `)
+            }
+        }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
@@ -350,6 +379,7 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
         );
     const groupNotes = formData.get('group_notes');
     const groupSize = Number(formData.get('member_length'));
+    const groupManager = formData.get('group_manager');
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
     {
@@ -391,6 +421,34 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
                 )
                 VALUES ($1, $2, 'user')
             `, [groupID, member]);
+        }
+
+        const currentMangerData = await client.query(`
+            SELECT
+                member_id id
+            FROM tbl_group_member_info
+            WHERE group_id='${groupID}
+            AND member_type='admin
+        `);
+        const currentManager = currentMangerData.rows.length > 0 ? 
+            currentMangerData.rows[0].id : "";
+        if(currentManager !== groupManager) {
+            if(currentManager !== "") {
+                await client.query(`
+                    DELETE FROM tbl_group_member_info
+                    WHERE group_id='${groupID}'
+                    AND memeber_id='${currentManager}'
+                `)
+            }
+            if(groupManager !== "") {
+                await client.query(`
+                    INSERT INTO tbl_group_member_info (
+                        group_id,
+                        member_id,
+                        memeber_type
+                    ) VALUES ('${groupID}', '${groupManager}', 'admin')
+                `)
+            }
         }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
@@ -528,6 +586,7 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
     const { groupName } = validatedFields.data;
     const groupNotes = formData.get('group_notes');
     const groupSize = Number(formData.get('member_length'));
+    const groupManager = formData.get('group_manager');
     const groupMembers = [];
     for(let num=0; num < groupSize; num++)
     {
@@ -582,6 +641,34 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
                 SET security_group_name=$1
                 WHERE dept_id=$2
             `, [groupName, member]);
+        }
+
+        const currentMangerData = await client.query(`
+            SELECT
+                member_id id
+            FROM tbl_group_member_info
+            WHERE group_id='${groupID}
+            AND member_type='admin
+        `);
+        const currentManager = currentMangerData.rows.length > 0 ? 
+            currentMangerData.rows[0].id : "";
+        if(currentManager !== groupManager) {
+            if(currentManager !== "") {
+                await client.query(`
+                    DELETE FROM tbl_group_member_info
+                    WHERE group_id='${groupID}'
+                    AND memeber_id='${currentManager}'
+                `)
+            }
+            if(groupManager !== "") {
+                await client.query(`
+                    INSERT INTO tbl_group_member_info (
+                        group_id,
+                        member_id,
+                        memeber_type
+                    ) VALUES ('${groupID}', '${groupManager}', 'admin')
+                `)
+            }
         }
 
         await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        

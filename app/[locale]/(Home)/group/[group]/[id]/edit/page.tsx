@@ -37,6 +37,7 @@ export default async function Page(props: {
   const [
     t,
     data,
+    users,
     outGroupData,
     outGroupTotalPages,
     inGroupData,
@@ -44,6 +45,7 @@ export default async function Page(props: {
   ] = await Promise.all([
     getDictionary(locale),
     adapter.getGroupInfoById(id, group),
+    adapter.getAllUsers(),
     group === "user"
       ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
       : group === "device"
@@ -70,6 +72,12 @@ export default async function Page(props: {
   // console.log("[Group Edit] Non-Group:", outGroupData);
   // console.log("[Group Edit] Group Data:", inGroupData);
   // console.log("[Group Edit] Group Pages:", inGroupTotalPages);
+
+  const userOptions: {value:string, title:string}[] = [
+    {value: "", title: t("group.select_group_manager")},
+    ...users.map(item => (
+    {value: item.user_id, title: item.user_name}))
+  ];
 
   const outGroup = {
     paramName: "outGroupPage",
@@ -124,6 +132,7 @@ export default async function Page(props: {
     thursday: t("common.thursday"),
     friday: t("common.friday"),
     saturday: t("common.saturday"),
+    group_manager: t("group.group_manager"),
     group_schedule_amount: t("group.schedule_amount"),
     group_remain_amount: t("group.remain_amount"),
     button_cancel: t("common.cancel"),
@@ -155,6 +164,19 @@ export default async function Page(props: {
           },
         ],
       },
+      {
+        title: t("group.group_manager"),
+        description: [],
+        items: [
+          {
+            name: "group_manager",
+            title: t("group.group_manager"),
+            type: "select",
+            defaultValue: data.manager_id,
+            options: userOptions
+          },
+        ],
+      },
     ],
     security: [
       {
@@ -172,6 +194,19 @@ export default async function Page(props: {
             title: t("common.note"),
             type: "input",
             defaultValue: data.group_notes,
+          },
+        ],
+      },
+      {
+        title: t("group.group_manager"),
+        description: [],
+        items: [
+          {
+            name: "group_manager",
+            title: t("group.group_manager"),
+            type: "select",
+            defaultValue: data.manager_id,
+            options: userOptions
           },
         ],
       },
@@ -215,6 +250,7 @@ export default async function Page(props: {
           userData={data}
           locale={locale}
           translated={translated}
+          candidates={userOptions}
           outGroup={outGroup}
           inGroup={inGroup}
           action={adapter.modifyUserGroup}
