@@ -49,34 +49,34 @@ export default async function Page(props: {
     group === "user"
       ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
       : group === "device"
-      ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-      : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
+        ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+        : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
     group === "user"
       ? adapter.getUsersNotInGroupPages(queryOutGroup, itemsPerPage)
       : group === "device"
-      ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
-      : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
+        ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
+        : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
     group === "user"
       ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
       : group === "device"
-      ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
-      : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
+        ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+        : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
     group === "user"
       ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
       : group === "device"
-      ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
-      : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
+        ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
+        : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
   ]);
 
-  console.log("[Group Edit] data:", data);
+  // console.log("[Group Edit] data:", data);
   // console.log("[Group Edit] Non-Group:", outGroupData);
   // console.log("[Group Edit] Group Data:", inGroupData);
   // console.log("[Group Edit] Group Pages:", inGroupTotalPages);
 
-  const userOptions: {value:string, title:string}[] = [
-    {value: "", title: t("group.select_group_manager")},
+  const userOptions: { value: string, title: string }[] = [
+    { value: "", title: t("group.select_group_manager") },
     ...users.map(item => (
-    {value: item.user_id, title: item.user_name}))
+      { value: item.user_id, title: item.user_name }))
   ];
 
   const outGroup = {

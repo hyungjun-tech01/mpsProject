@@ -7,6 +7,7 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import { IGroupSearch, IBreadCrums } from '@/app/lib/definitions';
 import getDictionary from "@/app/locales/dictionaries";
 import MyDBAdapter from '@/app/lib/adapter';
+import { auth } from "@/auth";
 
 
 export default async function Page(props: {
@@ -18,21 +19,31 @@ export default async function Page(props: {
     const locale = params.locale;
     const group = params.group;
     const id = params.id;
-    // const category = params.category;
     const searchParams = await props.searchParams;
     const queryOutGroup = searchParams?.queryOutGroup || '';
     const queryInGroup = searchParams?.queryInGroup || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentOutPage = Number(searchParams?.outGroupPage) || 1;
     const currentInPage = Number(searchParams?.inGroupPage) || 1;
+    const session = await auth();
 
     if (!['device', 'user', 'security'].includes(group)) {
         notFound();
     };
 
+    const manager = session?.user.name ?? "";
+
     const adapter = MyDBAdapter();
-    const [t, outGroupData, outGroupTotalPages, inGroupData, inGroupTotalPages] = await Promise.all([
+    const [
+        t,
+        data,
+        outGroupData,
+        outGroupTotalPages,
+        inGroupData,
+        inGroupTotalPages,
+    ] = await Promise.all([
         getDictionary(locale),
+        adapter.getAllUsers(),
         group === "user"
             ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
             : group === "device"
@@ -44,10 +55,10 @@ export default async function Page(props: {
                 ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
                 : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
         group === "user"
-            ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
+            ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
             : group === "device"
-                ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentOutPage)
-                : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentOutPage),
+                ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+                : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
         group === "user"
             ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
             : group === "device"
@@ -105,87 +116,139 @@ export default async function Page(props: {
         thursday: t("common.thursday"),
         friday: t("common.friday"),
         saturday: t("common.saturday"),
+        group_manager: t("group.group_manager"),
         group_schedule_amount: t("group.schedule_amount"),
+        group_remain_amount: t("group.remain_amount"),
         button_cancel: t("common.cancel"),
         button_go: t("common.apply"),
         title_grouping: t("common.grouping"),
         group_member: t("group.group_members"),
         none_group_member: t("group.none_group_members"),
+        search_placeholder_in_group: t("group.search_placeholder_in_group"),
+        search_placeholder_in_nonegroup: t("group.search_placeholder_in_nonegroup"),
     };
 
-    const deviceItems: ISection[] = [
-        {
+    const contentsItems: { device: ISection[]; security: ISection[] } = {
+        device: [
+          {
             title: t("common.generals"),
             description: [t("comment.group_edit_group_name")],
             items: [
-                {
-                    name: "group_name",
-                    title: t("group.group_name"),
-                    type: "input",
-                    defaultValue: "",
-                },
-                {
-                    name: "group_notes",
-                    title: t("common.note"),
-                    type: "input",
-                    defaultValue: "",
-                },
+              {
+                name: "group_name",
+                title: t("group.group_name"),
+                type: "label",
+                defaultValue: data.group_name,
+              },
+              {
+                name: "group_notes",
+                title: t("common.note"),
+                type: "label",
+                defaultValue: data.group_notes,
+              },
             ],
-        },
-    ];
-
-    const deviceButtons: IButtonInfo = {
+          },
+          {
+            title: t("group.group_manager"),
+            description: [],
+            items: [
+              {
+                name: "group_manager",
+                title: t("group.group_manager"),
+                type: "label",
+                defaultValue: manager,
+              },
+            ],
+          },
+        ],
+        security: [
+          {
+            title: t("common.generals"),
+            description: [t("comment.group_edit_group_name")],
+            items: [
+              {
+                name: "group_name",
+                title: t("group.group_name"),
+                type: "label",
+                defaultValue: data.group_name,
+              },
+              {
+                name: "group_notes",
+                title: t("common.note"),
+                type: "label",
+                defaultValue: data.group_notes,
+              },
+            ],
+          },
+          {
+            title: t("group.group_manager"),
+            description: [],
+            items: [
+              {
+                name: "group_manager",
+                title: t("group.group_manager"),
+                type: "label",
+                defaultValue: manager,
+              },
+            ],
+          },
+        ],
+      };
+    
+      const buttonItems: IButtonInfo = {
         go: { title: t("common.apply") },
         cancel: { title: t("common.cancel"), link: "/group/device" },
-    };
-
-    return (
+      };
+    
+      return (
         <main>
-            <Breadcrumbs
-                breadcrumbs={[
-                    {
-                        label: groupBreadcrumbs[group][0].label,
-                        href: groupBreadcrumbs[group][0].link,
-                    },
-                    {
-                        label: `${t("group.create_group")}`,
-                        href: `${groupBreadcrumbs[group][1].link}`,
-                        active: true,
-                    },
-                ]}
+          <Breadcrumbs
+            breadcrumbs={[
+              {
+                label: groupBreadcrumbs[group][0].label,
+                href: groupBreadcrumbs[group][0].link,
+              },
+              {
+                label: `${t("group.group_edit")}`,
+                href: `${groupBreadcrumbs[group][1].link}`,
+                active: true,
+              },
+            ]}
+          />
+          {group === "device" && (
+            <EditForm
+              id={id}
+              items={contentsItems.device}
+              buttons={buttonItems}
+              translated={translated}
+              outGroup={outGroup}
+              inGroup={inGroup}
+              action={adapter.modifyDeviceGroup}
             />
-            {/* <div className='w-full pl-2 flex justify-start'>
-                {subTitles.map((item, idx) => {
-                    return <Link key={idx} href={item.link}
-                        className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
-                            { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === category },
-                            { "text-gray-300  bg-white border-2": item.category !== category },
-                        )}>{item.title}</Link>;
-                })}
-            </div> */}
-            {group !== 'user' &&
-                <EditForm
-                    id={id}
-                    items={deviceItems}
-                    buttons={deviceButtons}
-                    translated={translated}
-                    totalPages={outGroupTotalPages}
-                    outGroup={outGroup}
-                    inGroup={inGroup}
-                    action={adapter.modifyDeviceGroup}
-                />
-            }
-            {group === 'members' &&
-                <div className="rounded-md bg-gray-50 p-4 md:p-6">
-                    <MemberTable
-                        columns={members}
-                        rows={inGroup}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        editable={false}
-                    />
-                </div>
-            }
+          )}
+          {group === "user" && (
+            <UserForm
+              id={id}
+              userData={data}
+              locale={locale}
+              translated={translated}
+              candidates={userOptions}
+              outGroup={outGroup}
+              inGroup={inGroup}
+              action={adapter.modifyUserGroup}
+            />
+          )}
+          {group === "security" && (
+            <EditForm
+              id={id}
+              items={contentsItems.security}
+              buttons={buttonItems}
+              translated={translated}
+              outGroup={outGroup}
+              inGroup={inGroup}
+              action={adapter.modifySecurityGroup}
+            />
+          )}
         </main>
-    );
+      );
 }

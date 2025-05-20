@@ -38,6 +38,7 @@ export default async function Page(props: {
     if(!session?.user) return notFound();
 
     const isAdmin = session?.user.role === 'admin';
+    const isManager = session?.user.role === 'manager';
     const userId = session?.user.id ?? "";
 
     const adapter = MyDBAdapter();
@@ -72,19 +73,19 @@ export default async function Page(props: {
     // Columns -------------------------------------------------------------------
     const groupColumns : { device: IColumnData[], user: IColumnData[], security: IColumnData[]} = {
         device: [
-            { name: 'group_name', title: t('group.group_name'), align: 'center' },
+            { name: 'group_name', title: t('group.group_name'), align: 'center', type: isManager ? 'view' : null },
             { name: 'device_count', title: t('group.device_count'), align: 'center' },
             { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
         ],
         user: [
-            { name: 'group_name', title: t('group.group_name'), align: 'left' },
+            { name: 'group_name', title: t('group.group_name'), align: 'left', type: isManager ? 'view' : null },
             { name: 'created_date', title: t('common.created'), align: 'left', type: 'date' },
             { name: 'remain_amount', title: t('account.balance'), align: 'center', type: 'currency' },
             { name: 'schedule_amount', title: t('group.allocate_amount'), align: 'center', type: 'currency' },
             { name: 'schedule_period', title: t('group.allocate_period'), align: 'center' },
         ],
         security: [
-            { name: 'group_name', title: t('group.group_name'), align: 'center' },
+            { name: 'group_name', title: t('group.group_name'), align: 'center', type: isManager ? 'view' : null },
             { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
             { name: 'group_notes', title: t('common.explanation'), align: 'center' },
             { name: 'dept_count', title: t('security.dept_count'), align: 'center' },

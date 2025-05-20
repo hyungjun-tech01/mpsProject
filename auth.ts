@@ -72,14 +72,22 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       const isManager = auth?.user.role === "manager";
       const userMenu = nextUrl.pathname.startsWith('/user');
       const groupMenu = nextUrl.pathname.startsWith('/group');
+      const editMenu = nextUrl.pathname.endsWith('/edit');
+
       if(userMenu) {
         if(isAdmin) return true;
         return Response.redirect(new URL('/', nextUrl));
       }
       if(groupMenu) {
-        if(isAdmin || isManager) return true;
-        return Response.redirect(new URL('/', nextUrl));
+        if(editMenu) {
+          if(isAdmin) return true;
+          return Response.redirect(new URL('/', nextUrl));
+        } else {
+          if(isAdmin || isManager) return true;
+          return Response.redirect(new URL('/', nextUrl));
+        }
       }
+      
       return true;
     },
     jwt: async ({ token, user }) => {

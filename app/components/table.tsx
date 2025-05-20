@@ -194,6 +194,9 @@ export default function CustomizedTable<DataType>({
                                                 {!!column.type && column.type === 'edit' &&
                                                     <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
                                                 }
+                                                {!!column.type && column.type === 'view' &&
+                                                    <Link href={`${path}/${row.id}/view`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
+                                                }
                                             </StyledTableCell>
                                         )
                                     })}

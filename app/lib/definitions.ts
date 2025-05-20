@@ -20,7 +20,7 @@ export type IBreadCrums = {
 export type IColumnData = {
   name: string;
   title: string | React.JSX.Element;
-  type?: string;
+  type?: string | null;
   values?: object;
   align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
 };
