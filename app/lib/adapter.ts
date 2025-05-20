@@ -91,6 +91,24 @@ export default function MyDBAdapter() {
         ) {
             return Group.fetchFilteredGroupsPages(pool, query, groupType, itemsPerPage);
         },
+        async getFilteredGroupsByManager(
+            managerId: string,
+            query: string,
+            groupType: string,
+            itemsPerPage: number,
+            currentPage: number,
+            locale: string
+        ) {
+            return Group.fetchFilteredGroupsByManager(pool, managerId, query, groupType, itemsPerPage, currentPage, locale);
+        },
+        async getFilteredGroupsByManagerPages(
+            managerId: string,
+            query: string,
+            groupType: string,
+            itemsPerPage: number,
+        ) {
+            return Group.fetchFilteredGroupsByManagerPages(pool, managerId, query, groupType, itemsPerPage);
+        },
         async getGroupsByType(
             groupType: string,
         ) {

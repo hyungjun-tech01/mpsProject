@@ -31,7 +31,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { user_name, user_password } = parsedCredentials.data;
 
-          console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
+          // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
           const adapter = MyDBAdapter();
           const userAttr = await adapter.getAccount(user_name);
           // console.log('Account : ', userAttr);
@@ -69,10 +69,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       // check admin --------------------------------------------
       const isAdmin = auth?.user.role === "admin";
+      const isManager = auth?.user.role === "manager";
       const userMenu = nextUrl.pathname.startsWith('/user');
       const groupMenu = nextUrl.pathname.startsWith('/group');
-      if(userMenu || groupMenu) {
+      if(userMenu) {
         if(isAdmin) return true;
+        return Response.redirect(new URL('/', nextUrl));
+      }
+      if(groupMenu) {
+        if(isAdmin || isManager) return true;
         return Response.redirect(new URL('/', nextUrl));
       }
       return true;

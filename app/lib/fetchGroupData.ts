@@ -143,6 +143,158 @@ export async function fetchFilteredGroupsPages(
     }
 };
 
+export async function fetchFilteredGroupsByManager(
+    client: Pool,
+    managerId: string,
+    query: string,
+    groupType: string,
+    itemsPerPage: number,
+    currentPage: number,
+    locale: string
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    let queryString = "";
+
+    if(groupType === "device") {
+        queryString = `SELECT 
+        g.group_id AS id,
+        g.group_name AS group_name,
+        g.created_date AS created_date,
+        (
+            SELECT 
+                COUNT(*)
+            FROM 
+                tbl_group_member_info gm,
+                tbl_device_info tgi 
+            WHERE 
+                gm.group_id = g.group_id 
+                AND gm.member_type = 'device'
+                and  gm.member_id = tgi.device_id AND tgi.deleted = 'N'
+        ) AS device_count
+        FROM 
+            tbl_group_info g
+        WHERE
+            g.group_id IN (
+                SELECT
+                    gm.group_id
+                FROM
+                    tbl_group_member_info gm
+                WHERE
+                    gm.member_id = '${managerId}'
+            ) 
+            AND g.group_type = 'device'
+            ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
+        GROUP BY 
+            g.group_id, g.group_name, g.created_date, g.modified_date
+        ORDER BY 
+            g.modified_date DESC
+        LIMIT 
+            ${itemsPerPage} OFFSET ${offset}
+        `;
+    } else if(groupType === "user") {
+        queryString = `
+            SELECT 
+                g.group_id AS id,
+                g.group_name AS group_name,
+                g.created_date AS created_date,
+                g.remain_amount AS remain_amount,
+                g.schedule_amount AS schedule_amount,
+                g.schedule_period AS schedule_period
+            FROM tbl_group_info g
+            WHERE
+                g.group_id IN (
+                    SELECT
+                        gm.group_id
+                    FROM
+                        tbl_group_member_info gm
+                    WHERE
+                        gm.member_id = '${managerId}'
+                )
+                AND g.group_type = 'user'
+                ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
+            ORDER BY g.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `;
+    } else if(groupType === "security") {
+        queryString = `
+            SELECT 
+                g.group_id AS id,
+                g.group_name AS group_name,
+                g.created_date AS created_date,
+                g.group_notes AS group_notes,
+                COUNT(gm.member_id) as dept_count
+            FROM tbl_group_info g
+            LEFT JOIN tbl_group_member_info gm ON g.group_id = gm.group_id
+            WHERE
+                g.group_id IN (
+                    SELECT
+                        gm.group_id
+                    FROM
+                        tbl_group_member_info gm
+                    WHERE
+                        gm.member_id = '${managerId}'
+                )
+                AND g.group_type = 'security'
+                ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
+            GROUP BY g.group_id, g.group_name, g.group_notes, g.created_date, g.modified_date
+            ORDER BY g.modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `;
+    }
+    else {
+        throw new Error("Wrong Group Type");
+    }
+
+    try {
+        const resp = await client.query(queryString);
+        if(groupType === 'user') {
+            const converted = resp.rows.map(item => {
+                return {
+                    ...item,
+                    schedule_period: convertSchedulePeriod[locale][item.schedule_period],
+                }    
+            });
+            return converted;
+        } else {
+            return resp.rows;
+        }
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goups by group type");
+    }
+};
+
+export async function fetchFilteredGroupsByManagerPages(
+    client: Pool,
+    managerId: string,
+    query: string,
+    groupType: string,
+    itemsPerPage: number,
+) {
+    try {
+        const resp = await client.query(`
+            SELECT COUNT(*)
+            FROM tbl_group_info g
+            WHERE
+                g.group_id IN (
+                    SELECT
+                        gm.group_id
+                    FROM
+                        tbl_group_member_info gm
+                    WHERE
+                        gm.member_id = '${managerId}'
+                )
+                AND group_type='${groupType}'
+                ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
+        `)
+        const totalPages = Math.ceil(Number(resp.rows[0].count) / itemsPerPage);
+        return totalPages;     
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goups by group type");
+    }
+};
+
 export async function fetchGroupsByType(
     client: Pool,
     groupType: string,

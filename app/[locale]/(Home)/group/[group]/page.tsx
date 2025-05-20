@@ -37,11 +37,16 @@ export default async function Page(props: {
 
     if(!session?.user) return notFound();
 
+    const isAdmin = session?.user.role === 'admin';
+    const userId = session?.user.id ?? "";
+
     const adapter = MyDBAdapter();
     const [t, totalPages, groupData] = await Promise.all([
         getDictionary(locale),
-        adapter.getFilteredGroupsPages(query, group, itemsPerPage),
-        adapter.getFilteredGroups(query, group, itemsPerPage, currentPage, locale),
+        isAdmin ? adapter.getFilteredGroupsPages(query, group, itemsPerPage)
+            : adapter.getFilteredGroupsByManagerPages(userId, query, group, itemsPerPage),
+        isAdmin ? adapter.getFilteredGroups(query, group, itemsPerPage, currentPage, locale)
+            : adapter.getFilteredGroupsByManager(userId, query, group, itemsPerPage, currentPage, locale),
     ]);
 
     // Tabs ----------------------------------------------------------------------
@@ -101,7 +106,7 @@ export default async function Page(props: {
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
                     <Search placeholder={groupTexts[group].keySearchPlaceholder} />
-                    <CreateButton link={`/group/${group}/create`} title={t('group.create_group')} />
+                    {!!isAdmin && <CreateButton link={`/group/${group}/create`} title={t('group.create_group')} />}
                 </div>
                 <Suspense fallback={<TableSkeleton />}>
                     <Table
@@ -112,6 +117,8 @@ export default async function Page(props: {
                         path={`/group/${group}`}
                         locale={locale}
                         deleteAction={adapter.deleteGroup}
+                        editable={!!isAdmin}
+                        deletable={!!isAdmin}
                     />
                 </Suspense>
             </div>
