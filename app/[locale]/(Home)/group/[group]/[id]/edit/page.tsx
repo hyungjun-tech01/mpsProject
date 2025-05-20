@@ -68,7 +68,7 @@ export default async function Page(props: {
       : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
   ]);
 
-  // console.log("[Group Edit] data:", data);
+  console.log("[Group Edit] data:", data);
   // console.log("[Group Edit] Non-Group:", outGroupData);
   // console.log("[Group Edit] Group Data:", inGroupData);
   // console.log("[Group Edit] Group Pages:", inGroupTotalPages);

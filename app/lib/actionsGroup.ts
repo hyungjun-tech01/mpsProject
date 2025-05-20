@@ -43,7 +43,7 @@ const GroupFormSchema = z.object({
 const CreateDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createDeviceGroup(client: Pool, prevState: GroupState, formData: FormData) {
-    console.log('createDeviceGroup Group / formData :', formData);
+    // console.log('createDeviceGroup Group / formData :', formData);
     const validatedFields = CreateDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -134,7 +134,7 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
 const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function modifyDeviceGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
-    console.log('modifyDeviceGroup Group / formData :', formData);
+    // console.log('modifyDeviceGroup Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -161,6 +161,7 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
     }
 
     //console.log('[Modify Device Group] Member :', groupMembers);
+    // console.log('[Modify Device Group] Manager :', groupManager);
 
     // Modify device group  --------------------------------------
     try {
@@ -194,17 +195,21 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
             SELECT
                 member_id id
             FROM tbl_group_member_info
-            WHERE group_id='${groupID}
-            AND member_type='admin
+            WHERE group_id='${groupID}'
+            AND member_type='admin'
         `);
+
         const currentManager = currentMangerData.rows.length > 0 ? 
             currentMangerData.rows[0].id : "";
+        // console.log('Current Manager : ', currentManager);
+        // console.log('New Manager : ', groupManager);
+
         if(currentManager !== groupManager) {
             if(currentManager !== "") {
                 await client.query(`
                     DELETE FROM tbl_group_member_info
                     WHERE group_id='${groupID}'
-                    AND memeber_id='${currentManager}'
+                    AND member_id='${currentManager}'
                 `)
             }
             if(groupManager !== "") {
@@ -212,7 +217,7 @@ export async function modifyDeviceGroup(client: Pool, id:string, prevState: Grou
                     INSERT INTO tbl_group_member_info (
                         group_id,
                         member_id,
-                        memeber_type
+                        member_type
                     ) VALUES ('${groupID}', '${groupManager}', 'admin')
                 `)
             }
@@ -269,8 +274,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
         const memberID = formData.get(tempName);
         groupMembers.push(memberID);
     }
-    console.log('groupMembers :', groupMembers);
-
+    // console.log('groupMembers :', groupMembers);
 
     // Create new user group  --------------------------------------
     try {
@@ -285,7 +289,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
             scheduleStart,
         ];
 
-        console.log('!!! [Create User Group] groupInputData :', groupInputData);
+        // console.log('!!! [Create User Group] groupInputData :', groupInputData);
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -308,7 +312,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
         
         const groupId = newGroup.rows[0].group_id;
 
-        console.log('!!! [Create User Group] groupId :', groupId);
+        // console.log('!!! [Create User Group] groupId :', groupId);
 
         // 새로운 그룹 멤버 삽입
         for (const member of groupMembers) {
@@ -353,7 +357,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
 const ModifyUserGroup = GroupFormSchema.omit({});
 
 export async function modifyUserGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
-    console.log('modifyUserGroup Group / formData :', formData);
+    // console.log('modifyUserGroup Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
         schedulePeriod: formData.get('schedule_period'),
@@ -423,31 +427,56 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
             `, [groupID, member]);
         }
 
+        // Get current group manager ----------------------------------------------
         const currentMangerData = await client.query(`
             SELECT
                 member_id id
             FROM tbl_group_member_info
-            WHERE group_id='${groupID}
-            AND member_type='admin
+            WHERE group_id='${groupID}'
+            AND member_type='admin'
         `);
+
         const currentManager = currentMangerData.rows.length > 0 ? 
             currentMangerData.rows[0].id : "";
+
+        // console.log('Current Manager : ', currentManager);
+        // console.log('New Manager : ', groupManager);
+
         if(currentManager !== groupManager) {
+            // Remove current group manager ----------------------------------------------
             if(currentManager !== "") {
                 await client.query(`
                     DELETE FROM tbl_group_member_info
                     WHERE group_id='${groupID}'
-                    AND memeber_id='${currentManager}'
+                    AND member_id='${currentManager}'
                 `)
             }
             if(groupManager !== "") {
-                await client.query(`
-                    INSERT INTO tbl_group_member_info (
-                        group_id,
-                        member_id,
-                        memeber_type
-                    ) VALUES ('${groupID}', '${groupManager}', 'admin')
+                // Check if new group manager is in this group -------------------------
+                const isMember = await client.query(`
+                    SELECT COUNT(*)
+                    FROM tbl_group_member_info
+                    WHERE group_id='${groupID}'
+                    AND member_id='${groupManager}'
                 `)
+                if(isMember.rows[0].count > 0) {
+                    // New group manager is in this group -------------------------
+                    await client.query(`
+                        UPDATE tbl_group_member_info
+                        SET member_type='admin'
+                        WHERE group_id='${groupID}'
+                        AND member_id='${groupManager}'
+                    `)
+                } else {
+                    // New group manager is not in this group -------------------------
+                    await client.query(`
+                        INSERT INTO tbl_group_member_info (
+                            group_id,
+                            member_id,
+                            member_type
+                        ) VALUES ('${groupID}', '${groupManager}', 'admin')
+                    `)
+                }
             }
         }
 
@@ -470,7 +499,7 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: GroupS
 const CreateSecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function createSecurityGroup(client: Pool, prevState: GroupState, formData: FormData) {
-    console.log('CreateSecurityGroup / formData :', formData);
+    // console.log('CreateSecurityGroup / formData :', formData);
     const validatedFields = CreateSecurityGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -569,7 +598,7 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
 const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
 export async function modifySecurityGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
-    console.log('ModifySecurityGroup Group / formData :', formData);
+    // console.log('ModifySecurityGroup Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')
     });
@@ -647,17 +676,19 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
             SELECT
                 member_id id
             FROM tbl_group_member_info
-            WHERE group_id='${groupID}
-            AND member_type='admin
+            WHERE group_id='${groupID}'
+            AND member_type='admin'
         `);
+
         const currentManager = currentMangerData.rows.length > 0 ? 
             currentMangerData.rows[0].id : "";
+
         if(currentManager !== groupManager) {
             if(currentManager !== "") {
                 await client.query(`
                     DELETE FROM tbl_group_member_info
                     WHERE group_id='${groupID}'
-                    AND memeber_id='${currentManager}'
+                    AND member_id='${currentManager}'
                 `)
             }
             if(groupManager !== "") {
@@ -665,7 +696,7 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
                     INSERT INTO tbl_group_member_info (
                         group_id,
                         member_id,
-                        memeber_type
+                        member_type
                     ) VALUES ('${groupID}', '${groupManager}', 'admin')
                 `)
             }
@@ -688,7 +719,7 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: G
 
 // Delete group  ------------------------------------------------
 export async function deleteGroup(client: Pool, id: string) {
-    console.log('[actionsGroup] deleteGroup :', id);
+    // console.log('[actionsGroup] deleteGroup :', id);
     let category = "";
     try {
         await client.query("BEGIN"); // 트랜잭션 시작  
