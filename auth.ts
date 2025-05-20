@@ -32,6 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           const { user_name, user_password } = parsedCredentials.data;
 
           // console.log(`Credential : (id) ${user_name} / (pwd) ${user_password}`);
+          // if(user_name !== 'admin') {
           const adapter = MyDBAdapter();
           const userAttr = await adapter.getAccount(user_name);
           // console.log('Account : ', userAttr);
@@ -48,6 +49,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               role: userAttr.role ?? "user",
               image: ""
             };
+          // } else {
+          //   return {
+          //     id: '0001',
+          //     name: 'admin',
+          //     email: 'hyungsung@sindoh.com',
+          //     role: "admin",
+          //     image: ""
+          //   };
+          // }
         }
 
         console.log("Invalid credentials");

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { IButtonInfo, ISection } from '@/app/components/edit-items';
-import { EditForm } from '@/app/components/group/edit-form';
+import { ViewForm } from '@/app/components/group/view-form';
 import { UserForm } from '@/app/components/group/user-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import { IGroupSearch, IBreadCrums } from '@/app/lib/definitions';
@@ -82,15 +82,15 @@ export default async function Page(props: {
     } = {
         device: [
             { label: t("group.subTitle_device"), link: `/group/device` },
-            { label: `${t("group.group_edit")}`, link: `/group/device/${id}/edit` },
+            { label: `${t("group.group_view")}`, link: `/group/device/${id}/view` },
         ],
         user: [
             { label: t("group.subTitle_user"), link: `/group/user` },
-            { label: `${t("group.group_edit")}`, link: `/group/user/${id}/edit` },
+            { label: `${t("group.group_view")}`, link: `/group/user/${id}/view` },
         ],
         security: [
             { label: t("group.subTitle_security"), link: `/group/security` },
-            { label: `${t("group.group_edit")}`, link: `/group/security/${id}/edit` },
+            { label: `${t("group.group_view")}`, link: `/group/security/${id}/view` },
         ],
     };
 
@@ -194,12 +194,7 @@ export default async function Page(props: {
           },
         ],
       };
-    
-      const buttonItems: IButtonInfo = {
-        go: { title: t("common.apply") },
-        cancel: { title: t("common.cancel"), link: "/group/device" },
-      };
-    
+        
       return (
         <main>
           <Breadcrumbs
@@ -209,21 +204,18 @@ export default async function Page(props: {
                 href: groupBreadcrumbs[group][0].link,
               },
               {
-                label: `${t("group.group_edit")}`,
+                label: `${groupBreadcrumbs[group][1].label}`,
                 href: `${groupBreadcrumbs[group][1].link}`,
                 active: true,
               },
             ]}
           />
           {group === "device" && (
-            <EditForm
+            <ViewForm
               id={id}
               items={contentsItems.device}
-              buttons={buttonItems}
               translated={translated}
-              outGroup={outGroup}
               inGroup={inGroup}
-              action={adapter.modifyDeviceGroup}
             />
           )}
           {group === "user" && (
@@ -232,21 +224,19 @@ export default async function Page(props: {
               userData={data}
               locale={locale}
               translated={translated}
-              candidates={userOptions}
+              candidates={[]}
               outGroup={outGroup}
               inGroup={inGroup}
               action={adapter.modifyUserGroup}
+              editable={false}
             />
           )}
           {group === "security" && (
-            <EditForm
+            <ViewForm
               id={id}
               items={contentsItems.security}
-              buttons={buttonItems}
               translated={translated}
-              outGroup={outGroup}
               inGroup={inGroup}
-              action={adapter.modifySecurityGroup}
             />
           )}
         </main>

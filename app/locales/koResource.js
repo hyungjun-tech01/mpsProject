@@ -438,6 +438,7 @@ const koResource = {
             group_name: '그룹명',
             group_name_placeholder: '그룹 이름을 입력하세요',
             group_schedue_start: '출력 쿼터 할당 시작 시점',
+            group_view: '그룹 보기',
             none_group_members: '비그룹원',
             remain_amount: '잔액',
             schedule_amount: '지정 금액',

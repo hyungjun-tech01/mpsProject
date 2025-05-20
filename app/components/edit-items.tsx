@@ -14,7 +14,7 @@ export interface IEditItem {
   placeholder?: string;
   options?: { title: string; value: string | number; suffix?: string }[] | null;
   locale?: string;
-  error?: string[];
+  error?: string[] | null;
   chartData?: { xlabels: string[], ydata: number[], maxY: number };
   other?: React.JSX.Element;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
