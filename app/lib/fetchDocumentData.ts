@@ -10,6 +10,9 @@ export async function fetchFilteredDocumnets(
     itemsPerPage: number,
     currentPage: number
 ) {
+
+    console.log('fetchFilteredDocumnets user_id', user_id);
+
     const offset = (currentPage - 1) * itemsPerPage;
     try{
         const docs = await client.query(`
@@ -27,8 +30,8 @@ export async function fetchFilteredDocumnets(
             WHERE dj.printer_id = tdi.device_id
                 and dj.created_by = tui.user_id
                 and dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
-                ${user_id === 'admin' ? "" : "AND ( dj.created_by = '" + user_id
-                    + "' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info  WHERE shared_to = '"
+                ${user_id === 'admin' ? "" : "AND ( tui.user_name = '" + user_id
+                    + "' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info tdsi, tbl_user_info t  WHERE tdsi.shared_to = t.user_id and t.user_name ='"
                     + user_id + "'))"}
                 ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             ORDER BY dj.created_date DESC
