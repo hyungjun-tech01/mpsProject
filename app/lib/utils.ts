@@ -141,3 +141,40 @@ export const generateStrOf30Days = () => {
   }
   return xData;
 };
+
+export const formatDateForPerMonth = (value: number, locale: string) => {
+  if(locale === "en") {
+    if(value == 1)
+      return '1st';
+    else if(value == 2)
+      return '2nd';
+    else if(value == 3)
+      return '3rd';
+    else
+      return value + 'th';
+  } else {
+    return value + ' 일';
+  }
+}
+
+export const formatDateForPerYear = (value: number, locale: string) => {
+  const tempDate = new Date();
+  tempDate.setMonth(Math.floor(value/100) - 1);
+  tempDate.setDate(value%100);
+
+  let check_locale = "";
+  switch (locale) {
+    case "en":
+      check_locale = "en-US";
+      break;
+    default:
+      check_locale = "ko-KR";
+      break;
+  }
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+  };
+  const formatter = new Intl.DateTimeFormat(check_locale, options);
+  return formatter.format(tempDate);
+}

@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 
-import { IButtonInfo, ISection } from '@/app/components/edit-items';
+import { ISection } from '@/app/components/edit-items';
 import { ViewForm } from '@/app/components/group/view-form';
-import { UserForm } from '@/app/components/group/user-form';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import { IGroupSearch, IBreadCrums } from '@/app/lib/definitions';
+import { formatCurrency, formatDateForPerMonth, formatDateForPerYear } from '@/app/lib/utils';
 import getDictionary from "@/app/locales/dictionaries";
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
@@ -20,10 +20,8 @@ export default async function Page(props: {
     const group = params.group;
     const id = params.id;
     const searchParams = await props.searchParams;
-    const queryOutGroup = searchParams?.queryOutGroup || '';
     const queryInGroup = searchParams?.queryInGroup || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
-    const currentOutPage = Number(searchParams?.outGroupPage) || 1;
     const currentInPage = Number(searchParams?.inGroupPage) || 1;
     const session = await auth();
 
@@ -37,23 +35,11 @@ export default async function Page(props: {
     const [
         t,
         data,
-        outGroupData,
-        outGroupTotalPages,
         inGroupData,
         inGroupTotalPages,
     ] = await Promise.all([
         getDictionary(locale),
-        adapter.getAllUsers(),
-        group === "user"
-            ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-            : group === "device"
-                ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-                : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
-        group === "user"
-            ? adapter.getUsersNotInGroupPages(queryOutGroup, itemsPerPage)
-            : group === "device"
-                ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
-                : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
+        adapter.getGroupInfoById(id, group),
         group === "user"
             ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
             : group === "device"
@@ -66,14 +52,7 @@ export default async function Page(props: {
                 : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
     ]);
 
-    const outGroup = { paramName: 'outGroupPage', totalPages: outGroupTotalPages, members: outGroupData };
     const inGroup = { paramName: 'inGroupPage', totalPages: inGroupTotalPages, members: inGroupData };
-
-    // Tabs ----------------------------------------------------------------------
-    // const subTitles = [
-    //     { category: 'edit', title: t('group.group_details'), link: `/group/${group}/${id}/edit` },
-    //     { category: 'members', title: t('group.group_members'), link: `/group/${group}/${id}/members` },
-    // ];
 
     const groupBreadcrumbs: {
         device: IBreadCrums[];
@@ -128,117 +107,224 @@ export default async function Page(props: {
         search_placeholder_in_nonegroup: t("group.search_placeholder_in_nonegroup"),
     };
 
-    const contentsItems: { device: ISection[]; security: ISection[] } = {
+    const translated_period = {
+        NONE: translated.none,
+        PER_DAY: translated.per_day,
+        PER_WEEK: translated.per_week,
+        PER_MONTH: translated.per_month,
+        PER_YEAR: translated.per_year,
+    };
+
+    const translated_week = {
+        '0': translated.sunday,
+        '1': translated.monday,
+        '2': translated.tuesday,
+        '3': translated.wednesday,
+        '4': translated.thursday,
+        '5': translated.friday,
+        '6': translated.saturday,
+    }
+
+    const contentsItems: { device: ISection[]; user: ISection[]; security: ISection[] } = {
         device: [
-          {
-            title: t("common.generals"),
-            description: [t("comment.group_edit_group_name")],
-            items: [
-              {
-                name: "group_name",
-                title: t("group.group_name"),
-                type: "label",
-                defaultValue: data.group_name,
-              },
-              {
-                name: "group_notes",
-                title: t("common.note"),
-                type: "label",
-                defaultValue: data.group_notes,
-              },
-            ],
-          },
-          {
-            title: t("group.group_manager"),
-            description: [],
-            items: [
-              {
-                name: "group_manager",
+            {
+                title: t("common.generals"),
+                description: [t("comment.group_edit_group_name")],
+                items: [
+                    {
+                        name: "group_name",
+                        title: t("group.group_name"),
+                        type: "label",
+                        defaultValue: data.group_name,
+                    },
+                    {
+                        name: "group_notes",
+                        title: t("common.note"),
+                        type: "label",
+                        defaultValue: data.group_notes,
+                    },
+                ],
+            },
+            {
                 title: t("group.group_manager"),
-                type: "label",
-                defaultValue: manager,
-              },
-            ],
-          },
+                description: [],
+                items: [
+                    {
+                        name: "group_manager",
+                        title: t("group.group_manager"),
+                        type: "label",
+                        defaultValue: manager,
+                    },
+                ],
+            },
+        ],
+        user: [
+            {
+                title: t("common.generals"),
+                description: [t("comment.group_edit_group_name")],
+                items: [
+                    {
+                        name: "group_name",
+                        title: t("group.group_name"),
+                        type: "label",
+                        defaultValue: data.group_name,
+                    },
+                    {
+                        name: "group_notes",
+                        title: t("common.note"),
+                        type: "label",
+                        defaultValue: data.group_notes,
+                    },
+                ],
+            }
         ],
         security: [
-          {
-            title: t("common.generals"),
-            description: [t("comment.group_edit_group_name")],
-            items: [
-              {
-                name: "group_name",
-                title: t("group.group_name"),
-                type: "label",
-                defaultValue: data.group_name,
-              },
-              {
-                name: "group_notes",
-                title: t("common.note"),
-                type: "label",
-                defaultValue: data.group_notes,
-              },
-            ],
-          },
-          {
-            title: t("group.group_manager"),
-            description: [],
-            items: [
-              {
+            {
+                title: t("common.generals"),
+                description: [t("comment.group_edit_group_name")],
+                items: [
+                    {
+                        name: "group_name",
+                        title: t("group.group_name"),
+                        type: "label",
+                        defaultValue: data.group_name,
+                    },
+                    {
+                        name: "group_notes",
+                        title: t("common.note"),
+                        type: "label",
+                        defaultValue: data.group_notes,
+                    },
+                ],
+            },
+            {
+                title: t("group.group_manager"),
+                description: [],
+                items: [
+                    {
+                        name: "group_manager",
+                        title: t("group.group_manager"),
+                        type: "label",
+                        defaultValue: manager,
+                    },
+                ],
+            },
+        ],
+    };
+
+    const userSubItem = [
+        {
+            name: "schedule_period",
+            title: t("group.schedule_period"),
+            type: "label",
+            defaultValue: translated_period[data.schedule_period],
+        }
+    ];
+    if(data.schedule_period === 'PER_WEEK') {
+        userSubItem.push({
+            name: "schedule_start",
+            title: t("group.group_schedue_start"),
+            type: "label",
+            defaultValue: translated_week[data.schedule_start],
+        })
+    };
+    if(data.schedule_period === 'PER_MONTH') {
+        userSubItem.push({
+            name: "schedule_start",
+            title: t("group.group_schedue_start"),
+            type: "label",
+            defaultValue: formatDateForPerMonth(data.schedule_start, locale),
+        })
+    };
+    if(data.schedule_period === 'PER_YEAR') {
+        userSubItem.push({
+            name: "schedule_start",
+            title: t("group.group_schedue_start"),
+            type: "label",
+            defaultValue: formatDateForPerYear(data.schedule_start, locale),
+        })
+    };
+    userSubItem.push({
+        name: "schedule_amount",
+        title: t("group.schedule_amount"),
+        type: "label",
+        defaultValue: formatCurrency(data.schedule_amount, locale),
+    });
+    userSubItem.push({
+        name: "remain_amount",
+        title: t("group.remain_amount"),
+        type: "label",
+        defaultValue: formatCurrency(data.remain_amount, locale),
+    });
+
+    contentsItems.user.push({
+        title: t("group.schedule_quota"),
+        description: [t("comment.group_edit_quota")],
+        items: userSubItem,
+    });
+
+    contentsItems.user.push({
+        title: t("group.group_manager"),
+        description: [],
+        items: [
+            {
                 name: "group_manager",
                 title: t("group.group_manager"),
                 type: "label",
                 defaultValue: manager,
-              },
-            ],
-          },
+            },
         ],
-      };
-        
-      return (
+    },)
+
+    return (
         <main>
-          <Breadcrumbs
-            breadcrumbs={[
-              {
-                label: groupBreadcrumbs[group][0].label,
-                href: groupBreadcrumbs[group][0].link,
-              },
-              {
-                label: `${groupBreadcrumbs[group][1].label}`,
-                href: `${groupBreadcrumbs[group][1].link}`,
-                active: true,
-              },
-            ]}
-          />
-          {group === "device" && (
-            <ViewForm
-              id={id}
-              items={contentsItems.device}
-              translated={translated}
-              inGroup={inGroup}
+            <Breadcrumbs
+                breadcrumbs={[
+                    {
+                        label: groupBreadcrumbs[group][0].label,
+                        href: groupBreadcrumbs[group][0].link,
+                    },
+                    {
+                        label: `${groupBreadcrumbs[group][1].label}`,
+                        href: `${groupBreadcrumbs[group][1].link}`,
+                        active: true,
+                    },
+                ]}
             />
-          )}
-          {group === "user" && (
+            {group === "device" && (
+                <ViewForm
+                    items={contentsItems.device}
+                    translated={translated}
+                    inGroup={inGroup}
+                />
+            )}
+            {/* {group === "user" && (
             <UserForm
               id={id}
               userData={data}
               locale={locale}
               translated={translated}
               candidates={[]}
-              outGroup={outGroup}
+              outGroup={[]}
               inGroup={inGroup}
               action={adapter.modifyUserGroup}
               editable={false}
             />
-          )}
-          {group === "security" && (
-            <ViewForm
-              id={id}
-              items={contentsItems.security}
-              translated={translated}
-              inGroup={inGroup}
-            />
-          )}
+          )} */}
+            {group === "user" && (
+                <ViewForm
+                    items={contentsItems.user}
+                    translated={translated}
+                    inGroup={inGroup}
+                />
+            )}
+            {group === "security" && (
+                <ViewForm
+                    items={contentsItems.security}
+                    translated={translated}
+                    inGroup={inGroup}
+                />
+            )}
         </main>
-      );
+    );
 }

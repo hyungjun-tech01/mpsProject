@@ -1,29 +1,195 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Menu, MenuItem } from '@mui/material';
+import { SearchOutlined } from '@mui/icons-material';
 import { IEditItem, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup, UserGroup } from "@/app/lib/definitions";
 import Search from "../search";
 import Pagination from '../pagination';
 
 export function ViewForm({
-  id,
   items,
   translated,
   inGroup,
 }: {
-  id: string;
   items: ISection[];
   translated: object;
   inGroup: {
     paramName: string;
     totalPages: number;
     members: DeviceGroup[] | SecurityGroup[];
-  } | null;
+  };
 }) {
-  const [group, setGroup] = useState<
-    (DeviceGroup | UserGroup | SecurityGroup)[]
-  >([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(anchorEl);
+  const handleMenuOpenInGroup = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    const foundIdx = inGroup.members.findIndex(member => member.id === event.currentTarget.id);
+        if(foundIdx !== -1) {
+            setShownMember(inGroup.members[foundIdx]);
+        }
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setShownMember(null);
+  };
+  const menuId = 'member-detail-menu';
+  const [shownMember, setShownMember] = useState<null | DeviceGroup | SecurityGroup | UserGroup>(null);
+
+  const renderMenu = () => {
+    if (!shownMember) return null;
+    if ('device_type' in shownMember) {
+      return (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Name : </span>
+              <span className='text-gray-600'>{shownMember.name}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Model : </span>
+              <span className='text-gray-600'>{shownMember.device_model}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Type : </span>
+              <span className='text-gray-600'>{shownMember.device_type}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Device Funtion : </span>
+              <span className='text-gray-600'>{shownMember.ext_device_function}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Physical Device ID : </span>
+              <span className='text-gray-600'>{shownMember.physical_device_id}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Serial No. : </span>
+              <span className='text-gray-600'>{shownMember.serial_number}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Device Status : </span>
+              <span className='text-gray-600'>{shownMember.device_status}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Deleted : </span>
+              <span className='text-gray-600'>{shownMember.deleted}</span>
+            </div>
+          </MenuItem>
+        </Menu>
+      )
+    } else if ('full_name' in shownMember) {
+      return (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>User Name : </span>
+              <span className='text-gray-600'>{shownMember.user_name}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Full Name : </span>
+              <span className='text-gray-600'>{shownMember.full_name}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Balance : </span>
+              <span className='text-gray-600'>{shownMember.balance}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Restricted : </span>
+              {/*<span className='text-gray-600'>{shownMember.restricted}</span>*/}
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Total Pages : </span>
+              <span className='text-gray-600'>{shownMember.total_pages}</span>
+            </div>
+          </MenuItem>
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Total Jobs : </span>
+              <span className='text-gray-600'>{shownMember.total_jobs}</span>
+            </div>
+          </MenuItem>
+        </Menu>
+      )
+    } else if ('dept_name' in shownMember) {
+      return (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem>
+            <div>
+              <span className='mr-3 font-medium'>Dept Name : </span>
+              <span className='text-gray-600'>{shownMember.dept_name}</span>
+            </div>
+          </MenuItem>
+        </Menu>
+      )
+    }
+    return null;
+  };
+
   return (
     <div className="rounded-md bg-gray-50 p-4 md:p-4">
       {items.map((sec: ISection, idx) => {
@@ -74,16 +240,6 @@ export function ViewForm({
           </div>
         );
       })}
-      {/* <Grouping
-        title={translated.title_grouping}
-        noneGroupMemberTitle={translated.none_group_member}
-        noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
-        groupMemberTitle={translated.group_member}
-        groupSearchPlaceholder={translated.search_placeholder_in_group}
-        outGroup={outGroup}
-        inGroup={inGroup}
-        editable={editable}
-      /> */}
       <div className={"w-full p-2 mb-4 flex md: flex-col"}>
         <div className="w-full">
           <div className="mb-5 text-xl font-semibold">
@@ -98,51 +254,26 @@ export function ViewForm({
             {!!inGroup && (
               <div className="flex-none">
                 <Search
-                  pageName="pageOutGroup"
-                  queryName="queryOutGroup"
+                  pageName="pageInGroup"
+                  queryName="queryInGroup"
                   placeholder={translated.search_placeholder_in_group}
                 />
               </div>
             )}
             <div className="grow p-2 border rounded-lg bg-white flex-col overflow-auto">
-              {group.map((member, idx) => {
+              {inGroup.members.map((member, idx) => {
                 const memberName = "member_" + idx;
-                if (!!selectedInGroup && selectedInGroup.id === member.id) {
-                  return (
-                    <div key={idx} className="flex justify-between">
-                      <div
-                        id={`name@${member.id}`}
-                        className="bg-lime-700 text-white font-normal pl-1 rounded-l w-full cursor-default"
-                        onClick={handleSelectInGroup}
-                      >
-                        {member.name}
-                      </div>
-                      {/* <SearchOutlined
-                        id={member.id}
-                        className="bg-lime-700 rounded-r"
-                        onClick={handleMenuOpenInGroup}
-                      /> */}
-                      <input
-                        key={member.id}
-                        type="hidden"
-                        name={memberName}
-                        value={member.id}
-                      />
-                    </div>
-                  );
-                } else {
                   return (
                     <div key={idx} className="flex justify-between">
                       <div
                         id={`name@${member.id}`}
                         className="bg-white text-black font-light pl-1 cursor-default"
-                        onClick={handleSelectInGroup}
                       >
                         {member.name}
                       </div>
                       <SearchOutlined
                         id={member.id}
-                        className="bg-white"
+                        className="bg-white hover:cursor-pointer"
                         onClick={handleMenuOpenInGroup}
                       />
                       <input
@@ -152,9 +283,8 @@ export function ViewForm({
                       />
                     </div>
                   );
-                }
               })}
-              <input type="hidden" name="member_length" value={group.length} />
+              <input type="hidden" name="member_length" value={inGroup.members.length} />
             </div>
           </div>
         </div>
@@ -174,6 +304,7 @@ export function ViewForm({
           </div>
         </div>
       </div>
+      { renderMenu() }
     </div>
   );
 }

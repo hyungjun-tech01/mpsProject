@@ -353,7 +353,7 @@ export default function Grouping({
                 <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
                     <div className='flex-none pl-2 font-semibold'>{groupMemberTitle}</div>
                     {!!inGroup && <div className='flex-none'>
-                            <Search pageName='pageOutGroup' queryName='queryOutGroup' placeholder={groupSearchPlaceholder} />
+                            <Search pageName='pageInGroup' queryName='queryInGroup' placeholder={groupSearchPlaceholder} />
                         </div>
                     }
                     <div className='grow p-2 border rounded-lg bg-white flex-col overflow-auto'>

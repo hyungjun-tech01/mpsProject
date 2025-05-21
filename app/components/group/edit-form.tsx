@@ -23,7 +23,7 @@ export function EditForm({
   buttons?: IButtonInfo;
   translated: object;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
-  inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
+  inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   action: (
     id: string | undefined,
     prevState: GroupState,
