@@ -5,7 +5,8 @@ import {
     PeopleOutline,
     PlagiarismOutlined,
     Inventory2Outlined,
-    ArticleOutlined
+    ArticleOutlined,
+    SettingsOutlined
 } from '@mui/icons-material';
 
 
@@ -18,6 +19,7 @@ export const SideMenuList = {
         { name: 'group', title: '그룹', href: '/group/device', icon: PeopleOutline },
         { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
         { name: 'logs', title: '로그', href: '/logs/auditlogs', icon: PlagiarismOutlined },
+        { name: 'settings', title: '설정', href: '/settings/registerUsers', icon: SettingsOutlined },
     ],
     manager: [
         { name: 'dashboard', title: '대쉬보드', href: '/', icon: SpaceDashboardOutlined },
