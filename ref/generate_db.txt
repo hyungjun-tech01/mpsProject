@@ -3124,3 +3124,53 @@ insert into tbl_dept_info
 (dept_name
 )
 values('재경부');
+
+-- 2025.05.22  tbl_user_info_if 사용자 정보 인터페이스 테이블
+
+DROP table if exists tbl_user_info_if;
+CREATE TABLE tbl_user_info_if (
+	user_info_if_id     varchar(36)    NOT NULL default uuid_generate_v4() primary key,        
+	user_name           varchar(255)   not null,
+	external_user_name  varchar(255 )  not null,   
+	full_name           varchar(255),   
+	email               varchar(255),
+	notes               varchar(2000),
+	created_date        timestamp      not null,	
+	created_by          varchar(255),
+    user_source_type    varchar(10)    not null,    
+	modified_date       timestamp,	
+	modified_by         varchar(255),
+	department          varchar(200),
+	office              varchar(200),
+	card_number         varchar(100),
+	card_number2        varchar(100),
+	home_directory      varchar(255),
+    priviliege          varchar(100),
+    if_status           varchar(10)    not null,  -- INPUT, SUCCESS, ERROR
+    if_message          varchar(4000)
+
+);
+
+-- 2025.05.22  tbl_security_value_info 정규식, 보안단어 관리
+DROP table if exists tbl_security_value_info;
+CREATE TABLE tbl_security_value_info(
+    security_value_id     varchar(36)   NOT NULL default uuid_generate_v4() ,     
+    security_name         varchar(255)  primary key,  
+    security_type         varchar(255)  not null,  
+    security_word         varchar(255)  not null,  
+    created_by            varchar(255),
+    creation_date         timestamp	  
+
+);
+
+-- 2025.05.22  tbl_application_log  화면사용로그
+DROP table if exists tbl_application_log;
+CREATE TABLE tbl_application_log(
+    application_log_id      varchar(36 ),           
+    application_page        varchar(255),        
+    application_action      varchar(255),        
+    application_parameter   text	    ,        
+    created_by              varchar(255),
+    log_date                timestamp	
+
+);
