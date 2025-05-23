@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
-import { CreateButton } from '@/app/components/buttons';
-import { TableSkeleton } from "@/app/components/skeletons";
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
@@ -64,9 +62,16 @@ export default async function Page(props: {
     // Columns -------------------------------------------------------------------
     const processColumns : { registerUsers: IColumnData[] } = {
         registerUsers: [
-            { name: 'group_name', title: t('group.group_name'), align: 'center' },
-            { name: 'device_count', title: t('group.device_count'), align: 'center' },
-            { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
+            { name: 'user_name', title: t('user.user_id'), align: 'center' },
+            { name: 'full_name', title: t('user.user_name'), align: 'center' },
+            { name: 'user_email', title: t('common.email'), align: 'center' },
+            { name: 'home_directory', title: t('user.home_directory'), align: 'center' },
+            { name: 'department', title: t('user.department'), align: 'center' },
+            { name: 'card_number', title: t('user.card_number'), align: 'center' },
+            { name: 'card_number2', title: t('user.card_number2'), align: 'center' },
+            { name: 'created', title: t('common.created'), align: 'center' },
+            { name: 'create_method', title: t('common.create_method'), align: 'center' },
+            { name: 'message', title: t('common.message'), align: 'left' },
         ]
     };
 
@@ -84,6 +89,8 @@ export default async function Page(props: {
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
                     <Search placeholder={""} />
+                    <label htmlFor="upload csv">{t("user.import_csv_file")}</label>
+                    <input type="file" id="upload_csv" name="upload_csv" accept="text/csv" />
                 </div>
                 {/* <Suspense fallback={<TableSkeleton />}>
                     <Table

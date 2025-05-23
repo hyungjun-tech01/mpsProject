@@ -227,15 +227,6 @@ const enResource = {
             contract_type:'Contract Type',
             end_date:'End Date',
         },
-        taxinvoice:{
-            add_taxinvoice :'Add Invoice',
-            memo : 'Invoice Memo',
-            information: 'Tax Inovice Information',
-            invoice_contents:'Invoice Contents',
-            summary:'Summary',
-            taxinvoice_manage: 'Manage (Tax) Invoice',
-            taxinvoice_multi_query:'Invoice Multi Query',
-        },
         common:{
             account: 'Account',
             actions: 'Actions',
@@ -252,6 +243,7 @@ const enResource = {
             card_no: 'Card No.',
             cash: 'Cash',
             category: 'Category',
+            create_method: 'Create Method',
             create_user:'Created by',
             created: 'Creation Date',
             color: 'Color',
@@ -406,6 +398,7 @@ const enResource = {
             placeholder_user_name : "Enter User's ID",
             placeholder_password_new : "Enter new password",
             placeholder_password_new_again : "Enter new password again",
+            import_csv_file: "Import CSV file",
         },
         account: {
             balance:'Balance',

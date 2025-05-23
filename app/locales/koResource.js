@@ -228,15 +228,6 @@ const koResource = {
             contract_type:'계약종류',
             end_date:'종료일',
         },
-        taxinvoice:{
-            add_taxinvoice :'세금계산서 등록',
-            memo : '계산서메모',
-            information: '세금계산서 정보',
-            invoice_contents:'계산서내용',
-            summary:'계산서요약',
-            taxinvoice_manage: '(세금)계산서 관리',
-            taxinvoice_multi_query:'계산서 다중검색',
-        },
         common:{
             account: '계정',
             actions: 'Action',
@@ -254,6 +245,7 @@ const koResource = {
             card_no: '카드번호',
             cash: '현금',
             category: '분류',
+            create_method: '생성 방법',
             create_user:'생성자',
             created:'생성일',
             color: '색상',
@@ -408,6 +400,7 @@ const koResource = {
             placeholder_user_name : "사용자의 ID를 입력하세요",
             placeholder_password_new : "새 비밀번호를 입력하세요",
             placeholder_password_new_again : "새 비밀번호를 다시 입력하세요",
+            import_csv_file: "CSV 파일 불러오기기",
         },
         account: {
             balance:'잔액',
