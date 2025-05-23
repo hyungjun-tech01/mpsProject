@@ -506,6 +506,9 @@ const enResource = {
             print_all: 'Print All',
             print_checked: 'Print Checked',
             waiting_list: 'Documents In Spool',
+        },
+        settings: {
+            registerUsers: 'Batch Register Users',
         }
     },
 }

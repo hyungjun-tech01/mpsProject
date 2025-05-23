@@ -555,6 +555,9 @@ const koResource = {
             print_all: '모두 출력',
             print_checked: '선택 출력',
             waiting_list: '대기 중인 출력 대기 목록',
+        },
+        settings: {
+            registerUsers: '일괄 사용자 등록',
         }
     },
 }
