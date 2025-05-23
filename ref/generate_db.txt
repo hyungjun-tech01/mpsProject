@@ -3145,7 +3145,7 @@ CREATE TABLE tbl_user_info_if (
 	card_number         varchar(100),
 	card_number2        varchar(100),
 	home_directory      varchar(255),
-    priviliege          varchar(100),
+    privilege          varchar(100),
     if_status           varchar(10)    not null,  -- INPUT, SUCCESS, ERROR
     if_message          varchar(4000)
 
