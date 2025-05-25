@@ -400,7 +400,7 @@ const koResource = {
             placeholder_user_name : "사용자의 ID를 입력하세요",
             placeholder_password_new : "새 비밀번호를 입력하세요",
             placeholder_password_new_again : "새 비밀번호를 다시 입력하세요",
-            import_csv_file: "CSV 파일 불러오기기",
+            import_csv_file: "CSV 파일 불러오기",
         },
         account: {
             balance:'잔액',
@@ -550,7 +550,7 @@ const koResource = {
             waiting_list: '대기 중인 출력 대기 목록',
         },
         settings: {
-            registerUsers: '일괄 사용자 등록',
+            registerUsers: '사용자 일괄 등록',
         }
     },
 }

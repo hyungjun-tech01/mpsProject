@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
+import { FileUpload } from '@/app/components/settings/file-upload-form';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
@@ -46,19 +47,6 @@ export default async function Page(props: {
         { category: 'registerUsers', title: t('settings.registerUsers'), link: `/settings/registerUsers` },
     ];
 
-    // Search Text ---------------------------------------------------------------------
-    // const groupTexts = {
-    //     registerUsers : {
-    //         keySearchPlaceholder : t('group.search_placehodler_device'),
-    //     },
-    //     user : {
-    //         keySearchPlaceholder : t('group.search_placehodler_user'),
-    //     },
-    //     security : {
-    //         keySearchPlaceholder : t('group.search_placehodler_security'),
-    //     }
-    // };
-
     // Columns -------------------------------------------------------------------
     const processColumns : { registerUsers: IColumnData[] } = {
         registerUsers: [
@@ -87,10 +75,19 @@ export default async function Page(props: {
             })}
             </div>
             <div className="w-full px-4 bg-gray-50 rounded-md">
-                <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
-                    <Search placeholder={""} />
-                    <label htmlFor="upload csv">{t("user.import_csv_file")}</label>
-                    <input type="file" id="upload_csv" name="upload_csv" accept="text/csv" />
+                <div className="pt-4 flex flex-col gap-2 md:pt-8">
+                    <div className="flex items-center justify-between gap-4">
+                        <label htmlFor="upload csv">{t("user.import_csv_file")}</label>
+                        <input type="file" id="upload_csv" name="upload_csv" accept=".csv" />
+                    </div>
+                    <FileUpload 
+                        title={t('user.import_csv_file')}
+                        accepted=".csv" 
+                        action={adapter.batchCreateUser}
+                    />
+                    <div className="pt-4 flex items-center justify-between gap-2">
+                        <Search placeholder={""} />
+                    </div>
                 </div>
                 {/* <Suspense fallback={<TableSkeleton />}>
                     <Table

@@ -428,7 +428,7 @@ export default function MyDBAdapter() {
             return Log.fetchUsageStatusByUser(pool, userName);
         },
 
-        // ----- Print Spoool --------------------------------------
+        // ----- Print Spool --------------------------------------
         async getFilteredPrintSpoolPages(userName: string, itemsPerPage: number) {
             return Print.fetchFilteredPrintSpoolPages(pool, userName, itemsPerPage);
         },
@@ -442,6 +442,12 @@ export default function MyDBAdapter() {
         async printSelectedPrint(list: string[]) {
             'use server';
             return PrintAction.printSelected(pool, list);
-        }
+        },
+
+        // ----- Setting ------------------------------------------
+        async batchCreateUser(prevState: UserState, formData: FormData) {
+            'use server';
+            return Action.batchCreateUser(pool, prevState, formData);
+        },
     }
 }
