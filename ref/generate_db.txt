@@ -3163,9 +3163,9 @@ CREATE TABLE tbl_security_value_info(
 
 );
 
--- 2025.05.22  tbl_application_log  화면사용로그
-DROP table if exists tbl_application_log;
-CREATE TABLE tbl_application_log(
+-- 2025.05.22  tbl_application_log_info  화면사용로그
+DROP table if exists tbl_application_log_info;
+CREATE TABLE tbl_application_log_info(
     application_log_id      varchar(36 ),           
     application_page        varchar(255),        
     application_action      varchar(255),        
