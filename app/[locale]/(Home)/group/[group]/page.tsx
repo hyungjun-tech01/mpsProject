@@ -12,6 +12,7 @@ import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 import clsx from 'clsx';
 
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 export const metadata: Metadata = {
     title: 'Group',
@@ -48,7 +49,24 @@ export default async function Page(props: {
             : adapter.getFilteredGroupsByManagerPages(userId, query, group, itemsPerPage),
         isAdmin ? adapter.getFilteredGroups(query, group, itemsPerPage, currentPage, locale)
             : adapter.getFilteredGroupsByManager(userId, query, group, itemsPerPage, currentPage, locale),
+        
     ]);
+
+    ///// application log ----------------------------------------------------------------------
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
+
+    const logData = new FormData();
+    logData.append('application_page', 'group');
+    logData.append('application_action', 'Query');
+    logData.append('application_parameter', group +':' +query );
+    logData.append('created_by', userName);
+    adapter.applicationLog(logData);
+    ///// application log ----------------------------------------------------------------------
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [

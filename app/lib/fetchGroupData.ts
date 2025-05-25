@@ -1,6 +1,11 @@
 import type { Pool } from "pg";
 
 
+//const [applicationLog] = await Promise.all([
+
+   
+//]);
+
 const convertSchedulePeriod = {
     en: {
         NONE: 'N/A',
@@ -28,6 +33,9 @@ export async function fetchFilteredGroups(
     currentPage: number,
     locale: string
 ) {
+
+    console.log("==========fetchFilteredGroups=======");
+
     const offset = (currentPage - 1) * itemsPerPage;
     let queryString = "";
 
@@ -95,6 +103,9 @@ export async function fetchFilteredGroups(
         throw new Error("Wrong Group Type");
     }
 
+;
+
+
     try {
         const resp = await client.query(queryString);
         if(groupType === 'user') {
@@ -104,10 +115,18 @@ export async function fetchFilteredGroups(
                     schedule_period: convertSchedulePeriod[locale][item.schedule_period],
                 }    
             });
+
+
+
             return converted;
         } else {
+
             return resp.rows;
         }
+
+        
+      //  
+
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goups by group type");

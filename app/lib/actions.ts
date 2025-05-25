@@ -608,3 +608,32 @@ export async function batchCreateUser(client: Pool, prevState: UserState, formDa
 
 
 };
+
+export async function applicationLog(client: Pool,  formData: FormData)
+{
+    try {
+
+        const application_page = formData.get('application_page');
+        const application_action = formData.get('application_action');
+        const application_parameter = formData.get('application_parameter');
+        const created_by = formData.get('created_by');
+
+        await client.query(`
+            INSERT INTO tbl_application_log_info (
+                application_page,        
+                application_action,        
+                application_parameter,        
+                created_by,
+                log_date
+            )
+            VALUES ($1,$2,$3,$4,now())`
+            , [application_page, application_action, application_parameter, created_by]);
+
+    } catch (error) {
+        console.log('application Log / Error : ', error);
+        return {
+            message: 'Database Error: Failed to Application Log.',
+        };
+    };
+
+}

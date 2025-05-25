@@ -13,6 +13,8 @@ import { TableSkeleton } from "@/app/components/skeletons";
 import { auth } from "@/auth"
 import { Circle } from "@mui/icons-material";
 
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
+
 
 export const metadata: Metadata = {
     title: 'Device',
@@ -46,8 +48,8 @@ export default async function Device(
     const session = await auth();
     // console.log('Session :', session);
     
-    if(!session?.user)
-        return notFound();
+    //if(!session?.user)
+    //    return notFound();
 
     const isAdmin = session?.user.role === 'admin';
     const userId = session?.user.id;
@@ -62,6 +64,21 @@ export default async function Device(
         isAdmin ? adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale) : null
     ]);
 
+     ///// application log ----------------------------------------------------------------------
+     const userName = session?.user.name ?? "";
+     if (!userName) {
+         // 여기서 redirect 함수를 사용해 리다이렉트 처리
+         redirect('/login'); // '/login'으로 리다이렉트
+         // notFound();
+     };
+ 
+     const logData = new FormData();
+     logData.append('application_page', 'device');
+     logData.append('application_action', 'Query');
+     logData.append('application_parameter', query );
+     logData.append('created_by', userName);
+     adapter.applicationLog(logData);
+     ///// application log ----------------------------------------------------------------------
     //console.log('Check : ', devices);
 
     const columns: IColumnData[] = [

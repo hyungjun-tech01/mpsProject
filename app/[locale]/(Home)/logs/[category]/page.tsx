@@ -10,6 +10,10 @@ import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
 
 
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
+import { auth } from "@/auth";
+
+
 export const metadata: Metadata = {
     title: 'Logs',
 }
@@ -23,6 +27,7 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    const session = await auth();
 
     const adapter = MyDBAdapter();
     const [t, /* printlogPages, printlogs, applogPages, applogs,*/ auditlogPages, auditlogs] = await Promise.all([
@@ -34,6 +39,23 @@ export default async function Page(props: {
         adapter.getFilteredAuditLogsPages(query, itemsPerPage),
         adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage)
     ]);
+
+    ///// application log ----------------------------------------------------------------------
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
+
+    const logData = new FormData();
+    logData.append('application_page', 'logs');
+    logData.append('application_action', 'Query');
+    logData.append('application_parameter', query );
+    logData.append('created_by', userName);
+    adapter.applicationLog(logData);
+    ///// application log ----------------------------------------------------------------------
+    
     const subTitles = [
      //   { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },
      //   { category: 'applogs', title: t('logs.applogs'), link: `/logs/applogs` },

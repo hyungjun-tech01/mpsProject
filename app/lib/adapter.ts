@@ -449,5 +449,11 @@ export default function MyDBAdapter() {
             'use server';
             return Action.batchCreateUser(pool, prevState, formData);
         },
+
+        // ----- Application Log ----------------------------------
+        async applicationLog(formData: FormData) {
+            'use server';
+            return Action.applicationLog(pool,  formData);
+        },
     }
 }
