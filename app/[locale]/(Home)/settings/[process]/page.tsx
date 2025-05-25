@@ -76,12 +76,9 @@ export default async function Page(props: {
             </div>
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
-                    <div className="flex items-center justify-between gap-4">
-                        <label htmlFor="upload csv">{t("user.import_csv_file")}</label>
-                        <input type="file" id="upload_csv" name="upload_csv" accept=".csv" />
-                    </div>
                     <FileUpload 
                         title={t('user.import_csv_file')}
+                        buttonTitle={t('common.select_file')}
                         accepted=".csv" 
                         action={adapter.batchCreateUser}
                     />

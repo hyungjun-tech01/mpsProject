@@ -301,6 +301,7 @@ const enResource = {
             save: 'Save',
             search: 'Search',
             search_here :'Search Here',
+            select_file: 'Select File',
             site_id: 'Site ID',
             size: 'Size',
             standard: 'Standard',

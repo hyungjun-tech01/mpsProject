@@ -304,6 +304,7 @@ const koResource = {
             saturday: '토요일',
             save: '저장',
             search: '검색',
+            select_file: '파일 선택',
             site_id: 'Site ID',
             size: '크기',
             search_here :'검색 키워드',
