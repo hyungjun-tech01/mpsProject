@@ -604,7 +604,5 @@ export async function updateAccount(client: Pool, id: string, prevState: UserSta
 
 export async function batchCreateUser(client: Pool, prevState: UserState, formData: FormData)
 {
-
-
-
+    console.log('[batch] Create User - ', formData);
 };
