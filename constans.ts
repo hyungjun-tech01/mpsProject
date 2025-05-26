@@ -7,7 +7,8 @@ import {
     Inventory2Outlined,
     ArticleOutlined,
     SettingsOutlined,
-    PersonAddOutlined
+    PersonAddOutlined,
+    RuleOutlined
 } from '@mui/icons-material';
 
 
@@ -30,6 +31,11 @@ export const SideMenuList = {
                   title: '사용자 등록', 
                   href: '/settings/registerUsers' ,
                   icon: PersonAddOutlined  
+                },
+                { name: 'regularExprPrivateInfo', 
+                    title: '개인정보 정규식관리', 
+                    href: '/settings/regularExprPrivateInfo' ,
+                    icon: RuleOutlined   
                 },
             ]
         },

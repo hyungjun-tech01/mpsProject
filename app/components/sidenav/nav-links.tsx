@@ -148,7 +148,11 @@ export default function NavLinks({ extended }: { extended: boolean }) {
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
   const toggleSubmenu = (menuName: string) => {
-    setExpandedMenu(expandedMenu === menuName ? null : menuName);
+    if (menuName === 'settings') {
+      setExpandedMenu(expandedMenu === menuName ? null : menuName);
+    } else {
+      setExpandedMenu(null);  // 다른 메뉴 클릭 시 settings 메뉴 닫기
+    }
   };
 
   return (
@@ -167,7 +171,8 @@ export default function NavLinks({ extended }: { extended: boolean }) {
                 className={clsx(
                   "flex h-[48px] items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-base text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700 cursor-pointer",
                   {
-                    'bg-lime-100 text-lime-700': pathname === '/' ? link.name === "dashboard" : category === link.name,
+                    'bg-lime-100 text-lime-700': isExpanded && !link.submenu?.some(subItem => pathname.startsWith(subItem.href)),
+                    //'bg-lime-100 text-lime-700': pathname === '/' ? link.name === "dashboard" : category === link.name,
                     'grow md:flex-none md:justify-start md:p-2 md:px-3': extended,
                   }
                 )}
@@ -180,6 +185,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
             ) : (
               <Link
                 href={link.href}
+                onClick={() => setExpandedMenu(null)} 
                 className={clsx(
                   "flex h-[48px] items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-base text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
                   {
@@ -199,6 +205,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
               <div className="pl-8">
                 {link.submenu.map((subItem) => {
                   const SubItemIcon = subItem.icon;
+                  const isActive = pathname.startsWith(subItem.href);  // 이 부분 수정
                   return (
                     <Link
                       key={subItem.name}
@@ -206,10 +213,10 @@ export default function NavLinks({ extended }: { extended: boolean }) {
                       className={clsx(
                         "flex h-[40px] items-center gap-2 text-sm text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
                         {
-                          'bg-lime-100 text-lime-700': pathname === subItem.href
+                          'bg-lime-100 text-lime-700': isActive  // 이 부분 수정
                         }
                       )}
-                    >
+                    > 
                       <SubItemIcon className="w-5" />
                       {subItem.title}
                     </Link>
