@@ -53,7 +53,7 @@ export function FileUpload({
             <VisuallyHiddenInput
               type="file"
               name="upload_file"
-              onChange={(event) => console.log(event.target.files)}
+              // onChange={(event) => console.log(event.target.files)}
               accept={accepted}
             />
           </Button>
