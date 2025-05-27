@@ -4,6 +4,7 @@ import * as Group from "./fetchGroupData";
 import * as Device from "./fetchDeviceData";
 import * as Document from "./fetchDocumentData";
 import * as Log from "./fetchLogData";
+import * as RegularExp from "./fetchRegularExpPrivateInfoData";
 import type { UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
@@ -448,6 +449,12 @@ export default function MyDBAdapter() {
         async batchCreateUser(prevState: UserState, formData: FormData) {
             'use server';
             return Action.batchCreateUser(pool, prevState, formData);
+        },
+
+        // ---------------------------------------------------
+        async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
+
+            return RegularExp.getFilteredRegularExp(pool, query, itemsPerPage, currentPage);
         },
 
         // ----- Application Log ----------------------------------

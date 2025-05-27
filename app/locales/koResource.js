@@ -552,6 +552,8 @@ const koResource = {
         },
         settings: {
             registerUsers: '사용자 일괄 등록',
+            regularExprPrivateInfo:'개인정보 정규식 관리',
+            regularExprPrivateInfoQueryCondition: '이름, Values 로 조회하세요.'
         }
     },
 }
