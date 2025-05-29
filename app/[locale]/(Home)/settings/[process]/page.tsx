@@ -10,6 +10,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 import clsx from 'clsx';
+import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
@@ -38,8 +39,10 @@ export default async function Page(props: {
     if( session?.user.role !== 'admin') return notFound();
 
     const adapter = MyDBAdapter();
-    const [t] = await Promise.all([
-        getDictionary(locale)
+    const [t, settingData, settingDataPages] = await Promise.all([
+        getDictionary(locale),
+        adapter.getFilteredIFUsers(query, itemsPerPage, currentPage),
+        adapter.getFilteredIFUserPages(query, itemsPerPage)
     ]);
 
     // Tabs ----------------------------------------------------------------------
@@ -52,7 +55,7 @@ export default async function Page(props: {
         registerUsers: [
             { name: 'user_name', title: t('user.user_id'), align: 'center' },
             { name: 'full_name', title: t('user.user_name'), align: 'center' },
-            { name: 'user_email', title: t('common.email'), align: 'center' },
+            { name: 'email', title: t('common.email'), align: 'center' },
             { name: 'home_directory', title: t('user.home_directory'), align: 'center' },
             { name: 'department', title: t('user.department'), align: 'center' },
             { name: 'card_number', title: t('user.card_number'), align: 'center' },
@@ -74,7 +77,7 @@ export default async function Page(props: {
                     )}>{item.title}</Link>;
             })}
             </div>
-            <div className="w-full px-4 bg-gray-50 rounded-md">
+            <div className="w-full px-4 pb-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
                     <FileUpload 
                         title={t('user.import_csv_file')}
@@ -83,23 +86,27 @@ export default async function Page(props: {
                         accepted={{'text/plain': ['.csv']}} 
                         action={adapter.batchCreateUser}
                     />
-                    <div className="pt-4 flex items-center justify-between gap-2">
-                        <Search placeholder={""} />
-                    </div>
                 </div>
-                {/* <Suspense fallback={<TableSkeleton />}>
-                    <Table
-                        columns={groupColumns[group]}
-                        rows={groupData}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        path={`/group/${group}`}
-                        locale={locale}
-                        deleteAction={adapter.deleteGroup}
-                        editable={!!isAdmin}
-                        deletable={!!isAdmin}
-                    />
-                </Suspense> */}
+                {settingData.length > 0 && 
+                    <div className="pt-4 flex flex-col gap-2 md:pt-8">
+                        <div className="pt-4 flex items-center justify-between gap-2">
+                            <Search placeholder={""} />
+                        </div>
+                        <Suspense fallback={<TableSkeleton />}>
+                            <Table
+                                columns={processColumns[process]}
+                                rows={settingData}
+                                currentPage={currentPage}
+                                totalPages={settingDataPages}
+                                path="/"
+                                locale={locale}
+                                deleteAction={adapter.deleteGroup}
+                                checkable
+                                editable={false}
+                            />
+                        </Suspense>
+                    </div>
+                }
             </div>
         </div>
     );

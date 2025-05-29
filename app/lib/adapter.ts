@@ -74,6 +74,12 @@ export default function MyDBAdapter() {
             'use server';
             return Action.changeBalance(pool, id, prevState, formData);
         },
+        async getFilteredIFUsers(query:string, itemsPerPage: number, currentPage: number) {
+            return User.fetchFilteredIFUsers(pool, query, itemsPerPage, currentPage);
+        },
+        async getFilteredIFUserPages(query: string, itemsPerPage:number) {
+            return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
+        },
 
         // ----- Group ------------------------------------------
         async getFilteredGroups(

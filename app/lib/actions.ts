@@ -675,7 +675,7 @@ export async function batchCreateUser(
         };
       };
       if(!!records) {
-        console.log('CSV Parse / Data : ', records);
+        // console.log('CSV Parse / Data : ', records);
         try {
           await client.query("BEGIN"); // 트랜잭션 시작
           for(const item of records) {
@@ -696,10 +696,11 @@ export async function batchCreateUser(
                 created_date,
                 created_by,
                 modified_date,
-                modified_by
+                modified_by,
+                if_status
               ) VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,"WEB",now(), "admin", now(), "admin")`,
-            [item[0],item[1],item[2],item[3],item[4],item[5],item[6],item[7],item[8],item[9],item[10]])
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),$13,now(),$14,$15)`,
+            [item[0],item[1],item[2],item[3],item[4],item[5],item[6],item[7],item[8],item[9],item[10],"WEB","admin","admin","INPUT"])
           }
           await client.query("COMMIT"); // 트랜잭션 시작
         }

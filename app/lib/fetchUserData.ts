@@ -218,3 +218,56 @@ export async function fetchAccount(
     }
 };
 // ----- End : Account -------------------------------------------------------//
+
+
+// ----- Start : User IF -----------------------------------------------------//
+export async function fetchFilteredIFUsers(
+    client: Pool,
+    query: string,
+    itemsPerPage: number,
+    currentPage: number
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    try {
+        const users = await client.query(`
+            SELECT
+                *
+            FROM tbl_user_info_if
+            ${query !== "" ? 
+                "WHERE user_name ILIKE '%" + query + "%' OR "
+                + "full_name ILIKE '%" + query + "%' OR "
+                + "email ILIKE '%" + query + "%'"
+                : ""}
+            ORDER BY modified_date DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+        `);
+        return users.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch users.");
+    }
+};
+
+export async function fetchFilteredIFUserPages(
+    client: Pool,
+    query: string,
+    itemsPerPage: number
+) {
+    try {
+        const count = await client.query(`
+            SELECT COUNT(*)
+            FROM tbl_user_info_if u
+            ${query === "" ? "" : 
+                "WHERE u.user_name ILIKE '%" + query + "%'"
+                + "OR u.full_name ILIKE '%" + query + "%'"
+                + "OR u.email ILIKE '%" + query + "%'"}
+            `);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch total number of invoices.");
+    }
+};
+// ----- End : User IF -------------------------------------------------------//

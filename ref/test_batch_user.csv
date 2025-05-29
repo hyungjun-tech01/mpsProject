@@ -1,11 +1,11 @@
 ﻿user_name,external_user_name,full_name,email,notes,department,office,card_number,card_number2,home_directory,privilege
-batch_1,배치1,배치1,batch_1@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_2,배치2,배치2,batch_2@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_3,배치3,배치3,batch_3@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_4,배치4,배치4,batch_4@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_5,배치5,배치5,batch_5@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_6,배치6,배치6,batch_6@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_7,배치7,배치7,batch_7@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_8,배치8,배치8,batch_8@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_9,배치9,배치9,batch_9@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
-batch_10,배치10,배치10,batch_10@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT,
+batch_1,배치1,배치1,batch_1@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_2,배치2,배치2,batch_2@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_3,배치3,배치3,batch_3@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_4,배치4,배치4,batch_4@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_5,배치5,배치5,batch_5@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_6,배치6,배치6,batch_6@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_7,배치7,배치7,batch_7@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_8,배치8,배치8,batch_8@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_9,배치9,배치9,batch_9@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
+batch_10,배치10,배치10,batch_10@test-mail.com,,batch부,2nd Floor,0000-0000-0000-000,0000-0000-0000-000,,BLACK_COPY/BLACK_PRINT
