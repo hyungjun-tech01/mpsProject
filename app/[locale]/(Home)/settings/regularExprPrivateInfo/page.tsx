@@ -46,12 +46,11 @@ export default async function Page(props: {
 
     // Columns -------------------------------------------------------------------
     const regularExpColumns :  IColumnData[]  = [
-            { name: 'security_value_id', title: t('settings.security_value_id'), align: 'center' },
             { name: 'security_name', title: t('settings.security_name'), align: 'center' },
             { name: 'security_type', title: t('settings.security_type'), align: 'center' },
             { name: 'security_word', title: t('settings.security_word'), align: 'center' },
             { name: 'created_by', title: t('settings.created_by'), align: 'center' },
-            { name: 'creation_date', title: t('settings.creation_date'), align: 'center' },
+            { name: 'creation_date', type: 'date', title: t('settings.creation_date'), align: 'center' },
         ];
 
     return (
