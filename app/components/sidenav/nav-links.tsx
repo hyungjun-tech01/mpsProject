@@ -202,7 +202,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
             )}
 
             {link.name === 'settings' && isExpanded && link.submenu && (
-              <div className="pl-8">
+              <div>
                 {link.submenu.map((subItem) => {
                   const SubItemIcon = subItem.icon;
                   const isActive = pathname.startsWith(subItem.href);  // 이 부분 수정
@@ -211,14 +211,18 @@ export default function NavLinks({ extended }: { extended: boolean }) {
                       key={subItem.name}
                       href={subItem.href}
                       className={clsx(
-                        "flex h-[40px] items-center gap-2 text-sm text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
+                        "flex h-[40px] items-center mt-2 mb-2 rounded-md text-sm text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
                         {
-                          'bg-lime-100 text-lime-700': isActive  // 이 부분 수정
+                          'bg-lime-100 text-lime-700': isActive,  // 이 부분 수정,
+                          'grow md:flex-none md:justify-start md:py-2 md:pl-3 md:ml-8': extended,
+                          'ml-2 p-2': !extended
                         }
                       )}
                     > 
                       <SubItemIcon className="w-5" />
-                      {subItem.title}
+                      <p className={clsx("hidden duration-150",
+                        { 'md:block': extended }
+                      )}>{subItem.title}</p>
                     </Link>
                   );
                 })}

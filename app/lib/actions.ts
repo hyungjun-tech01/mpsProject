@@ -4,10 +4,8 @@ import type { Pool } from "pg";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { writeFile } from "fs/promises";
-import { createReadStream } from "fs";
-import csv from "csv-parser";
-import path from "path";
+import fs from "fs";
+import { parse } from "csv-parse";
 import bcrypt from "bcrypt";
 
 const salt = await bcrypt.genSalt(11);
@@ -171,7 +169,7 @@ export async function modifyUser(
   const newEmail = formData.get("userEmail");
   const newHomeDir = formData.get("userHomeDirectory");
   const newDisabledPrinting = formData.get("userDisabledPrinting");
-  const newRestricted = formData.get("userRestricted");
+  // const newRestricted = formData.get("userRestricted");
   const newDept = formData.get("userDepartment");
   const newCardNo1 = formData.get("userCardNumber");
   const newCardNo2 = formData.get("userCardNumber2");
@@ -315,6 +313,7 @@ export async function modifyUser(
   }
 
   revalidatePath(`/user/${id}/edit`);
+  redirect(`/user/${id}/edit`);
 }
 
 export async function deleteUser(client: Pool, id: string) {
@@ -338,6 +337,7 @@ export async function deleteUser(client: Pool, id: string) {
   }
 
   revalidatePath("/user");
+  redirect("/user");
 }
 
 const ChangeBalance = z.object({
@@ -653,7 +653,6 @@ export async function batchCreateUser(
   prevState: UserState,
   formData: FormData
 ) {
-  console.log("[batch] Create User - ", formData);
   try {
     const file = formData.get("upload_file") as Blob | null;
 
@@ -662,34 +661,65 @@ export async function batchCreateUser(
         error: ["File blob is required."],
         message: "File이 없거나 크기가 0입니다.",
       };
-    }
+    };
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    // 파일 이름을 안전하게 생성 (원래 이름 사용)
-    const filename = file.name.replaceAll(" ", "_");
-    const ext = filename.split(".").pop();
-    const timestamp = Date.now();
-    const newFilename = `${timestamp}.${ext}`;
-
-    // upload 폴더 경로 (process.cwd()는 현재 작업 디렉토리)
-    const uploadDir = path.join(process.cwd(), "upload");
-
-    // 파일 시스템에 파일 저장
-    const filePath = path.join(uploadDir, newFilename);
-    await writeFile(filePath, buffer);
+    // const records = [];
+    parse(await file.text(), {
+      delimiter: ",",
+    }, async function(err, records) {
+      if(!!err) {
+        console.log('CSV Parse / Error : ', err);
+        return {
+          error: ["Parse Error"],
+          message: "파일 읽기에 실패하였습니다.",
+        };
+      };
+      if(!!records) {
+        console.log('CSV Parse / Data : ', records);
+        try {
+          await client.query("BEGIN"); // 트랜잭션 시작
+          for(const item of records) {
+            await client.query(`
+              INSERT INTO tbl_user_info_if (
+                user_name,
+                external_user_name,
+                full_name,
+                email,
+                notes,
+                department,
+                office,
+                card_number,
+                card_number2,
+                home_directory,
+                privilege,
+                user_source_type,
+                created_date,
+                created_by,
+                modified_date,
+                modified_by
+              ) VALUES (
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,"WEB",now(), "admin", now(), "admin")`,
+            [item[0],item[1],item[2],item[3],item[4],item[5],item[6],item[7],item[8],item[9],item[10]])
+          }
+          await client.query("COMMIT"); // 트랜잭션 시작
+        }
+        catch(err) {
+          await client.query("ROLLBACK"); // 에러 발생 시 롤백
+          console.log("Batch Create User / Error : ", err);
+          return {
+            error: ["Fail to write DB"],
+            message: "Database Error: Failed to write temporary user infos.",
+          };
+        }
+      }
+    });
     
-    const results = [];
-
-    createReadStream(filePath)
-      .pipe(csv())
-      .on("data", (data) => results.push(data))
-      .on("end", () => {
-        console.log(results);
-      });
+    
   } catch (error) {
     console.error("Error saving file:", error);
   }
+  revalidatePath(`/settings/registerUsers`);
+  redirect("/settings/registerUsers");
 }
 
 export async function applicationLog(client: Pool, formData: FormData) {

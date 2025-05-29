@@ -237,6 +237,7 @@ const enResource = {
             all: 'All',
             apply: 'Apply',
             avail:'Avail.',
+            browse_file: 'Browse File',
             cancel: 'Cancel',
             card: 'Card',
             card_name: 'Card Name',

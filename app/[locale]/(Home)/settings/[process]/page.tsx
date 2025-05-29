@@ -78,8 +78,9 @@ export default async function Page(props: {
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
                     <FileUpload 
                         title={t('user.import_csv_file')}
-                        buttonTitle={t('common.select_file')}
-                        accepted=".csv" 
+                        button_title={t('common.browse_file')}
+                        detail_comment={t('comment.click_drag_file_upload')}
+                        accepted={{'text/plain': ['.csv']}} 
                         action={adapter.batchCreateUser}
                     />
                     <div className="pt-4 flex items-center justify-between gap-2">

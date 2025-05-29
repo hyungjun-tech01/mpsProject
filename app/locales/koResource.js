@@ -239,6 +239,7 @@ const koResource = {
             apply: '적용',
             avail:'있음',
             black_total_pages:'흑백매수 ',
+            browse_file: '파일 찾기',
             cancel: '취소',
             card: '카드',
             card_name: '카드명',
@@ -401,7 +402,7 @@ const koResource = {
             placeholder_user_name : "사용자의 ID를 입력하세요",
             placeholder_password_new : "새 비밀번호를 입력하세요",
             placeholder_password_new_again : "새 비밀번호를 다시 입력하세요",
-            import_csv_file: "CSV 파일 불러오기",
+            import_csv_file: "CSV 파일 가져오기",
         },
         account: {
             balance:'잔액',
