@@ -554,7 +554,12 @@ const koResource = {
         settings: {
             registerUsers: '사용자 일괄 등록',
             regularExprPrivateInfo:'개인정보 정규식 관리',
-            regularExprPrivateInfoQueryCondition: '이름, Values 로 조회하세요.'
+            regularExprPrivateInfoQueryCondition: '이름, Values 로 조회하세요.',
+            security_name:'이름',
+            security_type:'타입',
+            security_word:'값',
+            created_by:'작성자',
+            creation_date:'작성일',
         }
     },
 }

@@ -11,17 +11,17 @@ export async function getFilteredRegularExp(
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const response = await client.query(`
-            SELECT security_value_id ,
+            SELECT security_value_id id,
             security_name            , 
             security_type            ,
             security_word            ,
             created_by               ,
             creation_date         
             FROM tbl_security_value_info 
-            WHERE ( security_name like '%'||${query}||'%' or security_word like '%'||${query}||'%' )
+            WHERE ( security_name like $1 or security_word like $1 )
             ORDER BY creation_date DESC
-            LIMIT ${itemsPerPage} OFFSET ${offset}
-        `);
+            LIMIT $2 OFFSET $3
+        `, [`%${query}%`, itemsPerPage, offset]);
         return response.rows;
     } catch (error) {
         console.error("Database Error:", error);
