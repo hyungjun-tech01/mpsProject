@@ -4,7 +4,6 @@ import type { Pool } from "pg";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import fs from "fs";
 import { parse } from "csv-parse";
 import bcrypt from "bcrypt";
 
@@ -675,10 +674,18 @@ export async function batchCreateUser(
         };
       };
       if(!!records) {
+        let adjusted = [];
+        if(records[0][0] === "user_name") {
+          adjusted = [
+            ...records.slice(1,)
+          ]
+        } else {
+          adjusted = [ ...records]
+        }
         // console.log('CSV Parse / Data : ', records);
         try {
           await client.query("BEGIN"); // 트랜잭션 시작
-          for(const item of records) {
+          for(const item of adjusted) {
             await client.query(`
               INSERT INTO tbl_user_info_if (
                 user_name,
