@@ -560,6 +560,8 @@ const koResource = {
             security_word:'값',
             created_by:'작성자',
             creation_date:'작성일',
+            create_regular:'정규식 추가',
+            dos:'DOS 명령어 실행'
         }
     },
 }
