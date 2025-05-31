@@ -12,6 +12,8 @@ import { auth } from "@/auth";
 import clsx from 'clsx';
 import { TableSkeleton } from "@/app/components/skeletons";
 import { CreateButton } from '@/app/components/buttons';
+import { executeDos } from '@/app/lib/executeDos'; 
+import { DosForm } from '@/app/components/settings/dosForm';
 
 export const metadata: Metadata = {
     title: 'Settings',
@@ -62,10 +64,8 @@ export default async function Page(props: {
            
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder={t('settings.regularExprPrivateInfoQueryCondition')}/>
-                <CreateButton link="/settings/regularExpPrivateInfo/create" title={t("settings.create_regular")} />
-                <button type="submit" className="flex h-10 items-center rounded-lg bg-lime-600 px-4 text-base font-medium text-white transition-colors hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500">
-                    {t("settings.dos")}
-                </button>
+                <CreateButton link="/settings/regularExprPrivateInfo/create" title={t("settings.create_regular")} />
+                <DosForm label={t("settings.dos")} />
             </div>
 
                 <Suspense fallback={<TableSkeleton />}>

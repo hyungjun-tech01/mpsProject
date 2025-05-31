@@ -552,6 +552,7 @@ const koResource = {
             waiting_list: '대기 중인 출력 대기 목록',
         },
         settings: {
+            settings: '설정',
             registerUsers: '사용자 일괄 등록',
             regularExprPrivateInfo:'개인정보 정규식 관리',
             regularExprPrivateInfoQueryCondition: '이름, Values 로 조회하세요.',
@@ -561,7 +562,17 @@ const koResource = {
             created_by:'작성자',
             creation_date:'작성일',
             create_regular:'정규식 추가',
-            dos:'DOS 명령어 실행'
+            dos:'DOS 명령어 실행',
+            createRegularExprPrivateInfo:'개인정보 정규식 추가',
+            createRegularExprPrivateInfoDescription:'개인정보 정규식을 추가합니다.',
+            regularExpName:'정규식 이름',
+            regularExpType:'정규식 타입',
+            regularExpValue:'정규식 값',
+            regularExpNamePlaceholder:'정규식 이름을 입력하세요',
+            regularExpTypePlaceholder:'정규식 타입을 선택하세요',
+            regularExpValuePlaceholder:'정규식 값을 입력하세요',
+            regularExpType_regex:'정규식',
+            regularExpType_security_word:'보안 단어',
         }
     },
 }
