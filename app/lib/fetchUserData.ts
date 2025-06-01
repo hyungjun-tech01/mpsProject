@@ -232,6 +232,7 @@ export async function fetchFilteredIFUsers(
     try {
         const users = await client.query(`
             SELECT
+                user_info_if_id id,
                 *
             FROM tbl_user_info_if
             ${query !== "" ? 

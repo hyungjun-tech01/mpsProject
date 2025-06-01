@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
-import Table from '@/app/components/table';
+import Table from '@/app/components/settings/table';
 import { FileUpload } from '@/app/components/settings/file-upload-form';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
@@ -90,7 +90,7 @@ export default async function Page(props: {
                 {settingData.length > 0 && 
                     <div className="pt-4 flex flex-col gap-2 md:pt-8">
                         <div className="pt-4 flex items-center justify-between gap-2">
-                            <Search placeholder={""} />
+                            <Search placeholder={t("comment.search_users")} />
                         </div>
                         <Suspense fallback={<TableSkeleton />}>
                             <Table
@@ -98,11 +98,9 @@ export default async function Page(props: {
                                 rows={settingData}
                                 currentPage={currentPage}
                                 totalPages={settingDataPages}
-                                path="/"
                                 locale={locale}
+                                action={adapter.submitSelectedUsers}
                                 deleteAction={adapter.deleteGroup}
-                                checkable
-                                editable={false}
                             />
                         </Suspense>
                     </div>
