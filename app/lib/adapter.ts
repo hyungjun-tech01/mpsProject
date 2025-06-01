@@ -80,6 +80,10 @@ export default function MyDBAdapter() {
         async getFilteredIFUserPages(query: string, itemsPerPage:number) {
             return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
         },
+        async submitSelectedUsers(prevState:object, formData: FormData ) {
+            'use server';
+            console.log('[Batch] Selected Users :', formData);
+        },
 
         // ----- Group ------------------------------------------
         async getFilteredGroups(

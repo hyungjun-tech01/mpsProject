@@ -352,7 +352,7 @@ const koResource = {
             user_edit_etc_description: '사용자의 사무실, 부서 혹은 ID 카드나 번호등의 추가정보를 제공하십시오.',
             user_edit_statistics_description: "지난 30일간의 계정 잔액기록과 사용통계.",
         },
-        user :{
+        user:{
             card_number: '카드번호(1)',
             card_number2: '카드번호(2)',
             change_balance: '(잔액변경)',
@@ -392,6 +392,7 @@ const koResource = {
             user_role:'사용자 권한',
             //-----------------------------------------------------------
             change_password_same:'변경 비밀번호 확인과 변경 비밀번호는 같아야 합니다.',
+            import_csv_file: "CSV 파일 가져오기",
             miss_password_item :'입력항목이 누락되었습니다.',
             min_password_length:'password 는 5자리 이상이어야 합니다.',
             placeholder_balance_initial : '최초 사용 금액을 입력하세요',
@@ -402,7 +403,6 @@ const koResource = {
             placeholder_user_name : "사용자의 ID를 입력하세요",
             placeholder_password_new : "새 비밀번호를 입력하세요",
             placeholder_password_new_again : "새 비밀번호를 다시 입력하세요",
-            import_csv_file: "CSV 파일 가져오기",
         },
         account: {
             balance:'잔액',
