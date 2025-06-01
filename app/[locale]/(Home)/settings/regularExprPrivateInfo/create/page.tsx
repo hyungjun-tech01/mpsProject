@@ -41,7 +41,7 @@ export default async function CreateRegularExprPrivateInfo(
 
     const buttonItems: IButtonInfo = {
         cancel : { title: t('common.cancel'), link: '/settings/regularExprPrivateInfo' },
-        go : { title: t('device.create_device') },
+        go : { title: t('settings.create_regular') },
     };
 
     return (
