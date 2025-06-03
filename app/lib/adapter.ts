@@ -12,6 +12,7 @@ import * as GroupAction from "./actionsGroup";
 import * as Print from "./fetchPrintSpoolData";
 import type { PrintState } from "./actionPrint";
 import * as PrintAction from "./actionPrint";
+import * as SettingAction from "./actionSetting";
 
 
 const pool = new Pool({
@@ -455,17 +456,22 @@ export default function MyDBAdapter() {
             return PrintAction.printSelected(pool, list);
         },
 
-        // ----- Setting ------------------------------------------
+        // ----- Setting ---------------------------------------------
         async batchCreateUser(prevState: UserState, formData: FormData) {
             'use server';
             return Action.batchCreateUser(pool, prevState, formData);
         },
-
-        // ---------------------------------------------------
+        
         async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
 
             return RegularExp.getFilteredRegularExp(pool, query, itemsPerPage, currentPage);
         },
+
+        async createRegularExp(prevState: GroupState, formData: FormData){
+            'use server';
+            return SettingAction.createRegularExp(pool, prevState, formData);
+        },
+        // -----------------------------------------------------------
 
         // ----- Application Log ----------------------------------
         async applicationLog(formData: FormData) {
