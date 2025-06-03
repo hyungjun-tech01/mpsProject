@@ -649,6 +649,7 @@ export async function updateAccount(
 
 export async function batchCreateUser(
   client: Pool,
+  id: string,
   prevState: UserState,
   formData: FormData
 ) {
@@ -672,24 +673,46 @@ export async function batchCreateUser(
         if (!!err) {
           console.log("CSV Parse / Error : ", err);
           return {
-            error: ["Parse Error"],
             message: "파일 읽기에 실패하였습니다.",
           };
         }
         if (!!records) {
+          const headers = (records[0][0] === "user_name")
+            ? [...records[0]]
+            : [ 
+                "user_name",
+                "external_user_name",
+                "full_name",
+                "email",
+                "notes",
+                "department",
+                "office",
+                "card_number",
+                "card_number2",
+                "home_directory",
+                "privilege",
+                "user_source_type",
+                "created_date",
+                "created_by",
+                "modified_date",
+                "modified_by",
+                "if_status"
+              ];
+          let idx = (records[0][0] === "user_name") ? 1: 0;
           let adjusted = [];
-          if (records[0][0] === "user_name") {
-            adjusted = [...records.slice(1)];
-          } else {
-            adjusted = [...records];
+          for (; idx < records.length; idx++) {
+            const temp = {};
+            for (let i = 0; i < records[0].length; i++) {
+              temp[headers[i]] = records[idx][i];
+            }
+            adjusted.push(temp);
           }
+          
           // console.log('CSV Parse / Data : ', records);
           try {
             await client.query("BEGIN"); // 트랜잭션 시작
             for (const item of adjusted) {
-              await client.query(
-                `
-              INSERT INTO tbl_user_info_if (
+              await client.query(`INSERT INTO tbl_user_info_if (
                 user_name,
                 external_user_name,
                 full_name,
@@ -708,22 +731,21 @@ export async function batchCreateUser(
                 modified_by,
                 if_status
               ) VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),$13,now(),$14,$15)`,
-                [
-                  item[0],
-                  item[1],
-                  item[2],
-                  item[3],
-                  item[4],
-                  item[5],
-                  item[6],
-                  item[7],
-                  item[8],
-                  item[9],
-                  item[10],
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),$13,now(),$14,$15)`, [
+                  item.user_name,
+                  item.external_user_name ?? "",
+                  item.full_name ?? "",
+                  item.email ?? "",
+                  item.notes ?? "",
+                  item.department ?? "",
+                  item.office ?? "",
+                  item.card_number ?? "",
+                  item.card_number2 ?? "",
+                  item.home_directory ?? "",
+                  item.privilege ?? "",
                   "WEB",
-                  "admin",
-                  "admin",
+                  id,
+                  id,
                   "INPUT",
                 ]
               );
@@ -733,7 +755,6 @@ export async function batchCreateUser(
             await client.query("ROLLBACK"); // 에러 발생 시 롤백
             console.log("Batch Create User / Error : ", err);
             return {
-              error: ["Fail to write DB"],
               message: "Database Error: Failed to write temporary user infos.",
             };
           }
@@ -785,7 +806,7 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
     try {
       await client.query("BEGIN");
 
-      for (const id of splitted) {
+      for (const id in splitted) {
         const response = await client.query(
           `call p_create_user_if($1, $2, $3)`,
           [id, null, null]
@@ -793,7 +814,7 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
         const result = response.rows[0].x_result;
         const result_msg = response.rows[0].x_result_msg;
         if (result === "ERROR") {
-          errMsg.push(result_msg);
+          errMsg.push(id + ":" + result_msg);
         }
       }
 
