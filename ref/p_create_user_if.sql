@@ -62,10 +62,17 @@ BEGIN
     FOR TARGET_CURSOR IN
                 SELECT   *
                 FROM     tbl_user_info_if t
-                WHERE  t.if_status IN ('INPUT')
+                WHERE  t.if_status IN ('INPUT', 'ERROR')
                 and user_info_if_id =  COALESCE(i_user_info_if_id, user_info_if_id)
             LOOP
                 -- validate_logic;
+                -- 에러 상태가 들어 왔다면 
+                if TARGET_CURSOR.if_status = 'ERROR' then 
+                    v_error_count := v_error_count + 1;
+                    v_error_messages := v_error_messages || ' ERROR 상태인 데이터는 처리할수 없습니다, 해당 데이터 삭제 후 다시 작업하세요: ' || 
+                              TARGET_CURSOR.user_name || '; ';  -- 메시지 누적
+                    CONTINUE;  -- 현재 레코드 건너뛰고 다음 레코드 처리
+                end if;
                 -- 중복 체크
                 SELECT EXISTS (
                     SELECT 1 
@@ -142,14 +149,14 @@ BEGIN
     -- 최종 결과 메시지 생성
     IF v_success_count > 0 AND v_error_count = 0 THEN
         x_result := 'SUCCESS';
-        x_result_msg := '모든 사용자 생성이 완료되었습니다. (총 ' || v_success_count || '건)';
+        x_result_msg := '사용자 생성이 완료되었습니다. (총 ' || v_success_count || '건)';
     ELSIF v_success_count > 0 AND v_error_count > 0 THEN
         x_result := 'ERROR';
         x_result_msg := '일부 사용자 생성이 완료되었습니다. (성공: ' || v_success_count || 
                         '건, 실패: ' || v_error_count || '건) 실패사유: ' || v_error_messages;
     ELSIF v_success_count = 0 AND v_error_count > 0 THEN
         x_result := 'ERROR';
-        x_result_msg := '모든 사용자 생성이 실패했습니다. 실패사유: ' || v_error_messages;
+        x_result_msg := '사용자 생성이 실패했습니다. 실패사유: ' || v_error_messages;
     ELSE
         x_result := 'ERROR';
         x_result_msg := 'ERROR 상태인 데이터는 처리할 수 없습니다. 해당 데이터를 삭제 후 다시 작업 하세요.';
