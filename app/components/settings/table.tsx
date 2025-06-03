@@ -60,8 +60,9 @@ export default function CustomizedTable<DataType>({
 }: ISettingTable<DataType>) {
     const initialState: object = { message: null, errors: {} };
     const [data, setData] = useState<object[]>([]);
-    const [isSelected, setIsSelected] = useState<boolean>(false);
-    const [seletedIds, setSelectedIds] = useState<string>("");
+    const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
+    const [isAnySelected, setIsAnySelected] = useState<boolean>(false);
+    const [seletedIds, setSelectedIds] = useState<string[]>([]);
     const [chosenID, setChosenID] = useState<string>('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [state, formAction] = useActionState(action, initialState);
@@ -125,79 +126,48 @@ export default function CustomizedTable<DataType>({
 
     const handleSelectAllClick = (event) => {
         if(event.target.checked) {
-            let selectedIds:string = "";
+            const selectedIds:string[] = [];
             const updatedData = data.map(row =>{
-                selectedIds += row.id;
+                selectedIds.push(row.id);
                 return {
                     ...row,
                     checked : true
                 };
             })
             setData(updatedData);
-            setIsSelected(true);
+            setIsAllSelected(true);
+            setIsAnySelected(true);
             setSelectedIds(selectedIds);
         } else {
             setData(data.map(row => ({
                 ...row,
                 checked: false
             })))
-            setIsSelected(false);
-            setSelectedIds("");
+            setIsAllSelected(false);
+            setIsAnySelected(false);
+            setSelectedIds([]);
         }
     };
 
     const handleSelectOneClick = (event) => {
         const selected = event.target.id;
-        if(event.target.checked) {
-            setData(prevState => {
-                const foundIdx = prevState.findIndex(row => row.id === selected);
-                if(foundIdx !== -1) {
-                    const modified = {
-                        ...prevState[foundIdx],
-                        checked: true
-                    };
-                    const updatedData = [
-                        ...prevState.slice(0, foundIdx),
-                        modified,
-                        ...prevState.slice(foundIdx + 1, )
-                    ];
-                    setData(updatedData);
-                }
+        
+        setData(prevState => {
+            let newIsAnySelected: boolean = false;
+            let newIsAllSelected: boolean = true;
+            const updated:string[] = [];
+            const returnValue = prevState.map(row => {
+                const newChecked: boolean = (row.id === selected) ? event.target.checked : row.checked;
+                newIsAnySelected ||= newChecked;
+                newIsAllSelected &&= newChecked;
+                if(newChecked) updated.push(row.id);
+                return {...row, checked: newChecked};
             });
-            setIsSelected(true);
-            setSelectedIds(prevState => prevState === "" ? 
-                selected : prevState + ";" + selected
-            );
-        } else {
-            let isAnySelected : boolean = false;
-            let foundIdx = -1;
-            let updated = "";
-            setData(prevState => {
-                for(let i = 0; i< prevState.length; i++) {
-                    if(prevState[i].id === selected) {
-                        foundIdx = i;
-                    } else {
-                        updated += prevState[i].id;
-                    }
-                    isAnySelected |= prevState[i].checked;
-                };
-                
-                if(foundIdx !== -1) {
-                    const modified = {
-                        ...prevState[foundIdx],
-                        checked: true
-                    };
-                    const updatedData = [
-                        ...prevState.slice(0, foundIdx),
-                        modified,
-                        ...prevState.slice(foundIdx + 1, )
-                    ];
-                    setData(updatedData);
-                };
-            });
-            setIsSelected(isAnySelected);
+            setIsAllSelected(newIsAllSelected);
+            setIsAnySelected(newIsAnySelected);
             setSelectedIds(updated);
-        }
+            return returnValue;
+        });
     };
 
     let columnLength = columns.length + 2;
@@ -210,12 +180,20 @@ export default function CustomizedTable<DataType>({
                 ...row
             })
         }));
+        setIsAnySelected(false);
+        setIsAllSelected(false);
+        setSelectedIds([]);
     }, [rows])
 
     return (
         <div className="mt-3">
-            {isSelected && 
-                <div className="mt-2 mb-4 flex justify-end">
+            {isAnySelected && 
+                <div className="mt-2 mb-4 flex justify-between">
+                    <div id="input-error" aria-live="polite" aria-atomic="true">
+                        {!!state?.message && (
+                            <p className="mt-2 text-sm text-red-500">{state.message}</p>
+                        )}
+                    </div>
                     <form action={formAction}>
                         <input id="selected_ids" type="hidden" name="selected_ids" value={seletedIds} />
                         <button type="submit"
@@ -231,7 +209,7 @@ export default function CustomizedTable<DataType>({
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align='right'>
-                                <input type="checkbox" onChange={handleSelectAllClick} />
+                                <input type="checkbox" checked={isAllSelected} onChange={handleSelectAllClick} />
                             </StyledTableCell>
                             {columns.map((column, idx) => (
                                 <StyledTableCell key={idx} align={column.align} >
@@ -250,7 +228,7 @@ export default function CustomizedTable<DataType>({
                                         align='center'
                                         scope="row"
                                     >
-                                        <input type="checkbox" id={row.id} name={row.id} defaultChecked={row.checked} onChange={handleSelectOneClick} />
+                                        <input type="checkbox" id={row.id} name={row.id} checked={row.checked} onChange={handleSelectOneClick} />
                                     </StyledTableCell>
                                     {columns.map((column) => {
                                         return (

@@ -660,33 +660,35 @@ export async function batchCreateUser(
         error: ["File blob is required."],
         message: "File이 없거나 크기가 0입니다.",
       };
-    };
+    }
 
     // const records = [];
-    parse(await file.text(), {
-      delimiter: ",",
-    }, async function(err, records) {
-      if(!!err) {
-        console.log('CSV Parse / Error : ', err);
-        return {
-          error: ["Parse Error"],
-          message: "파일 읽기에 실패하였습니다.",
-        };
-      };
-      if(!!records) {
-        let adjusted = [];
-        if(records[0][0] === "user_name") {
-          adjusted = [
-            ...records.slice(1,)
-          ]
-        } else {
-          adjusted = [ ...records]
+    parse(
+      await file.text(),
+      {
+        delimiter: ",",
+      },
+      async function (err, records) {
+        if (!!err) {
+          console.log("CSV Parse / Error : ", err);
+          return {
+            error: ["Parse Error"],
+            message: "파일 읽기에 실패하였습니다.",
+          };
         }
-        // console.log('CSV Parse / Data : ', records);
-        try {
-          await client.query("BEGIN"); // 트랜잭션 시작
-          for(const item of adjusted) {
-            await client.query(`
+        if (!!records) {
+          let adjusted = [];
+          if (records[0][0] === "user_name") {
+            adjusted = [...records.slice(1)];
+          } else {
+            adjusted = [...records];
+          }
+          // console.log('CSV Parse / Data : ', records);
+          try {
+            await client.query("BEGIN"); // 트랜잭션 시작
+            for (const item of adjusted) {
+              await client.query(
+                `
               INSERT INTO tbl_user_info_if (
                 user_name,
                 external_user_name,
@@ -707,22 +709,37 @@ export async function batchCreateUser(
                 if_status
               ) VALUES (
                 $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),$13,now(),$14,$15)`,
-            [item[0],item[1],item[2],item[3],item[4],item[5],item[6],item[7],item[8],item[9],item[10],"WEB","admin","admin","INPUT"])
+                [
+                  item[0],
+                  item[1],
+                  item[2],
+                  item[3],
+                  item[4],
+                  item[5],
+                  item[6],
+                  item[7],
+                  item[8],
+                  item[9],
+                  item[10],
+                  "WEB",
+                  "admin",
+                  "admin",
+                  "INPUT",
+                ]
+              );
+            }
+            await client.query("COMMIT"); // 트랜잭션 시작
+          } catch (err) {
+            await client.query("ROLLBACK"); // 에러 발생 시 롤백
+            console.log("Batch Create User / Error : ", err);
+            return {
+              error: ["Fail to write DB"],
+              message: "Database Error: Failed to write temporary user infos.",
+            };
           }
-          await client.query("COMMIT"); // 트랜잭션 시작
-        }
-        catch(err) {
-          await client.query("ROLLBACK"); // 에러 발생 시 롤백
-          console.log("Batch Create User / Error : ", err);
-          return {
-            error: ["Fail to write DB"],
-            message: "Database Error: Failed to write temporary user infos.",
-          };
         }
       }
-    });
-    
-    
+    );
   } catch (error) {
     console.error("Error saving file:", error);
   }
@@ -755,4 +772,64 @@ export async function applicationLog(client: Pool, formData: FormData) {
       message: "Database Error: Failed to Application Log.",
     };
   }
+}
+
+//------- Settings -----------------------------------------------------------------------------
+export async function uploadSelectedUser(client: Pool, formData: FormData) {
+  const seleced_ids = formData.get("selected_ids") as string;
+  console.log("[uploadSelectedUser] Selected : ", seleced_ids);
+  const errMsg: string[] = [];
+  if (!!seleced_ids && seleced_ids !== "") {
+    const splitted = seleced_ids.split(",");
+
+    try {
+      await client.query("BEGIN");
+
+      for (const id in splitted) {
+        const response = await client.query(
+          `call p_create_user_if($1, $2, $3)`,
+          [id, null, null]
+        );
+        const result = response.rows[0].x_result;
+        const result_msg = response.rows[0].x_result_msg;
+        if (result === "ERROR") {
+          errMsg.push(id + ":" + result_msg);
+        }
+      }
+
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK"); // 에러 발생 시 롤백
+      console.log("Create User / Error : ", error);
+      return {
+        message: ["Database Error: Failed to Create User."],
+      };
+    }
+
+    if (errMsg.length > 0) {
+      return {
+        message: errMsg,
+      };
+    }
+    revalidatePath("/settings/registerUsers");
+    redirect("/settings/registerUsers");
+  }
+}
+
+export async function deleteUserIF(client: Pool, id: string) {
+  // Then, Delete user_account, account and user
+  try {
+    await client.query(`
+            DELETE FROM tbl_user_info_if 
+            WHERE user_info_if_id='${id}'
+        `);
+  } catch (error) {
+    console.log("Delete User In IF / Error : ", error);
+    return {
+      message: "Database Error: Failed to delete by ID.",
+    };
+  }
+
+  revalidatePath("/settings/registerUsers");
+  redirect("/settings/registerUsers");
 }

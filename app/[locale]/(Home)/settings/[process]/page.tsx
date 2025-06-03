@@ -60,9 +60,10 @@ export default async function Page(props: {
             { name: 'department', title: t('user.department'), align: 'center' },
             { name: 'card_number', title: t('user.card_number'), align: 'center' },
             { name: 'card_number2', title: t('user.card_number2'), align: 'center' },
-            { name: 'created', title: t('common.created'), align: 'center' },
-            { name: 'create_method', title: t('common.create_method'), align: 'center' },
-            { name: 'message', title: t('common.message'), align: 'left' },
+            { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
+            { name: 'user_source_type', title: t('common.create_method'), align: 'center' },
+            { name: 'if_status', title: t('common.status'), align: 'center' },
+            { name: 'if_message', title: t('common.message'), align: 'left' },
         ]
     };
 
@@ -100,7 +101,7 @@ export default async function Page(props: {
                                 totalPages={settingDataPages}
                                 locale={locale}
                                 action={adapter.submitSelectedUsers}
-                                deleteAction={adapter.deleteGroup}
+                                deleteAction={adapter.deleteUserInIF}
                             />
                         </Suspense>
                     </div>

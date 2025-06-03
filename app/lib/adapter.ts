@@ -82,7 +82,11 @@ export default function MyDBAdapter() {
         },
         async submitSelectedUsers(prevState:object, formData: FormData ) {
             'use server';
-            console.log('[Batch] Selected Users :', formData);
+            return Action.uploadSelectedUser(pool, formData);
+        },
+        async deleteUserInIF(id: string) {
+            'use server';
+            return Action.deleteUserIF(pool, id);
         },
 
         // ----- Group ------------------------------------------
