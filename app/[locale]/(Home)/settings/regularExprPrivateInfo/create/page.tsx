@@ -1,8 +1,12 @@
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/settings/create-form';
+import { auth } from "@/auth";
+import { notFound } from 'next/navigation';
 
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
+
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 import MyDBAdapter from '@/app/lib/adapter';
 
@@ -14,6 +18,30 @@ export default async function CreateRegularExprPrivateInfo(
     const params = await props.params;
     const locale = params.locale;
     const adapter = MyDBAdapter();
+    const session = await auth();
+
+    if(!session?.user) return notFound();
+
+    const isAdmin = session?.user.role === 'admin';
+    const isManager = session?.user.role === 'manager';
+    const userId = session?.user.id ?? "";
+
+    ///// application log ----------------------------------------------------------------------
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
+
+    const logData = new FormData();
+    logData.append('application_page', 'Regular Exp Private Info');
+    logData.append('application_action', 'Create');
+    logData.append('application_parameter', '');
+    logData.append('created_by', userName);
+    adapter.applicationLog(logData);
+    ///// application log ----------------------------------------------------------------------
+
 
     const [t] = await Promise.all([
         getDictionary(locale),
@@ -34,7 +62,7 @@ export default async function CreateRegularExprPrivateInfo(
                 },      
                 { name: 'security_name', title: t('settings.regularExpName'), type: 'input', defaultValue: "", placeholder: t('settings.regularExpNamePlaceholder') },
                 { name: 'security_value', title: t('settings.regularExpValue'), type: 'input', defaultValue: '', placeholder: t('settings.regularExpValuePlaceholder') },
-               
+                { name: 'created_by', title: '', type:'hidden' , defaultValue: `${userName}`, placeholder: ''}
             ]
         },
     ];

@@ -36,12 +36,12 @@ const RegularExprFormSchema = z.object({
 const CreateRegularExpr = RegularExprFormSchema;
 
 export async function createRegularExp(client: Pool, prevState: GroupState, formData: FormData) {
-    // console.log('createUserGroup Group / formData :', formData);
+    console.log('createRegularExp  :', formData);
     const validatedFields = CreateRegularExpr.safeParse({
         regularExpName: formData.get('security_type'),
         regularExpType: formData.get('security_name'),
         regularExpValue: formData.get('security_value'),
-        createdBy: formData.get('createdBy'),
+        createdBy: formData.get('created_by'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -54,7 +54,7 @@ export async function createRegularExp(client: Pool, prevState: GroupState, form
 
     const { regularExpName, regularExpType, regularExpValue, createdBy } = validatedFields.data;
     
-    console.log('Regular Exp :', regularExpName, regularExpType, regularExpValue);
+    console.log('Regular Exp :', regularExpName, regularExpType, regularExpValue, createdBy);
 
     // Create new user group  --------------------------------------
     try {
@@ -72,9 +72,9 @@ export async function createRegularExp(client: Pool, prevState: GroupState, form
                 creation_date
             )
             VALUES ($1,$2,$3,$4,now())`
-        , regularExpName, regularExpType, regularExpValue, createdBy);
+        , [regularExpName, regularExpType, regularExpValue, createdBy]);
         
-            await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
+        await client.query("COMMIT"); // 모든 작업이 성공하면 커밋        
 
     } catch (error) {
         await client.query("ROLLBACK"); // 에러 발생 시 롤백

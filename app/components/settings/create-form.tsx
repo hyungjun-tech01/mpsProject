@@ -62,7 +62,16 @@ export default function Form(
                 <div className="w-2/3 pl-6">
                     <div className='w-full md:w-2/3'>
                         { items[0].items.map((item: IEditItem) =>
-                            item.type === 'hidden' ? '':
+                            item.type === 'hidden' ? 
+                            <input
+                                id={item.name}
+                                name={item.name}
+                                type="hidden"
+                                value={item.defaultValue}
+                                placeholder={item.placeholder}
+                                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            />
+                            :
                             <EditItem
                             key={item.name}
                             name={item.name}
