@@ -3,7 +3,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/settings/create-form';
 
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
-import {createDevice} from '@/app/components/device/actions';
+
 import MyDBAdapter from '@/app/lib/adapter';
 
 export default async function CreateRegularExprPrivateInfo(
@@ -57,7 +57,7 @@ export default async function CreateRegularExprPrivateInfo(
                     },
                 ]}
             />
-            <Form items={formItems}  buttons={buttonItems} action={createDevice}/>
+            <Form items={formItems}  buttons={buttonItems} action={adapter.createRegularExp}/>
         </main>
     );
 }

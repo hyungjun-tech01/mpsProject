@@ -38,9 +38,9 @@ const CreateRegularExpr = RegularExprFormSchema;
 export async function createRegularExp(client: Pool, prevState: GroupState, formData: FormData) {
     // console.log('createUserGroup Group / formData :', formData);
     const validatedFields = CreateRegularExpr.safeParse({
-        regularExpName: formData.get('regularExpName'),
-        regularExpType: formData.get('regularExpType'),
-        regularExpValue: formData.get('regularExpValue'),
+        regularExpName: formData.get('security_type'),
+        regularExpType: formData.get('security_name'),
+        regularExpValue: formData.get('security_value'),
         createdBy: formData.get('createdBy'),
     });
 

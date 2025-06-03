@@ -473,6 +473,8 @@ export default function MyDBAdapter() {
 
         async createRegularExp(prevState: GroupState, formData: FormData){
             'use server';
+
+            console.log('createRegularExp', FormData);
             return SettingAction.createRegularExp(pool, prevState, formData);
         },
         // -----------------------------------------------------------

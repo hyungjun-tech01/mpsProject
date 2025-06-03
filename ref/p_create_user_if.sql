@@ -55,10 +55,14 @@ DECLARE
    v_error_messages text := '';  
 BEGIN
 
+    -- 혹시 성공한 데이터가 있다면 삭제 처리 
+    delete from tbl_user_info_if
+    where if_status = 'SUCCESS';
+
     FOR TARGET_CURSOR IN
                 SELECT   *
                 FROM     tbl_user_info_if t
-                WHERE  t.if_status = 'INPUT'
+                WHERE  t.if_status IN ('INPUT')
                 and user_info_if_id =  COALESCE(i_user_info_if_id, user_info_if_id)
             LOOP
                 -- validate_logic;
@@ -71,11 +75,11 @@ BEGIN
 
                 IF v_exists THEN
                     v_error_count := v_error_count + 1;
-                    v_error_messages := v_error_messages || '이미 존재하는 사용자입니다: ' || 
+                    v_error_messages := v_error_messages || ' 이미 존재하는 사용자입니다: ' || 
                               TARGET_CURSOR.user_name || '; ';  -- 메시지 누적
 
                     update tbl_user_info_if 
-                    set if_status = 'ERROR', if_message = '이미 존재하는 사용자입니다: ' ||TARGET_CURSOR.user_name
+                    set if_status = 'ERROR', if_message = ' 이미 존재하는 사용자입니다: ' ||TARGET_CURSOR.user_name
                     where user_info_if_id = TARGET_CURSOR.user_info_if_id;
 
                     CONTINUE;  -- 현재 레코드 건너뛰고 다음 레코드 처리
@@ -130,6 +134,11 @@ BEGIN
                                   TARGET_CURSOR.user_name || ' - ' || SQLERRM || '; ';
                 END;                
 			END LOOP;	
+    
+    -- 성공한 데이터는 삭제 처리 
+    delete from tbl_user_info_if
+    where if_status = 'SUCCESS';
+    
     -- 최종 결과 메시지 생성
     IF v_success_count > 0 AND v_error_count = 0 THEN
         x_result := 'SUCCESS';
@@ -143,7 +152,7 @@ BEGIN
         x_result_msg := '모든 사용자 생성이 실패했습니다. 실패사유: ' || v_error_messages;
     ELSE
         x_result := 'ERROR';
-        x_result_msg := '처리할 데이터가 없습니다.';
+        x_result_msg := 'ERROR 상태인 데이터는 처리할 수 없습니다. 해당 데이터를 삭제 후 다시 작업 하세요.';
     END IF;
 EXCEPTION
     WHEN OTHERS THEN

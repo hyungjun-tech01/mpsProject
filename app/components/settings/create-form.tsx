@@ -62,6 +62,7 @@ export default function Form(
                 <div className="w-2/3 pl-6">
                     <div className='w-full md:w-2/3'>
                         { items[0].items.map((item: IEditItem) =>
+                            item.type === 'hidden' ? '':
                             <EditItem
                             key={item.name}
                             name={item.name}

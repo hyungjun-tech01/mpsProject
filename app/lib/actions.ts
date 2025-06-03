@@ -785,7 +785,7 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
     try {
       await client.query("BEGIN");
 
-      for (const id in splitted) {
+      for (const id of splitted) {
         const response = await client.query(
           `call p_create_user_if($1, $2, $3)`,
           [id, null, null]
@@ -793,7 +793,7 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
         const result = response.rows[0].x_result;
         const result_msg = response.rows[0].x_result_msg;
         if (result === "ERROR") {
-          errMsg.push(id + ":" + result_msg);
+          errMsg.push(result_msg);
         }
       }
 
