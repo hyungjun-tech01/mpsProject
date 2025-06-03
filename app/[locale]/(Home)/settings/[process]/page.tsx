@@ -82,7 +82,7 @@ export default async function Page(props: {
             <div className="w-full px-4 pb-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
                     <FileUpload 
-                        userId={userName}
+                        userId={userId}
                         title={t('user.import_csv_file')}
                         button_title={t('common.browse_file')}
                         detail_comment={t('comment.click_drag_file_upload')}
