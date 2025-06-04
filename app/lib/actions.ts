@@ -806,7 +806,7 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
     try {
       await client.query("BEGIN");
 
-      for (const id in splitted) {
+      for (const id of splitted) {
         const response = await client.query(
           `call p_create_user_if($1, $2, $3)`,
           [id, null, null]
