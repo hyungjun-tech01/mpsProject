@@ -38,6 +38,7 @@ export default async function Page(props: {
     if(!session?.user) return notFound();
     if( session?.user.role !== 'admin') return notFound();
 
+    const userId = session?.user.id ?? "";
     const adapter = MyDBAdapter();
     const [t, settingData, settingDataPages] = await Promise.all([
         getDictionary(locale),
@@ -81,10 +82,11 @@ export default async function Page(props: {
             <div className="w-full px-4 pb-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
                     <FileUpload 
+                        userId={userId}
                         title={t('user.import_csv_file')}
                         button_title={t('common.browse_file')}
                         detail_comment={t('comment.click_drag_file_upload')}
-                        accepted={{'text/plain': ['.csv']}} 
+                        accepted={{'text/plain': ['.csv']}}
                         action={adapter.batchCreateUser}
                     />
                 </div>

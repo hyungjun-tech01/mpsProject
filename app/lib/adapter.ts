@@ -75,20 +75,6 @@ export default function MyDBAdapter() {
             'use server';
             return Action.changeBalance(pool, id, prevState, formData);
         },
-        async getFilteredIFUsers(query:string, itemsPerPage: number, currentPage: number) {
-            return User.fetchFilteredIFUsers(pool, query, itemsPerPage, currentPage);
-        },
-        async getFilteredIFUserPages(query: string, itemsPerPage:number) {
-            return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
-        },
-        async submitSelectedUsers(prevState:object, formData: FormData ) {
-            'use server';
-            return Action.uploadSelectedUser(pool, formData);
-        },
-        async deleteUserInIF(id: string) {
-            'use server';
-            return Action.deleteUserIF(pool, id);
-        },
 
         // ----- Group ------------------------------------------
         async getFilteredGroups(
@@ -461,9 +447,23 @@ export default function MyDBAdapter() {
         },
 
         // ----- Setting ---------------------------------------------
-        async batchCreateUser(prevState: UserState, formData: FormData) {
+        async batchCreateUser(id: string, prevState: UserState, formData: FormData) {
             'use server';
-            return Action.batchCreateUser(pool, prevState, formData);
+            return Action.batchCreateUser(pool, id, prevState, formData);
+        },
+        async getFilteredIFUsers(query:string, itemsPerPage: number, currentPage: number) {
+            return User.fetchFilteredIFUsers(pool, query, itemsPerPage, currentPage);
+        },
+        async getFilteredIFUserPages(query: string, itemsPerPage:number) {
+            return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
+        },
+        async submitSelectedUsers(prevState:object, formData: FormData ) {
+            'use server';
+            return Action.uploadSelectedUser(pool, formData);
+        },
+        async deleteUserInIF(id: string) {
+            'use server';
+            return Action.deleteUserIF(pool, id);
         },
         
         async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
