@@ -76,7 +76,7 @@ export default async function Page(props: {
                         totalPages={1}
                         path={`/settings/regularExpPrivateInfo`}
                         locale={locale}
-                        deleteAction={adapter.deleteGroup}
+                        deleteAction={adapter.deleteRegularExp}
                         editable= {true}
                         deletable={true}
                     />

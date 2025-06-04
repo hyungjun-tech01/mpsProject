@@ -65,6 +65,7 @@ export default function Form(
                             item.type === 'hidden' ? 
                             <input
                                 id={item.name}
+                                key={item.name}
                                 name={item.name}
                                 type="hidden"
                                 value={item.defaultValue}

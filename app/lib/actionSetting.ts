@@ -36,7 +36,7 @@ const RegularExprFormSchema = z.object({
 const CreateRegularExpr = RegularExprFormSchema;
 
 export async function createRegularExp(client: Pool, prevState: GroupState, formData: FormData) {
-    console.log('createRegularExp  :', formData);
+    //console.log('createRegularExp  :', formData);
     const validatedFields = CreateRegularExpr.safeParse({
         regularExpName: formData.get('security_type'),
         regularExpType: formData.get('security_name'),
@@ -87,3 +87,24 @@ export async function createRegularExp(client: Pool, prevState: GroupState, form
     revalidatePath('/settings/regularExprPrivateInfo');
     redirect('/settings/regularExprPrivateInfo');
 };
+
+export async function deleteRegularExp(client: Pool, id: string ) {
+    try {
+        console.log("deleteRegularExp", id);
+        const result = await client.query(`
+            delete from tbl_security_value_info
+            where security_value_id =$1
+        `,[id]);
+       
+
+    } catch (error) {
+        console.log('Delete regular exp / Error : ', error);
+        return {
+            result: false,
+            data: "Database Error: Failed to Delete regular exp",
+        };
+    };
+    
+    revalidatePath('/settings/regularExprPrivateInfo');
+    redirect('/settings/regularExprPrivateInfo');
+}
