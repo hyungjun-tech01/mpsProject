@@ -178,3 +178,32 @@ export const formatDateForPerYear = (value: number, locale: string) => {
   const formatter = new Intl.DateTimeFormat(check_locale, options);
   return formatter.format(tempDate);
 }
+
+export const formatTimeSimple = (dateStr: string, locale: string = "ko") => {
+  let check_locale = "";
+  switch (locale) {
+    case "en":
+      check_locale = "en-US";
+      break;
+    default:
+      check_locale = "ko-KR";
+      break;
+  }
+
+  try {
+  const date = new Date(dateStr);
+
+  const yyyy = date.getFullYear();
+    const MM = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${MM}-${dd} ${hh}:${mm}`;
+
+  }
+  catch(e){
+    console.log('[Error] formatDate / input :', dateStr);
+    console.log(' - converted :', dateStr);
+    return "";
+  }
+};

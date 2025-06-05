@@ -21,6 +21,7 @@ export type IColumnData = {
   name: string;
   title: string | React.JSX.Element;
   type?: string | null;
+  width?: string | null | undefined;
   values?: object;
   align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
 };

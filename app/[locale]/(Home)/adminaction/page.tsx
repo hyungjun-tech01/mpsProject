@@ -16,10 +16,10 @@ import { executeDos } from '@/app/lib/executeDos';
 import { DosForm } from '@/app/components/settings/dosForm';
 
 export const metadata: Metadata = {
-    title: 'Settings',
+    title: 'Admin Action Log',
 }
 
-export default async function Page(props: {
+export default async function AdminActionLog(props: {
     searchParams?: Promise<ISearch>;
     params: Promise<{ process: string, locale: "ko" | "en" }>
 }
@@ -49,11 +49,11 @@ export default async function Page(props: {
 
     // Columns -------------------------------------------------------------------
     const regularExpColumns :  IColumnData[]  = [
-            { name: 'security_name', title: t('settings.security_name'), align: 'center' },
-            { name: 'security_type', title: t('settings.security_type'), align: 'center' },
-            { name: 'security_word', title: t('settings.security_word'), align: 'center' },
-            { name: 'created_by', title: t('settings.created_by'), align: 'center' },
-            { name: 'creation_date', type: 'date_simple', title: t('settings.creation_date'), align: 'center' },
+            { name: 'creation_date', type: 'date_simple', title: t('adminActionLog.creation_date'), align: 'center' },
+            { name: 'created_by', title: t('adminActionLog.created_by'), align: 'center' },
+            { name: 'application_action', title: t('adminActionLog.action'), align: 'center' },
+            { name: 'ip_address', title: t('adminActionLog.ip_address'), align: 'center' },
+            { name: 'application_page', title: t('adminActionLog.path'), align: 'center' },
         ];
 
     return (
@@ -63,9 +63,7 @@ export default async function Page(props: {
             </div>
            
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <Search placeholder={t('settings.regularExprPrivateInfoQueryCondition')}/>
-                <CreateButton link="/settings/regularExprPrivateInfo/create" title={t("settings.create_regular")} />
-                <DosForm label={t("settings.dos")} />
+                <Search placeholder={t('adminActionLog.query_placehold')}/>
             </div>
 
                 <Suspense fallback={<TableSkeleton />}>
@@ -77,8 +75,8 @@ export default async function Page(props: {
                         path={`/settings/regularExpPrivateInfo`}
                         locale={locale}
                         deleteAction={adapter.deleteRegularExp}
-                        editable= {true}
-                        deletable={true}
+                        editable= {false}
+                        deletable={false}
                     />
                 </Suspense>
             

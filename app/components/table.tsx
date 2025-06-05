@@ -13,7 +13,7 @@ import Pagination from './pagination';
 import { Menu } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
-import { formatCurrency, formatTimeToLocal } from '../lib/utils';
+import { formatCurrency, formatTimeToLocal , formatTimeSimple} from '../lib/utils';
 import { UpdateButton, DeleteButtton } from './buttons';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -146,13 +146,13 @@ export default function CustomizedTable<DataType>({
                 <Table sx={{minWidth: "700px"}} aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            {checkable && <StyledTableCell align='right'>{' '}</StyledTableCell>}
+                            {checkable && <StyledTableCell align='right' width={20} >{' '}</StyledTableCell>}
                             {columns.map((column, idx) => (
-                                <StyledTableCell key={idx} align={column.align} >
+                                <StyledTableCell key={idx} align={column.align} width={column.width ?? 100}>
                                     {column.title}
                                 </StyledTableCell>
                             ))}
-                            {(editable || deletable) && <StyledTableCell align='right'>{' '}</StyledTableCell>}
+                            {(editable || deletable) && <StyledTableCell align='right' width={20} >{' '}</StyledTableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -178,6 +178,7 @@ export default function CustomizedTable<DataType>({
                                             >
                                                 {!column.type && row[column.name]}
                                                 {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                                {!!column.type && column.type === 'date_simple' && formatTimeSimple(row[column.name], locale)}
                                                 {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                                 {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
                                                 {!!column.type && column.type === 'file' &&

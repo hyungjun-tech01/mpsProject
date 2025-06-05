@@ -554,7 +554,7 @@ const koResource = {
         settings: {
             settings: '설정',
             registerUsers: '사용자 일괄 등록',
-            regularExprPrivateInfo:'개인정보 정규식 관리',
+            regularExprPrivateInfo:'정규식/보안단어 관리',
             regularExprPrivateInfoQueryCondition: '이름, Values 로 조회하세요.',
             security_name:'이름',
             security_type:'타입',
@@ -573,6 +573,16 @@ const koResource = {
             regularExpValuePlaceholder:'정규식 값을 입력하세요',
             regularExpType_regex:'정규식',
             regularExpType_security_word:'보안 단어',
+        },
+        adminActionLog:{
+            adminActionLog:'관리자 작업 로그',
+            creation_date:'일시',
+            created_by : '사용지',
+            action:'행위',
+            path:'경로',
+            ip_address:'IP주소',
+            query_placehold : '사용자, 행위, 경로로 조회하세요.'
+
         }
     },
 }
