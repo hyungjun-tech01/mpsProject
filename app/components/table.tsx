@@ -24,6 +24,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.white,
         fontSize: 15,
+        overflow: "hidden",
+        whiteSpace: "nowrap",
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 15,
@@ -141,7 +143,7 @@ export default function CustomizedTable<DataType>({
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
             <TableContainer component={Paper}>
-                <Table className="min-w-[700px]" aria-label="customized table">
+                <Table sx={{minWidth: "700px"}} aria-label="customized table">
                     <TableHead>
                         <TableRow>
                             {checkable && <StyledTableCell align='right'>{' '}</StyledTableCell>}

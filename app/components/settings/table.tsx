@@ -22,6 +22,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.white,
         fontSize: 15,
+        overflow: "hidden",
+        whiteSpace: "nowrap",
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 15,
@@ -205,7 +207,7 @@ export default function CustomizedTable<DataType>({
                 </div>
             }
             <TableContainer component={Paper}>
-                <Table className="min-w-[700px]" aria-label="customized table">
+                <Table sx={{minWidth: "700px"}} aria-label="customized table">
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align='right'>
