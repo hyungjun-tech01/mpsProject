@@ -3178,3 +3178,12 @@ CREATE TABLE tbl_application_log_info(
 insert into tbl_security_value_info
 (security_name, security_type, security_word, created_by, creation_date)
 values('전화번호', '정규식',  '(\d{2}-\d{2}-\d{6}-\d{2})', 'admin',now());
+
+
+--2025.06.06 
+-- tbl_audit_job_log 컬럼 추가 
+alter table tbl_audit_job_log add detect_security boolean;
+alter table tbl_audit_job_log add security_text text;
+
+-- tbl_application_log 에 컬럼 추가 
+alter table tbl_application_log add ip_address varchar(255); 
