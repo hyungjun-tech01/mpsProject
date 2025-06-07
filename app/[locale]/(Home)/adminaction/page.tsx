@@ -39,9 +39,9 @@ export default async function AdminActionLog(props: {
 
     const adapter = MyDBAdapter();
 
-    const [t, regularExp] = await Promise.all([
+    const [t, totalPages, applicationLog] = await Promise.all([
         getDictionary(locale),
-        //adapter.getFilteredRegularExpPages(query, itemsPerPage),
+        adapter.getFilteredApplicationLogPages(query, itemsPerPage),
         adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage)
     ]);
 
@@ -70,10 +70,10 @@ export default async function AdminActionLog(props: {
                 <Suspense fallback={<TableSkeleton />}>
                     <Table
                         columns={regularExpColumns}
-                        rows={regularExp}
+                        rows={applicationLog}
                         currentPage={currentPage}
-                        totalPages={1}
-                        path={`/settings/regularExpPrivateInfo`}
+                        totalPages={totalPages}
+                        path={`/adminaction`}
                         locale={locale}
                         deleteAction={adapter.deleteRegularExp}
                         editable= {false}

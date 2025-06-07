@@ -8,7 +8,9 @@ import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 // import { DoNotDisturbOnOutlined, DoNotDisturbOffOutlined } from "@mui/icons-material";
 import { TableSkeleton } from "@/app/components/skeletons";
-
+import LogClient from '@/app/lib/logClient';
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -23,6 +25,15 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const session = await auth();
+
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
 
     const adapter = MyDBAdapter();
     const [t, totalPages, users] = await Promise.all([
@@ -47,6 +58,7 @@ export default async function Page(props: {
 
     return (
         <div className="w-full">
+             <LogClient userName={userName} groupId='' query={query}   applicationPage='사용자' applicationAction='조회'/>
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t("common.user")}</h1>
             </div>

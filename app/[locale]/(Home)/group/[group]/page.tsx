@@ -11,6 +11,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 import clsx from 'clsx';
+import LogClient from '@/app/lib/logClient';
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
@@ -60,12 +61,6 @@ export default async function Page(props: {
         // notFound();
     };
 
-    const logData = new FormData();
-    logData.append('application_page', 'group');
-    logData.append('application_action', 'Query');
-    logData.append('application_parameter', group +':' +query );
-    logData.append('created_by', userName);
-    adapter.applicationLog(logData);
     ///// application log ----------------------------------------------------------------------
 
     // Tabs ----------------------------------------------------------------------
@@ -113,6 +108,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
+            <LogClient userName={userName} groupId='' query={query}   applicationPage='그룹' applicationAction='조회'/>
             <div className="pl-2">
             {subTitles.map(item => {
                 return <Link key={item.category} href={item.link}

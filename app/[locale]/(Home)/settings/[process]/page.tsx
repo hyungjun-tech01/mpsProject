@@ -9,6 +9,8 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
+import LogClient from '@/app/lib/logClient';
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import clsx from 'clsx';
 import { TableSkeleton } from "@/app/components/skeletons";
 
@@ -33,6 +35,13 @@ export default async function Page(props: {
 
     if (!['registerUsers' ].includes(process)) {
         notFound();
+    };
+
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
     };
 
     if(!session?.user) return notFound();
@@ -70,6 +79,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
+            <LogClient userName={userName} groupId='' query={query}   applicationPage='사용자일괄등록' applicationAction='조회'/>
             <div className="pl-2">
             {subTitles.map(item => {
                 return <Link key={item.category} href={item.link}

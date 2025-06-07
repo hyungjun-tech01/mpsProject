@@ -1,18 +1,16 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
-import { FileUpload } from '@/app/components/settings/file-upload-form';
 import { IColumnData, ISearch } from '@/app/lib/definitions';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
-import clsx from 'clsx';
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
+import LogClient from '@/app/lib/logClient';
 import { TableSkeleton } from "@/app/components/skeletons";
 import { CreateButton } from '@/app/components/buttons';
-import { executeDos } from '@/app/lib/executeDos'; 
 import { DosForm } from '@/app/components/settings/dosForm';
 
 export const metadata: Metadata = {
@@ -33,15 +31,22 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
 
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
+
    
     if(!session?.user) return notFound();
     if( session?.user.role !== 'admin') return notFound();
 
     const adapter = MyDBAdapter();
 
-    const [t, regularExp] = await Promise.all([
+    const [t, totalPages, regularExp] = await Promise.all([
         getDictionary(locale),
-        //adapter.getFilteredRegularExpPages(query, itemsPerPage),
+        adapter.getFilteredRegularExpPages(query, itemsPerPage),
         adapter.getFilteredRegularExp(query, itemsPerPage, currentPage)
     ]);
 
@@ -58,6 +63,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
+            <LogClient userName={userName} groupId='' query={query}   applicationPage='정규식/보안단어' applicationAction='조회'/>
              <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t('settings.regularExprPrivateInfo')}</h1>
             </div>
@@ -73,7 +79,7 @@ export default async function Page(props: {
                         columns={regularExpColumns}
                         rows={regularExp}
                         currentPage={currentPage}
-                        totalPages={1}
+                        totalPages={totalPages}
                         path={`/settings/regularExpPrivateInfo`}
                         locale={locale}
                         deleteAction={adapter.deleteRegularExp}

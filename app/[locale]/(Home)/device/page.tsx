@@ -65,16 +65,15 @@ export default async function Device(
         isAdmin ? adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale) : null
     ]);
 
-     ///// application log ----------------------------------------------------------------------
+ 
      const userName = session?.user.name ?? "";
      if (!userName) {
          // 여기서 redirect 함수를 사용해 리다이렉트 처리
          redirect('/login'); // '/login'으로 리다이렉트
          // notFound();
      };
-
  
-     ///// application log ----------------------------------------------------------------------
+
     //console.log('Check : ', devices);
 
     const columns: IColumnData[] = [

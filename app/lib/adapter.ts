@@ -468,8 +468,12 @@ export default function MyDBAdapter() {
         },
         
         async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
+            return RegularExp.filteredRegularExp(pool, query, itemsPerPage, currentPage);
+        },
 
-            return RegularExp.getFilteredRegularExp(pool, query, itemsPerPage, currentPage);
+        async getFilteredRegularExpPages(query:string, itemsPerPage: number){
+
+            return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
         },
 
         async createRegularExp(prevState: GroupState, formData: FormData){
@@ -494,6 +498,11 @@ export default function MyDBAdapter() {
 
             return ApplicationLog.fetchFilteredApplicationLog(pool, query, itemsPerPage, currentPage);
         },
+        async getFilteredApplicationLogPages(query:string, itemsPerPage: number){
+
+            return ApplicationLog.fetchFilteredApplicationLogPages(pool, query, itemsPerPage);
+        },
+        
           // -----------------------------------------------------------
     }
 }

@@ -12,6 +12,7 @@ import { TableSkeleton } from "@/app/components/skeletons";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
+import LogClient from '@/app/lib/logClient';
 
 
 export const metadata: Metadata = {
@@ -40,7 +41,6 @@ export default async function Page(props: {
         adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage)
     ]);
 
-    ///// application log ----------------------------------------------------------------------
     const userName = session?.user.name ?? "";
     if (!userName) {
         // 여기서 redirect 함수를 사용해 리다이렉트 처리
@@ -48,13 +48,6 @@ export default async function Page(props: {
         // notFound();
     };
 
-    const logData = new FormData();
-    logData.append('application_page', 'logs');
-    logData.append('application_action', 'Query');
-    logData.append('application_parameter', query );
-    logData.append('created_by', userName);
-    adapter.applicationLog(logData);
-    ///// application log ----------------------------------------------------------------------
     
     const subTitles = [
      //   { category: 'printlogs', title: t('logs.printlogs'), link: `/logs/printlogs` },
@@ -93,6 +86,7 @@ export default async function Page(props: {
 
     return (
         <div className="w-full">
+             <LogClient userName={userName} groupId='' query={query}   applicationPage='로그' applicationAction='조회'/>
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t('logs.auditlogs')}</h1>
             </div>
