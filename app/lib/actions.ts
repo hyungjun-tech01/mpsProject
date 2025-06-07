@@ -776,36 +776,21 @@ export async function applicationLog(client: Pool, formData: FormData) {
     const created_by = formData.get("created_by");
     const ip_address = formData.get("ip_address");
 
-     // log_date 기준으로 시분까지 동일한 로그가 있는지 확인
-     const { rows } = await client.query(
-      `
-        SELECT 1 FROM tbl_application_log_info
-        WHERE application_page = $1
-          AND application_action = $2
-          AND application_parameter = $3
-          AND created_by = $4
-          AND ip_address = $5
-          AND to_char(log_date, 'YYYY-MM-DD HH24:MI') = to_char(now(), 'YYYY-MM-DD HH24:MI')
-        LIMIT 1
-      `,
-      [application_page, application_action, application_parameter, created_by, ip_address]
-    );
-
-    if (rows.length === 0) {
       await client.query(
-        `
-              INSERT INTO tbl_application_log_info (
-                  application_page,        
-                  application_action,        
-                  application_parameter,        
-                  created_by,
-                  log_date,
-                  ip_address
-              )
-              VALUES ($1,$2,$3,$4,now(),$5)`,
+        `INSERT INTO tbl_application_log_info (
+            application_page,        
+            application_action,        
+            application_parameter,        
+            created_by,
+            log_date,
+            log_minute_trunc,
+            ip_address
+          )
+          VALUES ($1,$2,$3,$4,now(),to_char(now(), 'yyyy.mm.dd hh24:mi'),$5)
+          ON CONFLICT (application_page, application_action, application_parameter, created_by, ip_address, log_minute_trunc) DO NOTHING;
+        `,
         [application_page, application_action, application_parameter, created_by, ip_address]
       );
-    }
   } catch (error) {
     console.log("application Log / Error : ", error);
     return {

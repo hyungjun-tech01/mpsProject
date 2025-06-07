@@ -24,8 +24,6 @@ export async function filteredRegularExp(
             LIMIT $2 OFFSET $3
         `, [`%${query}%`, itemsPerPage, offset]);
 
-
-        console.log('response.rows', response.rows);
         return response.rows;
     } catch (error) {
         console.error("Database Error:", error);

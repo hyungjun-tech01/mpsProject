@@ -3154,7 +3154,7 @@ CREATE TABLE tbl_user_info_if (
 -- 2025.05.22  tbl_security_value_info 정규식, 보안단어 관리
 DROP table if exists tbl_security_value_info;
 CREATE TABLE tbl_security_value_info(
-    security_value_id     varchar(36)   NOT NULL default uuid_generate_v4() ,     
+    security_value_id     varchar(36)   NOT NULL default uuid_generate_v4() primary key,     
     security_name         varchar(255)  primary key,  
     security_type         varchar(255)  not null,  
     security_word         varchar(255) not null, 
@@ -3165,12 +3165,14 @@ CREATE TABLE tbl_security_value_info(
 -- 2025.05.22  tbl_application_log_info  화면사용로그
 DROP table if exists tbl_application_log_info;
 CREATE TABLE tbl_application_log_info(
-    application_log_id      varchar(36) NOT NULL default uuid_generate_v4() ,       
+    application_log_id      varchar(36) NOT NULL default uuid_generate_v4() primary key,       
     application_page        varchar(255),        
     application_action      varchar(255),        
     application_parameter   text	    ,        
     created_by              varchar(255),
-    log_date                timestamp	
+    log_date                timestamp	,
+    ip_address              varchar(255),
+    log_minute_trunc        varchar(16)
 
 );
 
@@ -3187,3 +3189,18 @@ alter table tbl_audit_job_log add security_text text;
 
 -- tbl_application_log_info 에 컬럼 추가 
 alter table tbl_application_log_info add ip_address varchar(255); 
+
+
+-- 2025.06.07 
+ALTER TABLE tbl_application_log_info ADD COLUMN log_minute_trunc varchar(16); -- yyyy.mm.dd hh24:mi
+
+-- 동시간대에 같은 파라메터로 2개 라인 안생기게 
+ALTER TABLE tbl_application_log_info
+ADD CONSTRAINT uq_application_log_per_minute UNIQUE (
+    application_page,
+    application_action,
+    application_parameter,
+    created_by,
+    ip_address,
+    log_minute_trunc
+);
