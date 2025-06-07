@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import getDictionary from '@/app/locales/dictionaries';
@@ -6,6 +6,7 @@ import MyDBAdapter from '@/app/lib/adapter';
 import { IColumnData } from '@/app/lib/definitions';
 import { CreateButton } from '@/app/components/buttons';
 import { deleteDevice } from '@/app/components/device/actions';
+import LogClient from '@/app/lib/logClient';
 import Search from '@/app/components/search';
 import Table from '@/app/components/table';
 import ModalButton from '@/app/components/device/modalButton';
@@ -71,13 +72,8 @@ export default async function Device(
          redirect('/login'); // '/login'으로 리다이렉트
          // notFound();
      };
+
  
-     const logData = new FormData();
-     logData.append('application_page', 'device');
-     logData.append('application_action', 'Query');
-     logData.append('application_parameter', query );
-     logData.append('created_by', userName);
-     adapter.applicationLog(logData);
      ///// application log ----------------------------------------------------------------------
     //console.log('Check : ', devices);
 
@@ -97,6 +93,8 @@ export default async function Device(
     ];
     return (
             <div className="w-full">
+                <LogClient userName={userName} groupId={groupId} query={query}   applicationPage='출력장치' applicationAction='조회'/>
+                
                 <div className="flex w-full items-center justify-between">
                     <h1 className="text-2xl">{t('device.device')}</h1>
                 </div>

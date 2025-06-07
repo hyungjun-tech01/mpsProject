@@ -5,6 +5,7 @@ import * as Device from "./fetchDeviceData";
 import * as Document from "./fetchDocumentData";
 import * as Log from "./fetchLogData";
 import * as RegularExp from "./fetchRegularExpPrivateInfoData";
+import * as ApplicationLog from "./fetchApplicationLog";
 import type { UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
@@ -489,5 +490,10 @@ export default function MyDBAdapter() {
             'use server';
             return Action.applicationLog(pool,  formData);
         },
+        async getFilteredApplicationLog(query:string, itemsPerPage: number, currentPage: number){
+
+            return ApplicationLog.fetchFilteredApplicationLog(pool, query, itemsPerPage, currentPage);
+        },
+          // -----------------------------------------------------------
     }
 }
