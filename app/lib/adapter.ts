@@ -61,8 +61,17 @@ export default function MyDBAdapter() {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-        async deleteUser(userId: string) {
+        async deleteUser(userId: string, deletedBy: string) {
             'use server';
+
+            const logData = new FormData();
+            logData.append('application_page', '사용자');
+            logData.append('application_action', '삭제');
+            logData.append('application_parameter', `{userId:${userId}}`);
+            logData.append('created_by', deletedBy);
+
+            Action.applicationLog(pool,  logData);
+
             return Action.deleteUser(pool, userId)
         },
         async getAccount(userName: string) {

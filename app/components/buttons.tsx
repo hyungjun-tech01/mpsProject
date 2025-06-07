@@ -31,9 +31,9 @@ export function UpdateButton({ link, disabled }: { link: string, disabled: boole
   );
 }
 
-export function DeleteButtton({ id, title, action }: { id: string, title:string, action: (id:string) => void }) {
+export function DeleteButtton({ id, title, deletedBy, action }: { id: string, title:string, deletedBy:string, action: (id:string, deletedBy:string) => void }) {
   // console.log("DeleteButton / id :", id);
-  const actionWithId = action.bind(null, id);
+  const actionWithId = action.bind(null, id, deletedBy);
 
   return (
     <form action={actionWithId}>

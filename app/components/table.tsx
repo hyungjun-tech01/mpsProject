@@ -18,7 +18,6 @@ import { UpdateButton, DeleteButtton } from './buttons';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.primary.main,
@@ -48,6 +47,7 @@ interface ITable<DataType> {
     currentPage: number;
     totalPages: number;
     path?: string;
+    sesseionUserName?: string;
     locale?: 'ko' | 'en';
     deleteAction?: (id: string) => void;
     editable?: boolean;
@@ -55,11 +55,13 @@ interface ITable<DataType> {
     checkable?: boolean;
 }
 
+
 export default function CustomizedTable<DataType>({
     columns,
     rows,
     totalPages,
     path,
+    sesseionUserName,
     locale = 'ko',
     deleteAction,
     editable = true,
@@ -68,6 +70,7 @@ export default function CustomizedTable<DataType>({
 }: ITable<DataType>) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -117,7 +120,7 @@ export default function CustomizedTable<DataType>({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction} />
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={sesseionUserName} action={deleteAction} />
                 </div>
             </div>
         </Menu>
@@ -139,6 +142,7 @@ export default function CustomizedTable<DataType>({
     let columnLength = columns.length;
     if(checkable) columnLength += 1;
     if((editable || deletable)) columnLength += 1;
+    
 
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>

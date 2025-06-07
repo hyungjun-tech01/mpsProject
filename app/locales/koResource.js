@@ -581,7 +581,7 @@ const koResource = {
         adminActionLog:{
             adminActionLog:'관리자 작업 로그',
             creation_date:'일시',
-            created_by : '사용지',
+            created_by : '사용자',
             action:'행위',
             path:'경로',
             ip_address:'IP주소',

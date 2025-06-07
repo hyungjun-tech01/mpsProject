@@ -68,6 +68,7 @@ export default async function Page(props: {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     path='user'
+                    sesseionUserName={userName}
                     locale={locale}
                     deleteAction={adapter.deleteUser}
                     editable={true}

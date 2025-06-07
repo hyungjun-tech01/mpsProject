@@ -18,10 +18,11 @@ export async function fetchFilteredApplicationLog(
                     tui.full_name||'('||tal.created_by||')' created_by   ,
                     log_date             ,
                     ip_address        
-            from tbl_application_log_info tal, tbl_user_info tui
-            WHERE 1 = 1
-              and tal.created_by = tui.user_name
-             and (
+            from  tbl_application_log_info tal
+            LEFT JOIN 
+                tbl_user_info tui ON tal.created_by = tui.user_name
+            WHERE
+               (
                 application_page ILIKE '${`%${query}%`}' OR
                 application_action ILIKE '${`%${query}%`}' OR
                 application_parameter ILIKE '${`%${query}%`}' OR
