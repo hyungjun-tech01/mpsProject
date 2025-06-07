@@ -22,16 +22,17 @@ import {
     value,
     type,
     color,
+    
   }: {
     title: string;
     value: number | string | object;
-    type: "users" | "devices" | "pages" | "collected" | "error" | "warning";
+    type?: "users" | "devices" | "pages" | "collected" | "error" | "warning";
     color?: string;
   }) {
-    const Icon = iconMap[type];
+    const Icon = !!type ? iconMap[type] : null;
   
     return (
-      <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+      <div className="flex-1 rounded-xl bg-gray-50 p-2 shadow-sm  border border-gray-300">
         <div className="flex p-4">
           {!!Icon && <Icon className={clsx("h-6 w-6", 
               {"text-gray-700": !color}, 
