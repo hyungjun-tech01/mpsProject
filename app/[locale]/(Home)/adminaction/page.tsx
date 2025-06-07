@@ -42,24 +42,25 @@ export default async function AdminActionLog(props: {
     const [t, regularExp] = await Promise.all([
         getDictionary(locale),
         //adapter.getFilteredRegularExpPages(query, itemsPerPage),
-        adapter.getFilteredRegularExp(query, itemsPerPage, currentPage)
+        adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage)
     ]);
 
     // Tabs ----------------------------------------------------------------------
 
     // Columns -------------------------------------------------------------------
     const regularExpColumns :  IColumnData[]  = [
-            { name: 'creation_date', type: 'date_simple', title: t('adminActionLog.creation_date'), align: 'center' },
+            { name: 'log_date', type: 'date_simple', title: t('adminActionLog.creation_date'), align: 'center' },
             { name: 'created_by', title: t('adminActionLog.created_by'), align: 'center' },
+            { name: 'application_page', title: t('adminActionLog.path'), align: 'center' },
+            { name: 'application_parameter', title: t('adminActionLog.parameter'), align: 'center' },
             { name: 'application_action', title: t('adminActionLog.action'), align: 'center' },
             { name: 'ip_address', title: t('adminActionLog.ip_address'), align: 'center' },
-            { name: 'application_page', title: t('adminActionLog.path'), align: 'center' },
         ];
 
     return (
         <div className='w-full flex-col justify-start'>
              <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl">{t('settings.regularExprPrivateInfo')}</h1>
+                <h1 className="text-2xl">{t('adminActionLog.adminActionLog')}</h1>
             </div>
            
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

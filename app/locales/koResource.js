@@ -581,6 +581,7 @@ const koResource = {
             action:'행위',
             path:'경로',
             ip_address:'IP주소',
+            parameter: '파라메터',
             query_placehold : '사용자, 행위, 경로로 조회하세요.'
 
         }

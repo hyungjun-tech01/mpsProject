@@ -3185,5 +3185,5 @@ values('전화번호', '정규식',  '(\d{2}-\d{2}-\d{6}-\d{2})', 'admin',now())
 alter table tbl_audit_job_log add detect_security boolean;
 alter table tbl_audit_job_log add security_text text;
 
--- tbl_application_log 에 컬럼 추가 
-alter table tbl_application_log add ip_address varchar(255); 
+-- tbl_application_log_info 에 컬럼 추가 
+alter table tbl_application_log_info add ip_address varchar(255); 
