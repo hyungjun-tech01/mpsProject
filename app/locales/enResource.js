@@ -293,6 +293,7 @@ const enResource = {
             price_1: 'Amount',
             product: 'Product',
             quantity: 'Quantity',
+            rank:'Rank',
             region:'Region',
             regist_date:'Registration Date',
             related: 'Related',
@@ -415,6 +416,7 @@ const enResource = {
             document_name: 'Document Name',
             printer: 'Printer',
             property: 'Property',
+            print_count: 'Print Count',
             status: 'Status',
             usage_cost: 'Usage Const',
             usage_date: 'Usage Date',
@@ -504,6 +506,8 @@ const enResource = {
         },
         settings: {
             registerUsers: 'Batch Register Users',
+            detect_count: 'Detect Count',
+            detect_rate: 'Detect Rate',
         }
     },
 }

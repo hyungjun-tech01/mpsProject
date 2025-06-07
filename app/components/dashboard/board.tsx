@@ -7,7 +7,6 @@ import {
     WarningOutlined
 } from "@mui/icons-material";
 import clsx from 'clsx';
-import { notFound } from 'next/navigation';
 import MyDBAdapter from "@/app/lib/adapter";
 import { auth } from "@/auth";
 import Card from "./card";
@@ -72,10 +71,9 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
 
         return (
             <>
-                <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+                <div className="rounded-xl bg-gray-50 p-2 border border-gray-300">
                     { boardInfo.map((item, idx) => {
                         const Icon = iconMap[item.type];
-        
                         return (
                             <div key={idx} className="flex p-4 justify-between">
                                 <div className="flex justify-start">

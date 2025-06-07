@@ -30,11 +30,6 @@ export default async function Page(props: {
         adapter.getFilteredUsersPages(query, itemsPerPage),
         adapter.getFilteredUsers(query, itemsPerPage, currentPage)
     ]);
-
-    // const handleDelete = async (userId: string) => {
-    //     'use server';
-    //     await adapter.deleteUser(userId);
-    //   };
     
     const columns: IColumnData[] = [
         { name: 'user_name', title: t('user.user_id'), align: 'center' },
