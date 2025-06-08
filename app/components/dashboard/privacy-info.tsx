@@ -2,30 +2,45 @@
 
 import { Suspense } from "react";
 import { IColumnData } from '@/app/lib/definitions';
-import MyDBAdapter from '@/app/lib/adapter';
 import Card from "./card";
-// import PrivateChartWrapper from './private-charts';
 import PieChart from '../pieChart';
 import VerticalBarChart from '../verticalBarChart';
 import Table from '@/app/components/dashboard/table';
 import { TableSkeleton } from "@/app/components/skeletons";
+import MyDBAdapter from '@/app/lib/adapter';
 
 
-export default async function PrivateInfotWrapper({
-    trans, locale
+export default async function PrivacyInfoWrapper({
+    trans, locale, period, dept, user, periodStart, periodEnd
 }: {
-    trans: (key: string) => string,
-    locale: "ko" | "en"
+    trans: (key: string) => string;
+    locale: "ko" | "en";
+    period: string;
+    dept?: string;
+    user?: string;
+    periodStart?: string;
+    periodEnd?: string;
 }) {
     const adapter = MyDBAdapter();
+    const [totalPages, detectedByUser] = await Promise.all([
+        adapter.getAllTotalPageSum(period, periodStart, periodEnd, dept, user),
+        adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user)
+    ]);
+
+    const detectedUserList = detectedByUser.map((data, idx) => ({
+        ...data,
+        rank : idx+1,
+        detect_rate: Math.round(data.detected * 10 / data.printed) * 0.1 + " %",
+        details: '/logs/auditLogs'
+    }));
 
     const columns: IColumnData[] = [
         { name: 'rank', title: trans('common.rank'), align: 'center' },
         { name: 'user_name', title: trans('user.user_name'), align: 'center' },
         { name: 'full_name', title: trans('common.name'), align: 'center' },
         { name: 'department', title: trans('user.department'), align: 'center' },
-        { name: 'print_count', title: trans('print.print_count'), align: 'center' },
-        { name: 'detect_count', title: trans('settings.detect_count'), align: 'center' },
+        { name: 'printed', title: trans('print.print_count'), align: 'center' },
+        { name: 'detected', title: trans('settings.detect_count'), align: 'center' },
         { name: 'detect_rate', title: trans('settings.detect_rate'), align: 'center' },
         { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
     ];
@@ -41,7 +56,7 @@ export default async function PrivateInfotWrapper({
     return (
         <div className='w-full border-t border-gray-300 pt-4'>
             <div className='w-full flex justify-between items-center mb-4`'>
-                <h1 className="mb-4 text-xl md:text-2xl">개인정보 출력 검출 통계</h1>
+                <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
                 <div className='flex gap-4 text-sm'>
                     <div className=''>
                         <label htmlFor="period-select">기간 :</label>
@@ -49,6 +64,7 @@ export default async function PrivateInfotWrapper({
                             <option value="today">오늘</option>
                             <option value="week">1주일</option>
                             <option value="month">1개월</option>
+                            <option value="specified">지정 기간</option>
                         </select>
                     </div>
                     <div>
@@ -66,7 +82,7 @@ export default async function PrivateInfotWrapper({
                 </div>
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
-                <Card title="총 출력 건수" value={12845 + "건"} />
+                <Card title="총 출력 건수" value={totalPages + "건"} />
                 <Card title="개인정보 포함 건수" value={289 + "건"} />
                 <Card title="검출률" value="2.25%" />
                 <Card title="최종 검출 일시" value="2025-05-23 16:45" />
@@ -91,7 +107,7 @@ export default async function PrivateInfotWrapper({
                     <Suspense fallback={<TableSkeleton />}>
                         <Table
                             columns={columns}
-                            rows={data}
+                            rows={detectedUserList}
                             locale={locale}
                         />
                     </Suspense>

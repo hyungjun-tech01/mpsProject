@@ -1,6 +1,6 @@
 import type { Pool } from "pg";
 import { AuditLogField } from "@/app/lib/definitions";
-import { generateStrOf30Days } from "./utils";
+import { generateStrOf30Days, formatDBTime } from "./utils";
 
 
 
@@ -58,11 +58,44 @@ export async function fetchPrinterUsageLogByUserIdPages(
 
 export async function fetchAllTotalPageSum(
     client: Pool,
+    period: string,
+    periodStart?: string,
+    periodEnd?:string,
+    dept?: string,
+    user?: string,
 ) {
+    const now = new Date();
+    let startTime = new Date();
+    let endTime = null;
+
+    if(period === "today") {
+        startTime.setDate(now.getDate() -1);
+    } else if(period === "week") {
+        startTime.setDate(now.getDate() -7);
+    } else if(period === "month") {
+        const monthVal = now.getMonth();
+        startTime.setMonth(monthVal === 0 ? 11 : monthVal -1);
+    } else if(period === "specified") {
+        if(!!periodStart) {
+            startTime = new Date(periodStart);
+        } else {
+            return [];
+        }
+        if(!!periodEnd) {
+            endTime = new Date(periodEnd);
+        } else {
+            return [];
+        }
+    }
+
     try {
         const sum = await client.query(`
             SELECT SUM(total_pages)
             FROM tbl_audit_job_log
+            WHERE CAST(send_time AS BIGINT) > ${formatDBTime(startTime)}
+            ${ !!endTime ? "AND CAST(send_time AS BIGINT) <= " + formatDBTime(endTime) : ""}
+            ${ user ? "AND user_name=" + user : "" }
+            ${ dept ? "AND department=" + dept : "" }
         `);
         return sum.rows[0].sum;
     } catch (error) {
@@ -331,4 +364,56 @@ export async function fetchUsageStatusByUser(
         console.error("Database Error:", error);
         throw new Error("Failed to fetch usage status by user");
     }
-}
+};
+
+export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
+    const now = new Date();
+    let startTime = new Date();
+    let endTime = null;
+
+    if(period === "today") {
+        startTime.setDate(now.getDate() -1);
+    } else if(period === "week") {
+        startTime.setDate(now.getDate() -7);
+    } else if(period === "month") {
+        const monthVal = now.getMonth();
+        startTime.setMonth(monthVal === 0 ? 11 : monthVal -1);
+    } else if(period === "specified") {
+        if(!!periodStart) {
+            startTime = new Date(periodStart);
+        } else {
+            return [];
+        }
+        if(!!periodEnd) {
+            endTime = new Date(periodEnd);
+        } else {
+            return [];
+        }
+    }
+
+    console.log(`Check : ${startTime.getFullYear()}.${String(startTime.getMonth()+1).padStart(2,'0')}.${String(startTime.getDate()).padStart(2,'0')}`)
+
+    try {
+        const response = await client.query(`
+            SELECT
+                user_name,
+                external_user_name,
+                department,
+                sum(detect_privacy_count) as detected,
+                sum(total_count) as printed
+            FROM tbl_privacy_audit_v 
+            WHERE send_date >= '${startTime.getFullYear()}.${String(startTime.getMonth()+1).padStart(2,'0')}.${String(startTime.getDate()).padStart(2,'0')}'
+            ${!!endTime ? "AND send_date < '" + endTime.getFullYear() 
+                + "." + String(endTime.getMonth() + 1).padStart(2,'0')
+                + "." + String(endTime.getDate()).padStart(2,'0') + "'" : ""}
+            ${!!dept ? "AND department = '" + dept : "'"}
+            ${!!user ? "AND user_name = '" + user : "'"}
+            GROUP BY user_name, external_user_name, department
+            ORDER BY detected DESC`
+        );
+        return response.rows;
+    } catch (e) {
+        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        return [];
+    }
+};

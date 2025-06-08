@@ -421,8 +421,8 @@ export default function MyDBAdapter() {
         async getFilteredAuditLogsPages(query: string, itemsPerPage: number) {
             return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage);
         },
-        async getAllTotalPageSum() {
-            return Log.fetchAllTotalPageSum(pool);
+        async getAllTotalPageSum(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
+            return Log.fetchAllTotalPageSum(pool, period, periodStart, periodEnd, dept, user );
         },
         async getTodayTotalPageSum() {
             return Log.fetchTodayTotalPageSum(pool);
@@ -438,6 +438,9 @@ export default function MyDBAdapter() {
         },
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
+        },
+        async getPrivacyDetectInfoByUsers(period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
+            return Log.fetchPrivacyDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
         },
 
         // ----- Print Spool --------------------------------------
@@ -512,6 +515,6 @@ export default function MyDBAdapter() {
             return ApplicationLog.fetchFilteredApplicationLogPages(pool, query, itemsPerPage);
         },
         
-          // -----------------------------------------------------------
+        // -----------------------------------------------------------
     }
 }

@@ -61,7 +61,6 @@ export const formatTimeToLocal = (dateStr: string, locale: string = "ko") => {
       check_locale = "ko-KR";
       break;
   }
-
   
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
@@ -207,3 +206,15 @@ export const formatTimeSimple = (dateStr: string, locale: string = "ko") => {
     return "";
   }
 };
+
+export const formatDBTime = (inputDate: Date) => {
+  const yy = inputDate.getFullYear() % 100;
+  const mo = inputDate.getMonth() + 1;
+  const dd = inputDate.getDate();
+  const hh = inputDate.getHours();
+  const mi = inputDate.getMinutes();
+  const ss = inputDate.getSeconds();
+  const ms = inputDate.getMilliseconds();
+  
+  return `${yy}${mo}${dd}${hh}${mi}${ss}${ms}`;
+} 

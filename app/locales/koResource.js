@@ -38,6 +38,7 @@ const koResource = {
             total_pages: '총 페이지',
             scan_pages: '스캔 매수',
             warning_device: '경고',
+            privacy_info_detect_stats:'개인정보 출력 검출 통계',
         },
         company:{
             account_code:'계좌번호',

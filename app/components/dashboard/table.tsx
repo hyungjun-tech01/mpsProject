@@ -80,7 +80,7 @@ export default function CustomizedTable<DataType>({
                                                 {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
                                                 {!!column.type && column.type === 'link' && 
                                                     <Link href={row.link} className='flex justify-center text-lime-700'>
-                                                        <button className='rounded-md bg-lime-700 text-white px-2 py-1'>{locale === "ko" ? "보기" : "View"}</button>
+                                                        <button className='rounded-md bg-lime-700 text-white text-sm px-2 py-1'>{locale === "ko" ? "보기" : "View"}</button>
                                                     </Link>
                                                 }
                                             </StyledTableCell>

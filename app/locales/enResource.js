@@ -38,6 +38,7 @@ const enResource = {
             scan_pages: 'Scanned Pages',
             print_pages: 'Printed Pages',
             warning_device: 'Warning',
+            privacy_info_detect_stats:'Detected Private Info. Stats.',
         },
         company:{
             account_code:'Account Code',
