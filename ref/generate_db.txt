@@ -3258,4 +3258,12 @@ GROUP BY
   department;
 
 
-select * from tbl_privacy_audit_v;  
+-- 샘플 쿼리 
+select user_name, external_user_name, department, sum(detect_privacy_count) as detect_privacy_count, 
+sum(total_count) as total_count,
+ROUND(SUM(detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+from tbl_privacy_audit_v
+where send_date >= '2024.04.01'
+and send_date <= '2024.10.31'  
+group by user_name, external_user_name, department
+order by  percent_detect desc
