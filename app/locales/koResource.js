@@ -502,7 +502,7 @@ const koResource = {
         logs: {
             image:'이미지',
             destination: '전송처',
-            auditlogs: '감사 Log',
+            auditlogs: '감사 로그',
             copies: '부수',
             original_pages: '매수',
             total_pages : '전체매수',
