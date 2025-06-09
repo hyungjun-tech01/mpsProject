@@ -85,6 +85,9 @@ export default function MyDBAdapter() {
             'use server';
             return Action.changeBalance(pool, id, prevState, formData);
         },
+        async getAllDepts() {
+            return User.fetchAllDepts(pool);
+        },
 
         // ----- Group ------------------------------------------
         async getFilteredGroups(

@@ -16,23 +16,30 @@ export default async function PrivacyInfoWrapper({
 }: {
     trans: (key: string) => string;
     locale: "ko" | "en";
-    period: string;
+    period: "today" | "week" | "month" | "specified";
     dept?: string;
     user?: string;
     periodStart?: string;
     periodEnd?: string;
 }) {
     const adapter = MyDBAdapter();
-    const [totalPages, detectedByUser] = await Promise.all([
+    const [totalPages, detectedByUser, allDepts] = await Promise.all([
         adapter.getAllTotalPageSum(period, periodStart, periodEnd, dept, user),
         adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user),
+        adapter.getAllDepts(),
     ]);
+
+    console.log("All depts : ", allDepts);
 
     const detectedUserList = detectedByUser.map((data, idx) => ({
         ...data,
         rank : idx+1,
         details: '/logs/auditLogs'
     }));
+    const departments = [
+        ...allDepts.map(item => ({title: item.dept_name, value: item.dept_name})),
+        {title: trans('common.all'), value: "all"}
+    ];
 
     const columns: IColumnData[] = [
         { name: 'rank', title: trans('common.rank'), align: 'center' },
@@ -51,13 +58,30 @@ export default async function PrivacyInfoWrapper({
     //     {rank: 3, user_name: 'test_3', full_name: '테스트3', department: 'IT팀', print_count: 393, detect_count: 13, detect_rate: '3.7%', link: '/logs/auditLogs'},
     //     {rank: 4, user_name: 'test_4', full_name: '테스트4', department: 'IT팀', print_count: 286, detect_count: 11, detect_rate: '2.8%', link: '/logs/auditLogs'},
     //     {rank: 5, user_name: 'test_5', full_name: '테스트5', department: 'IT팀', print_count: 156, detect_count: 5, detect_rate: '3.3%', link: '/logs/auditLogs'},
-    // ]
+    // ];
+
+    const translated = {
+        period: trans('common.period'),
+        today: trans('common.today'),
+        week: trans('common.week'),
+        month: trans('common.month'),
+        specified: trans('common.specified_period'),
+        department: trans('user.department'),
+        user_name_or_id: trans('dashboard.user_name_or_id'),
+        dept_all: trans('common.all'),
+    }
     
     return (
         <div className='w-full border-t border-gray-300 pt-4'>
             <div className='w-full flex justify-between items-center mb-4`'>
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
-                <PrivacyQuery trans={trans} period={period} dept={dept} user={user} />
+                <PrivacyQuery
+                    translated={translated}
+                    departments={departments}
+                    period={period}
+                    dept={dept}
+                    user={user}
+                />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
                 <Card title="총 출력 건수" value={totalPages + "건"} />
