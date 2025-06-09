@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { IColumnData } from '@/app/lib/definitions';
+import PrivacyQuery from "./privacy-query";
 import Card from "./card";
 import PieChart from '../pieChart';
 import VerticalBarChart from '../verticalBarChart';
@@ -24,13 +25,12 @@ export default async function PrivacyInfoWrapper({
     const adapter = MyDBAdapter();
     const [totalPages, detectedByUser] = await Promise.all([
         adapter.getAllTotalPageSum(period, periodStart, periodEnd, dept, user),
-        adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user)
+        adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user),
     ]);
 
     const detectedUserList = detectedByUser.map((data, idx) => ({
         ...data,
         rank : idx+1,
-        detect_rate: Math.round(data.detected * 10 / data.printed) * 0.1 + " %",
         details: '/logs/auditLogs'
     }));
 
@@ -39,47 +39,25 @@ export default async function PrivacyInfoWrapper({
         { name: 'user_name', title: trans('user.user_name'), align: 'center' },
         { name: 'full_name', title: trans('common.name'), align: 'center' },
         { name: 'department', title: trans('user.department'), align: 'center' },
-        { name: 'printed', title: trans('print.print_count'), align: 'center' },
-        { name: 'detected', title: trans('settings.detect_count'), align: 'center' },
-        { name: 'detect_rate', title: trans('settings.detect_rate'), align: 'center' },
+        { name: 'total_count', title: trans('print.print_count'), align: 'center' },
+        { name: 'detect_privacy_count', title: trans('settings.detect_count'), align: 'center' },
+        { name: 'percent_detect', title: trans('settings.detect_rate'), align: 'center' },
         { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
     ];
 
-    const data = [
-        {rank: 1, user_name: 'test_1', full_name: '테스트1', department: 'IT팀', print_count: 421, detect_count: 18, detect_rate: '4.3%', link: '/logs/auditLogs'},
-        {rank: 2, user_name: 'test_2', full_name: '테스트2', department: 'IT팀', print_count: 517, detect_count: 15, detect_rate: '2.9%', link: '/logs/auditLogs'},
-        {rank: 3, user_name: 'test_3', full_name: '테스트3', department: 'IT팀', print_count: 393, detect_count: 13, detect_rate: '3.7%', link: '/logs/auditLogs'},
-        {rank: 4, user_name: 'test_4', full_name: '테스트4', department: 'IT팀', print_count: 286, detect_count: 11, detect_rate: '2.8%', link: '/logs/auditLogs'},
-        {rank: 5, user_name: 'test_5', full_name: '테스트5', department: 'IT팀', print_count: 156, detect_count: 5, detect_rate: '3.3%', link: '/logs/auditLogs'},
-    ]
+    // const data = [
+    //     {rank: 1, user_name: 'test_1', full_name: '테스트1', department: 'IT팀', print_count: 421, detect_count: 18, detect_rate: '4.3%', link: '/logs/auditLogs'},
+    //     {rank: 2, user_name: 'test_2', full_name: '테스트2', department: 'IT팀', print_count: 517, detect_count: 15, detect_rate: '2.9%', link: '/logs/auditLogs'},
+    //     {rank: 3, user_name: 'test_3', full_name: '테스트3', department: 'IT팀', print_count: 393, detect_count: 13, detect_rate: '3.7%', link: '/logs/auditLogs'},
+    //     {rank: 4, user_name: 'test_4', full_name: '테스트4', department: 'IT팀', print_count: 286, detect_count: 11, detect_rate: '2.8%', link: '/logs/auditLogs'},
+    //     {rank: 5, user_name: 'test_5', full_name: '테스트5', department: 'IT팀', print_count: 156, detect_count: 5, detect_rate: '3.3%', link: '/logs/auditLogs'},
+    // ]
     
     return (
         <div className='w-full border-t border-gray-300 pt-4'>
             <div className='w-full flex justify-between items-center mb-4`'>
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
-                <div className='flex gap-4 text-sm'>
-                    <div className=''>
-                        <label htmlFor="period-select">기간 :</label>
-                        <select id="period-select" className='ml-2 border border-gray-300'>
-                            <option value="today">오늘</option>
-                            <option value="week">1주일</option>
-                            <option value="month">1개월</option>
-                            <option value="specified">지정 기간</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="dept-select">부서 :</label>
-                        <select id="dept-select" className='ml-2 border border-gray-300'>
-                            <option value="all">전체</option>
-                            <option value="영업부">영업부</option>
-                            <option value="관리부">관리부</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="user-input">사용자 이름 또는 ID :</label>
-                        <input id="user-select" className='ml-2 border border-gray-300' />
-                    </div>
-                </div>
+                <PrivacyQuery trans={trans} period={period} dept={dept} user={user} />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
                 <Card title="총 출력 건수" value={totalPages + "건"} />

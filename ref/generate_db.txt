@@ -3229,33 +3229,37 @@ WHERE ctid IN (
 );
 
 
-create or replace view tbl_privacy_audit_v as
-SELECT 
-  send_date, 
-  user_name, 
-  external_user_name, 
-  department, 
-  SUM(detect_privacy_count) AS detect_privacy_count,
-  SUM(total_count) AS total_count
-FROM (
-  SELECT 
-    TO_CHAR(TO_TIMESTAMP(t.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
-    t.user_name,
-    t1.external_user_name,
-    t1.department,
-    CASE 
-      WHEN t.detect_privacy = true THEN 1 
-      ELSE 0 
-    END AS detect_privacy_count,
-    1 AS total_count
-  FROM tbl_audit_job_log t
-  JOIN tbl_user_info t1 ON t.user_name = t1.user_name
-) sub
-GROUP BY 
-  send_date, 
-  user_name, 
-  external_user_name, 
-  department;
+create or replace view tbl_privacy_audit_v as (
+    SELECT 
+        send_date, 
+        user_name,
+        user_id,
+        external_user_name, 
+        department, 
+        SUM(detect_privacy_count) AS detect_privacy_count,
+        SUM(total_count) AS total_count
+    FROM (
+        SELECT 
+            TO_CHAR(TO_TIMESTAMP(t.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
+            t.user_name,
+            t1.user_id,
+            t1.external_user_name,
+            t1.department,
+            CASE 
+            WHEN t.detect_privacy = true THEN 1 
+            ELSE 0 
+            END AS detect_privacy_count,
+            1 AS total_count
+        FROM tbl_audit_job_log t
+        JOIN tbl_user_info t1 ON t.user_name = t1.user_name
+    ) sub
+    GROUP BY 
+        send_date,
+        user_name,
+        user_id,
+        external_user_name, 
+        department
+);
 
 
 -- 샘플 쿼리 

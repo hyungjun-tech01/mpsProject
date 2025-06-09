@@ -208,13 +208,9 @@ export const formatTimeSimple = (dateStr: string, locale: string = "ko") => {
 };
 
 export const formatDBTime = (inputDate: Date) => {
-  const yy = String(inputDate.getFullYear() % 100).padStart(2,'0');
+  const yyyy = String(inputDate.getFullYear());
   const mo = String(inputDate.getMonth() + 1).padStart(2,'0');
   const dd = String(inputDate.getDate()).padStart(2,'0');
-  const hh = String(inputDate.getHours()).padStart(2,'0');
-  const mi = String(inputDate.getMinutes()).padStart(2,'0');
-  const ss = String(inputDate.getSeconds()).padStart(2,'0');
-  const ms = String(inputDate.getMilliseconds()).padStart(2,'0');
 
-  return `${yy}${mo}${dd}${hh}${mi}${ss}${ms}`;
+  return `${yyyy}.${mo}.${dd}`;
 } 

@@ -139,6 +139,7 @@ export default function CustomizedTable<DataType>({
         link.click();
         window.URL.revokeObjectURL(url);
     };
+    
     let columnLength = columns.length;
     if(checkable) columnLength += 1;
     if((editable || deletable)) columnLength += 1;

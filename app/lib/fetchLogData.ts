@@ -91,11 +91,19 @@ export async function fetchAllTotalPageSum(
     try {
         const sum = await client.query(`
             SELECT SUM(total_pages)
-            FROM tbl_audit_job_log
-            WHERE CAST(send_time AS BIGINT) > ${formatDBTime(startTime)}
-            ${ !!endTime ? "AND CAST(send_time AS BIGINT) <= " + formatDBTime(endTime) : ""}
-            ${ user ? "AND user_name=" + user : "" }
-            ${ dept ? "AND department=" + dept : "" }
+            FROM (
+                SELECT
+                    ui.user_id,
+                    ui.user_name,
+                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
+                    ajl.total_pages
+                FROM tbl_audit_job_log ajl
+                JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+            ) As sub
+            WHERE send_date > '${formatDBTime(startTime)}'
+            ${ !!endTime ? "AND send_date <= '" + formatDBTime(endTime) + "'" : ""}
+            ${ user ? "AND user_id='" + user + "'": "" }
+            ${ dept ? "AND department='" + dept + "'" : "" }
         `);
         return sum.rows[0].sum;
     } catch (error) {
@@ -104,22 +112,22 @@ export async function fetchAllTotalPageSum(
     }
 };
 
-export async function fetchTodayTotalPageSum(
-    client: Pool,
-) {
-    try {
-        const todayPages = await client.query(`
-            SELECT SUM(total_pages)
-            FROM tbl_audit_job_log
-            WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
-            AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
-        `);
-        return todayPages.rows[0].sum;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer count.");
-    }
-};
+// export async function fetchTodayTotalPageSum(
+//     client: Pool,
+// ) {
+//     try {
+//         const todayPages = await client.query(`
+//             SELECT SUM(total_pages)
+//             FROM tbl_audit_job_log
+//             WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
+//             AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
+//         `);
+//         return todayPages.rows[0].sum;
+//     } catch (error) {
+//         console.error("Database Error:", error);
+//         throw new Error("Failed to fetch printer count.");
+//     }
+// };
 
 export async function fetchTotalPagesPerDayFor30Days(
     client: Pool,
@@ -371,8 +379,10 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
     let startTime = new Date();
     let endTime = null;
 
+    const nowDate = now.getDate();
+
     if(period === "today") {
-        startTime.setDate(now.getDate() -1);
+        startTime.setDate(nowDate -1);
     } else if(period === "week") {
         startTime.setDate(now.getDate() -7);
     } else if(period === "month") {
@@ -391,26 +401,27 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
         }
     }
 
-    console.log(`Check : ${startTime.getFullYear()}.${String(startTime.getMonth()+1).padStart(2,'0')}.${String(startTime.getDate()).padStart(2,'0')}`)
+    const startDate = startTime.getFullYear() + "." + String(startTime.getMonth()+1).padStart(2,'0') + "." + String(startTime.getDate()).padStart(2,'0');
+    const endDate = endTime ? endTime.getFullYear() + "." + String(endTime.getMonth()+1).padStart(2,'0') + "." + String(endTime.getDate()).padStart(2,'0') : "";
 
     try {
         const response = await client.query(`
             SELECT
+                user_id,
                 user_name,
                 external_user_name,
                 department,
-                sum(detect_privacy_count) as detected,
-                sum(total_count) as printed
-            FROM tbl_privacy_audit_v 
-            WHERE send_date >= '${startTime.getFullYear()}.${String(startTime.getMonth()+1).padStart(2,'0')}.${String(startTime.getDate()).padStart(2,'0')}'
-            ${!!endTime ? "AND send_date < '" + endTime.getFullYear() 
-                + "." + String(endTime.getMonth() + 1).padStart(2,'0')
-                + "." + String(endTime.getDate()).padStart(2,'0') + "'" : ""}
+                sum(detect_privacy_count) as detect_privacy_count,
+                sum(total_count) as total_count,
+                ROUND(SUM(detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_privacy_audit_v
+            WHERE send_date >= '${startDate}'
+            ${endDate !== "" ? "AND send_date < '" + endDate + "'" : ""}
             ${!!dept ? "AND department = '" + dept : "'"}
-            ${!!user ? "AND user_name = '" + user : "'"}
-            GROUP BY user_name, external_user_name, department
-            ORDER BY detected DESC`
-        );
+            ${!!user ? "AND user_id = '" + user : "'"}
+            GROUP BY user_id, user_name, external_user_name, department
+            ORDER BY detect_privacy_count DESC
+        `);
         return response.rows;
     } catch (e) {
         console.log('fetchPrivacyDetectInfoByUsers :', e);

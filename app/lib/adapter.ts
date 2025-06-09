@@ -376,7 +376,6 @@ export default function MyDBAdapter() {
             return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
         },
 
-
         // ----- Document ------------------------------------------
         async getFilteredDocumnets(
             query: string,
@@ -425,7 +424,8 @@ export default function MyDBAdapter() {
             return Log.fetchAllTotalPageSum(pool, period, periodStart, periodEnd, dept, user );
         },
         async getTodayTotalPageSum() {
-            return Log.fetchTodayTotalPageSum(pool);
+            // return Log.fetchTodayTotalPageSum(pool);
+            return Log.fetchAllTotalPageSum(pool, "today");
         },
         async getTotalPagesPerDayFor30Days(userName: string | null | undefined) {
             return Log.fetchTotalPagesPerDayFor30Days(pool, userName);
@@ -478,16 +478,13 @@ export default function MyDBAdapter() {
             'use server';
             return Action.deleteUserIF(pool, id);
         },
-        
         async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
             return RegularExp.filteredRegularExp(pool, query, itemsPerPage, currentPage);
         },
-
         async getFilteredRegularExpPages(query:string, itemsPerPage: number){
 
             return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
         },
-
         async createRegularExp(prevState: GroupState, formData: FormData){
             'use server';
 
@@ -499,7 +496,6 @@ export default function MyDBAdapter() {
             console.log('deleteRegularExp', FormData);
             return SettingAction.deleteRegularExp(pool, id);
         },       
-        // -----------------------------------------------------------
 
         // ----- Application Log ----------------------------------
         async applicationLog(formData: FormData) {
