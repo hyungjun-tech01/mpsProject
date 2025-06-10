@@ -56,7 +56,7 @@ export async function fetchPrinterUsageLogByUserIdPages(
     }
 };
 
-export async function fetchAllTotalPageSum(
+export async function fetchAllTotalCountSum(
     client: Pool,
     period: string,
     periodStart?: string,
@@ -64,70 +64,66 @@ export async function fetchAllTotalPageSum(
     dept?: string,
     user?: string,
 ) {
-    const now = new Date();
-    let startTime = new Date();
-    let endTime = null;
+    let startDate = periodStart?? "";
+    let endDate = periodEnd?? "";
 
-    if(period === "today") {
-        startTime.setDate(now.getDate() -1);
-    } else if(period === "week") {
-        startTime.setDate(now.getDate() -7);
-    } else if(period === "month") {
-        const monthVal = now.getMonth();
-        startTime.setMonth(monthVal === 0 ? 11 : monthVal -1);
-    } else if(period === "specified") {
-        if(!!periodStart) {
-            startTime = new Date(periodStart);
-        } else {
-            return [];
+    if(period !== 'specified') {
+        const now = new Date();
+        const startTime = new Date();
+
+        if(period === 'today') {
+            startDate = formatDBTime(now);
+        } else if(period === 'week') {
+            startTime.setDate(now.getDate() - 6);
+        } else if(period === 'month') {
+            startTime.setDate(now.getMonth() - 1);
         }
-        if(!!periodEnd) {
-            endTime = new Date(periodEnd);
-        } else {
-            return [];
-        }
+        startDate = formatDBTime(startTime);
     }
-
+    
     try {
         const sum = await client.query(`
-            SELECT SUM(total_pages)
+            SELECT
+                SUM(total_count) AS total_count
             FROM (
                 SELECT
                     ui.user_id,
                     ui.user_name,
                     TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
-                    ajl.total_pages
+                    1 AS total_count
                 FROM tbl_audit_job_log ajl
                 JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+                ${(!!user && !!dept) ? "WHERE ui.user_id='" + user + "' AND ui.department='" + dept + "'": (
+                    !!user ? "WHERE ui.user_id='" + user + "'" : (
+                    !!dept ? "WHERE ui.department='" + dept + "'" : "" 
+                ))}
             ) As sub
-            WHERE send_date > '${formatDBTime(startTime)}'
-            ${ !!endTime ? "AND send_date <= '" + formatDBTime(endTime) + "'" : ""}
-            ${ user ? "AND user_id='" + user + "'": "" }
-            ${ dept ? "AND department='" + dept + "'" : "" }
+            WHERE send_date >= '${startDate}'
+            ${ endDate !=="" ? "AND send_date <= '" + endDate + "'" : "" }
         `);
-        return sum.rows[0].sum;
+        return sum.rows[0].total_count;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch printer count.");
     }
 };
 
-// export async function fetchTodayTotalPageSum(
-//     client: Pool,
-// ) {
-//     try {
-//         const todayPages = await client.query(`
-//             SELECT SUM(total_pages)
-//             FROM tbl_audit_job_log
-//             WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
-//             AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
-//         `);
-//         return todayPages.rows[0].sum;
-//     } catch (error) {
-//         console.error("Database Error:", error);
-//         throw new Error("Failed to fetch printer count.");
-//     }
-// };
+export async function fetchTodayTotalPageSum(
+    client: Pool,
+) {
+    try {
+        const todayPages = await client.query(`
+            SELECT SUM(total_pages)
+            FROM tbl_audit_job_log
+            WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
+            AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
+        `);
+        return todayPages.rows[0].sum;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch printer count.");
+    }
+};
 
 export async function fetchTotalPagesPerDayFor30Days(
     client: Pool,

@@ -140,9 +140,19 @@ export default function PrivacyQuery({
         </select>
       </div>
       {period === "specified" && (
-        <div className='flex gap-2'>
-          <DatePicker selected={startDate} onChange={handleStartDateChange} placeholderText={translated.from} className='border border-gray-300' />
-          <DatePicker selected={endDate} onChange={handleEndDateChange} placeholderText={translated.to} className='border border-gray-300' />
+        <div className='flex gap-2 md:flex-col'>
+          <DatePicker 
+            selected={startDate}
+            placeholderText={translated.from}
+            className='w-24 border border-gray-300 pl-2' 
+            onChange={handleStartDateChange}
+          />
+          <DatePicker
+            selected={endDate}
+            placeholderText={translated.to}
+            className='w-24 border border-gray-300 pl-2'
+            onChange={handleEndDateChange}
+          />
         </div>
       )}
       <div>

@@ -21,7 +21,6 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  console.log(`Dashboard - params : ${!!searchParams? JSON.stringify(searchParams) : "null"}`);
   const locale = params.locale;
   const periodParam = searchParams?.period?? "month";
   const deptParam = searchParams?.dept;
@@ -50,7 +49,7 @@ export default async function Page(props: {
         </div>
       </div>
       {isAdmin && 
-          <div className="mt-8">
+          <div className="mt-4">
             <PrivacyInfoWrapper
               trans={t}
               locale={locale}
