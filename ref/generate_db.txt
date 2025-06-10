@@ -3228,6 +3228,7 @@ WHERE ctid IN (
   LIMIT 10
 );
 
+    drop view tbl_privacy_audit_v;
 
 create or replace view tbl_privacy_audit_v as (
     SELECT 
@@ -3244,7 +3245,7 @@ create or replace view tbl_privacy_audit_v as (
             t.user_name,
             t1.user_id,
             t1.external_user_name,
-            t1.department,
+            t2.dept_name department,
             CASE 
             WHEN t.detect_privacy = true THEN 1 
             ELSE 0 
@@ -3252,6 +3253,7 @@ create or replace view tbl_privacy_audit_v as (
             1 AS total_count
         FROM tbl_audit_job_log t
         JOIN tbl_user_info t1 ON t.user_name = t1.user_name
+        JOIN tbl_dept_info t2 on t1.department = t2.dept_id
     ) sub
     GROUP BY 
         send_date,
@@ -3271,3 +3273,39 @@ where send_date >= '2024.04.01'
 and send_date <= '2024.10.31'  
 group by user_name, external_user_name, department
 order by  percent_detect desc
+
+
+-- 2025.06.10
+
+update tbl_user_info
+set department = null;
+
+DO $$
+DECLARE
+   v_count_dept INTEGER;
+   v_count_user INTEGER;
+   target_cursor RECORD;
+BEGIN
+    SELECT count(*) INTO v_count_dept FROM tbl_dept_info;
+    SELECT count(*) INTO v_count_user FROM tbl_user_info;
+
+    FOR target_cursor IN
+        SELECT dept_id FROM tbl_dept_info
+    LOOP
+        UPDATE tbl_user_info
+        SET department = target_cursor.dept_id
+        WHERE ctid IN (
+            SELECT ctid 
+            FROM tbl_user_info 
+            WHERE department IS NULL
+            LIMIT ROUND(v_count_user::NUMERIC / v_count_dept)
+        );
+    END LOOP;	    
+END;
+$$ LANGUAGE plpgsql;
+
+--확인 
+select t1.dept_name, count(*) from tbl_user_info t , tbl_dept_info t1
+where t.department = t1.dept_id
+group by t1.dept_name;
+

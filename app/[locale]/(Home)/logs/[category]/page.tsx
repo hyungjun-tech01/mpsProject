@@ -10,6 +10,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
 
 
+
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
@@ -29,6 +30,9 @@ export default async function Page(props: {
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
+
+    const startDate = new Date();
+    const endDate  = new Date();
 
     const adapter = MyDBAdapter();
     const [t, /* printlogPages, printlogs, applogPages, applogs,*/ auditlogPages, auditlogs] = await Promise.all([
