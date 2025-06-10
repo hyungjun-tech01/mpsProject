@@ -29,15 +29,13 @@ export default async function PrivacyInfoWrapper({
         adapter.getAllDepts(),
     ]);
 
-    console.log("All depts : ", allDepts);
-
     const detectedUserList = detectedByUser.map((data, idx) => ({
         ...data,
         rank : idx+1,
         details: '/logs/auditLogs'
     }));
     const departments = [
-        ...allDepts.map(item => ({title: item.dept_name, value: item.dept_name})),
+        ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
     ];
 
@@ -69,6 +67,8 @@ export default async function PrivacyInfoWrapper({
         department: trans('user.department'),
         user_name_or_id: trans('dashboard.user_name_or_id'),
         dept_all: trans('common.all'),
+        from: trans('dashboard.from'),
+        to: trans('dashboard.to'),
     }
     
     return (
@@ -79,8 +79,9 @@ export default async function PrivacyInfoWrapper({
                     translated={translated}
                     departments={departments}
                     period={period}
+                    periodStart={periodStart}
+                    periodEnd={periodEnd}
                     dept={dept}
-                    user={user}
                 />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
