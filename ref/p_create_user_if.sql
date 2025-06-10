@@ -50,6 +50,7 @@ DECLARE
    v_if_message text;
    TARGET_CURSOR record;
    v_exists boolean;
+   v_dept_exists boolean;
    v_success_count integer := 0;
    v_error_count integer := 0;
    v_error_messages text := '';  
@@ -73,6 +74,7 @@ BEGIN
                               TARGET_CURSOR.user_name || '; ';  -- 메시지 누적
                     CONTINUE;  -- 현재 레코드 건너뛰고 다음 레코드 처리
                 end if;
+                
                 -- 중복 체크
                 SELECT EXISTS (
                     SELECT 1 
@@ -87,6 +89,25 @@ BEGIN
 
                     update tbl_user_info_if 
                     set if_status = 'ERROR', if_message = ' 이미 존재하는 사용자입니다: ' ||TARGET_CURSOR.user_name
+                    where user_info_if_id = TARGET_CURSOR.user_info_if_id;
+
+                    CONTINUE;  -- 현재 레코드 건너뛰고 다음 레코드 처리
+                END IF;
+                
+                -- DEPT 부서 체크 
+                SELECT EXISTS (
+                    SELECT 1 
+                    FROM tbl_dept_info 
+                    WHERE dept_name = TARGET_CURSOR.department
+                ) INTO v_dept_exists;
+
+                IF not v_dept_exists then 
+                    v_error_count := v_error_count + 1;
+                    v_error_messages := v_error_messages || TARGET_CURSOR.department||' 존재하지 않는 부서입니다: ' || 
+                              TARGET_CURSOR.user_name || '; ';  -- 메시지 누적
+
+                    update tbl_user_info_if 
+                    set if_status = 'ERROR', if_message = '존재하지 않는 부서입니다: ' ||TARGET_CURSOR.user_name
                     where user_info_if_id = TARGET_CURSOR.user_info_if_id;
 
                     CONTINUE;  -- 현재 레코드 건너뛰고 다음 레코드 처리
