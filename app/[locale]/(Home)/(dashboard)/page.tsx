@@ -6,25 +6,28 @@ import PrivacyInfoWrapper from "@/app/components/dashboard/privacy-info";
 import getDictionary from '@/app/locales/dictionaries';
 import clsx from "clsx";
 import { auth } from "@/auth";
-import MyDBAdapter from '@/app/lib/adapter';
 
+interface IDashboardParams {
+  period?: "today" | "week" | "month" | "specified",
+  dept?:string,
+  user?:string,
+  periodStart?:string,
+  periodEnd?:string,
+}
 
 export default async function Page(props: {
-  params: Promise<{ 
-    period?:string,
-    dept?:string,
-    user?:string,
-    periodStart?:string,
-    periodEnd?:string,
-    locale: "ko" | "en" }>
+  searchParams?: Promise<IDashboardParams>;
+  params: Promise<{ locale: "ko" | "en" }>;
 }) {
+  const searchParams = await props.searchParams;
   const params = await props.params;
+  console.log(`Dashboard - params : ${!!searchParams? JSON.stringify(searchParams) : "null"}`);
   const locale = params.locale;
-  const periodParam = params.period?? "month";
-  const deptParam = params.dept;
-  const userParam = params.user;
-  const periodStartParam = params.periodStart;
-  const periodEndParam = params.periodEnd;
+  const periodParam = searchParams?.period?? "month";
+  const deptParam = searchParams?.dept;
+  const userParam = searchParams?.user;
+  const periodStartParam = searchParams?.periodStart;
+  const periodEndParam = searchParams?.periodEnd;
 
   const t = await getDictionary(locale);
 
@@ -47,7 +50,7 @@ export default async function Page(props: {
         </div>
       </div>
       {isAdmin && 
-          <div>
+          <div className="mt-8">
             <PrivacyInfoWrapper
               trans={t}
               locale={locale}

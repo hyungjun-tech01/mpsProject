@@ -178,7 +178,9 @@ export async function fetchUserCount(client: Pool) {
 export async function fetchAllDepts(client: Pool) {
     try {
         const response = await client.query(`
-            SELECT dept_name
+            SELECT
+              dept_id,
+              dept_name
             FROM tbl_dept_info
         `)
         return response.rows;
