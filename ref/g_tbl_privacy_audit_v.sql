@@ -23,7 +23,7 @@ create or replace view tbl_privacy_audit_v as (
             1 AS total_count
         FROM tbl_audit_job_log t
         JOIN tbl_user_info t1 ON t.user_name = t1.user_name
-        JOIN tbl_dept_info t2 on t1.department = t2.dept_id
+        LEFT JOIN tbl_dept_info t2 on t1.department = t2.dept_id
     ) sub
     GROUP BY 
         send_date,
