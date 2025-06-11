@@ -20,12 +20,14 @@ export async function fetchFilteredUsers(
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
-                u.department,
+                tdi.dept_name department,
+                tdi.dept_id,
                 u.total_pages,
                 u.total_jobs,
                 null account_id,
                 u.balance
             FROM tbl_user_info u
+            LEFT JOIN tbl_dept_info tdi on u.department = tdi.dept_id
             WHERE
                 u.deleted='N'
                 ${
@@ -116,12 +118,14 @@ export async function fetchUserById(client: Pool, id: string) {
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
-                u.department,
+                tdi.dept_name department,
+                tdi.dept_id,
                 u.card_number,
                 u.card_number2,
                 null account_id,
                 u.balance
             FROM tbl_user_info u
+            LEFT JOIN tbl_dept_info tdi on u.department = tdi.dept_id
             WHERE u.user_id='${id}'
         `);
 
@@ -143,12 +147,14 @@ export async function fetchUserByName(client: Pool, name: string) {
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
-                u.department,
+                tdi.dept_name department,
+                tdi.dept_id,
                 u.card_number,
                 u.card_number2,
                 null account_id,
                 u.balance
             FROM tbl_user_info u
+            LEFT JOIN tbl_dept_info tdi on u.department = tdi.dept_id
             WHERE u.user_name='${name}'
         `);
 
