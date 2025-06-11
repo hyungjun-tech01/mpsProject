@@ -423,12 +423,11 @@ export default function MyDBAdapter() {
         async getFilteredAuditLogsPages(query: string, itemsPerPage: number) {
             return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage);
         },
-        async getAllTotalPageSum(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
-            return Log.fetchAllTotalPageSum(pool, period, periodStart, periodEnd, dept, user );
+        async getAllTotalCountSum(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
+            return Log.fetchAllTotalCountSum(pool, period, periodStart, periodEnd, dept, user );
         },
         async getTodayTotalPageSum() {
-            // return Log.fetchTodayTotalPageSum(pool);
-            return Log.fetchAllTotalPageSum(pool, "today");
+            return Log.fetchTodayTotalPageSum(pool);
         },
         async getTotalPagesPerDayFor30Days(userName: string | null | undefined) {
             return Log.fetchTotalPagesPerDayFor30Days(pool, userName);

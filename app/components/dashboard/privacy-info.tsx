@@ -24,7 +24,7 @@ export default async function PrivacyInfoWrapper({
 }) {
     const adapter = MyDBAdapter();
     const [totalPages, detectedByUser, allDepts] = await Promise.all([
-        adapter.getAllTotalPageSum(period, periodStart, periodEnd, dept, user),
+        adapter.getAllTotalCountSum(period, periodStart, periodEnd, dept, user),
         adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user),
         adapter.getAllDepts(),
     ]);
@@ -47,7 +47,7 @@ export default async function PrivacyInfoWrapper({
         { name: 'total_count', title: trans('print.print_count'), align: 'center' },
         { name: 'detect_privacy_count', title: trans('settings.detect_count'), align: 'center' },
         { name: 'percent_detect', title: trans('settings.detect_rate'), align: 'center' },
-        { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
+        // { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
     ];
 
     // const data = [
@@ -72,8 +72,8 @@ export default async function PrivacyInfoWrapper({
     }
     
     return (
-        <div className='w-full border-t border-gray-300 pt-4'>
-            <div className='w-full flex justify-between items-center mb-4`'>
+        <div className='w-full border-t border-gray-300 pt-6'>
+            <div className='w-full flex justify-between items-center mb-8`'>
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
                 <PrivacyQuery
                     translated={translated}
@@ -85,9 +85,9 @@ export default async function PrivacyInfoWrapper({
                 />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
-                <Card title="총 출력 건수" value={totalPages + "건"} />
-                <Card title="개인정보 포함 건수" value={289 + "건"} />
-                <Card title="검출률" value="2.25%" />
+                <Card title={trans('dashboard.total_print_count')} value={(totalPages ?? 0) + "건"} />
+                <Card title={trans('dashboard.privacy_detect_count')} value={289 + "건"} />
+                <Card title={trans('dashboard.privacy_detect_rate')} value="2.25%" />
                 <Card title="최종 검출 일시" value="2025-05-23 16:45" />
             </div>
             <div className='w-full flex gap-4 mb-4'>
