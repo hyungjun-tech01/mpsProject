@@ -146,11 +146,11 @@ export default function PrivacyQuery({
         </select>
       </div>
       {isPeriodSpecified && (
-        <div className='flex gap-3 md:flex-col'>
+        <div className='flex-col md:flex-row'>
           <DatePicker 
             selected={startDate}
             placeholderText={translated.from}
-            className='w-24 border border-gray-300 pl-2' 
+            className='w-24 border border-gray-300 pl-2 md:mr-2' 
             onChange={handleStartDateChange}
           />
           <DatePicker

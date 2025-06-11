@@ -213,4 +213,9 @@ export const formatDBTime = (inputDate: Date) => {
   const dd = String(inputDate.getDate()).padStart(2,'0');
 
   return `${yyyy}.${mo}.${dd}`;
-} 
+};
+
+export const formatDBTime2 = (inputValue: Number) => {
+  const inputStr = String(inputValue);
+  return `20${inputStr.slice(0,2)}-${inputStr.slice(2,4)}-${inputStr.slice(4,6)} ${inputStr.slice(6,8)}:${inputStr.slice(8,10)}`
+}

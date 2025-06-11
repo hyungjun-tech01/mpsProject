@@ -9,6 +9,7 @@ import VerticalBarChart from '../verticalBarChart';
 import Table from '@/app/components/dashboard/table';
 import { TableSkeleton } from "@/app/components/skeletons";
 import MyDBAdapter from '@/app/lib/adapter';
+import { formatDBTime2 } from '@/app/lib/utils';
 
 
 export default async function PrivacyInfoWrapper({
@@ -23,17 +24,24 @@ export default async function PrivacyInfoWrapper({
     periodEnd?: string;
 }) {
     const adapter = MyDBAdapter();
-    const [totalPages, detectedByUser, allDepts] = await Promise.all([
-        adapter.getAllTotalCountSum(period, periodStart, periodEnd, dept, user),
+    const [totalCount, totalDetected, lastDetectTime, detectedByUser, allDepts] = await Promise.all([
+        adapter.getTotalCountSum(period, periodStart, periodEnd, dept, user),
+        adapter.geDetectedCountSum(period, periodStart, periodEnd, dept, user),
+        adapter.getLastDetectedTime(period, periodStart, periodEnd, dept, user),
         adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user),
         adapter.getAllDepts(),
     ]);
+
+    const detectRate = !!totalCount 
+        ? (!!totalDetected ? String(Math.round(totalDetected * 1000 /totalCount)*0.1) + " %" : "0 %" ) 
+        : "-";
 
     const detectedUserList = detectedByUser.map((data, idx) => ({
         ...data,
         rank : idx+1,
         details: '/logs/auditLogs'
     }));
+
     const departments = [
         ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
@@ -49,14 +57,6 @@ export default async function PrivacyInfoWrapper({
         { name: 'percent_detect', title: trans('settings.detect_rate'), align: 'center' },
         // { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
     ];
-
-    // const data = [
-    //     {rank: 1, user_name: 'test_1', full_name: '테스트1', department: 'IT팀', print_count: 421, detect_count: 18, detect_rate: '4.3%', link: '/logs/auditLogs'},
-    //     {rank: 2, user_name: 'test_2', full_name: '테스트2', department: 'IT팀', print_count: 517, detect_count: 15, detect_rate: '2.9%', link: '/logs/auditLogs'},
-    //     {rank: 3, user_name: 'test_3', full_name: '테스트3', department: 'IT팀', print_count: 393, detect_count: 13, detect_rate: '3.7%', link: '/logs/auditLogs'},
-    //     {rank: 4, user_name: 'test_4', full_name: '테스트4', department: 'IT팀', print_count: 286, detect_count: 11, detect_rate: '2.8%', link: '/logs/auditLogs'},
-    //     {rank: 5, user_name: 'test_5', full_name: '테스트5', department: 'IT팀', print_count: 156, detect_count: 5, detect_rate: '3.3%', link: '/logs/auditLogs'},
-    // ];
 
     const translated = {
         period: trans('common.period'),
@@ -85,10 +85,10 @@ export default async function PrivacyInfoWrapper({
                 />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
-                <Card title={trans('dashboard.total_print_count')} value={(totalPages ?? 0) + "건"} />
-                <Card title={trans('dashboard.privacy_detect_count')} value={289 + "건"} />
-                <Card title={trans('dashboard.privacy_detect_rate')} value="2.25%" />
-                <Card title="최종 검출 일시" value="2025-05-23 16:45" />
+                <Card title={trans('dashboard.total_print_count')} value={(totalCount ?? 0) + "건"} />
+                <Card title={trans('dashboard.privacy_detect_count')} value={(totalDetected ?? 0) + "건"} />
+                <Card title={trans('dashboard.privacy_detect_rate')} value={detectRate} />
+                <Card title="최종 검출 일시" value={formatDBTime2(lastDetectTime)} />
             </div>
             <div className='w-full flex gap-4 mb-4'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
