@@ -22,6 +22,7 @@ export default function PrivacyQuery({
   periodEnd?: string,
   dept?: string,
 }) {
+  const [isPeriodSpecified, setIsPeriodSpecified] = useState<Boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -37,34 +38,34 @@ export default function PrivacyQuery({
   ];
 
   const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("period", e.target.value);
-    replace(`${pathname}?${params.toString()}`);
+    const periodValue = e.target.value;
+    if(periodValue === 'specified') {
+      setIsPeriodSpecified(true);
+    } else {
+      const params = new URLSearchParams(searchParams);
+      params.set("period", e.target.value);
+      replace(`${pathname}?${params.toString()}`);
+      setIsPeriodSpecified(false);
+    }
   }
 
   const handleStartDateChange = (date: Date | null) => {
     if(!!date) {
-      let startDay = new Date();
-      const params = new URLSearchParams(searchParams);
+      setStartDate(date);
 
-      if(date < startDay) {
-        startDay = date;
+      if(!!endDate) {
+        let endTemp = endDate;
+        if(endDate < date) {
+          setEndDate(date);
+          endTemp = date;
+        }
+  
+        const params = new URLSearchParams(searchParams);
+        params.set("period", "specified");
+        params.set("periodStart", formatDBTime(date));
+        params.set("periodEnd", formatDBTime(endTemp));
+        replace(`${pathname}?${params.toString()}`);
       }
-
-      setStartDate(startDay);
-      params.set("periodStart", formatDBTime(startDay));
-
-      let endDay = new Date();
-      if(!endDate) {
-        setEndDate(endDay);
-        params.set("periodEnd", formatDBTime(endDay));
-      } else if(startDay > endDate) {
-        endDay = startDay;
-        setEndDate(endDay);
-        params.set("periodEnd", formatDBTime(endDay));
-      }
-
-      replace(`${pathname}?${params.toString()}`);
     }
   };
 
@@ -72,21 +73,19 @@ export default function PrivacyQuery({
     if(!!date) {
       setEndDate(date);
 
-      const params = new URLSearchParams(searchParams);
-      params.set("periodEnd", formatDBTime(date));
-
-      let startDay = new Date();
-      if(!startDate) {
-        if(date < startDay) {
-          startDay = date;
+      if(!!startDate) {
+        let startTemp = startDate;
+        if(date < startDate) {
+          setStartDate(date);
+          startTemp = date;
         }
-      } else if(startDate > date) {
-        startDay = date;
-        setStartDate(startDay);
-        params.set("periodStart", formatDBTime(startDay));
-      }
 
-      replace(`${pathname}?${params.toString()}`);
+        const params = new URLSearchParams(searchParams);
+        params.set("period", "specified");
+        params.set("periodStart", formatDBTime(startTemp));
+        params.set("periodEnd", formatDBTime(date));
+        replace(`${pathname}?${params.toString()}`);
+      }
     }
   };
 
@@ -94,7 +93,7 @@ export default function PrivacyQuery({
     const params = new URLSearchParams(searchParams);
     params.set("dept", e.target.value);
     replace(`${pathname}?${params.toString()}`);
-  }
+  };
 
   const handleUserSearch = useDebouncedCallback((term: string) => {
     console.log(`Searching... ${term}`);
@@ -110,20 +109,27 @@ export default function PrivacyQuery({
 
   useEffect(() => {
   //   console.log(`useEffect - parame : period ${period}, dept ${dept}`);
-  //   setPeriodState(period);
-  //   // if(period === "specified") {
-      if(!!periodStart) {
-        const splittedStart = periodStart.split(".");
-        const startDateTemp = new Date(splittedStart[0], splittedStart[1] - 1, splittedStart[2]);
-        setStartDate(startDateTemp);
+    if(period === "specified") {
+      if(!isPeriodSpecified) {
+        setIsPeriodSpecified(true);
       }
-      if(!!periodEnd) {
-        const splittedEnd = periodEnd.split(".");
-        const endDateTemp = new Date(splittedEnd[0], splittedEnd[1] - 1, splittedEnd[2]);
-        setEndDate(endDateTemp);
+    } else {
+      if(isPeriodSpecified) {
+        setIsPeriodSpecified(false);
       }
-  //   // }
-  }, [periodStart, periodEnd]);
+    }
+
+    if(!!periodStart) {
+      const splittedStart = periodStart.split(".");
+      const startDateTemp = new Date(splittedStart[0], splittedStart[1] - 1, splittedStart[2]);
+      setStartDate(startDateTemp);
+    };
+    if(!!periodEnd) {
+      const splittedEnd = periodEnd.split(".");
+      const endDateTemp = new Date(splittedEnd[0], splittedEnd[1] - 1, splittedEnd[2]);
+      setEndDate(endDateTemp);
+    };
+  }, [period, periodStart, periodEnd]);
 
   return (
     <div className='flex gap-4 text-sm'>
@@ -139,8 +145,8 @@ export default function PrivacyQuery({
           )}
         </select>
       </div>
-      {period === "specified" && (
-        <div className='flex gap-2 md:flex-col'>
+      {isPeriodSpecified && (
+        <div className='flex gap-3 md:flex-col'>
           <DatePicker 
             selected={startDate}
             placeholderText={translated.from}
