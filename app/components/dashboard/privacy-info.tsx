@@ -45,8 +45,8 @@ export default async function PrivacyInfoWrapper({
     if(totalCount > 0) {
         let isFirstFound = false;
         for(const item of detectedData) {
-            if(!!item.department && item.department !== "") {
-                detectDataOfDept[item.department].total += 1;
+            if(!!item.dept_name && item.dept_name !== "") {
+                detectDataOfDept[item.dept_name].total += 1;
             }
             if(item.detect_privacy) {
                 totalDetected += 1;
@@ -54,8 +54,8 @@ export default async function PrivacyInfoWrapper({
                     lastTime = formatDBTime2(item.send_time);
                     isFirstFound = true;
                 }
-                if(!!item.department && item.department !== "") {
-                    detectDataOfDept[item.department].detected += 1;
+                if(!!item.dept_name && item.dept_name !== "") {
+                    detectDataOfDept[item.dept_name].detected += 1;
                 }
             }
         }

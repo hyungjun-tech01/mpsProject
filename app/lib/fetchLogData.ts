@@ -94,9 +94,11 @@ export async function fetchPrivacytDetectedData(
                 ui.user_id,
                 ui.user_name,
                 ajl.send_time,
+                di.dept_name,
                 ajl.detect_privacy
             FROM tbl_audit_job_log ajl
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+            JOIN tbl_dept_info di ON ui.department = di.dept_id
             WHERE ajl.send_time >= '${startTime}'
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
