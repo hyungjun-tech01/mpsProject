@@ -24,15 +24,30 @@ export default async function PrivacyInfoWrapper({
     periodEnd?: string;
 }) {
     const adapter = MyDBAdapter();
-    const [totalCount, totalDetected, lastDetectTime, detectedByUser, allDepts] = await Promise.all([
-        adapter.getTotalCountSum(period, periodStart, periodEnd, dept, user),
-        adapter.geDetectedCountSum(period, periodStart, periodEnd, dept, user),
-        adapter.getLastDetectedTime(period, periodStart, periodEnd, dept, user),
+    const [ detectedData, detectedByUser, allDepts] = await Promise.all([
+        adapter.getPrivacytDetectedData(period, periodStart, periodEnd, dept, user),
         adapter.getPrivacyDetectInfoByUsers(period, periodStart, periodEnd, dept, user),
         adapter.getAllDepts(),
     ]);
 
-    const detectRate = !!totalCount 
+    const totalCount = detectedData.length;
+    let totalDetected = 0;
+    let lastTime = "-";
+
+    if(totalCount > 0) {
+        let isFirstFound = false;
+        for(const item of detectedData) {
+            if(item.detect_privacy) {
+                totalDetected += 1;
+                if(!isFirstFound) {
+                    lastTime = formatDBTime2(item.send_time);
+                    isFirstFound = true;
+                }
+            }
+        }
+    }
+    
+    const detectRate = totalCount > 0
         ? (!!totalDetected ? String(Math.round(totalDetected * 1000 /totalCount)*0.1) + " %" : "0 %" ) 
         : "-";
 
@@ -88,7 +103,7 @@ export default async function PrivacyInfoWrapper({
                 <Card title={trans('dashboard.total_print_count')} value={(totalCount ?? 0) + "건"} />
                 <Card title={trans('dashboard.privacy_detect_count')} value={(totalDetected ?? 0) + "건"} />
                 <Card title={trans('dashboard.privacy_detect_rate')} value={detectRate} />
-                <Card title="최종 검출 일시" value={formatDBTime2(lastDetectTime)} />
+                <Card title="최종 검출 일시" value={lastTime} />
             </div>
             <div className='w-full flex gap-4 mb-4'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>

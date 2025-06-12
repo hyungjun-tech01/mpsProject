@@ -57,110 +57,7 @@ export async function fetchPrinterUsageLogByUserIdPages(
     }
 };
 
-export async function fetchTotalCountSum(
-    client: Pool,
-    period: string,
-    periodStart?: string,
-    periodEnd?:string,
-    dept?: string,
-    user?: string,
-) {
-    let startDate = periodStart?? "";
-    let endDate = periodEnd?? "";
-
-    if(period !== 'specified') {
-        const now = new Date();
-        const startTime = new Date();
-
-        if(period === 'today') {
-            startDate = formatDBTime(now);
-        } else if(period === 'week') {
-            startTime.setDate(now.getDate() - 6);
-        } else if(period === 'month') {
-            startTime.setMonth(now.getMonth() - 1);
-        }
-        startDate = formatDBTime(startTime);
-    }
-    
-    try {
-        const sum = await client.query(`
-            SELECT
-                SUM(total_count) AS total_count
-            FROM (
-                SELECT
-                    ui.user_id,
-                    ui.user_name,
-                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
-                    1 AS total_count
-                FROM tbl_audit_job_log ajl
-                JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
-                ${(!!user && !!dept) ? "WHERE (ui.user_id like'%" + user + "%' OR ui.user_name like '%" + user + "%') AND ui.department='" + dept + "'": (
-                    !!user ? "WHERE ui.user_id like'%" + user + "%' OR ui.user_name like '%" + user + "%'" : (
-                    !!dept ? "WHERE ui.department='" + dept + "'" : "" 
-                ))}
-            ) As sub
-            WHERE send_date >= '${startDate}'
-            ${ endDate !=="" ? "AND send_date <= '" + endDate + "'" : "" }
-        `);
-        return sum.rows[0].total_count;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer count.");
-    }
-};
-
-export async function fetchDetectedCountSum(
-    client: Pool,
-    period: string,
-    periodStart?: string,
-    periodEnd?:string,
-    dept?: string,
-    user?: string,
-) {
-    let startDate = periodStart?? "";
-    let endDate = periodEnd?? "";
-
-    if(period !== 'specified') {
-        const now = new Date();
-        const startTime = new Date();
-
-        if(period === 'today') {
-            startDate = formatDBTime(now);
-        } else if(period === 'week') {
-            startTime.setDate(now.getDate() - 6);
-        } else if(period === 'month') {
-            startTime.setMonth(now.getMonth() - 1);
-        }
-        startDate = formatDBTime(startTime);
-    }
-    
-    try {
-        const sum = await client.query(`
-            SELECT
-                SUM(total_count) AS total_count
-            FROM (
-                SELECT
-                    ui.user_id,
-                    ui.user_name,
-                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
-                    1 AS total_count
-                FROM tbl_audit_job_log ajl
-                JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
-                WHERE ajl.detect_privacy='true'
-                ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
-                ${!!dept ? "AND ui.department='" + dept + "'" : ""} 
-            ) As sub
-            WHERE send_date >= '${startDate}'
-            ${ endDate !=="" ? "AND send_date <= '" + endDate + "'" : "" }
-        `);
-        return sum.rows[0].total_count;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch printer count.");
-    }
-};
-
-export async function fetchLastDetectedTime(
+export async function fetchPrivacytDetectedData(
     client: Pool,
     period: string,
     periodStart?: string,
@@ -183,11 +80,11 @@ export async function fetchLastDetectedTime(
     } else {
         if(!!periodStart) {
             const splitted = periodStart.split('.');
-            startTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[0])*1e8;
+            startTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2])*1e8;
         }
         if(!!periodEnd) {
             const splitted = periodEnd.split('.');
-            endTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[0])*1e8;
+            endTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2] + '23595999');
         }
     }
     
@@ -196,21 +93,20 @@ export async function fetchLastDetectedTime(
             SELECT
                 ui.user_id,
                 ui.user_name,
-                ajl.send_time
+                ajl.send_time,
+                ajl.detect_privacy
             FROM tbl_audit_job_log ajl
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
-            WHERE ajl.detect_privacy='true'
-            ${!!startTime ? "AND ajl.send_time >= '" + startTime + "'" : ""}
+            WHERE ajl.send_time >= '${startTime}'
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
             ORDER BY send_time DESC
-            LIMIT 1
         `);
-        return sum.rows[0].send_time;
+        return sum.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch last time.");
+        throw new Error("Failed to fetch detection data.");
     }
 };
 
