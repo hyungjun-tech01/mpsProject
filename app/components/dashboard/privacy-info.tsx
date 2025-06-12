@@ -65,8 +65,8 @@ export default async function PrivacyInfoWrapper({
     const columns: IColumnData[] = [
         { name: 'rank', title: trans('common.rank'), align: 'center' },
         { name: 'user_name', title: trans('user.user_name'), align: 'center' },
-        { name: 'full_name', title: trans('common.name'), align: 'center' },
-        { name: 'department', title: trans('user.department'), align: 'center' },
+        { name: 'external_user_name', title: trans('common.name'), align: 'center' },
+        { name: 'dept_name', title: trans('user.department'), align: 'center' },
         { name: 'total_count', title: trans('print.print_count'), align: 'center' },
         { name: 'detect_privacy_count', title: trans('settings.detect_count'), align: 'center' },
         { name: 'percent_detect', title: trans('settings.detect_rate'), align: 'center' },

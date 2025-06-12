@@ -393,19 +393,20 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
     try {
         const response = await client.query(`
             SELECT
-                user_id,
-                user_name,
-                external_user_name,
-                department,
-                sum(detect_privacy_count) as detect_privacy_count,
-                sum(total_count) as total_count,
-                ROUND(SUM(detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
-            FROM tbl_privacy_audit_v
+                pav.user_id,
+                pav.user_name,
+                pav.external_user_name,
+                di.dept_name,
+                sum(pav.detect_privacy_count) as detect_privacy_count,
+                sum(pav.total_count) as total_count,
+                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_privacy_audit_v pav
+            JOIN tbl_dept_info di ON pav.department = di.dept_id
             WHERE send_date >= '${startDate}'
             ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
-            ${!!dept ? "AND department = '" + dept + "'" : ""}
-            ${!!user ? "AND (user_id like '%" + user + "%' OR user_name like '%"+ user +"%')" : ""}
-            GROUP BY user_id, user_name, external_user_name, department
+            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
+            GROUP BY user_id, user_name, external_user_name, dept_name
             ORDER BY detect_privacy_count DESC
         `);
         return response.rows;
