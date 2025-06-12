@@ -34,22 +34,41 @@ export default async function PrivacyInfoWrapper({
     let totalDetected = 0;
     let lastTime = "-";
 
+    const detectDataOfDept = {};
+    const detectRateOfDept = {};
+
+    for(const dept of allDepts) {
+        detectDataOfDept[dept.dept_name] = {total: 0, detected:0};
+        detectRateOfDept[dept.dept_name] = 0;
+    };
+
     if(totalCount > 0) {
         let isFirstFound = false;
         for(const item of detectedData) {
+            if(!!item.department && item.department !== "") {
+                detectDataOfDept[item.department].total += 1;
+            }
             if(item.detect_privacy) {
                 totalDetected += 1;
                 if(!isFirstFound) {
                     lastTime = formatDBTime2(item.send_time);
                     isFirstFound = true;
                 }
+                if(!!item.department && item.department !== "") {
+                    detectDataOfDept[item.department].detected += 1;
+                }
             }
         }
-    }
+    };
+
+    for(const dept of allDepts) {
+        detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
+            ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
+            : 0;
+    };
     
     const detectRate = totalCount > 0
-        ? (!!totalDetected ? String(Math.round(totalDetected * 1000 /totalCount)*0.1) + " %" : "0 %" ) 
-        : "-";
+        ? (!!totalDetected ? String(Math.round(totalDetected * 1000 /totalCount)*0.1) + " %" : "0 %" ) : "-";
 
     const detectedUserList = detectedByUser.map((data, idx) => ({
         ...data,
@@ -57,7 +76,7 @@ export default async function PrivacyInfoWrapper({
         details: '/logs/auditLogs'
     }));
 
-    const departments = [
+    const deptOptions = [
         ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
     ];
@@ -92,7 +111,7 @@ export default async function PrivacyInfoWrapper({
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
                 <PrivacyQuery
                     translated={translated}
-                    departments={departments}
+                    departments={deptOptions}
                     period={period}
                     periodStart={periodStart}
                     periodEnd={periodEnd}
@@ -100,16 +119,16 @@ export default async function PrivacyInfoWrapper({
                 />
             </div>
             <div className='w-full flex justify-between gap-4 mb-4'>
-                <Card title={trans('dashboard.total_print_count')} value={(totalCount ?? 0) + "건"} />
-                <Card title={trans('dashboard.privacy_detect_count')} value={(totalDetected ?? 0) + "건"} />
+                <Card title={trans('dashboard.total_print_count')} value={totalCount + "건"} />
+                <Card title={trans('dashboard.privacy_detect_count')} value={totalDetected + "건"} />
                 <Card title={trans('dashboard.privacy_detect_rate')} value={detectRate} />
-                <Card title="최종 검출 일시" value={lastTime} />
+                <Card title={trans('dashboard.privacy_last_detect_time')} value={lastTime} />
             </div>
             <div className='w-full flex gap-4 mb-4'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
                     <h3 className="mb-4 text-md font-normal">개인정보 종류별 검출 비율</h3>
                     <div className="h-64">
-                        <PieChart />
+                        <PieChart data={detectRateOfDept}/>
                     </div>
                 </div>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
