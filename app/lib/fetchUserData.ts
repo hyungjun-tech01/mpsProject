@@ -184,6 +184,8 @@ export async function fetchUserCount(client: Pool) {
 export async function fetchAllDepts(client: Pool) {
     try {
         const response = await client.query(`
+            SELECT '' as dept_id, '-- 부서 선택 --'  as dept_name
+            UNION ALL
             SELECT
               dept_id,
               dept_name

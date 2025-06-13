@@ -27,9 +27,10 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
 
     const adapter = MyDBAdapter();
-    const [t, user] = await Promise.all([
+    const [t, user, allDept] = await Promise.all([
         getDictionary(locale),
-        adapter.getUserById(id)
+        adapter.getUserById(id),
+        adapter.getAllDepts()
     ]);
 
     if (!user) {
@@ -86,7 +87,9 @@ export default async function Page(props: {
             {
                 title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'),
                 items: [
-                    { name: 'userDepartment', title: t('user.department'), type: 'input', defaultValue: user.department, placeholder: t('user.placeholder_department') },
+                    { name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: user.dept_id, placeholder: t('user.placeholder_department'), 
+                        options:  allDept.map((x:any) => ( {'title':x.dept_name, 'value':x.dept_id} ) )
+                    },
                     { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
                     { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
                 ]
