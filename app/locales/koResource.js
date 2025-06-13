@@ -34,6 +34,8 @@ const koResource = {
             privacy_detect_count: '개인정보 포함 건수',
             privacy_detect_rate: '검출률',
             privacy_last_detect_time: '최종 검출 일시',
+            privacy_detect_by_date: '날자별 개인정보 검출 추이',
+            privacy_detect_by_dept: '부서별 개인정보 검출 비율',
             recent_printed_page: '최근 1달간 출력 동향',
             scan_pages: '스캔 매수',
             to: '종료일',

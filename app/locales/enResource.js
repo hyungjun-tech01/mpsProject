@@ -33,6 +33,8 @@ const enResource = {
             privacy_detect_rate: 'Detection Rate',
             privacy_info_detect_stats:'Detected Private Info. Stats.',
             privacy_last_detect_time: 'The last detected time',
+            privacy_detect_by_date: 'Privacy Detect Count by Date',
+            privacy_detect_by_dept: 'Privacy Detect Rate by Dept.',
             recent_printed_page: 'Recent Printed Pages',
             to: 'To',
             today_pages: 'Today Pages',

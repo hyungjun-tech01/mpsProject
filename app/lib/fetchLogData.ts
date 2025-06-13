@@ -1,6 +1,6 @@
 import type { Pool } from "pg";
 import { AuditLogField } from "@/app/lib/definitions";
-import { generateStrOf30Days, formatDBTime } from "./utils";
+import { generateStrOf30Days, formatTimeYYYYpMMpDD } from "./utils";
 import { sliderClasses } from "@mui/material";
 
 
@@ -383,13 +383,13 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
         const startTime = new Date();
 
         if(period === 'today') {
-            startDate = formatDBTime(now);
+            startDate = formatTimeYYYYpMMpDD(now);
         } else if(period === 'week') {
             startTime.setDate(now.getDate() - 6);
         } else if(period === 'month') {
             startTime.setMonth(now.getMonth() - 1);
         }
-        startDate = formatDBTime(startTime);
+        startDate = formatTimeYYYYpMMpDD(startTime);
     }
 
     try {

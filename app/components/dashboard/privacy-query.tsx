@@ -5,7 +5,7 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { formatDBTime } from '@/app/lib/utils';
+import { formatTimeYYYYpMMpDD } from '@/app/lib/utils';
 
 export default function PrivacyQuery({
   translated,
@@ -62,8 +62,8 @@ export default function PrivacyQuery({
   
         const params = new URLSearchParams(searchParams);
         params.set("period", "specified");
-        params.set("periodStart", formatDBTime(date));
-        params.set("periodEnd", formatDBTime(endTemp));
+        params.set("periodStart", formatTimeYYYYpMMpDD(date));
+        params.set("periodEnd", formatTimeYYYYpMMpDD(endTemp));
         replace(`${pathname}?${params.toString()}`);
       }
     }
@@ -82,8 +82,8 @@ export default function PrivacyQuery({
 
         const params = new URLSearchParams(searchParams);
         params.set("period", "specified");
-        params.set("periodStart", formatDBTime(startTemp));
-        params.set("periodEnd", formatDBTime(date));
+        params.set("periodStart", formatTimeYYYYpMMpDD(startTemp));
+        params.set("periodEnd", formatTimeYYYYpMMpDD(date));
         replace(`${pathname}?${params.toString()}`);
       }
     }

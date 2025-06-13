@@ -23,19 +23,25 @@ const bdColors = [
   "rgba(255, 159, 64, 1)",
 ];
 
-export default function PieChart({ data }: { data: object }) {
-  const keys = Object.keys(data);
+export default function PieChart({
+  labels,
+  dataSet,
+ }: {
+  labels: string[];
+  dataSet: {
+    label: string;
+    data: number[];
+  }[];
+ }) {
   const inputData = {
-    labels: keys,
-    datasets: [
-      {
-        label: "# of Votes",
-        data: Object.values(data),
-        backgroundColor: bgColors.slice(0, keys.length),
-        borderColor: bdColors.slice(0, keys.length),
+    labels: labels,
+    datasets: dataSet.map(item => ({
+        label: item.label,
+        data: item.data,
+        backgroundColor: bgColors.slice(0, labels.length),
+        borderColor: bdColors.slice(0, labels.length),
         borderWidth: 1,
-      },
-    ],
+      })),
   };
   return <Pie data={inputData} />;
 }
