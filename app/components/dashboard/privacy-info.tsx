@@ -9,7 +9,7 @@ import VerticalBarChart from '../verticalBarChart';
 import Table from '@/app/components/dashboard/table';
 import { TableSkeleton } from "@/app/components/skeletons";
 import MyDBAdapter from '@/app/lib/adapter';
-import { formatTimeYYYY_MM_DDbHHcMM, formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
+import { formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
 
 
 export default async function PrivacyInfoWrapper({
@@ -60,12 +60,6 @@ export default async function PrivacyInfoWrapper({
             }
         }
     };
-
-    for(const dept of allDepts) {
-        detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
-            ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
-            : 0;
-    };
     
     const detectRate = totalCount > 0
         ? (!!totalDetected ? String(Math.round(totalDetected * 1000 /totalCount)*0.1) + " %" : "0 %" ) : "-";
@@ -88,6 +82,13 @@ export default async function PrivacyInfoWrapper({
         ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
     ];
+
+    // Data for Pie Bar Chart Component ---------------------------------------------------------
+    for(const dept of allDepts) {
+        detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
+            ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
+            : 0;
+    };
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
     const detectDataOfDate = {};
