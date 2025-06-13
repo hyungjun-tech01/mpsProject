@@ -22,40 +22,57 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart",
-    },
-  },
-};
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+// const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      // data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      data: labels,
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      // data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      data: labels,
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
+// export const data = {
+//   labels: labels,
+//   datasets: [
+//     {
+//       label: "Dataset 1",
+//       // data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//       data: labels,
+//       backgroundColor: "rgba(255, 99, 132, 0.5)",
+//     },
+//     {
+//       label: "Dataset 2",
+//       // data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//       data: labels,
+//       backgroundColor: "rgba(53, 162, 235, 0.5)",
+//     },
+//   ],
+// };
 
-export default function VerticalBarChart() {
+export default function VerticalBarChart({
+  title,
+  xlabels,
+  dataSet,
+}:{
+  title?: string;
+  xlabels: string[];
+  dataSet: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+  }[];
+}) {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: !!title && title !== "",
+        text: title?? "Bar Chart",
+      },
+    },
+  };
+  const data = {
+    labels:xlabels,
+    datasets: dataSet,
+  }
+  console.log("Vertical Chart Data :", data);
   return (
       <Bar options={options} data={data} />
   );
