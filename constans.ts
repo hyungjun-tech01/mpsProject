@@ -16,7 +16,6 @@ import {
 export const SideMenuList = {
     admin: [
         { name: 'dashboard', title: '대쉬보드', href: '/', icon: SpaceDashboardOutlined },
-        { name: 'adminactionlog', title: '관리자작업로그', href: '/adminaction', icon: PlagiarismOutlined },
         { name: 'user', title: '사용자', href: '/user', icon: PersonOutlined },
         { name: 'device', title: '출력장치', href: '/device', icon: PrintOutlined },
         { name: 'group', title: '그룹', href: '/group/device', icon: PeopleOutline },
