@@ -416,12 +416,15 @@ export default function MyDBAdapter() {
         async getFilteredAuditLogs(
             query:string,
             itemsPerPage: number,
-            currentPage: number
+            currentPage: number,
+            fromDate : string|null, 
+            toDate:string|null,
         ) {
-            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage);
+            console.log('fromDate', fromDate);
+            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate);
         },
-        async getFilteredAuditLogsPages(query: string, itemsPerPage: number) {
-            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage);
+        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null) {
+            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate);
         },
         async getPrivacytDetectedData(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
             return Log.fetchPrivacytDetectedData(pool, period, periodStart, periodEnd, dept, user );

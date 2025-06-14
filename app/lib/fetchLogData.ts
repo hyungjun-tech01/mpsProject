@@ -245,67 +245,76 @@ export async function fetchFilteredAuditLogs(
     client: Pool,
     query: string,
     itemsPerPage: number,
-    currentPage: number
+    currentPage: number,
+    dateFrom : string|null,
+    dateTo : string|null,
 ) {
+    console.log('date from-to', dateFrom,dateTo);
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const auditLogs =
             query !== ""
                 ? await client.query(`
-            select job_log_id,
-                job_type ,
-                printer_serial_number ,
-                job_id      ,
-                user_name ,
-                destination ,
-                send_time,
-                file_name ,
-                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
-                copies  ,
-                original_pages ,
-                CASE WHEN detect_privacy THEN 'Y' 
+            select a.job_log_id,
+                a.job_type ,
+                a.printer_serial_number ,
+                a.job_id      ,
+                b.full_name user_name ,
+                a.destination ,
+                a.send_time,
+                a.file_name ,
+                to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                a.copies  ,
+                a.original_pages ,
+                CASE WHEN a.detect_privacy THEN 'Y' 
                 ELSE 'N' 
                 END AS detect_privacy,
-                privacy_text,
-                image_archive_path ,
-                text_archive_path ,
-                original_job_id  ,
-                document_name,
-                total_pages,
-                color_total_pages
-            from tbl_audit_job_log
+                a.privacy_text,
+                a.image_archive_path ,
+                a.text_archive_path ,
+                a.original_job_id  ,
+                a.document_name,
+                a.total_pages,
+                a.color_total_pages
+            from tbl_audit_job_log a
+            left join tbl_user_info b on a.user_name = b.user_name
             WHERE (
                 printer_serial_number ILIKE '${`%${query}%`}' OR
-                user_name ILIKE '${`%${query}%`}' OR
+                b.full_name  ILIKE '${`%${query}%`}' OR
                 document_name ILIKE '${`%${query}%`}' OR
                 privacy_text ILIKE '${`%${query}%`}' 
-                )			
+                )		
+              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
                 : await client.query(`
-            select job_log_id,
-                job_type ,
-                printer_serial_number ,
-                job_id      ,
-                user_name ,
-                destination ,
-                send_time,
-                file_name ,
-                to_char(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
-                copies  ,
-                original_pages ,
-                CASE WHEN detect_privacy THEN 'Y' 
+            select a.job_log_id,
+                a.job_type ,
+                a.printer_serial_number ,
+                a.job_id      ,
+                b.full_name user_name ,
+                a.destination ,
+                a.send_time,
+                a.file_name ,
+                to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                a.copies  ,
+                a.original_pages ,
+                CASE WHEN a.detect_privacy THEN 'Y' 
                 ELSE 'N' 
                 END AS detect_privacy,
-                privacy_text,
-                image_archive_path ,
-                text_archive_path ,
-                original_job_id  ,
-                document_name,
-                total_pages,
-                color_total_pages
-            from tbl_audit_job_log			
+                a.privacy_text,
+                a.image_archive_path ,
+                a.text_archive_path ,
+                a.original_job_id  ,
+                a.document_name,
+                a.total_pages,
+                a.color_total_pages
+            from tbl_audit_job_log a
+            left join tbl_user_info b on a.user_name = b.user_name		
+            WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 		
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -328,7 +337,9 @@ export async function fetchFilteredAuditLogs(
 export async function fetchFilteredAuditLogPages(
     client: Pool,
     query: string,
-    itemsPerPage: number
+    itemsPerPage: number,
+    dateFrom : string|null,
+    dateTo : string|null,
 ) {
     try {
         const count =
@@ -342,9 +353,13 @@ export async function fetchFilteredAuditLogPages(
                         document_name ILIKE '${`%${query}%`}' OR
                         privacy_text ILIKE '${`%${query}%`}'                        
                     )
+                    and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                    and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}' 
             `)
                 : await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_job_log
+                SELECT COUNT(*) FROM tbl_audit_job_log 
+                WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}' 
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
