@@ -44,7 +44,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ITable<DataType> {
     columns: IColumnData[];
     rows: DataType[];
-    currentPage: number;
     totalPages: number;
     path?: string;
     sesseionUserName?: string;

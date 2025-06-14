@@ -144,6 +144,7 @@ const koResource = {
             color_total_pages:'컬러매수',
             condition:'조건',
             contact_details:'연락처 정보',
+            copy:'복사',
             currency: '통화',
             dashboard: '현황보기',
             date: '날짜',
@@ -151,6 +152,7 @@ const koResource = {
             edit: '편집',
             email: '이메일 주소',
             explanation: '설명',
+            fax: '팩스',
             fax_no: '팩스번호',
             friday: '금요일',
             from: '변경 전',
@@ -188,6 +190,7 @@ const koResource = {
             preview: '미리보기',
             price: '가격',
             price_1: '금액',
+            print: '인쇄',
             product: '품목',
             quantity: '수량',
             rank:'순위',
@@ -198,6 +201,7 @@ const koResource = {
             sales: '매출',
             saturday: '토요일',
             save: '저장',
+            scan: '스캔',
             search: '검색',
             select_file: '파일 선택',
             site_id: 'Site ID',
@@ -391,6 +395,7 @@ const koResource = {
             color_printer:'컬러프린터',
             mono_printer:'흑벡프린터',
             search_placeholder_grouping: '장치이름, 위치, IP주소로 조회할 수 있습니다.',
+            select_device: '-- 장치 선택 --',
         },
         security: {
             dept_count: '부서 수',
@@ -485,6 +490,18 @@ const koResource = {
             parameter: '파라메터',
             query_placehold : '사용자, 행위, 경로로 조회하세요.'
 
+        },
+        analysis: {
+            analize_print: '출력량 통계/조회',
+            analize_privacy: '개인정보 검출 통계/조회',
+            category_dept: '부서별',
+            category_device: '기기별',
+            category_user: '사용자별',
+            print_total_pages: '총 출력 매수',
+            print_depts: '부서 수',
+            print_device: '복합기/프린터 수',
+            print_users: '사용자 수',
+            select_jobtype: '-- 작업구분 선택 --',
         }
     },
 }

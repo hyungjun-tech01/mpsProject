@@ -21,21 +21,16 @@ export const metadata: Metadata = {
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
-    params: Promise<{ process: string, locale: "ko" | "en" }>
+    params: Promise<{ locale: "ko" | "en" }>
 }
 ) {
     const params = await props.params;
-    const process = params.process;
     const locale = params.locale;
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
-
-    if (!['registerUsers' ].includes(process)) {
-        notFound();
-    };
 
     const userName = session?.user.name ?? "";
     if (!userName) {
@@ -55,41 +50,28 @@ export default async function Page(props: {
         adapter.getFilteredIFUserPages(query, itemsPerPage)
     ]);
 
-    // Tabs ----------------------------------------------------------------------
-    const subTitles = [
-        { category: 'registerUsers', title: t('settings.registerUsers'), link: `/settings/registerUsers` },
-    ];
-
     // Columns -------------------------------------------------------------------
-    const processColumns : { registerUsers: IColumnData[] } = {
-        registerUsers: [
-            { name: 'user_name', title: t('user.user_id'), align: 'center' },
-            { name: 'full_name', title: t('user.user_name'), align: 'center' },
-            { name: 'email', title: t('common.email'), align: 'center' },
-            { name: 'home_directory', title: t('user.home_directory'), align: 'center' },
-            { name: 'department', title: t('user.department'), align: 'center' },
-            { name: 'card_number', title: t('user.card_number'), align: 'center' },
-            { name: 'card_number2', title: t('user.card_number2'), align: 'center' },
-            { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
-            { name: 'user_source_type', title: t('common.create_method'), align: 'center' },
-            { name: 'if_status', title: t('common.status'), align: 'center' },
-            { name: 'if_message', title: t('common.message'), align: 'left' },
-        ]
-    };
+    const registerUsersColumns : IColumnData[] = [
+        { name: 'user_name', title: t('user.user_id'), align: 'center' },
+        { name: 'full_name', title: t('user.user_name'), align: 'center' },
+        { name: 'email', title: t('common.email'), align: 'center' },
+        { name: 'home_directory', title: t('user.home_directory'), align: 'center' },
+        { name: 'department', title: t('user.department'), align: 'center' },
+        { name: 'card_number', title: t('user.card_number'), align: 'center' },
+        { name: 'card_number2', title: t('user.card_number2'), align: 'center' },
+        { name: 'created_date', title: t('common.created'), align: 'center', type: 'date' },
+        { name: 'user_source_type', title: t('common.create_method'), align: 'center' },
+        { name: 'if_status', title: t('common.status'), align: 'center' },
+        { name: 'if_message', title: t('common.message'), align: 'left' },
+    ];
 
     return (
         <div className='w-full flex-col justify-start'>
             <LogClient userName={userName} groupId='' query={query}   applicationPage='사용자일괄등록' applicationAction='조회'/>
-            <div className="pl-2">
-            {subTitles.map(item => {
-                return <Link key={item.category} href={item.link}
-                    className={clsx("w-auto px-2 py-1 h-auto rounded-t-lg border-solid",
-                        { "font-medium text-lime-900 bg-gray-50 border-x-2 border-t-2": item.category === process },
-                        { "text-gray-300  bg-white border-2": item.category !== process },
-                    )}>{item.title}</Link>;
-            })}
+            <div className="flex w-full items-center justify-between">
+                <h1 className="text-2xl">{t("settings.registerUsers")}</h1>
             </div>
-            <div className="w-full px-4 pb-4 bg-gray-50 rounded-md">
+            <div className="w-full px-4 pb-4 rounded-md">
                 <div className="pt-4 flex flex-col gap-2 md:pt-8">
                     <FileUpload 
                         userId={userId}
@@ -107,7 +89,7 @@ export default async function Page(props: {
                         </div>
                         <Suspense fallback={<TableSkeleton />}>
                             <Table
-                                columns={processColumns[process]}
+                                columns={registerUsersColumns}
                                 rows={settingData}
                                 currentPage={currentPage}
                                 totalPages={settingDataPages}

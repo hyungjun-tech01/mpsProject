@@ -417,3 +417,30 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
         return [];
     }
 };
+
+export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+    try {
+        const response = await client.query(`
+            SELECT
+                pav.user_id,
+                pav.user_name,
+                pav.external_user_name,
+                di.dept_name,
+                sum(pav.detect_privacy_count) as detect_privacy_count,
+                sum(pav.total_count) as total_count,
+                TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
+            FROM tbl_audit_job_log ajl
+            JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
+            JOIN tbl_dept_info di ON di.dept_id = ui.department
+            WHERE send_date >= '${periodStart}' AND send_date <= '${periodEnd}'
+            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
+            GROUP BY user_id, user_name, external_user_name, dept_name
+            ORDER BY detect_privacy_count DESC
+        `);
+        return response.rows;
+    } catch (e) {
+        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        return [];
+    }
+}

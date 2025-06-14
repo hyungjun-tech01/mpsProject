@@ -368,7 +368,6 @@ export default function MyDBAdapter() {
                 throw new Error("Failed to fetch printer count.");
             }
         },
-
         async fetchFilteredDevices(
             loginName: string | undefined,
             query: string,
@@ -377,6 +376,9 @@ export default function MyDBAdapter() {
             groupId?: string
         ) {
             return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
+        },
+        async getAllDevices() {
+            return Device.fetchAllDevices(pool)
         },
 
         // ----- Document ------------------------------------------

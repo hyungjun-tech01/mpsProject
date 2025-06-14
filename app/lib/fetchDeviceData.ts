@@ -652,3 +652,18 @@ export async function fetchDevicesbyGroupManager(
         throw new Error('Failed to fetch total number of devices.');
     }
 }
+
+export async function fetchAllDevices(client: Pool) {
+    try {
+        const response = await client.query(`
+            SELECT
+              device_id,
+              device_name
+            FROM tbl_device_info
+        `)
+        return response.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch all devices.");
+  }
+}
