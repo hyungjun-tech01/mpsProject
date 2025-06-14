@@ -84,8 +84,8 @@ export default function AuditLogQuery({
 
 
   return (
-      <div className="flex gap-4 text-sm items-center">
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex gap-4 text-sm items-center">
+      <div className="flex flex-row items-center gap-2">
       {/* From 날짜 */}
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium text-gray-700 w-30">{dateFrom}</label>
@@ -99,7 +99,7 @@ export default function AuditLogQuery({
       </div>
   
       {/* To 날짜 */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 ml-2">
         <label className="text-sm font-medium text-gray-700 w-30">{dateTo}</label>
         <DatePicker
           selected={endDate}

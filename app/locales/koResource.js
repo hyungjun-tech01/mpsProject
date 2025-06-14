@@ -413,7 +413,9 @@ const koResource = {
             serial_number:'출력장비',
             query_condition:'사용자이름,시리얼번호,문서이름, 검출결과로 조회하세요 ',
             dateFrom:'조회시작일',
-            dateTo:'조회종료일'
+            dateTo:'조회종료일',
+            auditlogsRetired:'퇴사자감사로그',
+            adminActionLogs:'관리자작업로그'
         },
         fax:{
             fax_line: '팩스 라인',
