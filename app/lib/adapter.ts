@@ -452,6 +452,12 @@ export default function MyDBAdapter() {
         async getPrivacyDetectInfoByUsers(period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
             return Log.fetchPrivacyDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
         },
+        async getPrintInfoByQuerygetPrivacyDetectInfoByUsers(periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+            return Log.fetchPrintInfoByQuery(pool, periodStart, periodEnd, dept, user, device);
+        },
+        async getPrivacyInfoByQuerygetPrivacyDetectInfoByUsers(periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+            return Log.fetchPrivacyInfoByQuery(pool, periodStart, periodEnd, dept, user, device);
+        },
 
         // ----- Print Spool --------------------------------------
         async getFilteredPrintSpoolPages(userName: string, itemsPerPage: number) {

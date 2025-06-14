@@ -13,6 +13,7 @@ import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 
 import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
+import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
 
 
 export const metadata: Metadata = {
@@ -38,8 +39,11 @@ export default async function Page(props: {
     const searchParams = await props.searchParams;
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const periodStartParam = searchParams?.periodStart;
-    const periodEndParam = searchParams?.periodEnd;
+
+    const currentTime = new Date();
+    const periodStartParam = searchParams?.periodStart || formatTimeYYYYpMMpDD(currentTime);
+    currentTime.setDate(1);
+    const periodEndParam = searchParams?.periodEnd || formatTimeYYYYpMMpDD(currentTime);
     const deptParam = searchParams?.dept;
     const userParam = searchParams?.user;
     const deviceParam = searchParams?.device;
@@ -55,15 +59,49 @@ export default async function Page(props: {
     };
 
     const adapter = MyDBAdapter();
-    const [trans, dataPages, data, allDepts, allDevices] = await Promise.all([
+    const [trans, data, allDepts, allDevices] = await Promise.all([
         getDictionary(locale),
-        category === "print" ? adapter.getFilteredAuditLogsPages("", itemsPerPage)
-            : adapter.getFilteredApplicationLogPages("", itemsPerPage),
-        category === "print" ? adapter.getFilteredAuditLogs("", itemsPerPage, currentPage)
-            : adapter.getFilteredApplicationLog("", itemsPerPage, currentPage),
+        category === "print" 
+            ? adapter.getPrintInfoByQuerygetPrivacyDetectInfoByUsers(periodStartParam, periodEndParam, deptParam, userParam, deviceParam)
+            : adapter.getPrivacyInfoByQuerygetPrivacyDetectInfoByUsers(periodStartParam, periodEndParam, deptParam, userParam, deviceParam),
         adapter.getAllDepts(),
         adapter.getAllDevices(),
     ]);
+
+    // Manipulate data
+    // console.log("Print Analysis (raw) : ", data);
+    const realData = {
+        dept: [], user: [], device: []
+    };
+    for(const item of data) {
+        const deptIdx = realData.dept.findIndex(dept => dept.dept_name === item.dept_name );
+        if(deptIdx === -1){
+            const initData = {dept_name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+            initData[item.job_type] = item.total_pages;
+            realData.dept.push(initData);
+        } else {
+            realData.dept[deptIdx][item.job_type] += item.total_pages;
+        };
+
+        const userIdx = realData.user.findIndex(user => user.user_name === item.user_name );
+        if(userIdx === -1){
+            const initData = {user_name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+            initData[item.job_type] = item.total_pages;
+            realData.user.push(initData);
+        } else {
+            realData.user[userIdx][item.job_type] += item.total_pages;
+        };
+
+        const deviceIdx = realData.device.findIndex(device => device.device_id === item.device_id );
+        if(deviceIdx === -1){
+            const initData = {device_id: item.device_id, device_name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+            initData[item.job_type] = item.total_pages;
+            realData.device.push(initData);
+        } else {
+            realData.device[deviceIdx][item.job_type] += item.total_pages;
+        };
+    };
+
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
@@ -130,10 +168,10 @@ export default async function Page(props: {
     ];
 
     const columnSubs: IColumnData[] = [
-        { name: 'PRINT', title: trans('common.print'), align: 'center' },
-        { name: 'COPY', title: trans('common.copy'), align: 'center' },
-        { name: 'SCAN', title: trans('common.page'), align: 'center' },
-        { name: 'FAX', title: trans('common.fax'), align: 'center' },
+        { name: 'Print', title: trans('common.print'), align: 'center' },
+        { name: 'Copy', title: trans('common.copy'), align: 'center' },
+        { name: 'Scan', title: trans('common.scan'), align: 'center' },
+        { name: 'Fax', title: trans('common.fax'), align: 'center' },
     ];
     
     const columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[] } = {
@@ -184,8 +222,9 @@ export default async function Page(props: {
                     <Suspense fallback={<TableSkeleton />}>
                         <TableView
                             columns={columns}
-                            rows={[]}
-                            totalPages={dataPages}
+                            rows={realData}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
                             translated={translated}
                         />
                     </Suspense>

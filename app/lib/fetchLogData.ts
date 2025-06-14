@@ -437,25 +437,65 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
     try {
         const response = await client.query(`
             SELECT
-                pav.user_id,
-                pav.user_name,
-                pav.external_user_name,
-                di.dept_name,
-                sum(pav.detect_privacy_count) as detect_privacy_count,
-                sum(pav.total_count) as total_count,
-                TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
-            FROM tbl_audit_job_log ajl
-            JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
-            JOIN tbl_dept_info di ON di.dept_id = ui.department
-            WHERE send_date >= '${periodStart}' AND send_date <= '${periodEnd}'
+            *
+            FROM (
+                SELECT
+                    ui.user_name,
+                    ui.external_user_name,
+                    di.dept_name,
+                    ajl.total_pages,
+                    ajl.color_total_pages,
+                    dv.device_id,
+                    ajl.job_type,
+                    dv.device_name,
+                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date
+                FROM tbl_audit_job_log ajl
+                JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
+                JOIN tbl_device_info dv ON dv.device_id = ajl.device_id
+                LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
+            ) sub
+            WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
-            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
-            GROUP BY user_id, user_name, external_user_name, dept_name
-            ORDER BY detect_privacy_count DESC
+            ${!!user ? "AND (ui.user_name like '%" + user + "%' OR ui.external_user_name like '%"+ user +"%')" : ""}
+            ORDER BY total_pages DESC
         `);
         return response.rows;
     } catch (e) {
-        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        console.log('fetchPrintInfoByQuery :', e);
+        return [];
+    }
+}
+
+
+export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+    try {
+        const response = await client.query(`
+            SELECT
+            *
+            FROM (
+                SELECT
+                    ui.user_name,
+                    ui.external_user_name,
+                    di.dept_name,
+                    ajl.total_pages,
+                    ajl.color_total_pages,
+                    ajl.job_type,
+                    dv.device_id,
+                    dv.device_name,
+                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date
+                FROM tbl_audit_job_log ajl
+                JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
+                JOIN tbl_device_info dv ON dv.device_id = ajl.device_id
+                LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
+            ) sub
+            WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
+            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (ui.user_name like '%" + user + "%' OR ui.external_user_name like '%"+ user +"%')" : ""}
+            ORDER BY total_pages DESC
+        `);
+        return response.rows;
+    } catch (e) {
+        console.log('fetchPrintInfoByQuery :', e);
         return [];
     }
 }

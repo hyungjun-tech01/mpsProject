@@ -37,20 +37,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-interface ITable<DataType> {
+interface ITable {
     columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[] }
-    rows: DataType[];
-    totalPages: number;
+    rows: {dept:object[], user:object[], device:object[]};
+    itemsPerPage: number;
+    currentPage: number;
     translated: object;
 }
 
 
-export default function CustomizedTable<DataType>({
+export default function ViewTabl({
     columns,
     rows,
-    totalPages,
+    itemsPerPage,
+    currentPage,
     translated
-}: ITable<DataType>) {
+}: ITable) {
     const [selectedCategory, setSelectedCategory] = useState<string>("dept");
 
     // Tabs ----------------------------------------------------------------------
@@ -59,6 +61,11 @@ export default function CustomizedTable<DataType>({
         { category: 'user', title: translated.user, icon: PersonOutlined },
         { category: 'device', title: translated.device, icon: PrintOutlined },
     ];
+
+    const totalPages = Math.ceil(rows[selectedCategory].length / itemsPerPage);
+    const minIndex = (currentPage - 1)*itemsPerPage;
+    const maxIndex = Math.min(currentPage*itemsPerPage, rows[selectedCategory].length);
+    const showRows = rows[selectedCategory].slice(minIndex, maxIndex);
     
     return (
         <div className='py-4'>
@@ -91,7 +98,7 @@ export default function CustomizedTable<DataType>({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.length > 0 ? rows.map((row, idx) => {
+                            {showRows.length > 0 ? showRows.map((row, idx) => {
                                 return (
                                     <StyledTableRow key={idx}>
                                         {columns[selectedCategory].map((column) => {
