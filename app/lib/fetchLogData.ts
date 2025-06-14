@@ -455,8 +455,8 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
                 LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
             ) sub
             WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
-            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
-            ${!!user ? "AND (ui.user_name like '%" + user + "%' OR ui.external_user_name like '%"+ user +"%')" : ""}
+            ${!!dept ? "AND dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (user_name like '%" + user + "%' OR external_user_name like '%"+ user +"%')" : ""}
             ORDER BY total_pages DESC
         `);
         return response.rows;

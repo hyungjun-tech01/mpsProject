@@ -149,7 +149,7 @@ export default async function Page(props: {
 
     const optionsForQuery = {
         dept: [{title: trans('user.select_dept'), value: ""},
-            ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id}))],
+            ...allDepts.map(item => ({title: item.dept_name, value: item.dept_name}))],
         device: [{title: trans('device.select_device'), value: ""},
             ...allDevices.map(item => ({title: item.device_name, value: item.device_id}))],
         jobType: [{title: trans('analysis.select_jobtype'), value: ""},
