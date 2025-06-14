@@ -279,6 +279,7 @@ const koResource = {
             secTitle_etc: '관련 내역',
             secTitle_password: '비밀번호 변경',
             secTitle_statistics: '통계',
+            select_dept: "-- 부서 선택 --",
             subTitle_budget: '조절 및 과금',
             subTitle_detail: '상세내역',
             subTitle_ProcessedLog: '처리업무 기록',

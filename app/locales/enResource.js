@@ -245,7 +245,7 @@ const enResource = {
             user_edit_etc_description: '사용자의 사무실, 부서 혹은 ID 카드나 번호등의 추가정보를 제공하십시오.',
             user_edit_statistics_description: "사용자 잔액 설정을 위해 여기에 값을 입력하십시오. 금액을 조절하려면(5크레딧 추가등), '조절'링크를 선택하십시오. 사용자를 '제한'한다는 것은 계정에 크레딧이 없을 시 출력을 할 수 없다는 것을 의미합니다.",
         },
-        user :{
+        user:{
             card_number: 'Primary Card No.',
             card_number2: 'Secondary Card No.',
             change_balance: '(Change Balance)',
@@ -276,6 +276,7 @@ const enResource = {
             secTitle_etc: 'Etc',
             secTitle_password: 'Change Password',
             secTitle_statistics: 'Statistics',
+            select_dept: "-- Select Department --",
             remain_amount:'Remained Amount',
             subTitle_budget: 'Control & Charge',
             subTitle_detail: 'Details',
