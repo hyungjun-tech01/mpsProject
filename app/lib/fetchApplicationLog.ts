@@ -5,7 +5,9 @@ export async function fetchFilteredApplicationLog(
     client: Pool,
     query: string,
     itemsPerPage: number,
-    currentPage: number
+    currentPage: number,
+    dateFrom :string,
+    dateTo : string,
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
     try {
@@ -23,14 +25,15 @@ export async function fetchFilteredApplicationLog(
                 tbl_user_info tui ON tal.created_by = tui.user_name
             WHERE
                (
-                application_page ILIKE '${`%${query}%`}' OR
-                application_action ILIKE '${`%${query}%`}' OR
-                application_parameter ILIKE '${`%${query}%`}' OR
-                tui.full_name ILIKE '${`%${query}%`}' 
-                )			
+                application_page ILIKE $3 OR
+                application_action ILIKE $3 OR
+                application_parameter ILIKE $3 OR
+                tui.full_name ILIKE $3 
+                )		
+                and log_date::DATE BETWEEN TO_DATE($1, 'YYYY.MM.DD') AND TO_DATE($2, 'YYYY.MM.DD')	
             ORDER BY log_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
-            `);
+            `, [dateFrom, dateTo, `%${query}%`]);
 
 
         return auditLogs.rows;
@@ -44,7 +47,9 @@ export async function fetchFilteredApplicationLog(
 export async function fetchFilteredApplicationLogPages(
     client: Pool,
     query: string,
-    itemsPerPage: number
+    itemsPerPage: number,
+    dateFrom :string,
+    dateTo : string,
 ) {
     try {
         const count =
@@ -53,12 +58,13 @@ export async function fetchFilteredApplicationLogPages(
                  WHERE  1 = 1
                    and tal.created_by = tui.user_name
                    and (
-                        application_page ILIKE '${`%${query}%`}' OR
-                        application_action ILIKE '${`%${query}%`}' OR
-                        application_parameter ILIKE '${`%${query}%`}' OR
-                        tui.full_name ILIKE '${`%${query}%`}'                     
+                        application_page ILIKE $3 OR
+                        application_action ILIKE $3 OR
+                        application_parameter ILIKE $3 OR
+                        tui.full_name ILIKE $3                    
                     )
-            `);
+                    and log_date::DATE BETWEEN TO_DATE($1, 'YYYY.MM.DD') AND TO_DATE($2, 'YYYY.MM.DD')	
+            `, [dateFrom, dateTo, `%${query}%`]);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
