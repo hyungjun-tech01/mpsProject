@@ -10,6 +10,7 @@ import Search from '@/app/components/search';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
+import AuditLogQuery from "@/app/components/log/AuditLogQuery";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
@@ -32,12 +33,15 @@ export default async function Page(props: {
     searchParams?: Promise<IAuditLogParams>;
     params: Promise<{ locale: "ko" | "en", category: string }>;
 }) {
-    const { locale } = await props.params;
+    const { locale, category  } = await props.params;
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
     const session = await auth();
+
+    const periodStartParam = searchParams?.periodStart ?? null;
+    const periodEndParam = searchParams?.periodEnd ?? null;;
 
     const userName = session?.user.name ?? "";
     if(!userName) redirect('/login'); // '/login'으로 리다이렉트
@@ -50,10 +54,10 @@ export default async function Page(props: {
     const adapter = MyDBAdapter();
     const [t, logPages, logData] = await Promise.all([
         getDictionary(locale),
-        category === "auditlogs" ? adapter.getFilteredAuditLogsPages(query, itemsPerPage)
-            : adapter.getFilteredApplicationLogPages(query, itemsPerPage),
-        category === "auditlogs" ? adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage)
-            : adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage),
+        category === "auditlogs" ? adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam)
+            : adapter.getFilteredApplicationLogPages(query, itemsPerPage, periodStartParam, periodEndParam),
+        category === "auditlogs" ? adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam)
+            : adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage, periodStartParam, periodEndParam),
     ]);
 
     // Tabs ----------------------------------------------------------------------
@@ -111,6 +115,12 @@ export default async function Page(props: {
 
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
+                    <AuditLogQuery
+                      dateFrom = { t('logs.dateFrom')}
+                      dateTo =  { t('logs.dateTo')}
+                      periodStart ={periodStartParam}
+                      periodEnd ={periodEndParam}
+                    />
                     <Search placeholder={searchTexts[category].keySearchPlaceholder} />
                 </div>
                 <Suspense fallback={<TableSkeleton />}>

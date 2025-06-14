@@ -12,7 +12,7 @@ const getMonthStartAndToday = () => {
   return { monthStart, today };
 };
 
-export default function auditLogQuery({
+export default function AuditLogQuery({
   dateFrom,
   dateTo,
   periodStart,
@@ -20,8 +20,8 @@ export default function auditLogQuery({
 }: {
   dateFrom: string,
   dateTo: string,
-  periodStart?: string,
-  periodEnd?: string,
+  periodStart?: string|null,
+  periodEnd?: string|null,
 }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -81,22 +81,35 @@ export default function auditLogQuery({
       }
     }
   };
+
+
   return (
-    <div className='flex gap-4 text-sm'>
-      <div className='flex-col md:flex-row'>
-        <DatePicker 
+      <div className="flex gap-4 text-sm items-center">
+    <div className="flex flex-row items-center gap-2">
+      {/* From 날짜 */}
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700 w-30">{dateFrom}</label>
+        <DatePicker
           selected={startDate}
+          dateFormat="yyyy.MM.dd"
           placeholderText={dateFrom}
-          className='w-24 border border-gray-300 pl-2 md:mr-2' 
+          className="w-36 h-10 border border-gray-300 pl-2 rounded"
           onChange={handleStartDateChange}
         />
+      </div>
+  
+      {/* To 날짜 */}
+      <div className="flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700 w-30">{dateTo}</label>
         <DatePicker
           selected={endDate}
+          dateFormat="yyyy.MM.dd"
           placeholderText={dateTo}
-          className='w-24 border border-gray-300 pl-2'
+          className="w-36 h-10 border border-gray-300 pl-2 rounded"
           onChange={handleEndDateChange}
         />
       </div>
     </div>
+  </div>
   );
 }

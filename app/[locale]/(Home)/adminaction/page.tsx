@@ -41,8 +41,8 @@ export default async function AdminActionLog(props: {
 
     const [t, totalPages, applicationLog] = await Promise.all([
         getDictionary(locale),
-        adapter.getFilteredApplicationLogPages(query, itemsPerPage),
-        adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage)
+        adapter.getFilteredApplicationLogPages(query, itemsPerPage, null, null),
+        adapter.getFilteredApplicationLog(query, itemsPerPage, currentPage, null, null)
     ]);
 
     // Tabs ----------------------------------------------------------------------

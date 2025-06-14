@@ -248,8 +248,8 @@ export async function fetchFilteredAuditLogs(
     currentPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+   
 ) {
-    console.log('date from-to', dateFrom,dateTo);
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const auditLogs =
@@ -284,8 +284,8 @@ export async function fetchFilteredAuditLogs(
                 document_name ILIKE '${`%${query}%`}' OR
                 privacy_text ILIKE '${`%${query}%`}' 
                 )		
-              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
+             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	    
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
@@ -314,7 +314,7 @@ export async function fetchFilteredAuditLogs(
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name		
             WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 		
+              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -353,13 +353,13 @@ export async function fetchFilteredAuditLogPages(
                         document_name ILIKE '${`%${query}%`}' OR
                         privacy_text ILIKE '${`%${query}%`}'                        
                     )
-                    and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
-                    and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                     
             `)
                 : await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log 
-                WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
-                and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}' 
+                 WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                 
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);

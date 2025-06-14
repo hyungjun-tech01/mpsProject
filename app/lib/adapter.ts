@@ -420,11 +420,14 @@ export default function MyDBAdapter() {
             fromDate : string|null, 
             toDate:string|null,
         ) {
-            console.log('fromDate', fromDate);
+           // console.log('fromDate', fromDate);
+           //, fromDate , toDate
             return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate);
         },
         async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null) {
-            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate);
+            //, fromDate : string|null, toDate:string|null
+            // , fromDate, toDate
+            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate);
         },
         async getPrivacytDetectedData(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
             return Log.fetchPrivacytDetectedData(pool, period, periodStart, periodEnd, dept, user );
@@ -507,13 +510,13 @@ export default function MyDBAdapter() {
             'use server';
             return Action.applicationLog(pool,  formData);
         },
-        async getFilteredApplicationLog(query:string, itemsPerPage: number, currentPage: number){
+        async getFilteredApplicationLog(query:string, itemsPerPage: number, currentPage: number, dateFrom:string|null, dateTo:string|null){
 
-            return ApplicationLog.fetchFilteredApplicationLog(pool, query, itemsPerPage, currentPage);
+            return ApplicationLog.fetchFilteredApplicationLog(pool, query, itemsPerPage, currentPage, dateFrom, dateTo);
         },
-        async getFilteredApplicationLogPages(query:string, itemsPerPage: number){
+        async getFilteredApplicationLogPages(query:string, itemsPerPage: number, dateFrom:string|null, dateTo:string|null){
 
-            return ApplicationLog.fetchFilteredApplicationLogPages(pool, query, itemsPerPage);
+            return ApplicationLog.fetchFilteredApplicationLogPages(pool, query, itemsPerPage, dateFrom, dateTo);
         },
         
         // -----------------------------------------------------------
