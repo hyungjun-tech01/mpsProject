@@ -139,7 +139,7 @@ export default async function Page(props: {
     };
 
     const queryKeys = {
-        print: ["periodStart","periodEnd","dept","user","device","jobType"],
+        print: ["periodStart","periodEnd","dept","user","device"],  //,"jobType"],
         privacy: ["periodStart","periodEnd","dept"],
     };
 
@@ -165,12 +165,12 @@ export default async function Page(props: {
             ...allDepts.map(item => ({title: item.dept_name, value: item.dept_name}))],
         device: [{title: trans('device.select_device'), value: ""},
             ...allDevices.map(item => ({title: item.device_name, value: item.device_id}))],
-        jobType: [{title: trans('analysis.select_jobtype'), value: ""},
-            {title: trans('common.copy'), value: "COPY"},
-            {title: trans('common.fax'), value: "FAX"},
-            {title: trans('common.scan'), value: "SCAN"},
-            {title: trans('common.print'), value: "PRINT"},
-        ],
+        // jobType: [{title: trans('analysis.select_jobtype'), value: ""},
+        //     {title: trans('common.copy'), value: "COPY"},
+        //     {title: trans('common.fax'), value: "FAX"},
+        //     {title: trans('common.scan'), value: "SCAN"},
+        //     {title: trans('common.print'), value: "PRINT"},
+        // ],
     };
 
     const cardData = [
