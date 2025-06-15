@@ -66,11 +66,16 @@ export default function ViewTabl({
         { category: 'device', title: translated.device, icon: PrintOutlined },
     ] : null;
 
-    console.log('Check :', columns);
     const totalPages = Math.ceil(rows[selectedCategory].length / itemsPerPage);
     const minIndex = (currentPage - 1)*itemsPerPage;
     const maxIndex = Math.min(currentPage*itemsPerPage, rows[selectedCategory].length);
     const showRows = rows[selectedCategory].slice(minIndex, maxIndex);
+    // console.log('Table View / input data :', rows);
+    // console.log('Table View / rows :', rows[selectedCategory]);
+    // console.log('Table View / total pages :', totalPages);
+    // console.log('Table View / min index :', minIndex);
+    // console.log('Table View / max index :', maxIndex);
+    // console.log('Table View / show rows :', showRows);
     
     return (
         <div className='py-4'>

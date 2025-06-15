@@ -443,6 +443,7 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
                     ui.user_name,
                     ui.external_user_name,
                     di.dept_name,
+                    ajl.job_type,
                     ajl.total_pages,
                     ajl.color_total_pages,
                     dv.device_id,

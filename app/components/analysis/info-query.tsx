@@ -75,10 +75,14 @@ export default function InfoQuery({
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const handlejobTypeChange= (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handlejobTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const params = new URLSearchParams(searchParams);
     params.set("jobType", e.target.value);
     replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleInitParams = () => {
+    replace(`${pathname}`);
   };
 
 
@@ -179,6 +183,10 @@ export default function InfoQuery({
           </select>
         </div>
       }
+      <button
+        className='w-24 h-7 border bg-lime-900 text-white rounded-md'
+        onClick={handleInitParams}
+      >{translated.initialize}</button>
     </div>
   );
 }
