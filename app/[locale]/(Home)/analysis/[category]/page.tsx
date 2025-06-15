@@ -14,6 +14,7 @@ import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
+import { initialize } from "next/dist/server/lib/render-server";
 
 
 export const metadata: Metadata = {
@@ -140,6 +141,7 @@ export default async function Page(props: {
         device: trans('analysis.category_device'),
         dept: trans('analysis.category_dept'),
         user: trans('analysis.category_user'),
+        initialize: trans('common.initialize'),
     };
 
     const queryKeys = {
