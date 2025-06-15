@@ -446,7 +446,6 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
                     ajl.total_pages,
                     ajl.color_total_pages,
                     dv.device_id,
-                    ajl.job_type,
                     dv.device_name,
                     TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date
                 FROM tbl_audit_job_log ajl
@@ -457,6 +456,7 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
             WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
             ${!!dept ? "AND dept_name = '" + dept + "'" : ""}
             ${!!user ? "AND (user_name like '%" + user + "%' OR external_user_name like '%"+ user +"%')" : ""}
+            ${!!device ? "AND device_name like '%" + device + "'" : ""}
             ORDER BY total_pages DESC
         `);
         return response.rows;
@@ -467,31 +467,32 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
 }
 
 
-export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string) {
+    const splittedStart = periodStart.split('.');
+    const startTime = splittedStart.at(0)?.slice(-2) + splittedStart.at(1) + splittedStart.at(2) + "00000000";
+    const splittedEnd = periodEnd.split('.');
+    const endTime = splittedEnd.at(0)?.slice(-2) + splittedEnd.at(1) + splittedEnd.at(2) + "23595999";
+
     try {
         const response = await client.query(`
             SELECT
             *
             FROM (
                 SELECT
+                    ajl.send_time,
                     ui.user_name,
                     ui.external_user_name,
-                    di.dept_name,
-                    ajl.total_pages,
-                    ajl.color_total_pages,
-                    ajl.job_type,
-                    dv.device_id,
-                    dv.device_name,
-                    TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date
+                    ajl.document_name,
+                    ajl.status,
+                    di.dept_name
                 FROM tbl_audit_job_log ajl
                 JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
-                JOIN tbl_device_info dv ON dv.device_id = ajl.device_id
                 LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
             ) sub
-            WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
-            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
-            ${!!user ? "AND (ui.user_name like '%" + user + "%' OR ui.external_user_name like '%"+ user +"%')" : ""}
-            ORDER BY total_pages DESC
+            WHERE send_time >= '${startTime}' AND send_time <= '${endTime}'
+            ${!!dept ? "AND dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (user_name like '%" + user + "%' OR external_user_name like '%"+ user +"%')" : ""}
+            ORDER BY send_time DESC
         `);
         return response.rows;
     } catch (e) {

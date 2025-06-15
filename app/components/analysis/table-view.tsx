@@ -38,30 +38,35 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 interface ITable {
-    columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[] }
-    rows: {dept:object[], user:object[], device:object[]};
+    defaultSection: string;
+    columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[]} | { privacy: IColumnData[] };
+    rows: { dept:object[], user:object[], device:object[]} | { privacy: object[]};
     itemsPerPage: number;
     currentPage: number;
     translated: object;
+    title?: string;
 }
 
 
 export default function ViewTabl({
+    defaultSection,
     columns,
     rows,
     itemsPerPage,
     currentPage,
-    translated
+    translated,
+    title
 }: ITable) {
-    const [selectedCategory, setSelectedCategory] = useState<string>("dept");
+    const [selectedCategory, setSelectedCategory] = useState<string>(defaultSection);
 
     // Tabs ----------------------------------------------------------------------
-    const subTitles = [
+    const subTitles = defaultSection !== 'privacy' ? [
         { category: 'dept', title: translated.dept, icon: FolderOutlined },
         { category: 'user', title: translated.user, icon: PersonOutlined },
         { category: 'device', title: translated.device, icon: PrintOutlined },
-    ];
+    ] : null;
 
+    console.log('Check :', columns);
     const totalPages = Math.ceil(rows[selectedCategory].length / itemsPerPage);
     const minIndex = (currentPage - 1)*itemsPerPage;
     const maxIndex = Math.min(currentPage*itemsPerPage, rows[selectedCategory].length);
@@ -69,22 +74,25 @@ export default function ViewTabl({
     
     return (
         <div className='py-4'>
-            <div className='flex justify-start'>
-                <div className='flex bg-gray-200 px-2 py-1 rounded'>
-                {subTitles.map(sub =>
-                    <div key={sub.category}
-                        onClick={()=>setSelectedCategory(sub.category)}
-                        className={clsx("h-8 py-2 px-4 font-sm align-middle text-sm hover:cursor-pointer flex gap-2 items-center", {
-                            "bg-white rounded": sub.category === selectedCategory,
-                            "bg-gray-200": sub.category !== selectedCategory,
-                        })}
-                    >
-                        < sub.icon />
-                        {sub.title}
+            {!!subTitles && 
+                <div className='flex justify-start'>
+                    <div className='flex bg-gray-200 px-2 py-1 rounded'>
+                    {subTitles.map(sub =>
+                        <div key={sub.category}
+                            onClick={()=>setSelectedCategory(sub.category)}
+                            className={clsx("h-8 py-2 px-4 font-sm align-middle text-sm hover:cursor-pointer flex gap-2 items-center", {
+                                "bg-white rounded": sub.category === selectedCategory,
+                                "bg-gray-200": sub.category !== selectedCategory,
+                            })}
+                        >
+                            < sub.icon />
+                            {sub.title}
+                        </div>
+                    )}
                     </div>
-                )}
                 </div>
-            </div>
+            }
+            {!!title && <div className=''>{title}</div>}
             <div className="mt-4 flow-root">
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: "700px"}} aria-label="customized table">
@@ -101,10 +109,10 @@ export default function ViewTabl({
                             {showRows.length > 0 ? showRows.map((row, idx) => {
                                 return (
                                     <StyledTableRow key={idx}>
-                                        {columns[selectedCategory].map((column) => {
+                                        {columns[selectedCategory].map((column, colIdx) => {
                                             return (
                                                 <StyledTableCell
-                                                    key={column.name}
+                                                    key={colIdx}
                                                     component="th"
                                                     align={column.align}
                                                     scope="row"

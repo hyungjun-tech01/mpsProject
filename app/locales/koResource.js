@@ -289,7 +289,7 @@ const koResource = {
             subTitle_ProcessedLog: '처리업무 기록',
             subTitle_jobLog: 'Job Log',
             update_user: '사용자 변경하기',
-            user_id:'사용자 아이디',
+            user_id:'사용자 ID',
             user_name:'사용자 이름',
             user_role:'사용자 권한',
             //-----------------------------------------------------------
@@ -496,11 +496,16 @@ const koResource = {
 
         },
         analysis: {
+            action: '조치',
+            action_status: '조치 상태',
             analize_print: '출력량 통계/조회',
             analize_privacy: '개인정보 검출 통계/조회',
             category_dept: '부서별',
             category_device: '기기별',
             category_user: '사용자별',
+            detect_items: '검출 항목',
+            detect_time: '검출 일시',
+            detect_item_list: '검출 내역 목록',
             print_total_pages: '총 출력 매수',
             print_depts: '부서 수',
             print_device: '복합기/프린터 수',

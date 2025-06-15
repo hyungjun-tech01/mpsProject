@@ -423,11 +423,16 @@ const enResource = {
 
         },
         analysis: {
+            action: 'Action',
+            action_status: 'Action Status',
             analize_print: 'Query For Print',
             analize_privacy: 'Query For Privacy Detection',
             category_dept: 'By Dept.',
             category_device: 'By Device',
             category_user: 'By User',
+            detect_items: 'Detect Items',
+            detect_time: 'Detect Time',
+            detect_item_list: 'Detect Item List',
             print_total_pages: 'Total Print Page Count',
             print_depts: 'Dept. Count',
             print_device: 'Device Count',
