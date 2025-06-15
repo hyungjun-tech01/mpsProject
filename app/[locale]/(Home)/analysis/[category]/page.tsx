@@ -70,35 +70,48 @@ export default async function Page(props: {
 
     // Manipulate data
     // console.log("Print Analysis (raw) : ", data);
-    const realData = {
+    const dataForCards = {
+        total_pages: 0,
+        dept_count: 0,
+        device_count: 0,
+        user_count: 0,
+    }
+    const dataForTable = {
         dept: [], user: [], device: []
     };
+    
     for(const item of data) {
-        const deptIdx = realData.dept.findIndex(dept => dept.dept_name === item.dept_name );
+        dataForCards.total_pages += item.total_pages;
+
+        const deptIdx = dataForTable.dept.findIndex(dept => dept.dept_name === item.dept_name );
         if(deptIdx === -1){
+            dataForCards.dept_count += 1;
+
             const initData = {dept_name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
             initData[item.job_type] = item.total_pages;
-            realData.dept.push(initData);
+            dataForTable.dept.push(initData);
         } else {
-            realData.dept[deptIdx][item.job_type] += item.total_pages;
+            dataForTable.dept[deptIdx][item.job_type] += item.total_pages;
         };
 
-        const userIdx = realData.user.findIndex(user => user.user_name === item.user_name );
+        const userIdx = dataForTable.user.findIndex(user => user.user_name === item.user_name );
         if(userIdx === -1){
+            dataForCards.user_count += 1;
             const initData = {user_name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
             initData[item.job_type] = item.total_pages;
-            realData.user.push(initData);
+            dataForTable.user.push(initData);
         } else {
-            realData.user[userIdx][item.job_type] += item.total_pages;
+            dataForTable.user[userIdx][item.job_type] += item.total_pages;
         };
 
-        const deviceIdx = realData.device.findIndex(device => device.device_id === item.device_id );
+        const deviceIdx = dataForTable.device.findIndex(device => device.device_id === item.device_id );
         if(deviceIdx === -1){
+            dataForCards.device_count += 1;
             const initData = {device_id: item.device_id, device_name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
             initData[item.job_type] = item.total_pages;
-            realData.device.push(initData);
+            dataForTable.device.push(initData);
         } else {
-            realData.device[deviceIdx][item.job_type] += item.total_pages;
+            dataForTable.device[deviceIdx][item.job_type] += item.total_pages;
         };
     };
 
@@ -161,10 +174,10 @@ export default async function Page(props: {
     };
 
     const cardData = [
-        { title: trans('analysis.print_total_pages'), value: 0 },
-        { title: trans('analysis.print_depts'), value: 0 },
-        { title: trans('analysis.print_device'), value: 0 },
-        { title: trans('analysis.print_users'), value: 0 },
+        { title: trans('analysis.print_total_pages'), value: dataForCards.total_pages },
+        { title: trans('analysis.print_depts'), value: dataForCards.dept_count },
+        { title: trans('analysis.print_device'), value: dataForCards.device_count },
+        { title: trans('analysis.print_users'), value: dataForCards.user_count },
     ];
 
     const columnSubs: IColumnData[] = [
@@ -222,7 +235,7 @@ export default async function Page(props: {
                     <Suspense fallback={<TableSkeleton />}>
                         <TableView
                             columns={columns}
-                            rows={realData}
+                            rows={dataForTable}
                             itemsPerPage={itemsPerPage}
                             currentPage={currentPage}
                             translated={translated}
