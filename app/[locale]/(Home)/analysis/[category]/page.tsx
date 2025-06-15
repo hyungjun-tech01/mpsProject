@@ -119,7 +119,7 @@ export default async function Page(props: {
     } else if(category === 'privacy') {
         dataForTable["privacy"] = [ ...data ];
     }
-    console.log('Data For Table :', dataForTable);
+    // console.log('Data For Table :', dataForTable);
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
@@ -215,8 +215,8 @@ export default async function Page(props: {
                 { name: 'user_name', title: trans('user.user_id'), align: 'center' },
                 { name: 'external_user_name', title: trans('user.user_name'), align: 'center' },
                 { name: 'document_name', title: trans('printer.document_name'), align: 'center' },
-                { name: 'detect_items', title: trans('analysis.detect_items'), align: 'center' },
-                { name: 'action_status', title: trans('analysis.action_status'), align: 'center' },
+                { name: 'detected_item', title: trans('analysis.detect_items'), align: 'center' },
+                { name: 'status', title: trans('analysis.action_status'), align: 'center' },
                 { name: 'action', title: trans('analysis.action'), align: 'center' },
             ]
         },

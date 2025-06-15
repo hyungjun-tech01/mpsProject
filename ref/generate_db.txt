@@ -3264,3 +3264,5 @@ select t1.dept_name, count(*) from tbl_user_info t , tbl_dept_info t1
 where t.department = t1.dept_id
 group by t1.dept_name;
 
+-- 2025.06.15
+ALTER TABLE tbl_audit_job_log ADD COLUMN detected_item varchar(256); 
