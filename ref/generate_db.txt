@@ -2996,11 +2996,9 @@ ALTER TABLE tbl_user_info ALTER COLUMN user_role SET NOT NULL;
 
 -- 2025.04.07 : tbl_user_info에 admin 계정 추가
 INSERT INTO tbl_user_info (
-    user_id,
     user_name,
     external_user_name,
     full_name,
-    user_role,
     email,
     department,
     home_directory,
@@ -3010,12 +3008,10 @@ INSERT INTO tbl_user_info (
     created_date,
     modified_date
 ) VALUES (
-    '0001',
     'admin',
-    'admin',
+    '관리자',
     'admin', 
-    'admin',
-    '',
+    'admin@admin.com',
     '',
     '',
     '',
@@ -3270,3 +3266,300 @@ ALTER TABLE tbl_audit_job_log ADD COLUMN detected_item varchar(256);
 -- 2025.06.16 
 ALTER TABLE tbl_audit_job_log drop COLUMN detected_item; 
 ALTER TABLE tbl_audit_job_log add COLUMN detected_items varchar(1024); 
+ALTER TABLE tbl_audit_job_log add COLUMN detected_privacy_number integer; 
+ALTER TABLE tbl_audit_job_log add COLUMN detected_security_number integer; 
+
+
+
+
+-- 2025.06.16
+-- 지금까지 생성 수정된 테이블들 create 로 한번에 적용
+
+select * from tbl_user_info  ;
+select * from tbl_device_info;
+select * from tbl_group_info;
+select * from tbl_group_member_info;
+select * from tbl_document_job_info;
+select * from tbl_document_shared_info;
+select * from tbl_fax_line_info;
+select * from tbl_audit_job_log;
+select * from tbl_settings_info;
+select * from tbl_dept_info;
+select * from tbl_print_job_spool_info;
+select * from tbl_user_info_if;
+select * from tbl_security_value_info;
+select * from tbl_application_log_info;
+
+
+-------------------------table create 작업 -------------------------------------
+CREATE TABLE IF NOT EXISTS public.tbl_user_info
+(
+    user_id varchar(36)   NOT NULL DEFAULT 'uuid_generate_v4()',
+    user_name varchar(255)  NOT NULL,
+    external_user_name varchar(255) ,
+    full_name varchar(255) ,
+    email varchar(255) ,
+    notes varchar(2000) ,
+    total_jobs integer DEFAULT 0,
+    total_pages integer DEFAULT 0,
+    reset_by varchar(255) ,
+    reset_date timestamp without time zone,
+    schedule_period varchar(10) ,
+    schedule_amount double precision,
+    schedule_start integer,
+    deleted character(1)  DEFAULT 'N'::bpchar,
+    deleted_date timestamp without time zone,
+    created_date timestamp without time zone,
+    created_by varchar(255) ,
+    user_source_type varchar(10) ,
+    modified_date timestamp without time zone,
+    modified_by varchar(255) ,
+    department varchar(200) ,
+    office varchar(200) ,
+    card_number varchar(100) ,
+    card_number2 varchar(100) ,
+    disabled_printing character(1)  DEFAULT 'N'::bpchar,
+    disabled_printing_until timestamp without time zone,
+    home_directory varchar(255) ,
+    password varchar(255) ,
+    balance double precision NOT NULL DEFAULT 0,
+    sysadmin character(1) ,
+    privilege varchar(100) DEFAULT 'ALL',
+    CONSTRAINT tbl_user_info_pkey PRIMARY KEY (user_name )
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_device_info
+(
+    device_id varchar(36)   NOT NULL DEFAULT 'uuid_generate_v4()',
+    device_name varchar(510)  NOT NULL,
+    location varchar(255) ,
+    notes varchar(2000) ,
+    default_cost double precision,
+    deleted character(1)  DEFAULT 'N'::bpchar,
+    deleted_date timestamp without time zone,
+    disabled character(1) ,
+    disabled_until timestamp without time zone,
+    total_jobs integer,
+    total_pages integer,
+    created_date timestamp without time zone NOT NULL,
+    created_by varchar(255)  NOT NULL,
+    modified_date timestamp without time zone NOT NULL,
+    modified_by varchar(255)  NOT NULL,
+    ext_device_function varchar(100) ,
+    physical_device_id varchar(100)  NOT NULL,
+    device_model varchar(100) ,
+    serial_number varchar(100) ,
+    web_print_enabled character(1)  NOT NULL,
+    device_status varchar(50) ,
+    device_type varchar(255) NOT NULL,
+    device_administrator varchar(255) ,
+    device_administrator_password varchar(1000) ,
+    enable_printer_release character(1) ,
+    total_color_pages integer,
+    black_toner_percentage integer,
+    cyan_toner_percentage integer,
+    magenta_toner_percentage integer,
+    yellow_toner_percentage integer,
+    app_type varchar(255) 
+);
+
+CREATE TABLE IF NOT EXISTS public.tbl_group_info
+(
+    group_id varchar(36)   NOT NULL DEFAULT 'uuid_generate_v4()',
+    group_name varchar(255)  NOT NULL,
+    group_type varchar(20)  NOT NULL,
+    group_notes varchar(255) ,
+    schedule_period varchar(10) ,
+    schedule_amount double precision,
+    remain_amount double precision,
+    schedule_start integer,
+    reset_by varchar(255) ,
+    reset_date timestamp without time zone,
+    created_date timestamp without time zone,
+    created_by varchar(255) ,
+    modified_date timestamp without time zone,
+    modified_by varchar(255) 
+);
+
+CREATE TABLE IF NOT EXISTS public.tbl_group_member_info
+(
+    group_id varchar(36)  NOT NULL,
+    member_id varchar(36)  NOT NULL,
+    member_type varchar(20)  NOT NULL,
+    group_admin_start_date timestamp without time zone,
+    group_admin_end_date timestamp without time zone,
+    CONSTRAINT tbl_group_member_info_pkey PRIMARY KEY (group_id, member_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_document_job_info
+(
+    document_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    created_by varchar(36)  NOT NULL,
+    created_date timestamp without time zone NOT NULL,
+    deleted_date timestamp without time zone,
+    printer_id varchar(36) ,
+    denied_reason varchar(30) ,
+    job_type varchar(10) ,
+    gray_scale character(1) ,
+    dpi varchar(10) ,
+    total_pages integer,
+    paper_size varchar(20) ,
+    document_name varchar(255)  NOT NULL,
+    archive_path varchar(255) ,
+    file_size_kb integer,
+    shared character(1) ,
+    CONSTRAINT tbl_document_job_info_pkey PRIMARY KEY (document_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_document_shared_info
+(
+    document_id character varying(36) COLLATE pg_catalog."default" NOT NULL,
+    shared_to character varying(36) COLLATE pg_catalog."default" NOT NULL,
+    shared_type character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    shared_expiry_date timestamp without time zone,
+    CONSTRAINT tbl_document_shared_info_pkey PRIMARY KEY (document_id, shared_to)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_fax_line_info
+(
+    fax_line_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    fax_line_name varchar(255)  NOT NULL,
+    printer_id varchar(36)  NOT NULL,
+    fax_line_user_id varchar(36)  NOT NULL,
+    fax_line_shared_group_id varchar(36)  NOT NULL,
+    created_date timestamp without time zone,
+    created_by varchar(36) ,
+    deleted_date timestamp without time zone,
+    deleted_by varchar(36) ,
+    CONSTRAINT tbl_fax_line_info_pkey PRIMARY KEY (fax_line_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.tbl_audit_job_log
+(
+    job_log_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    job_type varchar(10)  NOT NULL,
+    printer_serial_number varchar(20) ,
+    job_id varchar(20) ,
+    user_name varchar(50) ,
+    destination varchar(50) ,
+    send_time varchar(20) ,
+    file_name varchar(50) ,
+    finish_time varchar(20) ,
+    copies integer,
+    original_pages integer,
+    detect_privacy boolean,
+    privacy_text text ,
+    image_archive_path varchar(100) ,
+    text_archive_path varchar(100) ,
+    original_job_id varchar(20) ,
+    ocr_text text ,
+    image_archive bytea,
+    image_thumbnail bytea,
+    is_encrypted boolean,
+    security_group_name varchar(255) ,
+    device_id varchar(36) ,
+    total_pages integer,
+    color_total_pages integer,
+    status varchar(100) ,
+    document_name varchar(255) ,
+    detect_security boolean,
+    security_text text ,
+    detected_items varchar(1024) ,
+    detected_privacy_number integer,
+    detected_security_number integer,
+    CONSTRAINT tbl_audit_job_log_pkey PRIMARY KEY (job_log_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_settings_info
+(
+    setting_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    setting_name varchar(100) ,
+    setting_value text ,
+    value_type varchar(100) ,
+    CONSTRAINT tbl_settings_info_pkey PRIMARY KEY (setting_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.tbl_dept_info
+(
+    dept_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    dept_name varchar(255) ,
+    security_group_name varchar(255) ,
+    parent_dept_id  varchar(36),
+    CONSTRAINT tbl_dept_info_pkey PRIMARY KEY (dept_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_print_job_spool_info
+(
+    print_job_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    print_pc_ip varchar(15)  ,
+    print_job_time timestamp without time zone ,
+    print_job_user varchar(255)  ,
+    print_document_name varchar(255) ,
+    copies integer ,
+    color_mode varchar(10)  ,
+    paper_size varchar(5) ,
+    duplex varchar(5)  ,
+    n_up integer ,
+    language varchar(10)  ,
+    pages integer ,
+    CONSTRAINT pk_print_job_info PRIMARY KEY (print_job_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.tbl_user_info_if
+(
+    user_info_if_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    user_name varchar(255)  NOT NULL,
+    external_user_name varchar(255)  NOT NULL,
+    full_name varchar(255) ,
+    email varchar(255) ,
+    notes varchar(2000) ,
+    created_date timestamp without time zone NOT NULL,
+    created_by varchar(255) ,
+    user_source_type varchar(10)  NOT NULL,
+    modified_date timestamp without time zone,
+    modified_by varchar(255) ,
+    department varchar(200) ,
+    office varchar(200) ,
+    card_number varchar(100) ,
+    card_number2 varchar(100) ,
+    home_directory varchar(255) ,
+    privilege varchar(100) default 'ALL',
+    if_status varchar(10)  NOT NULL,
+    if_message varchar(4000) ,
+    CONSTRAINT tbl_user_info_if_pkey PRIMARY KEY (user_info_if_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_security_value_info
+(
+    security_value_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    security_name varchar(255)  NOT NULL,
+    security_type varchar(255)  NOT NULL,
+    security_word varchar(255)  NOT NULL,
+    created_by varchar(255) ,
+    creation_date timestamp without time zone,
+    CONSTRAINT tbl_security_value_info_pkey PRIMARY KEY (security_name)
+);
+
+
+CREATE TABLE IF NOT EXISTS public.tbl_application_log_info
+(
+    application_log_id varchar(36)  NOT NULL DEFAULT 'uuid_generate_v4()',
+    application_page varchar(255) ,
+    application_action varchar(255) ,
+    application_parameter text ,
+    created_by varchar(255) ,
+    log_date timestamp without time zone,
+    ip_address varchar(255) ,
+    log_minute_trunc varchar(16) ,
+    CONSTRAINT uq_application_log_per_minute UNIQUE (application_page, application_action, application_parameter, created_by, ip_address, log_minute_trunc)
+);
+
+
+-------------------------table create 작업 끝-------------------------------------
