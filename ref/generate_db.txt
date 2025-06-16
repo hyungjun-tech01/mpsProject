@@ -3266,3 +3266,7 @@ group by t1.dept_name;
 
 -- 2025.06.15
 ALTER TABLE tbl_audit_job_log ADD COLUMN detected_item varchar(256); 
+
+-- 2025.06.16 
+ALTER TABLE tbl_audit_job_log drop COLUMN detected_item; 
+ALTER TABLE tbl_audit_job_log add COLUMN detected_items varchar(1024); 
