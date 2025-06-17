@@ -33,6 +33,14 @@ export default function PieChart({
     data: number[];
   }[];
  }) {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "right" as const,
+      }
+    }
+  };
   const inputData = {
     labels: labels,
     datasets: dataSet.map(item => ({
@@ -43,5 +51,5 @@ export default function PieChart({
         borderWidth: 1,
       })),
   };
-  return <Pie data={inputData} />;
+  return <Pie options={options} data={inputData} />;
 }
