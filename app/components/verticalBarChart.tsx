@@ -72,7 +72,7 @@ export default function VerticalBarChart({
     labels:xlabels,
     datasets: dataSet,
   }
-  console.log("Vertical Chart Data :", data);
+  // console.log("Vertical Chart Data :", data);
   return (
       <Bar options={options} data={data} />
   );
