@@ -100,7 +100,7 @@ BEGIN
                         SELECT dept_id 
                         INTO v_dept_id
                         FROM tbl_dept_info 
-                        WHERE dept_name = TARGET_CURSOR.department;
+                        WHERE dept_id = TARGET_CURSOR.department;
                     EXCEPTION
                         WHEN NO_DATA_FOUND THEN
                             v_dept_id := NULL; -- 혹은 기본값 또는 로깅
