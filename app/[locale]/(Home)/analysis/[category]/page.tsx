@@ -250,8 +250,8 @@ export default async function Page(props: {
                 </div>
                 {category === 'print' &&
                     <div className="mb-8 flex flex-col items-stretch text-sm md:flex-row md:gap-4">
-                        {cardData.map(item => 
-                            <div className="flex-1 h-12 border border-gray-300 rounded-lg flex items-center justify-between px-4 bg-white">
+                        {cardData.map((item, idx) => 
+                            <div key={idx} className="flex-1 h-12 max-w-64 border border-gray-300 rounded-lg flex items-center justify-between px-4 bg-white">
                                 <div className=""> {item.title} :</div>
                                 <div className="font-semibold"> {item.value}</div>
                             </div>
