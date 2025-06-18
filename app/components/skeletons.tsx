@@ -180,6 +180,10 @@ export function TableSkeleton() {
               <TableRowSkeleton />
               <TableRowSkeleton />
               <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
+              <TableRowSkeleton />
             </tbody>
           </table>
         </div>

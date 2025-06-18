@@ -33,20 +33,6 @@ export function BoardItemSkeleton() {
   )
 }
 
-export function BoardSkeleton() {
-  return (
-    <div
-      className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-50 p-2 shadow-sm`}
-    >
-      <BoardItemSkeleton />
-      <BoardItemSkeleton />
-      <BoardItemSkeleton />
-      <BoardItemSkeleton />
-      <BoardItemSkeleton />
-    </div>
-  );
-}
-
 export function ChartSkeleton() {
   return (
     <div className="w-full md:col-span-4">
@@ -64,11 +50,11 @@ export function ChartSkeleton() {
 
 export function CardsSkeleton() {
   return (
-    <>
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       <CardSkeleton />
       <CardSkeleton />
       <CardSkeleton />
-    </>
+    </div>
   );
 }
 
@@ -78,15 +64,11 @@ export default function DashboardSkeleton() {
       <div
         className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
       />
-      <div className="flex flex-col">
-        <div className="flex flex-col md:flex-row gap-6 mb-6">
-          <CardSkeleton />
-          <CardSkeleton />
-          <CardSkeleton />
-        </div>
-        <div className="flex-1">
-          <ChartSkeleton />
-        </div>
+      <div className="flex flex-col gap mb-6">
+        <CardsSkeleton />
+      </div>
+      <div className="flex-1">
+        <ChartSkeleton />
       </div>
     </>
   );
