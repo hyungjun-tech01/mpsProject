@@ -60,8 +60,8 @@ export default async function Page(props: {
         logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam);
         logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam);
     } else if (category === "auditlogsRetired") {
-        logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam);
-        logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam);
+        logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam);
+        logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam);
     } else {
     // application logs
         logPagesPromise = adapter.getFilteredApplicationLogPages(query, itemsPerPage, periodStartParam, periodEndParam);
@@ -155,7 +155,7 @@ export default async function Page(props: {
                     <Search placeholder={searchTexts[category].keySearchPlaceholder} />
                 </div>
                 <Suspense fallback={<TableSkeleton />}>
-                {category === 'auditlogs' ?
+                {( category === 'auditlogs' || category === 'auditlogsRetired' ) ?
                     <LogTable
                         columns={groupColumns[category]}
                         rows={logData}

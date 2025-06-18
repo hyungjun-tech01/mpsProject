@@ -370,6 +370,102 @@ export async function fetchFilteredAuditLogPages(
     }
 };
 
+export async function fetchFilteredRetiredAuditLogs(
+    client: Pool,
+    query: string,
+    itemsPerPage: number,
+    currentPage: number,
+    dateFrom : string|null,
+    dateTo : string|null,
+   
+) {
+    const offset = (currentPage - 1) * itemsPerPage;
+    try {
+        const auditLogs =
+            await client.query(`
+            select a.job_log_id,
+                a.job_type ,
+                a.printer_serial_number ,
+                a.job_id      ,
+                b.full_name user_name ,
+                a.destination ,
+                a.send_time,
+                a.file_name ,
+                to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
+                a.copies  ,
+                a.original_pages ,
+                CASE WHEN a.detect_privacy THEN 'Y' 
+                ELSE 'N' 
+                END AS detect_privacy,
+                a.privacy_text,
+                a.image_archive_path ,
+                a.text_archive_path ,
+                a.original_job_id  ,
+                a.document_name,
+                a.total_pages,
+                a.color_total_pages
+            from tbl_audit_job_log a
+            left join tbl_user_info b on a.user_name = b.user_name
+            WHERE (
+                printer_serial_number ILIKE '${`%${query}%`}' OR
+                b.full_name  ILIKE '${`%${query}%`}' OR
+                document_name ILIKE '${`%${query}%`}' OR
+                privacy_text ILIKE '${`%${query}%`}' 
+                )	
+             and b.deleted = 'Y'	
+             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	    
+            ORDER BY send_time DESC
+            LIMIT ${itemsPerPage} OFFSET ${offset}
+            `);
+
+        const converted = auditLogs.rows.map((data: AuditLogField) => ({
+            ...data,
+            id: data.job_log_id,
+            privacy_text: parsePrivacyText(data.privacy_text),
+            image_archive_path: data.image_archive_path,
+        }));
+
+        return converted;
+
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
+    }
+};
+
+export async function fetchFilteredRetiredAuditLogPages(
+    client: Pool,
+    query: string,
+    itemsPerPage: number,
+    dateFrom : string|null,
+    dateTo : string|null,
+) {
+    try {
+        const count =
+                await client.query(`
+                SELECT COUNT(*) FROM tbl_audit_job_log a
+                left join tbl_user_info b on a.user_name = b.user_name
+                 WHERE 
+                    (
+                        a.printer_serial_number ILIKE '${`%${query}%`}' OR
+                        b.full_name ILIKE '${`%${query}%`}' OR
+                        a.document_name ILIKE '${`%${query}%`}' OR
+                        a.privacy_text ILIKE '${`%${query}%`}'                        
+                    )
+                 and b.deleted = 'Y'   
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                     
+            `);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        return totalPages;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch audit logs");
+    }
+};
+
 export async function fetchUsageStatusByUser(
     client: Pool,
     userName: string,

@@ -431,6 +431,23 @@ export default function MyDBAdapter() {
             // , fromDate, toDate
             return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate);
         },
+        async getFilteredRetiredAuditLogs(
+            query:string,
+            itemsPerPage: number,
+            currentPage: number,
+            fromDate : string|null, 
+            toDate:string|null,
+        ) {
+           // console.log('fromDate', fromDate);
+           //, fromDate , toDate
+            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate);
+        },
+        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null) {
+            //, fromDate : string|null, toDate:string|null
+            // , fromDate, toDate
+            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate);
+        },
+        
         async getPrivacytDetectedData(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
             return Log.fetchPrivacytDetectedData(pool, period, periodStart, periodEnd, dept, user );
         },
