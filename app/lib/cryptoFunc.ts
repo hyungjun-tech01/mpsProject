@@ -11,7 +11,7 @@ export function encrypt(text: string): string {
     if (!algorithm || !key || !iv) {
         return 'error=-encypt';
     }
-    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), Buffer.from(iv));
+    const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), Buffer.from(iv));
     let encrypted = cipher.update(text, 'utf8', 'base64');
     encrypted += cipher.final('base64');
     return encrypted;
@@ -23,7 +23,7 @@ export function decrypt(encryptedText: string): string {
         return 'error=-decypt';
     }
 
-    let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), Buffer.from(iv));
+    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), Buffer.from(iv));
     let decrypted = decipher.update(encryptedText, 'base64', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;

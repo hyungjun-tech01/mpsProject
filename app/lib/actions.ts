@@ -62,7 +62,7 @@ export async function createUser(
   const userEmail = formData.get("userEmail");
   const userHomeDirectory = formData.get("userHomeDirectory");
   const userNotes = formData.get("userNotes");
-  const userRestricted = formData.get("userRestricted");
+  // const userRestricted = formData.get("userRestricted");
   const userDepartment = formData.get("userDepartment");
   const userCardNumber = formData.get("userCardNumber");
   const userCardNumber2 = formData.get("userCardNumber2");
@@ -507,11 +507,18 @@ export async function deleteDocument(client: Pool, id: string) {
 //------- Account -----------------------------------------------------------------------------
 export async function updateAccount(
   client: Pool,
-  id: string,
+  id?: string,
   prevState: UserState,
   formData: FormData
 ) {
   // console.log('[Account] Update account : ', formData);
+  if(!id) {
+    return {
+      errors: ["입력 오류"],
+      message: "입력 ID가 없습니다.",
+    };
+  }
+
   const newPwd = formData.get("userPwdNew");
   const newPwdAgain = formData.get("userPwdNewAgain");
 
@@ -628,7 +635,7 @@ export async function updateAccount(
     }
 
     sqlText += `, modified_date=NOW(), modified_by='${resp.rows[0].user_name}' WHERE user_id='${id}'`;
-    console.log("[Account] Update account / sql text : ", sqlText);
+    // console.log("[Account] Update account / sql text : ", sqlText);
     try {
       await client.query(sqlText);
     } catch (error) {

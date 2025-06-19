@@ -22,7 +22,7 @@ export default function PrivacyQuery({
   periodEnd?: string,
   dept?: string,
 }) {
-  const [isPeriodSpecified, setIsPeriodSpecified] = useState<Boolean>(false);
+  const [isPeriodSpecified, setIsPeriodSpecified] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -129,7 +129,7 @@ export default function PrivacyQuery({
       const endDateTemp = new Date(splittedEnd[0], splittedEnd[1] - 1, splittedEnd[2]);
       setEndDate(endDateTemp);
     };
-  }, [period, periodStart, periodEnd]);
+  }, [period, periodStart, periodEnd, isPeriodSpecified]);
 
   return (
     <div className='flex gap-4 text-sm'>

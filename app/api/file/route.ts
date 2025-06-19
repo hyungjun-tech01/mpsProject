@@ -53,13 +53,13 @@ async function handleDecryptPDFFileRequest(filepath: string) {
   
       const encryptedFilePath = path.join(process.cwd(), 'upload', filepath);
   
-      let key = Buffer.alloc(32);
+      const key = Buffer.alloc(32);
       Buffer.from(cryptoPassword).copy(key);
   
       if (fs.existsSync(encryptedFilePath)) {
         const encryptedData = fs.readFileSync(encryptedFilePath);
   
-        let iv = Buffer.alloc(16);
+        const iv = Buffer.alloc(16);
         Buffer.from(cryptoIV).copy(iv);
   
         const decipher = crypto.createDecipheriv(algorithm, key, iv);
@@ -95,13 +95,13 @@ async function handleDecryptPDFFileRequest(filepath: string) {
   
       const encryptedFilePath = path.join(process.cwd(), 'upload', filepath);
   
-      let key = Buffer.alloc(32);
+      const key = Buffer.alloc(32);
       Buffer.from(cryptoPassword).copy(key);
   
       if (fs.existsSync(encryptedFilePath)) {
         const encryptedData = fs.readFileSync(encryptedFilePath);
   
-        let iv = Buffer.alloc(16);
+        const iv = Buffer.alloc(16);
         Buffer.from(cryptoIV).copy(iv);
   
         const decipher = crypto.createDecipheriv(algorithm, key, iv);

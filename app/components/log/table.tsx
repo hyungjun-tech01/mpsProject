@@ -22,7 +22,6 @@ import AuditLogTextViewer from './AuditLogTextViewer';
 import { Button, Modal } from '@mui/material';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Link from 'next/link';
 
 
@@ -224,7 +223,7 @@ export default function CustomizedTable<DataType>({
             setIsTextModalOpen(false);
         } 
     }    
-    const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
             <TableContainer component={Paper}>
@@ -370,7 +369,7 @@ export default function CustomizedTable<DataType>({
                 border: '5px solid #000' }}
         >
         <div>
-          <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closePdfModal} />
+          <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} />
           {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
           <div style={{ textAlign: 'right' }}>
             <Button

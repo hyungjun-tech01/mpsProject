@@ -22,10 +22,6 @@ export default async function CreateRegularExprPrivateInfo(
 
     if(!session?.user) return notFound();
 
-    const isAdmin = session?.user.role === 'admin';
-    const isManager = session?.user.role === 'manager';
-    const userId = session?.user.id ?? "";
-
     ///// application log ----------------------------------------------------------------------
     const userName = session?.user.name ?? "";
     if (!userName) {

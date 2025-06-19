@@ -73,14 +73,19 @@ export default async function Page(props: {
     const dataForCards = {};
     const dataForTable = {};
     if(category === 'print') {
-        dataForCards["total_pages"] = 0;
-        dataForCards["dept_count"] = 0;
-        dataForCards["user_count"] = 0;
-        dataForCards["device_count"] = 0;
+        Object.defineProperties(dataForCards, {
+            total_pages: {value: 0, writable: true},
+            dept_count: {value: 0, writable: true},
+            user_count: {value: 0, writable: true},
+            device_count: {value: 0, writable: true},
+        });
+        console.log('dataForCards : ', dataForCards);
 
-        dataForTable["dept"] = [];
-        dataForTable["user"] = [];
-        dataForTable["device"] = [];
+        Object.defineProperties(dataForTable, {
+            dept: {value: [], writable: true},
+            user: {value: [], writable: true},
+            device: {value: [], writable: true},
+        });
         
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
@@ -117,7 +122,9 @@ export default async function Page(props: {
             };
         };
     } else if(category === 'privacy') {
-        dataForTable["privacy"] = [ ...data ];
+        Object.defineProperties(dataForTable, {
+            privacy: {value: [ ...data ]},
+        });
     }
     // console.log('Data For Table :', dataForTable);
 

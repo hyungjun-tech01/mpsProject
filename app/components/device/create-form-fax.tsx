@@ -1,12 +1,11 @@
 'use client';
 
-import { useActionState, useState, useEffect } from 'react';
-import {  State } from './actions';
-import Link from 'next/link';
+import { useActionState, useState } from 'react';
+import { State } from './actions';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
 import {deleteFaxLineInfo, saveFaxLineInfo} from '@/app/components/device/actions';
-import { IButtonInfo, ISection, IEditItem, EditItem , IOption , IItem} from '../edit-items';
+import { IButtonInfo, IOption, IItem} from '../edit-items';
 import Select, {SingleValue} from 'react-select';
 import { useRouter } from 'next/navigation';
 
@@ -35,7 +34,7 @@ export default function FormFax(
 
     const [faxData, setFaxData] = useState<Record<string, any>>({});
 
-    const [deletedFaxLineId, setDeletedFaxLineId] = useState<string | null>(null);
+    // const [deletedFaxLineId, setDeletedFaxLineId] = useState<string | null>(null);
 
     const handleChange = (name: string, newValue: SingleValue<{ value: string; label: string }>) => {
         setFaxData(prev => ({
@@ -113,7 +112,7 @@ export default function FormFax(
         console.log(inputElement, 'inputElement');  
 
         if (inputElement) {
-            const value = inputElement.value;
+            // const value = inputElement.value;
         }else{
             console.log('inputElement not found');
             return;

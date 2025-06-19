@@ -6,14 +6,14 @@ export default function LogClient({
   userName,
   groupId,
   query,
-  applicationPage, 
+  applicationPage,
   applicationAction
 }: {
   userName: string;
   groupId?: string;
   query: string;
-  applicationPage:string;
-  applicationAction:string;
+  applicationPage: string;
+  applicationAction: string;
 }) {
   useEffect(() => {
     const logAccess = async () => {

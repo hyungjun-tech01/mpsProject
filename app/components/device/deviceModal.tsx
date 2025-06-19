@@ -5,7 +5,7 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 interface DeviceModalProps {
     clickModal: () => void;
-    groupList: any[];
+    groupList: object[];
     groupId: string | undefined;
 }
 

@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation'
-import { IBM_Plex_Mono } from 'next/font/google';
 import {FaxLineInfo} from  '@/app/lib/definitions';
 
 import MyDBAdapter from '@/app/lib/adapter';

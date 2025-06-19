@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { IColumnData } from '@/app/lib/definitions';
-import { formatCurrency, formatTimeToLocal } from '@/app/lib/utils';
+import { formatTimeToLocal } from '@/app/lib/utils';
 import Link from 'next/link';
 
 
@@ -48,8 +48,6 @@ export default function CustomizedTable<DataType>({
     rows,
     locale = 'ko',
 }: ITable<DataType>) {
-
-    let columnLength = columns.length;
 
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
@@ -91,7 +89,7 @@ export default function CustomizedTable<DataType>({
                         :
                             <StyledTableRow>
                                 <StyledTableCell
-                                    colSpan={columnLength}
+                                    colSpan={columns.length}
                                     align="center"
                                 >
                                     No Data

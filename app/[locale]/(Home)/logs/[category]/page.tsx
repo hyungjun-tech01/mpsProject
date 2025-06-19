@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { notFound } from 'next/navigation';
 import LogTable from '@/app/components/log/table';
 import Table from '@/app/components/table';
-import { IColumnData, ISearch } from '@/app/lib/definitions';
+import { IColumnData } from '@/app/lib/definitions';
 import Search from '@/app/components/search';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
@@ -149,8 +149,6 @@ export default async function Page(props: {
                     <AuditLogQuery
                       dateFrom = { t('logs.dateFrom')}
                       dateTo =  { t('logs.dateTo')}
-                      periodStart ={periodStartParam}
-                      periodEnd ={periodEndParam}
                     />
                     <Search placeholder={searchTexts[category].keySearchPlaceholder} />
                 </div>

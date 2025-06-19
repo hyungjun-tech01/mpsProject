@@ -293,7 +293,7 @@ export default function Grouping({
         const checkInGroup = !!inGroup ? inGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
         const updatedInGroup = [...checkInGroup, ...group];
         setGroup(updatedInGroup);
-    }, [outGroup, inGroup]);
+    }, [outGroup, inGroup, group]);
 
     return (
         <div className={'w-full p-2 mb-4 flex md: flex-col'}>

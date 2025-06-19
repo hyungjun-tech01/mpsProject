@@ -101,7 +101,7 @@ export function UserForm({
         } else if (month in [4, 6, 9, 11]) {
             endDate = 30;
         }
-        let regenOptions = [];
+        const regenOptions = [];
         if (locale === 'ko') {
             for (let i = 1; i <= endDate; i++) {
                 regenOptions.push({ title: i.toString() + " 일", value: i });

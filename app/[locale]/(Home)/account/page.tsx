@@ -15,7 +15,7 @@ export default async function Page(props: {
     const locale = params.locale;
 
     const session = await auth();
-    if(!session?.user)
+    if(!session?.user?.name)
         return notFound();
 
     // console.log('[Account] current user :', session.user);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import {  State } from './actions';
+import {  State } from '../user/actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
@@ -9,9 +9,8 @@ import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
 
 
 export default function Form(
-    {id, items,  buttons, action} : 
+    {items,  buttons, action} : 
     {
-        id?: string;  
       items: ISection[]; 
       buttons?: IButtonInfo;
       action: (prevState: State, formData: FormData) => Promise<void>;
@@ -24,8 +23,7 @@ export default function Form(
     const [enablePrintChecked, setEnablePrintChecked] = useState(false);
 
     // const updatedAction = !!id ? action.bind(null, id) : action;
-    const updatedAction =    action;
-    const [state, formAction] = useActionState(updatedAction, initialState);
+    const [state, formAction] = useActionState(action, initialState);
 
     //const [state, formAction] = useActionState(increment, 0);
     

@@ -11,7 +11,7 @@ import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
 import * as Print from "./fetchPrintSpoolData";
-import type { PrintState } from "./actionPrint";
+// import type { PrintState } from "./actionPrint";
 import * as PrintAction from "./actionPrint";
 import * as SettingAction from "./actionSetting";
 
@@ -77,7 +77,7 @@ export default function MyDBAdapter() {
         async getAccount(userName: string) {
             return User.fetchAccount(pool, userName)
         },
-        async updateAccount(id: string, prevState: UserState, formData: FormData) {
+        async updateAccount(id: string | undefined, prevState: UserState, formData: FormData) {
             'use server';
             return Action.updateAccount(pool, id, prevState, formData);
         },
@@ -289,7 +289,7 @@ export default function MyDBAdapter() {
             return Device.fetchDevicesbyGroupManagerPages(pool, userId, query, itemsPerPage);
         },
         async createDevice(
-            newDevice: any
+            newDevice: object
         ) {
             'use server';
             return Device.fetchCreateDevice(pool, newDevice);
@@ -312,14 +312,14 @@ export default function MyDBAdapter() {
             return Device.fetchDeleteFaxLineInfo(pool, id);
         },   
         async  modifyDevice(
-            newDevice: any
+            newDevice: object
         ) {
             'use server';
             return Device.fetchModifyDevice(pool, newDevice);
         },
         async saveFaxLineInfo(
-            saveFaxLineData:any, 
-            created_by:any
+            saveFaxLineData: object, 
+            created_by: string
         ){
             'use server';
             return Device.fetchSaveFaxLineInfo(pool, saveFaxLineData, created_by);

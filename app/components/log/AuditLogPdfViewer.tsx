@@ -5,9 +5,6 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
-//pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
-pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs';
-//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -17,9 +14,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface IAuditLogPdfViewer {
     pdfUrl: string | undefined,
     auditPdfContent: Blob|null,
-    onClose : (value:boolean) => void,
+    // onClose : (value:boolean) => void,
   };
-const AuditLogPdfViewer = ({pdfUrl, auditPdfContent, onClose}: IAuditLogPdfViewer) => {
+  
+const AuditLogPdfViewer = ({pdfUrl, auditPdfContent}: IAuditLogPdfViewer) => {
   const [numPages, setNumPages] = useState<number|null>(null);
 
   const onDocumentLoadSuccess = (pdf: PDFDocumentProxy) => {
