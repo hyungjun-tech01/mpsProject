@@ -29,7 +29,6 @@ export default async function Fax(
 ){
     const params = await props.params;
     const locale = params.locale;
-    const job = params.job;
 
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';

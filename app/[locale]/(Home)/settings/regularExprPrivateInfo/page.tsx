@@ -23,7 +23,6 @@ export default async function Page(props: {
 }
 ) {
     const params = await props.params;
-    const process = params.process;
     const locale = params.locale;
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';

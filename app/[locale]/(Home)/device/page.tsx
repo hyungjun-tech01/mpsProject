@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import getDictionary from '@/app/locales/dictionaries';
@@ -49,8 +49,8 @@ export default async function Device(
     const session = await auth();
     // console.log('Session :', session);
     
-    //if(!session?.user)
-    //    return notFound();
+    if(!session?.user?.id)
+       return notFound();
 
     const isAdmin = session?.user.role === 'admin';
     const userId = session?.user.id;
@@ -106,7 +106,6 @@ export default async function Device(
                     <Table
                         columns={columns}
                         rows={devices}
-                        currentPage={currentPage}
                         totalPages={totalPages}
                         locale={locale}
                         path='device'

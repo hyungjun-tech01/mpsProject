@@ -1,4 +1,4 @@
-import { SearchSkeleton, TableSkeleton, TitleSkeleton } from "@/app/components/skeletons";
+import { TableSkeleton, TitleSkeleton } from "@/app/components/skeletons";
 
 export default function Loading() {
     return (

@@ -41,7 +41,7 @@ export default async function Page(props: {
         {
             title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
                 { name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: "", placeholder: t('user.placeholder_department'), 
-                    options: [{title: t('user.select_dept'), value: ""}, ...allDept.map((x:any) => ( {title:x.dept_name, value:x.dept_id} ))]
+                    options: [{title: t('user.select_dept'), value: ""}, ...allDept.map((x:{dept_id:string, dept_name:string}) => ( {title:x.dept_name, value:x.dept_id} ))]
                 },
                 { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: "" },
                 { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: "" },

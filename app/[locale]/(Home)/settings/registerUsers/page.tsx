@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/settings/table';
@@ -11,7 +10,6 @@ import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
-import clsx from 'clsx';
 import { TableSkeleton } from "@/app/components/skeletons";
 
 

@@ -61,11 +61,12 @@ export default async function CreateDevice(
                 { name: 'ext_device_function_fax', title: t('device.ext_device_function_fax'), type: 'checked', defaultValue: "", placeholder: t('device.ext_device_function_fax') },
                 {
                     name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: "", 
-                    options:  printerGroup.map((x:any) => ( {'title':x.group_name, 'value':x.group_id} ) )
+                    options: [{title: '-1 없음', value: '' }, 
+                        ...printerGroup.map((x:{group_name:string, group_id:string}) =>
+                            ({title:x.group_name, value:x.group_id}))]
                 },
             ]
         },
-
     ];
 
     const buttonItems: IButtonInfo = {

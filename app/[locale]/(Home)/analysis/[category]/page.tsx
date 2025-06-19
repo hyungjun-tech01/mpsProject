@@ -31,6 +31,16 @@ interface IAnalysisParams {
     // jobType?: string,
 }
 
+interface IAllDepts {
+    dept_id: string,
+    dept_name: string,
+}
+
+interface IAllDevices {
+    device_id: string,
+    device_name: string,
+}
+
 export default async function Page(props: {
     searchParams?: Promise<IAnalysisParams>;
     params: Promise<{ locale: "ko" | "en", category: string }>;
@@ -70,8 +80,9 @@ export default async function Page(props: {
 
     // Manipulate data
     // console.log("Analysis (raw) : ", data);
-    const dataForCards = {};
-    const dataForTable = {};
+    const dataForCards = Object();
+    const dataForTable = Object();
+
     if(category === 'print') {
         Object.defineProperties(dataForCards, {
             total_pages: {value: 0, writable: true},
@@ -82,48 +93,57 @@ export default async function Page(props: {
         console.log('dataForCards : ', dataForCards);
 
         Object.defineProperties(dataForTable, {
-            dept: {value: [], writable: true},
-            user: {value: [], writable: true},
-            device: {value: [], writable: true},
+            dept: {value: [] as object[], writable: true},
+            user: {value: [] as object[], writable: true},
+            device: {value: [] as object[], writable: true},
         });
         
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
 
-            const deptIdx = dataForTable.dept.findIndex(dept => dept.dept_name === item.dept_name );
+            const deptIdx = dataForTable.dept.findIndex((dept:{
+                dept_name:string, Copy:number, Scan:number, Print:number, Fax:number
+            }) => dept.dept_name === item.dept_name);
+
             if(deptIdx === -1){
                 dataForCards.dept_count += 1;
 
                 const initData = {dept_name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                initData[item.job_type] = item.total_pages;
+                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.dept.push(initData);
             } else {
                 dataForTable.dept[deptIdx][item.job_type] += item.total_pages;
             };
 
-            const userIdx = dataForTable.user.findIndex(user => user.user_name === item.user_name );
+            const userIdx = dataForTable.user.findIndex((user:{
+                user_name:string, Copy:number, Scan:number, Print:number, Fax:number
+            }) => user.user_name === item.user_name);
+
             if(userIdx === -1){
                 dataForCards.user_count += 1;
                 const initData = {user_name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                initData[item.job_type] = item.total_pages;
+                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.user.push(initData);
             } else {
                 dataForTable.user[userIdx][item.job_type] += item.total_pages;
             };
 
-            const deviceIdx = dataForTable.device.findIndex(device => device.device_id === item.device_id );
+            const deviceIdx = dataForTable.device.findIndex((device:{
+                device_id:string, Copy:number, Scan:number, Print:number, Fax:number
+            }) => device.device_id === item.device_id);
+
             if(deviceIdx === -1){
                 dataForCards.device_count += 1;
                 const initData = {device_id: item.device_id, device_name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                initData[item.job_type] = item.total_pages;
+                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.device.push(initData);
             } else {
                 dataForTable.device[deviceIdx][item.job_type] += item.total_pages;
             };
         };
     } else if(category === 'privacy') {
-        Object.defineProperties(dataForTable, {
-            privacy: {value: [ ...data ]},
+        Object.defineProperty(dataForTable, "privacy", {
+            value: [ ...data ], writable: true
         });
     }
     // console.log('Data For Table :', dataForTable);
@@ -174,9 +194,9 @@ export default async function Page(props: {
 
     const optionsForQuery = {
         dept: [{title: trans('user.select_dept'), value: ""},
-            ...allDepts.map(item => ({title: item.dept_name, value: item.dept_name}))],
+            ...allDepts.map((item: IAllDepts) => ({title: item.dept_name, value: item.dept_name}))],
         device: [{title: trans('device.select_device'), value: ""},
-            ...allDevices.map(item => ({title: item.device_name, value: item.device_id}))],
+            ...allDevices.map((item: IAllDevices) => ({title: item.device_name, value: item.device_id}))],
         jobType: [{title: trans('analysis.select_jobtype'), value: ""},
             {title: trans('common.copy'), value: "COPY"},
             {title: trans('common.fax'), value: "FAX"},
@@ -249,8 +269,8 @@ export default async function Page(props: {
                 <div className="py-4 flex items-center justify-between gap-2 md:py-8">
                     <InfoQuery
                         translated={translated}
-                        queryKeys={queryKeys[category]}
-                        queryData={dataForQuery[category]}
+                        queryKeys={queryKeys[category as "print" | "privacy"]}
+                        queryData={dataForQuery[category as "print" | "privacy"]}
                         options={optionsForQuery}
                     />
                 </div>
@@ -268,7 +288,7 @@ export default async function Page(props: {
                     <Suspense fallback={<TableSkeleton />}>
                         <TableView
                             defaultSection={defaultSec}
-                            columns={columns[category]}
+                            columns={columns[category as "print" | "privacy"]}
                             rows={dataForTable}
                             itemsPerPage={itemsPerPage}
                             currentPage={currentPage}

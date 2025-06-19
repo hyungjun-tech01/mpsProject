@@ -321,9 +321,6 @@ export async function fetchGroupsByType(
     try {
         const groups =
             await client.query(`
-                SELECT '' group_id, 
-                       '-1 없음' group_name
-                union all
                 SELECT
                     u.group_id,
                     u.group_name

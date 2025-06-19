@@ -76,7 +76,8 @@ export const formatTimeToLocal = (dateStr: string, locale: string = "ko") => {
     return formatter.format(date);
   }
   catch(e){
-    console.log('[Error] formatDate / input :', dateStr);
+    console.log('[Error] message: ', e);
+    console.log(' - formatDate / input :', dateStr);
     console.log(' - converted :', date);
     return "";
   }
@@ -131,7 +132,7 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 
 export const generateStrOf30Days = () => {
   const today = new Date();
-  let xData: string[] = [];
+  const xData: string[] = [];
   for (let i = 0; i < 30; i++) {
     const tempDay = new Date();
     tempDay.setDate(today.getDate() + i - 30);
@@ -178,7 +179,7 @@ export const formatDateForPerYear = (value: number, locale: string) => {
   return formatter.format(tempDate);
 }
 
-export const formatTimeSimple = (dateStr: string, locale: string = "ko") => {
+export const formatTimeSimple = (dateStr: string) => {
   try {
     const date = new Date(dateStr);
 
@@ -190,7 +191,8 @@ export const formatTimeSimple = (dateStr: string, locale: string = "ko") => {
 
     return `${yyyy}-${MM}-${dd} ${hh}:${mm}`;
   } catch(e){
-    console.log('[Error] formatDate / input :', dateStr);
+    console.log('[Error] message: ', e);
+    console.log(' - formatDate / input :', dateStr);
     console.log(' - converted :', dateStr);
     return "";
   }
@@ -204,13 +206,13 @@ export const formatTimeYYYYpMMpDD = (inputDate: Date) => {
   return `${yyyy}.${mo}.${dd}`;
 };
 
-export const formatTimeYYYYpMMpDD_FromDB = (inputValue: Number) => {
+export const formatTimeYYYYpMMpDD_FromDB = (inputValue: number) => {
   const inputStr = String(inputValue);
 
   return `20${inputStr.slice(0,2)}.${inputStr.slice(2,4)}.${inputStr.slice(4,6)}`;
 };
 
-export const formatTimeYYYY_MM_DDbHHcMM_FromDB = (inputValue: Number) => {
+export const formatTimeYYYY_MM_DDbHHcMM_FromDB = (inputValue: number) => {
   const inputStr = String(inputValue);
   return `20${inputStr.slice(0,2)}-${inputStr.slice(2,4)}-${inputStr.slice(4,6)} ${inputStr.slice(6,8)}:${inputStr.slice(8,10)}`
 }

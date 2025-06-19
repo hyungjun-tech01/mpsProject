@@ -19,8 +19,6 @@ export default async function Page(props: {
     const id = params.id;
     const job = params.job;
     const locale = params.locale;
-    const searchParams = await props.searchParams;
-    
 
     const adapter = MyDBAdapter();
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
@@ -81,7 +79,9 @@ export default async function Page(props: {
                 { name: 'deleted', title: t('device.deleted'), type: 'checked', defaultValue: device.deleted, placeholder: t('device.deleted') },
                 {
                     name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: device.group_id, 
-                    options:  printerGroup.map((x:any) => ( {'title':x.group_name, 'value':x.group_id} ) )
+                    options: [{title: '-1 없음', value: '' }, 
+                        ...printerGroup.map((x:{group_name:string, group_id:string}) =>
+                            ({title:x.group_name, value:x.group_id}))]
                 },
             ]
         },
@@ -89,20 +89,20 @@ export default async function Page(props: {
 
     const optionsUser = [
         {label:'-1 없음', value: ''},
-        ...allUsers.map((x:any) => ( 
+        ...allUsers.map((x:{user_id:string, user_name:string}) => ( 
             {'label':`${x.user_name}`, 'value':String(x.user_id)} 
         ))
     ];
     const optionsGroup = [
         {label:'-1 없음', value: ''},
-        allGroups.map((x:any) => ( 
+        ...allGroups.map((x:{group_id:string, group_name:string}) => ( 
         {'label':`${x.group_name}`, 'value':String(x.group_id)} 
         ))
     ];
 
 
     const editFaxItems: IItem[] =  fax.length > 0 
-    ? fax.map((faxLine:any, index:any) => ({
+    ? fax.map((faxLine:{fax_line_id:string, fax_line_name:string, fax_line_user_id:string, user_name:string, group_id:string, group_name:string }, index:number) => ({
         items: [
             { name: `fax_line_id_${index}`, title: `${t('fax.fax_line_id')} ${index+1}` , type: 'hidden', defaultValue: faxLine.fax_line_id, placeholder: t('fax.fax_line_id') },
             { name: `fax_line_name_${index}`, title: `${t('fax.fax_line_name')} ${index+1}` , type: 'input', defaultValue: faxLine.fax_line_name, placeholder: t('fax.fax_line_name') },

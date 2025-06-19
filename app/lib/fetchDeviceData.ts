@@ -306,8 +306,6 @@ export async function fetchPrinterGroup(
 ) {
     try {
         const response = await client.query(`
-           select null group_id, null group_name
-           union all
            select group_id, group_name
              from tbl_group_info
              where group_type = 'device';

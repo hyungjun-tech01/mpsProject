@@ -1,4 +1,3 @@
-import { Add } from '@mui/icons-material';
 import { FrontTabSkeleton, BehindTabSkeleton, TitleSkeleton, EditSkeleton, LastEditSkeleton } from "@/app/components/skeletons";
 
 export default function Loading() {

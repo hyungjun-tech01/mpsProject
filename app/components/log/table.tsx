@@ -264,7 +264,7 @@ export default function CustomizedTable<DataType>({
                                         >
                                             {!column.type && row[column.name]}
                                             {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
-                                            {!!column.type && column.type === 'date_simple' && formatTimeSimple(row[column.name], locale)}
+                                            {!!column.type && column.type === 'date_simple' && formatTimeSimple(row[column.name])}
                                             {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
                                             {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
                                             {!!column.type && column.type === 'file' &&
@@ -287,7 +287,7 @@ export default function CustomizedTable<DataType>({
                                             }
                                             {!!column.type && column.type === 'auditLogDate' &&
                                                 <div className='flex justify-center' onClick={()=>handleAuditLogDateClick(row.text_archive_path)}>
-                                                    {formatTimeSimple(row[column.name], locale)}
+                                                    {formatTimeSimple(row[column.name])}
                                                 </div>
                                             }
                                             {!!column.type && column.type === 'enum_icon' &&
