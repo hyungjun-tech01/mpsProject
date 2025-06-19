@@ -18,12 +18,16 @@ import Switch from '@mui/material/Switch';
 import { useColorScheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { logout } from "@/app/components/auth/actions";
+import { useSession } from 'next-auth/react';
 
 interface IHeader {
     extendSideNav: () => void;
 }
 
 export default function Header({ extendSideNav }: IHeader) {
+    const session = useSession();
+    const userName = session?.data?.user.name ?? "Unknown";
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -127,9 +131,10 @@ export default function Header({ extendSideNav }: IHeader) {
                             aria-haspopup="true"
                             href={`/account`}
                             // onClick={handleProfileMenuOpen}
-                            className="inherit"
+                            className="inherit flex items-center gap-2"
                         >
                             <AccountCircle className="text-lime-50" />
+                            <span className="text-lime-50">{userName}</span>
                         </Link>
                     </Box>
                     <Box className="hidden md:flex">
