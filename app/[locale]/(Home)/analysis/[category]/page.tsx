@@ -14,7 +14,6 @@ import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
-import { initialize } from "next/dist/server/lib/render-server";
 
 
 export const metadata: Metadata = {

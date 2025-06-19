@@ -322,3 +322,13 @@ export function GroupSkeleton() {
     </div>
   )
 }
+
+export function SmallCardSkeleton() {
+  return (
+    <div
+      className={`${shimmer} relative overflow-hidden flex-1 rounded-lg bg-gray-300 shadow-sm`}
+    >
+      <div className="flex-1 h-12 max-w-64 px-4"></div>
+    </div>
+  );
+}
