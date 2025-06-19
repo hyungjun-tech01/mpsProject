@@ -2,7 +2,6 @@ import { Add,
   NavigateBeforeOutlined,
   NavigateNextOutlined
 } from '@mui/icons-material';
-import Breadcrumbs from '@/app/components/breadcrumbs';
 
 // Loading animation
 const shimmer =
@@ -71,7 +70,7 @@ function TableRowSkeleton() {
   return (
     <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
       <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
-        <div className="h-6 rounded bg-gray-100"></div>
+        <div className={`${shimmer} h-6 rounded bg-gray-100`}></div>
       </td>
       <td className="whitespace-nowrap px-3 py-3">
         <div className="h-6 rounded bg-gray-100"></div>
@@ -202,7 +201,7 @@ export function FrontTabSkeleton() {
   return (
     <div className="w-24 px-2 py-1 h-8 rounded-t-lg border-solid font-medium bg-gray-50 border-x-2 border-t-2">
       <div
-        className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm`}
+        className={`${shimmer} relative overflow-hidden bg-gray-100 p-2 shadow-sm`}
       />
     </div>
   );
@@ -212,7 +211,7 @@ export function BehindTabSkeleton() {
   return (
     <div className="w-24 px-2 py-1 h-8 rounded-t-lg border-solid font-medium bg-white border-2">
       <div
-        className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm`}
+        className={`${shimmer} relative overflow-hidden bg-gray-100 p-2 shadow-sm`}
       />
     </div>
   );

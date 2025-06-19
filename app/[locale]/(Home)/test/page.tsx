@@ -7,7 +7,6 @@ export default function Loading() {
             <div className="pl-2 flex flex-row">
                 <FrontTabSkeleton />
                 <BehindTabSkeleton />
-                <BehindTabSkeleton />
             </div>
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="pt-4 flex items-center justify-between gap-2 md:pt-8">
