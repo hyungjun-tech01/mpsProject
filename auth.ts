@@ -7,11 +7,13 @@ import MyDBAdapter from '@/app/lib/adapter';
 declare module "next-auth" {
   interface User {
     role?: string;
+    full_name?: string;
   }
 
   interface Session {
     user: {
       role?: string;
+      full_name?: string;
     } & DefaultSession["user"];
   }
 }
@@ -45,6 +47,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return {
               id: userAttr.id,
               name: userAttr.name,
+              full_name: userAttr.full_name,
               email: userAttr.email,
               role: userAttr.role ?? "user",
               image: ""
@@ -104,6 +107,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.full_name = user.full_name;
       }
       return token;
     },
@@ -111,6 +115,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string | undefined;
+        session.user.full_name = token.full_name as string | undefined;
       }
       return session;
     }

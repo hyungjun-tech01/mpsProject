@@ -207,6 +207,7 @@ export async function fetchAccount(
             SELECT
                 u.user_id id,
                 u.user_name name,
+                u.full_name full_name,
                 CASE 
                     WHEN u.sysadmin = 'Y' THEN 'admin'
                 ELSE 'user'

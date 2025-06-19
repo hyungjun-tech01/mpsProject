@@ -26,7 +26,7 @@ interface IHeader {
 
 export default function Header({ extendSideNav }: IHeader) {
     const session = useSession();
-    const userName = session?.data?.user.name ?? "Unknown";
+    const userFullName = session?.data?.user.full_name ?? "Unknown";
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -134,7 +134,7 @@ export default function Header({ extendSideNav }: IHeader) {
                             className="inherit flex items-center gap-2"
                         >
                             <AccountCircle className="text-lime-50" />
-                            <span className="text-lime-50">{userName}</span>
+                            <span className="text-lime-50">{userFullName}</span>
                         </Link>
                     </Box>
                     <Box className="hidden md:flex">
