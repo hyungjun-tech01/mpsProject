@@ -26,6 +26,7 @@ export async function fetchPrinterUsageLogByUserId(
             WHERE pul.user_name = tu.user_name
             and pul.device_id = td.device_id
             and tu.user_id='${userId}'
+            and pul.send_time <> '0'
             ORDER BY usage_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `);
@@ -46,6 +47,7 @@ export async function fetchPrinterUsageLogByUserIdPages(
                 SELECT COUNT(*) 
                 FROM tbl_audit_job_log pul, tbl_user_info tu
                 WHERE pul.user_name = tu.user_name
+                  and pul.send_time <> '0'
                   and tu.user_id ='${userId}'
             `);
 
@@ -99,7 +101,9 @@ export async function fetchPrivacytDetectedData(
             FROM tbl_audit_job_log ajl
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
             JOIN tbl_dept_info di ON ui.department = di.dept_id
-            WHERE ajl.send_time >= '${startTime}'
+            WHERE 1 = 1 
+            and ajl.send_time <> '0'
+            and ajl.send_time >= '${startTime}'
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
@@ -119,7 +123,9 @@ export async function fetchTodayTotalPageSum(
         const todayPages = await client.query(`
             SELECT SUM(total_pages)
             FROM tbl_audit_job_log
-            WHERE send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
+            WHERE 1 =1 
+            and send_time <> '0'
+            and send_time BETWEEN TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '000000'
             AND TO_CHAR(DATE_TRUNC('day', NOW()), 'YYMMDD') || '235959'
         `);
         return todayPages.rows[0].sum;
@@ -139,7 +145,9 @@ export async function fetchTotalPagesPerDayFor30Days(
                 TO_DATE(send_time, 'YYMMDDHH24MISS') AS used_day,
                 SUM(total_pages) AS pages
             FROM tbl_audit_job_log
-            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
+            WHERE 1 = 1 
+            and send_time <> '0'
+            and send_time >= TO_CHAR(DATE_TRUNC('day',  - INTERVAL '30 days'), 'YYMMDD') || '000000'
             ${!!userName ? `AND user_name = '${userName}'` : ""}
             GROUP BY  TO_DATE(send_time, 'YYMMDDHH24MISS')
             ORDER BY used_day ASC`
@@ -187,7 +195,9 @@ export async function fetchTop5UserFor30days(client: Pool) {
                 user_name,
                 SUM(total_pages) AS total_pages_sum
             FROM tbl_audit_job_log
-            WHERE send_time >= TO_CHAR(DATE_TRUNC('day',  current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
+            WHERE 1 = 1 
+            and send_time <> '0'
+            and send_time >= TO_CHAR(DATE_TRUNC('day',  current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
             GROUP BY  user_name
             ORDER BY total_pages_sum DESC
             LIMIT 5`
@@ -206,7 +216,7 @@ export async function fetchTop5DevicesFor30days(client: Pool) {
             SELECT 
                 d.device_name,
                 SUM(ajl.total_pages) AS total_pages_sum
-            FROM tbl_audit_job_log AS ajl
+            FROM   tbl_audit_job_log AS ajl
             JOIN tbl_device_info AS d ON ajl.device_id = d.device_id
             WHERE ajl.send_time >= TO_CHAR(DATE_TRUNC('day', current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
             GROUP BY  d.device_name
@@ -278,7 +288,9 @@ export async function fetchFilteredAuditLogs(
                 a.color_total_pages
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
-            WHERE (
+            WHERE 1 = 1
+            and a.send_time <> '0'
+            and (
                 printer_serial_number ILIKE '${`%${query}%`}' OR
                 b.full_name  ILIKE '${`%${query}%`}' OR
                 document_name ILIKE '${`%${query}%`}' OR
@@ -313,7 +325,9 @@ export async function fetchFilteredAuditLogs(
                 a.color_total_pages
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name		
-            WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+            WHERE 1 = 1
+              and b.send_time <> '0'
+              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
@@ -346,8 +360,9 @@ export async function fetchFilteredAuditLogPages(
             query !== ""
                 ? await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log
-                 WHERE 
-                    (
+                 WHERE 1 = 1
+                  and send_time <> '0'
+                  and (
                         printer_serial_number ILIKE '${`%${query}%`}' OR
                         user_name ILIKE '${`%${query}%`}' OR
                         document_name ILIKE '${`%${query}%`}' OR
@@ -358,7 +373,9 @@ export async function fetchFilteredAuditLogPages(
             `)
                 : await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log 
-                 WHERE TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
+                 WHERE  1 = 1
+                 and send_time <> '0'
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                 
             `);
 
@@ -406,7 +423,9 @@ export async function fetchFilteredRetiredAuditLogs(
                 a.color_total_pages
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
-            WHERE (
+            WHERE 1 = 1
+            and b.send_time <> '0'
+            and (
                 printer_serial_number ILIKE '${`%${query}%`}' OR
                 b.full_name  ILIKE '${`%${query}%`}' OR
                 document_name ILIKE '${`%${query}%`}' OR
@@ -446,8 +465,9 @@ export async function fetchFilteredRetiredAuditLogPages(
                 await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log a
                 left join tbl_user_info b on a.user_name = b.user_name
-                 WHERE 
-                    (
+                 WHERE 1 = 1
+                 and send_time <> '0'
+                 and (
                         a.printer_serial_number ILIKE '${`%${query}%`}' OR
                         b.full_name ILIKE '${`%${query}%`}' OR
                         a.document_name ILIKE '${`%${query}%`}' OR
@@ -476,7 +496,9 @@ export async function fetchUsageStatusByUser(
                 COUNT(*) as total_job_count,
                 SUM(CASE WHEN job_type IN ('Copy', 'Print') THEN total_pages ELSE 0 END) as copy_print_total_pages
             FROM tbl_audit_job_log
-            WHERE user_name='${userName}'
+            WHERE 1 =1 
+             and send_time <> '0'
+             and user_name='${userName}'
         `);
         return result.rows[0];
     } catch (error) {
@@ -549,6 +571,8 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
                 JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
                 JOIN tbl_device_info dv ON dv.device_id = ajl.device_id
                 LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
+                where 1 = 1
+                and ajl.send_time <> '0'
             ) sub
             WHERE send_date>='${periodStart}' AND send_date<='${periodEnd}'
             ${!!dept ? "AND dept_name = '" + dept + "'" : ""}
@@ -585,6 +609,8 @@ export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, 
                 FROM tbl_audit_job_log ajl
                 JOIN tbl_user_info ui ON ui.user_name = ajl.user_name
                 LEFT JOIN tbl_dept_info di ON di.dept_id = ui.department
+                where 1 = 1
+                  and ajl.send_time <> '0'
             ) sub
             WHERE send_time >= '${startTime}' AND send_time <= '${endTime}'
             ${!!dept ? "AND dept_name = '" + dept + "'" : ""}

@@ -6,6 +6,7 @@ create or replace view tbl_privacy_audit_v as (
         user_name,
         user_id,
         external_user_name, 
+        full_name,
         department, 
         dept_id,
         SUM(detect_privacy_count) AS detect_privacy_count,
@@ -15,7 +16,8 @@ create or replace view tbl_privacy_audit_v as (
             TO_CHAR(TO_TIMESTAMP(t.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') AS send_date,
             t1.user_name,
             t1.user_id,
-            t1.full_name external_user_name,
+            t1.external_user_name external_user_name,
+            t1.full_name full_name,
             t2.dept_name department,
             t2.dept_id dept_id,
             CASE 
@@ -32,7 +34,8 @@ create or replace view tbl_privacy_audit_v as (
         send_date,
         user_name,
         user_id,
-        external_user_name, 
+        external_user_name,
+        full_name,
         department,
         dept_id
 );
