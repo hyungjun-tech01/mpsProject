@@ -1,7 +1,7 @@
 // import { Revenue } from './definitions';
 
 export const formatCurrency = (
-  amount: number | string | null,
+  amount: number | string | null | undefined,
   locale: string = "ko"
 ) => {
   let currency = "KRW";

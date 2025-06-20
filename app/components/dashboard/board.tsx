@@ -103,7 +103,7 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
 
         boardInfo.push({ title: trans("dashboard.total_job_count"), value: myUsageStatus.total_job_count || 0, type: "pages" });
         boardInfo.push({ title: trans("dashboard.total_pages"), value: myUsageStatus.copy_print_total_pages || 0, type: "pages" });
-        boardInfo.push({ title: trans("account.balance"), value: formatCurrency(myInfo.balance || 0, 'ko'), type: "collected" });
+        boardInfo.push({ title: trans("account.balance"), value: formatCurrency(myInfo.balance?? 0, 'ko'), type: "collected" });
 
         return (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
