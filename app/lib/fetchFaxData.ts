@@ -1,9 +1,7 @@
 "use server";
 
 import pg from 'pg';
-import { BASE_PATH } from '@/constans';
 import { Fax } from '@/app/lib/definitions';
-import { revalidatePath } from 'next/cache';
 
 const client = new pg.Client({
     user: process.env.DB_USER,
@@ -146,7 +144,7 @@ export async function fetchFaxById(id:string){
     }
 }
 
-export async function fetchCreateFax(newDevice: any) {
+export async function fetchCreateFax(newDevice: object) {
     try {
 
         // 트랜잭션 시작
@@ -173,9 +171,9 @@ export async function fetchCreateFax(newDevice: any) {
         ]);
 
         const newDeviceId = result.rows[0].device_id;
-        const result1 = await client.query(`
-        insert into tbl_group_member_info(group_id, member_id, member_type)
-        values($1, $2, $3)`,[ newDevice.device_group, newDeviceId, 'device']);
+        await client.query(`
+            insert into tbl_group_member_info(group_id, member_id, member_type)
+            values($1, $2, $3)`,[ newDevice.device_group, newDeviceId, 'device']);
 
        
         // 모든 쿼리 성공 시 커밋
@@ -184,7 +182,7 @@ export async function fetchCreateFax(newDevice: any) {
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
-    } catch (error:any) {
+    } catch (error) {
 
         // 오류 발생 시 롤백
         await client.query('ROLLBACK');
@@ -192,7 +190,7 @@ export async function fetchCreateFax(newDevice: any) {
         console.error('Insert Error:', error); // 오류 출력
         return {
             result: false,
-            data: `Database Error: ${error.message}`,
+            data: `Database Error: ${error}`,
         };
     }
 }
@@ -218,7 +216,7 @@ export async function fetchDeleteFax(id: string) {
         };
     };
 }
-export async function fetchModifyFax(newDevice: any) {
+export async function fetchModifyFax(newDevice: object) {
 
     try {
         // 트랜잭션 시작
@@ -256,14 +254,14 @@ export async function fetchModifyFax(newDevice: any) {
         const count = parseInt(queryResult1.rows[0].cnt, 10);    
 
         if (count > 0) {
-            const result1 = await client.query(`
-            update tbl_group_member_info
-               set group_id = $1
-               where member_id = $2`,[ newDevice.device_group, newDevice.device_id]);
+            await client.query(`
+                update tbl_group_member_info
+                set group_id = $1
+                where member_id = $2`,[ newDevice.device_group, newDevice.device_id]);
         }else{
-            const result1 = await client.query(`
-            insert into tbl_group_member_info(group_id, member_id, member_type)
-            values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
+            await client.query(`
+                insert into tbl_group_member_info(group_id, member_id, member_type)
+                values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
         }
 
         // 모든 쿼리 성공 시 커밋

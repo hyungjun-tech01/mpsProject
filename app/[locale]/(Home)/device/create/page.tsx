@@ -6,6 +6,7 @@ import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import {createDevice} from '@/app/components/device/actions';
 import MyDBAdapter from '@/app/lib/adapter';
 
+
 export default async function CreateDevice(
     props: { 
         params: Promise<{ locale: "ko" | "en" }>;
@@ -19,7 +20,6 @@ export default async function CreateDevice(
         getDictionary(locale),
         adapter.getPrinterGroup(),
     ]);
-
 
     const formItems: ISection[] = [
         {

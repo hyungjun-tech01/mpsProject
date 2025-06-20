@@ -1,7 +1,6 @@
 import type { Pool } from "pg";
 import { AuditLogField } from "@/app/lib/definitions";
 import { generateStrOf30Days, formatTimeYYYYpMMpDD } from "./utils";
-import { sliderClasses } from "@mui/material";
 
 
 
@@ -509,7 +508,7 @@ export async function fetchUsageStatusByUser(
 
 export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
     let startDate = periodStart?? "";
-    let endDate = periodEnd?? "";
+    const endDate = periodEnd?? "";
 
     if(period !== 'specified') {
         const now = new Date();

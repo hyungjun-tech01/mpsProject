@@ -5,7 +5,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-export async function executeDos(prevState: any, formData: FormData) {
+export async function executeDos(prevState: {status: string, message: string}, formData: FormData) {
     try {
         const command = formData.get('command') as string;
 
@@ -20,7 +20,8 @@ export async function executeDos(prevState: any, formData: FormData) {
         }
         
         return { status: 'success', message: stdout };
+        
     } catch (error) {
-        return { status: 'error', message: '명령어 실행 중 오류가 발생했습니다.' };
+        return { status: 'error', message: `명령어 실행 중 오류가 발생했습니다. ${error}` };
     }
 }

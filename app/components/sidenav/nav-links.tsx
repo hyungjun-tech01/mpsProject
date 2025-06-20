@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import clsx from 'clsx';
 import { SideMenuList } from '@/constans';
 import { useState } from 'react';
-import { Menu, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 
 
 // 타입 정의 추가
@@ -14,12 +14,12 @@ interface MenuItem {
   name: string;
   title: string;
   href: string;
-  icon: any;
+  icon: React.ElementType;
   submenu?: {
     name: string;
     title: string;
     href: string;
-    icon: any;
+    icon: React.ElementType;
   }[];
 }
 
@@ -41,11 +41,11 @@ export default function NavLinks({ extended }: { extended: boolean }) {
   return (
     <>
       {SideMenuList[userRole as keyof typeof SideMenuList].map((link: MenuItem) => {
-        if(session?.user?.role !== "admin" && link.name === 'user') return null;
+        if (session?.user?.role !== "admin" && link.name === 'user') return null;
 
         const LinkIcon = link.icon;
         const isExpanded = expandedMenu === link.name;
-        
+
         return (
           <div key={link.name}>
             {link.name === 'settings' ? (
@@ -67,7 +67,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
             ) : (
               <Link
                 href={link.href}
-                onClick={() => setExpandedMenu(null)} 
+                onClick={() => setExpandedMenu(null)}
                 className={clsx(
                   "flex h-[48px] items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-base text-gray-500 font-medium duration-150 hover:bg-lime-100 hover:text-lime-700",
                   {
@@ -100,7 +100,7 @@ export default function NavLinks({ extended }: { extended: boolean }) {
                           'ml-2 p-2': !extended
                         }
                       )}
-                    > 
+                    >
                       <SubItemIcon className="w-5" />
                       <p className={clsx("hidden duration-150",
                         { 'md:block': extended }

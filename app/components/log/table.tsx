@@ -152,7 +152,6 @@ export default function CustomizedTable<DataType>({
       };
 
     const replaceThumbnailSrc = (imagePath:string|null):string => {
-
        if (!imagePath) return '';
 
         const found_idx = imagePath.lastIndexOf('.');
@@ -169,7 +168,6 @@ export default function CustomizedTable<DataType>({
 
     const handleThumnailClick = async (imagePath:string|null) => {
         try {
-
             if (!imagePath) {
               throw new Error('Invalid pdf path');
             }
@@ -186,8 +184,6 @@ export default function CustomizedTable<DataType>({
             setAuditPdfContent(blob);
             setPdfUrl(url);
             setIsPdfModalOpen(true);
-
-
         } catch (error) {
             if (error instanceof Error) {
                 alert(`Error: ${error.message}`);
@@ -196,13 +192,11 @@ export default function CustomizedTable<DataType>({
                 alert('An unknown error occurred');
                 console.error('Unknown error:', error);
             }
-            
         }
     }
 
     const handleAuditLogDateClick = async (textfilename:string|null) => {
         try {
-
             if (!textfilename) {
                 throw new Error('Invalid text file path');
             }
@@ -210,7 +204,7 @@ export default function CustomizedTable<DataType>({
             const replace_src = src.replace(/\\/g,'/');
             const response = await fetch(replace_src);
             if (!response.ok) {
-            throw new Error('Failed to decrypt file');
+                throw new Error('Failed to decrypt file');
             }
             const decryptText = await response.text();
 
@@ -241,8 +235,6 @@ export default function CustomizedTable<DataType>({
                     </TableHead>
                     <TableBody>
                         {rows.length > 0 && rows.map((row, idx) => {
-
-                            
                             return (
                                 <StyledTableRow key={idx}>
                                     {checkable &&
@@ -276,14 +268,14 @@ export default function CustomizedTable<DataType>({
                                             }
                                             {!!column.type && column.type === 'auditLogImage' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                <img 
-                                                src={`/${replaceThumbnailSrc(row[column.name])}`} 
-                                                alt="No Image"  
-                                                className="w-24 h-18"
-                                                onClick={() => handleThumnailClick(row[column.name])}
-                                                onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
-                                              />
-                                              </div>
+                                                <Image 
+                                                    src={`/${replaceThumbnailSrc(row[column.name])}`} 
+                                                    alt="No Image"  
+                                                    className="w-24 h-18"
+                                                    onClick={() => handleThumnailClick(row[column.name])}
+                                                    onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                />
+                                                </div>
                                             }
                                             {!!column.type && column.type === 'auditLogDate' &&
                                                 <div className='flex justify-center' onClick={()=>handleAuditLogDateClick(row.text_archive_path)}>
@@ -355,65 +347,65 @@ export default function CustomizedTable<DataType>({
                 <Pagination totalPages={totalPages} />
             </div>
             {renderMenu}
+            <Modal
+                open={isPdfModalOpen}
+                onClose={closePdfModal}
+                style={{ width: '800px',
+                    height: '85vh',
+                    backgroundColor: '#ffffff',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    border: '5px solid #000' }}
+            >
+                <div>
+                    <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={closePdfModal}/>
+                    <div style={{ textAlign: 'right' }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            onClick={closePdfModal}
+                            sx={{ mt: 3, mb: 2 , 
+                                backgroundColor:"rgba(25,137,43,255)",
+                                ":hover": { backgroundColor: "rgba(13,118,33,255)" }
+                            }}
+                        >
+                            닫기
+                        </Button>
+                    </div>
+                </div>
+            </Modal>   
 
-        <Modal
-            open={isPdfModalOpen}
-            onClose={closePdfModal}
-            style={{ width: '800px',
-                height: '85vh',
-                backgroundColor: '#ffffff',
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                border: '5px solid #000' }}
-        >
-        <div>
-          <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} />
-          {/* <AuditLogPdfViewer pdfUrl={pdfUrl} auditPdfContent={auditPdfContent} onClose={()=>closePdfModal}/> */}
-          <div style={{ textAlign: 'right' }}>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={closePdfModal}
-              sx={{ mt: 3, mb: 2 , 
-                  backgroundColor:"rgba(25,137,43,255)",
-                  ":hover": { backgroundColor: "rgba(13,118,33,255)" }
-                  }}
-            >닫기
-            </Button>
-          </div>
+            <Modal
+                open={isTextModalOpen}
+                onClose={closeTextModal}
+                style={{ width: '800px',
+                    height: '85vh',
+                    backgroundColor: '#ffffff',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    border: '5px solid #000' }}
+            >
+                <div>
+                    <AuditLogTextViewer Url={pdfUrl} auditContent={auditContent} onClose={closeTextModal} />
+                    <div style={{ textAlign: 'right' }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            onClick={closeTextModal}
+                            sx={{ mt: 3, mb: 2 , 
+                                backgroundColor:"rgba(25,137,43,255)",
+                                ":hover": { backgroundColor: "rgba(13,118,33,255)" }
+                                }}
+                        >
+                            닫기
+                        </Button>
+                    </div>
+                </div>
+            </Modal>         
         </div>
-       </Modal>   
-
-        <Modal
-            open={isTextModalOpen}
-            onClose={closeTextModal}
-            style={{ width: '800px',
-                height: '85vh',
-                backgroundColor: '#ffffff',
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                border: '5px solid #000' }}
-        >
-        <>
-          <AuditLogTextViewer Url={pdfUrl} auditContent={auditContent} onClose={closeTextModal} />
-          <div style={{ textAlign: 'right' }}>
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={closeTextModal}
-              sx={{ mt: 3, mb: 2 , 
-                  backgroundColor:"rgba(25,137,43,255)",
-                  ":hover": { backgroundColor: "rgba(13,118,33,255)" }
-                  }}
-            >닫기
-            </Button>
-          </div>
-        </>
-       </Modal>         
-        </div>        
     );
 }

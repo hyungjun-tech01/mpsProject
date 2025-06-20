@@ -14,8 +14,8 @@ export async function fetchFilteredDevices(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const device = query !== '' ? 
-        await client.query(`
+        const device = query !== '' ?
+            await client.query(`
             SELECT
                 d.device_id AS id,
                 d.device_id,
@@ -54,7 +54,7 @@ export async function fetchFilteredDevices(
             ORDER BY d.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `) :
-        await client.query(`
+            await client.query(`
             SELECT
                 d.device_id AS id,
                 d.device_id,
@@ -87,9 +87,9 @@ export async function fetchFilteredDevices(
             ORDER BY d.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `)
-        ;
-        
-        const converted = device.rows.map((data:Device) => ({
+            ;
+
+        const converted = device.rows.map((data: Device) => ({
             ...data,
             cyan_toner_percentage: data.cyan_toner_percentage + ' %',
             magenta_toner_percentage: data.magenta_toner_percentage + ' %',
@@ -110,7 +110,7 @@ export async function fetchFilteredDevices(
 //     currentPage: number,
 //     groupId?: string
 // ) {
-    
+
 // }
 
 export async function fetchDevicesPages(
@@ -126,7 +126,7 @@ export async function fetchDevicesPages(
     }
 
     try {
-        const count = query !== '' 
+        const count = query !== ''
             ? await client.query(`
                 SELECT COUNT(*)
                 FROM tbl_device_info
@@ -146,7 +146,7 @@ export async function fetchDevicesPages(
                 FROM tbl_device_info
                 where deleted = 'N'
             `)
-        ;
+            ;
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;
@@ -158,8 +158,8 @@ export async function fetchDevicesPages(
 
 export async function fetchDeviceById(
     client: Pool,
-    id:string
-    ){
+    id: string
+) {
     try {
         const device = await client.query(`
             SELECT
@@ -211,10 +211,10 @@ export async function fetchDeviceById(
 
 export async function fetchDeviceFaxLineById(
     client: Pool,
-    id:string
-    ){
-    try{
-        const faxLine =  await client.query(`
+    id: string
+) {
+    try {
+        const faxLine = await client.query(`
         SELECT 
             tfli.fax_line_id,
             tfli.fax_line_name,
@@ -233,10 +233,10 @@ export async function fetchDeviceFaxLineById(
         WHERE 1=1 
         AND tfli.deleted_date is null
         AND tfli.printer_id = $1
-    `,[id]);
-   
-    return  faxLine.rows;
-    }catch (error) {
+    `, [id]);
+
+        return faxLine.rows;
+    } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to get device by id.");
     }
@@ -244,17 +244,17 @@ export async function fetchDeviceFaxLineById(
 
 export async function fetchCreateDevice(
     client: Pool,
-    newDevice: any
-    ) {
+    newDevice: object
+) {
     try {
 
         // 트랜잭션 시작
         await client.query('BEGIN');
 
         let ext_device_function;
-        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
-        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
-        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
+        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
+        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN' : '';
+        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX' : '';
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
 
@@ -270,25 +270,25 @@ export async function fetchCreateDevice(
             now(), -1, now(), -1,
             $11, $12, $13,
             0,0,0,0
-        ) RETURNING *`, [newDevice.device_type,newDevice.device_name, newDevice.location, 
-            newDevice.physical_device_id,ext_device_function,'N', 'N', newDevice.notes,
-            newDevice.device_model,newDevice.serial_number,
-            newDevice.app_type, newDevice.device_administrator, newDevice.device_administrator_password 
+        ) RETURNING *`, [newDevice.device_type, newDevice.device_name, newDevice.location,
+        newDevice.physical_device_id, ext_device_function, 'N', 'N', newDevice.notes,
+        newDevice.device_model, newDevice.serial_number,
+        newDevice.app_type, newDevice.device_administrator, newDevice.device_administrator_password
         ]);
 
         const newDeviceId = result.rows[0].device_id;
-        const result1 = await client.query(`
-        insert into tbl_group_member_info(group_id, member_id, member_type)
-        values($1, $2, $3)`,[ newDevice.device_group, newDeviceId, 'device']);
+        await client.query(`
+            insert into tbl_group_member_info(group_id, member_id, member_type)
+            values($1, $2, $3)`, [newDevice.device_group, newDeviceId, 'device']);
 
-       
+
         // 모든 쿼리 성공 시 커밋
-        await client.query('COMMIT');    
+        await client.query('COMMIT');
 
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
-    } catch (error:any) {
+    } catch (error) {
 
         // 오류 발생 시 롤백
         await client.query('ROLLBACK');
@@ -320,15 +320,15 @@ export async function fetchPrinterGroup(
 export async function fetchDeleteDevice(
     client: Pool,
     id: string
-    ) {
+) {
     try {
         //console.log(id);
         const result = await client.query(`
             update tbl_device_info
             set deleted ='Y'
             where device_id=$1
-        `,[id]);
-       
+        `, [id]);
+
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
@@ -344,15 +344,15 @@ export async function fetchDeleteDevice(
 export async function fetchDeleteFaxLineInfo(
     client: Pool,
     id: string
-    ) {
+) {
     try {
         //console.log(id);
         const result = await client.query(`
             update tbl_fax_line_info 
             set deleted_date = now()
             where fax_line_id=$1
-        `,[id]);
-       
+        `, [id]);
+
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
@@ -368,8 +368,8 @@ export async function fetchDeleteFaxLineInfo(
 
 export async function fetchModifyDevice(
     client: Pool,
-    newDevice: any
-    ) {
+    newDevice: object
+) {
 
     try {
 
@@ -377,9 +377,9 @@ export async function fetchModifyDevice(
         await client.query('BEGIN');
 
         let ext_device_function;
-        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER':'';
-        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN':'';
-        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX':'';
+        ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
+        ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN' : '';
+        ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX' : '';
 
         ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
         const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
@@ -397,36 +397,36 @@ export async function fetchModifyDevice(
                 device_administrator = $9,
                 device_administrator_password = $10
             where device_id = $11
-        `,[ newDevice.device_type, 
-            newDevice.device_name, 
-            newDevice.location, 
-            newDevice.physical_device_id, 
-            newDevice.notes, 
-            newDevice.device_model, 
-            newDevice.serial_number,
-            ext_device_function, 
-            newDevice.device_administrator,
+        `, [newDevice.device_type,
+        newDevice.device_name,
+        newDevice.location,
+        newDevice.physical_device_id,
+        newDevice.notes,
+        newDevice.device_model,
+        newDevice.serial_number,
+            ext_device_function,
+        newDevice.device_administrator,
             encrypt_device_admin_pwd,
-            newDevice.device_id]);
+        newDevice.device_id]);
 
         // tbl_group_member_info 데이터가 있으면, update 
         // tbl_group_member_info 데이터가 없으면, insert 
         const queryResult1 = await client.query(`
             select count(*) cnt from tbl_group_member_info t
-            where t.member_id = $1`,[newDevice.device_id]);
+            where t.member_id = $1`, [newDevice.device_id]);
 
         // 결과에서 카운트를 정수로 변환
-        const count = parseInt(queryResult1.rows[0].cnt, 10);    
+        const count = parseInt(queryResult1.rows[0].cnt, 10);
 
         if (count > 0) {
-            const result1 = await client.query(`
+            await client.query(`
             update tbl_group_member_info
                set group_id = $1
-               where member_id = $2`,[ newDevice.device_group, newDevice.device_id]);
-        }else{
-            const result1 = await client.query(`
+               where member_id = $2`, [newDevice.device_group, newDevice.device_id]);
+        } else {
+            await client.query(`
             insert into tbl_group_member_info(group_id, member_id, member_type)
-            values($1, $2, $3)`,[ newDevice.device_group, newDevice.device_id, 'device']);
+            values($1, $2, $3)`, [newDevice.device_group, newDevice.device_id, 'device']);
         }
 
         // 모든 쿼리 성공 시 커밋
@@ -435,9 +435,9 @@ export async function fetchModifyDevice(
         // 성공 처리
         return { result: true, data: result.rows[0] };
 
-    }catch (error) {
-       // 오류 발생 시 롤백
-       await client.query('ROLLBACK');
+    } catch (error) {
+        // 오류 발생 시 롤백
+        await client.query('ROLLBACK');
 
         console.log('Modify device / Error : ', error);
         return {
@@ -449,58 +449,62 @@ export async function fetchModifyDevice(
 
 export async function fetchSaveFaxLineInfo(
     client: Pool,
-    saveFaxLineData:any, 
-    created_by:any){
+    saveFaxLineData: {
+        fax_line_id: string | null;
+        fax_line_name: string;
+        printer_id: string;
+        fax_line_user_id: string;
+        fax_line_shared_group_id: string;
+    },
+    created_by: string) {
     try {
         //console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);
         // 트랜잭션 시작
         await client.query('BEGIN');
 
-        let result ;
         let out_fax_line_id = null;
 
-        if (saveFaxLineData.fax_line_id === null || saveFaxLineData.fax_line_id  === ''){
+        if (saveFaxLineData.fax_line_id === null || saveFaxLineData.fax_line_id === '') {
 
             const resp_fax_line_id = await client.query(`SELECT uuid_generate_v4() fax_line_id`);
-            console.log('fax_line_id', resp_fax_line_id.rows[0].fax_line_id);
+            // console.log('fax_line_id', resp_fax_line_id.rows[0].fax_line_id);
 
             const fax_line_id = resp_fax_line_id.rows[0].fax_line_id;
 
-            result = await client.query(`
-            insert into tbl_fax_line_info(fax_line_id, 
+            await client.query(`
+                insert into tbl_fax_line_info(fax_line_id, 
                                         fax_line_name, 
                                         printer_id, 
                                         fax_line_user_id, 
                                         fax_line_shared_group_id, 
                                         created_date,
                                         created_by)
-            values($1,$2,$3,$4,$5, now(),$6)`,
-            [fax_line_id,
-            saveFaxLineData.fax_line_name, 
-            saveFaxLineData.printer_id,
-            saveFaxLineData.fax_line_user_id, 
-            saveFaxLineData.fax_line_shared_group_id,
-            created_by
+                values($1,$2,$3,$4,$5, now(),$6)`,
+                    [fax_line_id,
+                        saveFaxLineData.fax_line_name,
+                        saveFaxLineData.printer_id,
+                        saveFaxLineData.fax_line_user_id,
+                        saveFaxLineData.fax_line_shared_group_id,
+                        created_by
             ]);
 
             out_fax_line_id = fax_line_id;
 
-        }else{
-            result = await client.query(`
+        } else {
+            await client.query(`
                 update tbl_fax_line_info 
                 set fax_line_name = $1, 
                     fax_line_user_id = $2,
                     fax_line_shared_group_id = $3
                 where fax_line_id = $4
-            `,[saveFaxLineData.fax_line_name, 
-               saveFaxLineData.fax_line_user_id, 
-               saveFaxLineData.fax_line_shared_group_id,
-               saveFaxLineData.fax_line_id
+            `, [saveFaxLineData.fax_line_name,
+                saveFaxLineData.fax_line_user_id,
+                saveFaxLineData.fax_line_shared_group_id,
+                saveFaxLineData.fax_line_id
             ]);
             out_fax_line_id = saveFaxLineData.fax_line_id;
         }
 
-        
         // 모든 쿼리 성공 시 커밋
         await client.query('COMMIT');
 
@@ -509,9 +513,9 @@ export async function fetchSaveFaxLineInfo(
         // 성공 처리
         return { result: true, data: out_fax_line_id };
 
-    }catch (error) {
-       // 오류 발생 시 롤백
-       await client.query('ROLLBACK');
+    } catch (error) {
+        // 오류 발생 시 롤백
+        await client.query('ROLLBACK');
 
         console.log('Modify device / Error : ', error);
         return {
@@ -528,9 +532,9 @@ export async function fetchDevicesbyGroupManagerPages(
     itemsPerPage: number,
 ) {
     try {
-        const count = 
-        query !== "" ? 
-        await client.query(`
+        const count =
+            query !== "" ?
+                await client.query(`
             SELECT DISTINCT
                 COUNT(*)
             FROM tbl_device_info d
@@ -542,8 +546,8 @@ export async function fetchDevicesbyGroupManagerPages(
                 'tbl_device_info.ext_device_function ILIKE '${`%${query}%`}' OR 
                 'tbl_device_info.physical_device_id ILIKE ILIKE '${`%${query}%`}'
                 )
-            AND d.deleted = 'N'`) 
-        : await client.query(`
+            AND d.deleted = 'N'`)
+                : await client.query(`
             SELECT DISTINCT
                 COUNT(*)
             FROM tbl_device_info d
@@ -552,7 +556,7 @@ export async function fetchDevicesbyGroupManagerPages(
             WHERE gm_user.member_id = '${userId}'
             AND d.deleted = 'N'
         `)
-        ;
+            ;
         return Math.ceil(Number(count.rows[0].count) / itemsPerPage);
     } catch (error) {
         console.error('Database Error:', error);
@@ -570,9 +574,9 @@ export async function fetchDevicesbyGroupManager(
     const offset = (currentPage - 1) * itemsPerPage;
 
     try {
-        const devices = 
-        query !== "" ?
-        await client.query(`
+        const devices =
+            query !== "" ?
+                await client.query(`
             SELECT DISTINCT
                 d.device_id AS id,
                 d.device_name,
@@ -609,7 +613,7 @@ export async function fetchDevicesbyGroupManager(
             ORDER BY d.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `)
-         : await client.query(`
+                : await client.query(`
             SELECT DISTINCT
                 d.device_id AS id,
                 d.device_name,
@@ -642,7 +646,7 @@ export async function fetchDevicesbyGroupManager(
             ORDER BY d.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
-        ;
+            ;
 
         return devices.rows;
     } catch (error) {
@@ -663,5 +667,5 @@ export async function fetchAllDevices(client: Pool) {
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch all devices.");
-  }
+    }
 }

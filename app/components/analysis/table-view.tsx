@@ -13,6 +13,7 @@ import Pagination from '../pagination';
 import { IColumnData } from '@/app/lib/definitions';
 import clsx from 'clsx';
 import { FolderOutlined, PrintOutlined, PersonOutlined } from '@mui/icons-material';
+import { IAnalysisPrintTable, IAnalysisPrivacyTable } from '@/app/lib/definitions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -40,7 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ITable {
     defaultSection: string;
     columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[]} | { privacy: IColumnData[] };
-    rows: { dept:object[], user:object[], device:object[]} | { privacy: object[]};
+    rows: IAnalysisPrintTable | IAnalysisPrivacyTable | null;
     itemsPerPage: number;
     currentPage: number;
     translated: object;
@@ -48,7 +49,7 @@ interface ITable {
 }
 
 
-export default function ViewTabl({
+export default function ViewTable({
     defaultSection,
     columns,
     rows,
@@ -66,10 +67,11 @@ export default function ViewTabl({
         { category: 'device', title: translated.device, icon: PrintOutlined },
     ] : null;
 
-    const totalPages = Math.ceil(rows[selectedCategory].length / itemsPerPage);
+    const totalPages = (!!rows && !!rows[selectedCategory]) ? Math.ceil(rows[selectedCategory].length / itemsPerPage) : 1;
     const minIndex = (currentPage - 1)*itemsPerPage;
     const maxIndex = Math.min(currentPage*itemsPerPage, rows[selectedCategory].length);
     const showRows = rows[selectedCategory].slice(minIndex, maxIndex);
+    
     // console.log('Table View / input data :', rows);
     // console.log('Table View / rows :', rows[selectedCategory]);
     // console.log('Table View / total pages :', totalPages);

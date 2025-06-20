@@ -166,7 +166,6 @@ export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: st
             fax_line_id: output.data
         }
     }
-
 }
 
 export async function modifyDevice(prevState: State, formData: FormData) {
@@ -175,7 +174,6 @@ export async function modifyDevice(prevState: State, formData: FormData) {
         console.error("Error: formData가 FormData 인스턴스가 아닙니다.");
         return;
     }
-
 
     // 체크박스 값이 없으면 "N"으로 설정
     if (!formData.has('ext_device_function_printer')) {
@@ -190,7 +188,6 @@ export async function modifyDevice(prevState: State, formData: FormData) {
     // if (!formData.has('enable_print_release')) {
     //     formData.set('enable_print_release', 'N');
     // }
-
 
     const validatedFields = CreateDevice.safeParse({
         device_id : formData.get('device_id'),
@@ -225,7 +222,7 @@ export async function modifyDevice(prevState: State, formData: FormData) {
 
     if ( newDevice.device_administrator !== null && newDevice.device_administrator_password === null){
         return {
-            errors: 'Device administrator password missing',
+            errors: ['Device administrator password missing'],
             message: 'Device administrator password missing',
         }
     }
@@ -234,7 +231,7 @@ export async function modifyDevice(prevState: State, formData: FormData) {
 
     if(!output.result) {
         return {
-            errors: output.data,
+            errors: [output.data],
             message: 'Failed to Modify Device',
         }
     }

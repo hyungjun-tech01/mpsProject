@@ -14,6 +14,7 @@ import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
+import { IAnalysisPrintTable, IAnalysisPrivacyTable } from "@/app/lib/definitions";
 
 
 export const metadata: Metadata = {
@@ -40,6 +41,14 @@ interface IAllDevices {
     device_id: string,
     device_name: string,
 }
+
+interface IDataForCards {
+    total_pages: number,
+    dept_count: number,
+    user_count: number,
+    device_count: number,
+}
+
 
 export default async function Page(props: {
     searchParams?: Promise<IAnalysisParams>;
@@ -86,11 +95,10 @@ export default async function Page(props: {
     // console.log("Analysis / deviceParam : ", deviceParam);
     // console.log("Analysis / data : ", data);
 
-    let dataForCards = {};
-    let dataForTable = {};
+    const dataForCards: IDataForCards = { total_pages: 0, dept_count: 0, user_count: 0, device_count: 0 };
+    let dataForTable: IAnalysisPrintTable | IAnalysisPrivacyTable | null = null;
 
     if(category === 'print') {
-        dataForCards = { total_pages: 0, dept_count: 0, user_count: 0, device_count: 0 };
         dataForTable = { dept: [], user: [], device: [] };
         
         for(const item of data) {
@@ -100,27 +108,27 @@ export default async function Page(props: {
                 dept_name:string, Copy:number, Scan:number, Print:number, Fax:number
             }) => dept.dept_name === item.dept_name);
 
-            if(deptIdx === -1){
+            if(deptIdx === -1) {
                 dataForCards.dept_count += 1;
 
                 const initData = {dept_name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.dept.push(initData);
             } else {
-                dataForTable.dept[deptIdx][item.job_type] += item.total_pages;
+                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                dataForTable.dept[deptIdx][jobType] += item.total_pages;
             };
 
             const userIdx = dataForTable.user.findIndex((user:{
                 user_name:string, Copy:number, Scan:number, Print:number, Fax:number
             }) => user.user_name === item.user_name);
 
-            if(userIdx === -1){
+            if(userIdx === -1) {
                 dataForCards.user_count += 1;
                 const initData = {user_name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.user.push(initData);
             } else {
-                dataForTable.user[userIdx][item.job_type] += item.total_pages;
+                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                dataForTable.user[userIdx][jobType] += item.total_pages;
             };
 
             const deviceIdx = dataForTable.device.findIndex((device:{
@@ -130,10 +138,10 @@ export default async function Page(props: {
             if(deviceIdx === -1){
                 dataForCards.device_count += 1;
                 const initData = {device_id: item.device_id, device_name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
-                Object.defineProperty(initData, item.job_type, {value: item.total_pages, writable:true});
                 dataForTable.device.push(initData);
             } else {
-                dataForTable.device[deviceIdx][item.job_type] += item.total_pages;
+                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                dataForTable.device[deviceIdx][jobType] += item.total_pages;
             };
         };
     } else if(category === 'privacy') {
@@ -146,6 +154,7 @@ export default async function Page(props: {
         { category: 'print', title: trans('analysis.analize_print'), link: `/analysis/print` },
         { category: 'privacy', title: trans('analysis.analize_privacy'), link: `/analysis/privacy` },
     ];
+
     const translated = {
         period: trans('common.period'),
         today: trans('common.today'),

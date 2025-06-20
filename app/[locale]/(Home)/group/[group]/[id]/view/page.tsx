@@ -10,6 +10,14 @@ import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 
 
+interface IViewItem {
+    name: string;
+    title: string;
+    type: "label" | "input" | "currency" | "select" | "checked" | "chart" | "password" | "hidden" | "react-select" | "button" | "status_bar";
+    defaultValue: string;
+};
+
+
 export default async function Page(props: {
     searchParams?: Promise<IGroupSearch>;
     params: Promise<{ group: string, id: string, category: string, locale: "ko" | "en" }>
@@ -217,7 +225,7 @@ export default async function Page(props: {
             name: "schedule_period",
             title: t("group.schedule_period"),
             type: "label",
-            defaultValue: translated_period[data.schedule_period],
+            defaultValue: translated_period[data.schedule_period as keyof typeof translated_period],
         }
     ];
     if(data.schedule_period === 'PER_WEEK') {
@@ -225,7 +233,7 @@ export default async function Page(props: {
             name: "schedule_start",
             title: t("group.group_schedue_start"),
             type: "label",
-            defaultValue: translated_week[data.schedule_start],
+            defaultValue: translated_week[data.schedule_start as keyof typeof translated_week],
         })
     };
     if(data.schedule_period === 'PER_MONTH') {
@@ -260,7 +268,7 @@ export default async function Page(props: {
     contentsItems.user.push({
         title: t("group.schedule_quota"),
         description: [t("comment.group_edit_quota")],
-        items: userSubItem,
+        items: userSubItem as IViewItem[],
     });
 
     contentsItems.user.push({
@@ -281,12 +289,12 @@ export default async function Page(props: {
             <Breadcrumbs
                 breadcrumbs={[
                     {
-                        label: groupBreadcrumbs[group][0].label,
-                        href: groupBreadcrumbs[group][0].link,
+                        label: groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][0].label,
+                        href: groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][0].link,
                     },
                     {
-                        label: `${groupBreadcrumbs[group][1].label}`,
-                        href: `${groupBreadcrumbs[group][1].link}`,
+                        label: `${groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][1].label}`,
+                        href: `${groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][1].link}`,
                         active: true,
                     },
                 ]}

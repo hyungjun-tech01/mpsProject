@@ -172,8 +172,6 @@ export default function CustomizedTable<DataType>({
         });
     };
 
-    let columnLength = columns.length + 2;
-
     useEffect(()=>{
         console.log('Setting Table - useEffect');
         setData(rows.map(row => {
@@ -273,7 +271,7 @@ export default function CustomizedTable<DataType>({
                         :
                             <StyledTableRow>
                                 <StyledTableCell
-                                    colSpan={columnLength}
+                                    colSpan={columns.length + 2}
                                     align="center"
                                 >
                                     No Data

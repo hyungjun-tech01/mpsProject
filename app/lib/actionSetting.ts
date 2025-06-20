@@ -63,7 +63,7 @@ export async function createRegularExp(client: Pool, prevState: GroupState, form
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
-        const newGroup = await client.query(`
+        await client.query(`
             INSERT INTO tbl_security_value_info (
                 security_name,
                 security_type,
@@ -91,11 +91,10 @@ export async function createRegularExp(client: Pool, prevState: GroupState, form
 export async function deleteRegularExp(client: Pool, id: string ) {
     try {
         console.log("deleteRegularExp", id);
-        const result = await client.query(`
+        await client.query(`
             delete from tbl_security_value_info
             where security_value_id =$1
         `,[id]);
-       
 
     } catch (error) {
         console.log('Delete regular exp / Error : ', error);

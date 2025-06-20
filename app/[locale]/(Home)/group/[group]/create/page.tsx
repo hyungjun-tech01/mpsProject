@@ -47,7 +47,7 @@ export default async function Page(props: {
 
   const userOptions: {value:string, title:string}[] = [
     {value:"", title:t("group.select_group_manager")},
-    ...users.map(item => (
+    ...users.map((item: { user_id: string, user_name: string }) => (
     {value: item.user_id, title: item.user_name}))
   ];
 
@@ -169,7 +169,6 @@ export default async function Page(props: {
           },
         ],
       },
-      ,
       {
         title: t("group.group_manager"),
         description: [],

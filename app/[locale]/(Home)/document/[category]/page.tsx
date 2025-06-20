@@ -29,7 +29,7 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     
     const session = await auth();
-    if(!session?.user)
+    if(!session?.user.name)
         return notFound();
 
     const adapter = MyDBAdapter();
@@ -83,7 +83,6 @@ export default async function Page(props: {
                     <Table
                         columns={columns}
                         rows={docs}
-                        currentPage={currentPage}
                         totalPages={totalPages}
                         path='document'
                         locale={locale}

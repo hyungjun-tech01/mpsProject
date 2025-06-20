@@ -183,14 +183,14 @@ export async function modifyUser(
     (newPwd.toString().length < 6 || newPwdAgain.toString().length < 6)
   ) {
     return {
-      errors: ["암호 길이 작음"],
+      errors: "암호 길이 작음",
       message: "암호는 6자리 이상이어야 합니다.",
     };
   }
 
   if (changePwd && newPwd !== newPwdAgain) {
     return {
-      errors: ["입력 암호 불일치"],
+      errors: "입력 암호 불일치",
       message: "입력 암호가 일치하지 않습니다.",
     };
   }
@@ -514,7 +514,6 @@ export async function updateAccount(
   // console.log('[Account] Update account : ', formData);
   if(!id) {
     return {
-      errors: ["입력 오류"],
       message: "입력 ID가 없습니다.",
     };
   }
@@ -530,14 +529,12 @@ export async function updateAccount(
     (newPwd.toString().length < 6 || newPwdAgain.toString().length < 6)
   ) {
     return {
-      errors: ["암호 길이 작음"],
       message: "암호는 6자리 이상이어야 합니다.",
     };
   }
 
   if (changePwd && newPwd !== newPwdAgain) {
     return {
-      errors: ["암호 불일치"],
       message: "입력한 암호가 서로 일치하지 않습니다.",
     };
   }
@@ -706,7 +703,7 @@ export async function batchCreateUser(
                 "if_status"
               ];
           let idx = (records[0][0] === "user_name") ? 1: 0;
-          let adjusted = [];
+          const adjusted = [];
           for (; idx < records.length; idx++) {
             const temp = {};
             for (let i = 0; i < records[0].length; i++) {

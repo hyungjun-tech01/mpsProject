@@ -223,7 +223,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createDeviceGroup(pool, prevState, formData);
         },
-        async modifyDeviceGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifyDeviceGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyDeviceGroup(pool, id, prevState, formData);
         },
@@ -231,7 +231,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createUserGroup(pool, prevState, formData);
         },
-        async modifyUserGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifyUserGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyUserGroup(pool, id, prevState, formData);
         },
@@ -239,7 +239,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createSecurityGroup(pool, prevState, formData);
         },
-        async modifySecurityGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifySecurityGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifySecurityGroup(pool, id, prevState, formData);
         },

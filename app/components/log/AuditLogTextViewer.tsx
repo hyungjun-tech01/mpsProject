@@ -1,13 +1,18 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
+
 interface IAuditLogTextViewer {
   Url: string | undefined,
   auditContent: string | null,
   onClose: (value: boolean) => void,
 };
+
 const AuditLogTextViewer = ({ Url, auditContent, onClose }: IAuditLogTextViewer) => {
-  // const [numPages, setNumPages] = useState<number | null>(null);
+
+  console.log('AuditLogTextViewer / Url : ', Url);
+  console.log('AuditLogTextViewer / auditContent : ', auditContent);
+  console.log('AuditLogTextViewer / onClose : ', onClose);
 
   return (
     <Box sx={{
@@ -29,9 +34,7 @@ const AuditLogTextViewer = ({ Url, auditContent, onClose }: IAuditLogTextViewer)
             //배열 사이사이 <br />태그를 넣어 뿌려줘서 개행을 넣은 효과를 내준다.
             auditContent.split("\n").map((line, index) => {
               if (line.length <= 1) {
-                return (
-                  ''
-                );
+                return ('');
               } else {
                 return (
                   <span key={index}>
