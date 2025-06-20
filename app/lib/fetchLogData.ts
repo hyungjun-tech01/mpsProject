@@ -260,6 +260,9 @@ export async function fetchFilteredAuditLogs(
    
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
+
+    console.log(currentPage,itemsPerPage , offset);
+
     try {
         const auditLogs =
             query !== ""
@@ -355,6 +358,8 @@ export async function fetchFilteredAuditLogPages(
     dateTo : string|null,
 ) {
     try {
+
+        console.log('dateFrom',dateFrom, dateTo, "'"+query+"'");
         const count =
             query !== ""
                 ? await client.query(`
@@ -379,6 +384,7 @@ export async function fetchFilteredAuditLogPages(
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
+        console.log('totalPages', totalPages);
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
