@@ -18,17 +18,17 @@ export function EditForm({
   inGroup,
   action,
 }: {
-  id?: string;
+  id: string | undefined;
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
-  inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
+  inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
     id: string | undefined,
     prevState: GroupState,
-    formData: FormData
-  ) => Promise<void>;
+    formData: FormData,
+  ) => Promise<GroupState | void>;
 }) {
   const initialState: GroupState = { message: null, errors: {} };
   const updatedAction = !!id ? action.bind(null, id) : action;

@@ -179,7 +179,7 @@ export type AuditLogField ={
   color_total_pages: number|null;
 };
 
-export type Fax ={
+export type Fax = {
   fax_line_id: string|null;
   fax_line_name: string|null;
   printer_id: string|null;
@@ -189,4 +189,42 @@ export type Fax ={
   created_by: string|null;
   deleted_date: Date|null;
   deleted_by: string|null;
+};
+
+// ----- Begin : Analysis ----------------------------------------//
+export type IAnalysisPrintTable = {
+  dept: {
+    dept_name: string,
+    Copy: number,
+    Scan: number,
+    Print: number,
+    Fax: number
+  }[],
+  user: {
+    user_name: string,
+    Copy: number,
+    Scan: number,
+    Print: number,
+    Fax: number
+  }[],
+  device: {
+    device_id: string,
+    device_name: string,
+    Copy: number,
+    Scan: number,
+    Print: number,
+    Fax: number
+  }[]
+};
+
+export type IAnalysisPrivacyTable = {
+  privacy: { 
+    send_time: string,
+    user_name: string,
+    external_user_name: string,
+    document_name: string,
+    detected_items: string,
+    status: string,
+    action: string 
+  }[]
 };

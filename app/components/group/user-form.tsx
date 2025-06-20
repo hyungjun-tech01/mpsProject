@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@mui/material';
-import type { UserState } from '@/app/lib/actions';
+import type { GroupState } from '@/app/lib/actionsGroup';
 import { ChangeEvent, useActionState, useState, useEffect } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
@@ -19,7 +19,7 @@ export function UserForm({
     inGroup,
     action,
 }: {
-    id?: string;
+    id: string | undefined;
     userData: Group;
     locale: string;
     translated: object;
@@ -28,11 +28,11 @@ export function UserForm({
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
         id: string | undefined,
-        prevState: UserState,
+        prevState: GroupState,
         formData: FormData
-    ) => Promise<void>;
+    ) => Promise<GroupState | void>;
 }) {
-    const initialState: UserState = { message: null, errors: {} };
+    const initialState: GroupState = { message: null, errors: {} };
     const updatedAction = !!id ? action.bind(null, id) : action;
     const [state, formAction] = useActionState(updatedAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>(userData.schedule_period);

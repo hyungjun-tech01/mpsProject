@@ -60,7 +60,6 @@ export default async function Fax(
                     <Table
                         columns={columns}
                         rows={devices}
-                        currentPage={currentPage}
                         totalPages={totalPages}
                         locale={locale}
                         path='device'

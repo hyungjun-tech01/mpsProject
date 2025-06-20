@@ -19,10 +19,12 @@ import { redirect } from 'next/navigation';
 
 export type GroupState = {
     errors?: {
+        groupName?: string[];
         schedulePreiod?: string[];
         scheduleStart?: string[];
-        scheduleStartSub: string[];
+        scheduleStartSub?: string[];
         scheduleAmount?: string[];
+        remainAmount?: string[];
     };
     message?: string | null;
 };
@@ -133,7 +135,12 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
 
 const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifyDeviceGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
+export async function modifyDeviceGroup(client: Pool, id:string | undefined, prevState: GroupState, formData: FormData) {
+    if (!id) {
+        return {
+            message: 'Group ID is required.',
+        };
+    }
     // console.log('modifyDeviceGroup Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
@@ -356,7 +363,12 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
 
 const ModifyUserGroup = GroupFormSchema.omit({});
 
-export async function modifyUserGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
+export async function modifyUserGroup(client: Pool, id:string | undefined, prevState: GroupState, formData: FormData) {
+    if (!id) {
+        return {
+            message: 'Group ID is required.',
+        };
+    }
     // console.log('modifyUserGroup Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
@@ -597,7 +609,12 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
 
 const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifySecurityGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
+export async function modifySecurityGroup(client: Pool, id: string | undefined, prevState: GroupState, formData: FormData) {
+    if (!id) {
+        return {
+            message: 'Group ID is required.',
+        };
+    }
     // console.log('ModifySecurityGroup Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')

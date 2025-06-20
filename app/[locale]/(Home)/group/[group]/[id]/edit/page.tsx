@@ -75,7 +75,7 @@ export default async function Page(props: {
 
   const userOptions: { value: string, title: string }[] = [
     { value: "", title: t("group.select_group_manager") },
-    ...users.map(item => (
+    ...users.map((item: { user_id: string, user_name: string }) => (
       { value: item.user_id, title: item.user_name }))
   ];
 
@@ -223,12 +223,12 @@ export default async function Page(props: {
       <Breadcrumbs
         breadcrumbs={[
           {
-            label: groupBreadcrumbs[group][0].label,
-            href: groupBreadcrumbs[group][0].link,
+            label: groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][0].label,
+            href: groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][0].link,
           },
           {
             label: `${t("group.group_edit")}`,
-            href: `${groupBreadcrumbs[group][1].link}`,
+            href: `${groupBreadcrumbs[group as keyof typeof groupBreadcrumbs][1].link}`,
             active: true,
           },
         ]}

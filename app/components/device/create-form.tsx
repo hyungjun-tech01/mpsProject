@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState } from 'react';
 import {  State } from './actions';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -8,46 +8,19 @@ import Button from '@mui/material/Button';
 import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
 
 
-export default function Form(
-    {id, items,  buttons, action} : 
-    {
-        id?: string;  
-      items: ISection[]; 
-      buttons?: IButtonInfo;
-      action: (prevState: State, formData: FormData) => Promise<void>;
-    }
-){
+export default function Form({
+    items,  buttons, action
+} : {
+    items: ISection[]; 
+    buttons?: IButtonInfo;
+    action: (prevState: State, formData: FormData) => Promise<{
+        errors?: object | string;
+        message?: string;
+    } | void>;
+}){
     const initialState: State = { message: null, errors: null };
-    const [printerChecked, setPrinterChecked] = useState(false);
-    const [scanChecked, setScanChecked] = useState(false);
-    const [faxChecked, setFaxChecked] = useState(false);
-    const [enablePrintChecked, setEnablePrintChecked] = useState(false);
+    const [state, formAction] = useActionState(action, initialState);
 
-    // const updatedAction = !!id ? action.bind(null, id) : action;
-    const updatedAction =    action;
-    const [state, formAction] = useActionState(updatedAction, initialState);
-
-    //const [state, formAction] = useActionState(increment, 0);
-    
-
-    // 체크박스 상태 변경 핸들러
-    const handlePrinterChange = (e:any) => {
-        setPrinterChecked(e.target.checked);
-    };
-
-    const handleScanChange = (e:any) => {
-        setScanChecked(e.target.checked);
-    };
-
-    const handleFaxChange = (e:any) => {
-            setFaxChecked(e.target.checked);
-    };
-
-    const handleEnablePrintChange = (e:any) => {
-        setEnablePrintChecked(e.target.checked);
-    };
-
-    //console.log('create form');
     return (
         <div>
             <form action={formAction}>

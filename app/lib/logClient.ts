@@ -30,7 +30,7 @@ export default function LogClient({
     };
 
     logAccess();
-  }, [userName, groupId, query]);
+  }, [userName, groupId, query, applicationPage, applicationAction]);
 
   return null;
 }
