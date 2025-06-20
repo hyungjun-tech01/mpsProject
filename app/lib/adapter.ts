@@ -6,7 +6,7 @@ import * as Document from "./fetchDocumentData";
 import * as Log from "./fetchLogData";
 import * as RegularExp from "./fetchRegularExpPrivateInfoData";
 import * as ApplicationLog from "./fetchApplicationLog";
-import type { UserState } from "./actions";
+import type { BasicState, UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
@@ -14,6 +14,7 @@ import * as Print from "./fetchPrintSpoolData";
 // import type { PrintState } from "./actionPrint";
 import * as PrintAction from "./actionPrint";
 import * as SettingAction from "./actionSetting";
+import type { RegularExpState } from "./actionSetting";
 
 
 const pool = new Pool({
@@ -223,7 +224,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createDeviceGroup(pool, prevState, formData);
         },
-        async modifyDeviceGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
+        async modifyDeviceGroup(id: string, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyDeviceGroup(pool, id, prevState, formData);
         },
@@ -231,7 +232,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createUserGroup(pool, prevState, formData);
         },
-        async modifyUserGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
+        async modifyUserGroup(id: string, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyUserGroup(pool, id, prevState, formData);
         },
@@ -239,7 +240,7 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.createSecurityGroup(pool, prevState, formData);
         },
-        async modifySecurityGroup(id: string | undefined, prevState: GroupState, formData: FormData) {
+        async modifySecurityGroup(id: string, prevState: GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifySecurityGroup(pool, id, prevState, formData);
         },
@@ -493,7 +494,7 @@ export default function MyDBAdapter() {
         },
 
         // ----- Setting ---------------------------------------------
-        async batchCreateUser(id: string, prevState: UserState, formData: FormData) {
+        async batchCreateUser(id: string, prevState: BasicState, formData: FormData) {
             'use server';
             return Action.batchCreateUser(pool, id, prevState, formData);
         },
@@ -518,15 +519,13 @@ export default function MyDBAdapter() {
 
             return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
         },
-        async createRegularExp(prevState: GroupState, formData: FormData){
+        async createRegularExp(prevState: RegularExpState, formData: FormData){
             'use server';
-
             return SettingAction.createRegularExp(pool, prevState, formData);
         },
         async deleteRegularExp( id: string){
             'use server';
-
-            console.log('deleteRegularExp', FormData);
+            // console.log('deleteRegularExp', FormData);
             return SettingAction.deleteRegularExp(pool, id);
         },       
 

@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { IButtonInfo, ISection } from "@/app/components/edit-items";
-import { EditForm } from "@/app/components/group/edit-form";
-import { UserForm } from "@/app/components/group/user-form";
+import { EditGroupForm } from "@/app/components/group/edit-form";
+import { EditUserGroupForm } from "@/app/components/group/user-form";
 import Breadcrumbs from "@/app/components/breadcrumbs";
 import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
 import getDictionary from "@/app/locales/dictionaries";
@@ -234,7 +234,7 @@ export default async function Page(props: {
         ]}
       />
       {group === "device" && (
-        <EditForm
+        <EditGroupForm
           id={id}
           items={contentsItems.device}
           buttons={buttonItems}
@@ -245,7 +245,7 @@ export default async function Page(props: {
         />
       )}
       {group === "user" && (
-        <UserForm
+        <EditUserGroupForm
           id={id}
           userData={data}
           locale={locale}
@@ -257,7 +257,7 @@ export default async function Page(props: {
         />
       )}
       {group === "security" && (
-        <EditForm
+        <EditGroupForm
           id={id}
           items={contentsItems.security}
           buttons={buttonItems}

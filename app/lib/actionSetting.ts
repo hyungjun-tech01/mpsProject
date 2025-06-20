@@ -6,12 +6,12 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 
-export type GroupState = {
+export type RegularExpState = {
     errors?: {
-        schedulePreiod?: string[];
-        scheduleStart?: string[];
-        scheduleStartSub: string[];
-        scheduleAmount?: string[];
+        regularExpName?: string[];
+        regularExpType?: string[];
+        regularExpValue?: string[];
+        createdBy?: string[];
     };
     message?: string | null;
 };
@@ -35,7 +35,7 @@ const RegularExprFormSchema = z.object({
 // Regular Exp  ------------------------------------------------
 const CreateRegularExpr = RegularExprFormSchema;
 
-export async function createRegularExp(client: Pool, prevState: GroupState, formData: FormData) {
+export async function createRegularExp(client: Pool, prevState: RegularExpState, formData: FormData) {
     //console.log('createRegularExp  :', formData);
     const validatedFields = CreateRegularExpr.safeParse({
         regularExpName: formData.get('security_name'),

@@ -192,33 +192,30 @@ export type Fax = {
 };
 
 // ----- Begin : Analysis ----------------------------------------//
-export type IAnalysisPrintTable = {
-  dept: {
+export type IAnalysisTable = {
+  dept?: {
     dept_name: string,
     Copy: number,
     Scan: number,
     Print: number,
     Fax: number
   }[],
-  user: {
+  user?: {
     user_name: string,
     Copy: number,
     Scan: number,
     Print: number,
     Fax: number
   }[],
-  device: {
+  device?: {
     device_id: string,
     device_name: string,
     Copy: number,
     Scan: number,
     Print: number,
     Fax: number
-  }[]
-};
-
-export type IAnalysisPrivacyTable = {
-  privacy: { 
+  }[],
+  privacy?: { 
     send_time: string,
     user_name: string,
     external_user_name: string,

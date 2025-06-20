@@ -7,6 +7,7 @@ import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
 import InfoQuery from "@/app/components/analysis/info-query";
+import type { IQueryData, IInfoQueryTR, IOptionsForAnalysis } from "@/app/components/analysis/info-query";
 import TableView from "@/app/components/analysis/table-view";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
@@ -14,7 +15,7 @@ import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
-import { IAnalysisPrintTable, IAnalysisPrivacyTable } from "@/app/lib/definitions";
+import { IAnalysisTable } from "@/app/lib/definitions";
 
 
 export const metadata: Metadata = {
@@ -96,10 +97,13 @@ export default async function Page(props: {
     // console.log("Analysis / data : ", data);
 
     const dataForCards: IDataForCards = { total_pages: 0, dept_count: 0, user_count: 0, device_count: 0 };
-    let dataForTable: IAnalysisPrintTable | IAnalysisPrivacyTable | null = null;
+    const dataForTable: IAnalysisTable = {};
 
     if(category === 'print') {
-        dataForTable = { dept: [], user: [], device: [] };
+        // dataForTable = { dept: [], user: [], device: [] };
+        dataForTable.dept = [];
+        dataForTable.user = [];
+        dataForTable.device = [];
         
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
@@ -145,7 +149,7 @@ export default async function Page(props: {
             };
         };
     } else if(category === 'privacy') {
-        dataForTable = { privacy: [ ...data ] };
+        dataForTable.privacy = [ ...data ];
     }
     // console.log('Data For Table :', dataForTable);
 
@@ -155,20 +159,30 @@ export default async function Page(props: {
         { category: 'privacy', title: trans('analysis.analize_privacy'), link: `/analysis/privacy` },
     ];
 
-    const translated = {
-        period: trans('common.period'),
-        today: trans('common.today'),
-        week: trans('common.week'),
-        month: trans('common.month'),
-        specified: trans('common.specified_period'),
-        department: trans('user.department'),
-        user_name_or_id: trans('dashboard.user_name_or_id'),
-        dept_all: trans('common.all'),
-        from: trans('dashboard.from'),
-        to: trans('dashboard.to'),
+    // const translated = {
+    //     period: trans('common.period'),
+    //     today: trans('common.today'),
+    //     week: trans('common.week'),
+    //     month: trans('common.month'),
+    //     specified: trans('common.specified_period'),
+    //     department: trans('user.department'),
+    //     user_name_or_id: trans('dashboard.user_name_or_id'),
+    //     dept_all: trans('common.all'),
+    //     device: trans('analysis.category_device'),
+    //     dept: trans('analysis.category_dept'),
+    //     user: trans('analysis.category_user'),
+    // };
+
+    const translatedForTV = {
         device: trans('analysis.category_device'),
         dept: trans('analysis.category_dept'),
         user: trans('analysis.category_user'),
+    }
+
+    const translatedForIQ: IInfoQueryTR = {
+        user_name_or_id: trans('dashboard.user_name_or_id'),
+        from: trans('dashboard.from'),
+        to: trans('dashboard.to'),
         initialize: trans('common.initialize'),
     };
 
@@ -177,7 +191,7 @@ export default async function Page(props: {
         privacy: ["periodStart","periodEnd","dept"],
     };
 
-    const dataForQuery = {
+    const dataForQuery : { print: IQueryData, privacy: IQueryData } = {
         print: {
             periodStart: periodStartParam,
             periodEnd: periodEndParam,
@@ -194,7 +208,7 @@ export default async function Page(props: {
         }
     }
 
-    const optionsForQuery = {
+    const optionsForQuery: IOptionsForAnalysis = {
         dept: [{title: trans('user.select_dept'), value: ""},
             ...allDepts.map((item: IAllDepts) => ({title: item.dept_name, value: item.dept_name}))],
         device: [{title: trans('device.select_device'), value: ""},
@@ -270,7 +284,7 @@ export default async function Page(props: {
             <div className="w-full px-4 bg-gray-50 rounded-md">
                 <div className="py-4 flex items-center justify-between gap-2 md:py-8">
                     <InfoQuery
-                        translated={translated}
+                        translated={translatedForIQ}
                         queryKeys={queryKeys[category as "print" | "privacy"]}
                         queryData={dataForQuery[category as "print" | "privacy"]}
                         options={optionsForQuery}
@@ -294,7 +308,7 @@ export default async function Page(props: {
                             rows={dataForTable}
                             itemsPerPage={itemsPerPage}
                             currentPage={currentPage}
-                            translated={translated}
+                            translated={translatedForTV}
                             title={tableTitle}
                         />
                     </Suspense>

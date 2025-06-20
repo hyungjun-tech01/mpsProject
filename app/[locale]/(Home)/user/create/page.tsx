@@ -1,7 +1,7 @@
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import getDictionary from '@/app/locales/dictionaries';
-import { EditForm } from '@/app/components/user/edit-form';
+import { CreateForm } from '@/app/components/user/create-form';
 import MyDBAdapter from '@/app/lib/adapter';
 
 
@@ -65,7 +65,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <EditForm items={formItems} buttons={buttonItems} action={adapter.createUser}/>
+            <CreateForm items={formItems} buttons={buttonItems} action={adapter.createUser}/>
             {/* <CreateForm items={formItems} /> */}
         </main>
     );

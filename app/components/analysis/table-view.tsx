@@ -13,7 +13,7 @@ import Pagination from '../pagination';
 import { IColumnData } from '@/app/lib/definitions';
 import clsx from 'clsx';
 import { FolderOutlined, PrintOutlined, PersonOutlined } from '@mui/icons-material';
-import { IAnalysisPrintTable, IAnalysisPrivacyTable } from '@/app/lib/definitions';
+import { IAnalysisTable } from '@/app/lib/definitions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -38,13 +38,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
+
 interface ITable {
-    defaultSection: string;
-    columns: { dept: IColumnData[], user: IColumnData[], device: IColumnData[]} | { privacy: IColumnData[] };
-    rows: IAnalysisPrintTable | IAnalysisPrivacyTable | null;
+    defaultSection: "dept" | "user" | "device" | "privacy";
+    columns: { dept?: IColumnData[], user?: IColumnData[], device?: IColumnData[], privacy?: IColumnData[] };
+    rows: IAnalysisTable;
     itemsPerPage: number;
     currentPage: number;
-    translated: object;
+    translated: {dept:string, user:string, device: string};
     title?: string;
 }
 
@@ -58,19 +59,21 @@ export default function ViewTable({
     translated,
     title
 }: ITable) {
-    const [selectedCategory, setSelectedCategory] = useState<string>(defaultSection);
+    const [selectedCategory, setSelectedCategory] = useState<"dept" | "user" | "device" | "privacy">(defaultSection);
 
     // Tabs ----------------------------------------------------------------------
-    const subTitles = defaultSection !== 'privacy' ? [
+    const subTitles : { category: "dept" | "user" | "device", title: string, icon: React.ElementType }[] | null 
+        = defaultSection !== 'privacy' ? [
         { category: 'dept', title: translated.dept, icon: FolderOutlined },
         { category: 'user', title: translated.user, icon: PersonOutlined },
         { category: 'device', title: translated.device, icon: PrintOutlined },
     ] : null;
 
-    const totalPages = (!!rows && !!rows[selectedCategory]) ? Math.ceil(rows[selectedCategory].length / itemsPerPage) : 1;
+    const selectedRows = rows[selectedCategory  as "dept" | "user" | "device" | "privacy"];
+    const totalPages = !!selectedRows ? Math.ceil(selectedRows.length / itemsPerPage) : 1;
     const minIndex = (currentPage - 1)*itemsPerPage;
-    const maxIndex = Math.min(currentPage*itemsPerPage, rows[selectedCategory].length);
-    const showRows = rows[selectedCategory].slice(minIndex, maxIndex);
+    const maxIndex = Math.min(currentPage*itemsPerPage, !!selectedRows ? selectedRows.length : 0);
+    const showRows = !!selectedRows ? selectedRows.slice(minIndex, maxIndex) : [];
     
     // console.log('Table View / input data :', rows);
     // console.log('Table View / rows :', rows[selectedCategory]);
@@ -105,7 +108,7 @@ export default function ViewTable({
                     <Table sx={{minWidth: "700px"}} aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {columns[selectedCategory].map((column, idx) => (
+                                {!!columns[selectedCategory] && columns[selectedCategory].map((column, idx) => (
                                     <StyledTableCell key={idx} align={column.align} width={column.width ?? 100}>
                                         {column.title}
                                     </StyledTableCell>
@@ -116,7 +119,7 @@ export default function ViewTable({
                             {showRows.length > 0 ? showRows.map((row, idx) => {
                                 return (
                                     <StyledTableRow key={idx}>
-                                        {columns[selectedCategory].map((column, colIdx) => {
+                                        {!!columns[selectedCategory] && columns[selectedCategory].map((column, colIdx) => {
                                             return (
                                                 <StyledTableCell
                                                     key={colIdx}
@@ -133,7 +136,7 @@ export default function ViewTable({
                                 :
                                 <StyledTableRow>
                                     <StyledTableCell
-                                        colSpan={columns[selectedCategory].length}
+                                        colSpan={!!columns[selectedCategory] ? columns[selectedCategory].length: 1}
                                         align="center"
                                     >
                                         No Data

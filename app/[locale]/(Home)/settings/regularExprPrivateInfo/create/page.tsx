@@ -3,12 +3,10 @@ import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/settings/create-form';
 import { auth } from "@/auth";
 import { notFound } from 'next/navigation';
-
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
-
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
-
 import MyDBAdapter from '@/app/lib/adapter';
+
 
 export default async function CreateRegularExprPrivateInfo(
     props: { 
@@ -36,13 +34,11 @@ export default async function CreateRegularExprPrivateInfo(
     logData.append('application_parameter', '');
     logData.append('created_by', userName);
     adapter.applicationLog(logData);
+
     ///// application log ----------------------------------------------------------------------
-
-
     const [t] = await Promise.all([
         getDictionary(locale),
     ]);
-
 
     const formItems: ISection[] = [
         {

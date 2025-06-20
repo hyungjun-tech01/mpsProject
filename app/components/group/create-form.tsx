@@ -9,8 +9,7 @@ import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
 
-export function EditGroupForm({
-  id,
+export function CreateGroupForm({
   items,
   buttons,
   translated,
@@ -18,21 +17,18 @@ export function EditGroupForm({
   inGroup,
   action,
 }: {
-  id: string;
   items: ISection[];
   buttons?: IButtonInfo;
   translated: object;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
-    id: string,
     prevState: GroupState,
     formData: FormData,
   ) => Promise<GroupState | void>;
 }) {
   const initialState: GroupState = { message: null, errors: {} };
-  const updatedAction = action.bind(null, id);
-  const [state, formAction] = useActionState(updatedAction, initialState);
+  const [state, formAction] = useActionState(action, initialState);
 
   return (
     <form action={formAction}>

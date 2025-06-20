@@ -127,7 +127,6 @@ export default async function Page(props: {
                     <Table
                         columns={groupColumns[group]}
                         rows={groupData}
-                        currentPage={currentPage}
                         totalPages={totalPages}
                         path={`/group/${group}`}
                         locale={locale}

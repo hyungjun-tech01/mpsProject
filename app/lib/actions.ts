@@ -9,6 +9,11 @@ import bcrypt from "bcrypt";
 
 const salt = await bcrypt.genSalt(11);
 
+export type BasicState = {
+  errors?: string;
+  message?: string;
+}
+
 export type UserState = {
   errors?: {
     userName?: string[];
@@ -183,14 +188,12 @@ export async function modifyUser(
     (newPwd.toString().length < 6 || newPwdAgain.toString().length < 6)
   ) {
     return {
-      errors: "암호 길이 작음",
       message: "암호는 6자리 이상이어야 합니다.",
     };
   }
 
   if (changePwd && newPwd !== newPwdAgain) {
     return {
-      errors: "입력 암호 불일치",
       message: "입력 암호가 일치하지 않습니다.",
     };
   }
@@ -512,7 +515,7 @@ export async function updateAccount(
   formData: FormData
 ) {
   // console.log('[Account] Update account : ', formData);
-  if(!id) {
+  if (!id) {
     return {
       message: "입력 ID가 없습니다.",
     };
@@ -654,7 +657,7 @@ export async function updateAccount(
 export async function batchCreateUser(
   client: Pool,
   id: string,
-  prevState: UserState,
+  prevState: BasicState,
   formData: FormData
 ) {
   try {
@@ -662,7 +665,7 @@ export async function batchCreateUser(
 
     if (!file) {
       return {
-        error: ["File blob is required."],
+        error: "File blob is required.",
         message: "File이 없거나 크기가 0입니다.",
       };
     }
@@ -683,26 +686,26 @@ export async function batchCreateUser(
         if (!!records) {
           const headers = (records[0][0] === "user_name")
             ? [...records[0]]
-            : [ 
-                "user_name",
-                "external_user_name",
-                "full_name",
-                "email",
-                "notes",
-                "department",
-                "office",
-                "card_number",
-                "card_number2",
-                "home_directory",
-                "privilege",
-                "user_source_type",
-                "created_date",
-                "created_by",
-                "modified_date",
-                "modified_by",
-                "if_status"
-              ];
-          let idx = (records[0][0] === "user_name") ? 1: 0;
+            : [
+              "user_name",
+              "external_user_name",
+              "full_name",
+              "email",
+              "notes",
+              "department",
+              "office",
+              "card_number",
+              "card_number2",
+              "home_directory",
+              "privilege",
+              "user_source_type",
+              "created_date",
+              "created_by",
+              "modified_date",
+              "modified_by",
+              "if_status"
+            ];
+          let idx = (records[0][0] === "user_name") ? 1 : 0;
           const adjusted = [];
           for (; idx < records.length; idx++) {
             const temp = {};
@@ -711,7 +714,7 @@ export async function batchCreateUser(
             }
             adjusted.push(temp);
           }
-          
+
           // console.log('CSV Parse / Data : ', records);
           try {
             await client.query("BEGIN"); // 트랜잭션 시작
@@ -736,22 +739,22 @@ export async function batchCreateUser(
                 if_status
               ) VALUES (
                 $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),$13,now(),$14,$15)`, [
-                  item.user_name,
-                  item.external_user_name ?? "",
-                  item.full_name ?? "",
-                  item.email ?? "",
-                  item.notes ?? "",
-                  item.department ?? "",
-                  item.office ?? "",
-                  item.card_number ?? "",
-                  item.card_number2 ?? "",
-                  item.home_directory ?? "",
-                  item.privilege ?? "",
-                  "WEB",
-                  id,
-                  id,
-                  "INPUT",
-                ]
+                item.user_name,
+                item.external_user_name ?? "",
+                item.full_name ?? "",
+                item.email ?? "",
+                item.notes ?? "",
+                item.department ?? "",
+                item.office ?? "",
+                item.card_number ?? "",
+                item.card_number2 ?? "",
+                item.home_directory ?? "",
+                item.privilege ?? "",
+                "WEB",
+                id,
+                id,
+                "INPUT",
+              ]
               );
             }
             await client.query("COMMIT"); // 트랜잭션 시작
@@ -780,8 +783,8 @@ export async function applicationLog(client: Pool, formData: FormData) {
     const created_by = formData.get("created_by");
     const ip_address = formData.get("ip_address");
 
-      await client.query(
-        `INSERT INTO tbl_application_log_info (
+    await client.query(
+      `INSERT INTO tbl_application_log_info (
             application_page,        
             application_action,        
             application_parameter,        
@@ -793,8 +796,8 @@ export async function applicationLog(client: Pool, formData: FormData) {
           VALUES ($1,$2,$3,$4,now(),to_char(now(), 'yyyy.mm.dd hh24:mi'),$5)
           ON CONFLICT (application_page, application_action, application_parameter, created_by, ip_address, log_minute_trunc) DO NOTHING;
         `,
-        [application_page, application_action, application_parameter, created_by, ip_address]
-      );
+      [application_page, application_action, application_parameter, created_by, ip_address]
+    );
   } catch (error) {
     console.log("application Log / Error : ", error);
     return {

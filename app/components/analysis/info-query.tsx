@@ -7,16 +7,37 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { formatTimeYYYYpMMpDD } from '@/app/lib/utils';
 
+export type IQueryData = {
+  periodStart:string,
+  periodEnd:string,
+  dept?:string,
+  user?:string,
+  device?:string
+};
+
+export type IInfoQueryTR = {
+  from: string;
+  to: string;
+  user_name_or_id: string;
+  initialize: string;
+}
+
+export type IOptionsForAnalysis = {
+    dept: {title:string, value:string}[];
+    device: {title:string, value:string}[];
+    jobType: {title:string, value:string}[];
+}
+
 export default function InfoQuery({
   translated,
   queryKeys,
   queryData,
   options
 }: {
-  translated: object;
+  translated: IInfoQueryTR;
   queryKeys: string[];
-  queryData: object;
-  options: object;
+  queryData: IQueryData;
+  options: IOptionsForAnalysis;
 }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -102,7 +123,9 @@ export default function InfoQuery({
   //   console.log(`useEffect - parame : period ${period}, dept ${dept}`);
     if(!!queryData.periodStart) {
       const splittedStart = queryData.periodStart.split(".");
-      const startDateTemp = new Date(splittedStart[0], splittedStart[1] - 1, splittedStart[2]);
+      const startDateTemp = new Date(
+        Number(splittedStart[0]), Number(splittedStart[1]) - 1, Number(splittedStart[2])
+      );
       setStartDate(startDateTemp);
     } else {
       const now = new Date();
@@ -111,7 +134,9 @@ export default function InfoQuery({
     };
     if(!!queryData.periodEnd) {
       const splittedEnd = queryData.periodEnd.split(".");
-      const endDateTemp = new Date(splittedEnd[0], splittedEnd[1] - 1, splittedEnd[2]);
+      const endDateTemp = new Date(
+        Number(splittedEnd[0]), Number(splittedEnd[1]) - 1, Number(splittedEnd[2])
+      );
       setEndDate(endDateTemp);
     } else {
       const now = new Date();

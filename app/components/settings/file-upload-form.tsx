@@ -3,7 +3,8 @@
 import React, { useActionState, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import type { UserState } from "@/app/lib/actions";
+import type { BasicState } from "@/app/lib/actions";
+
 
 export function FileUpload({
   userId,
@@ -18,9 +19,9 @@ export function FileUpload({
   button_title: string;
   detail_comment: string;
   accepted: object;
-  action: (prevState: UserState, formData: FormData) => Promise<void>;
+  action: (id:string, prevState: BasicState, formData: FormData) => Promise<BasicState | void>;
 }) {
-  const initialState: UserState = { message: null, errors: {} };
+  const initialState: BasicState = {};
   const updatedAction = action.bind(null, userId);
   const [state, formAction] = useActionState(updatedAction, initialState);
   const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({

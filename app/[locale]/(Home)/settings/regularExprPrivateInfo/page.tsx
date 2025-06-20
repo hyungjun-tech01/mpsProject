@@ -77,7 +77,6 @@ export default async function Page(props: {
                     <Table
                         columns={regularExpColumns}
                         rows={regularExp}
-                        currentPage={currentPage}
                         totalPages={totalPages}
                         path={`/settings/regularExpPrivateInfo`}
                         locale={locale}

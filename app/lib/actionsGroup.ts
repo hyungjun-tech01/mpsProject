@@ -135,12 +135,7 @@ export async function createDeviceGroup(client: Pool, prevState: GroupState, for
 
 const ModifyDeviceGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifyDeviceGroup(client: Pool, id:string | undefined, prevState: GroupState, formData: FormData) {
-    if (!id) {
-        return {
-            message: 'Group ID is required.',
-        };
-    }
+export async function modifyDeviceGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
     // console.log('modifyDeviceGroup Group / formData :', formData);
     const validatedFields = ModifyDeviceGroup.safeParse({
         groupName: formData.get('group_name')
@@ -363,12 +358,7 @@ export async function createUserGroup(client: Pool, prevState: GroupState, formD
 
 const ModifyUserGroup = GroupFormSchema.omit({});
 
-export async function modifyUserGroup(client: Pool, id:string | undefined, prevState: GroupState, formData: FormData) {
-    if (!id) {
-        return {
-            message: 'Group ID is required.',
-        };
-    }
+export async function modifyUserGroup(client: Pool, id:string, prevState: GroupState, formData: FormData) {
     // console.log('modifyUserGroup Group / formData :', formData);
     const validatedFields = ModifyUserGroup.safeParse({
         groupName: formData.get('group_name'),
@@ -609,12 +599,7 @@ export async function createSecurityGroup(client: Pool, prevState: GroupState, f
 
 const ModifySecurityGroup = GroupFormSchema.omit({schedulePeriod:true, scheduleAmount:true, remainAmount:true});
 
-export async function modifySecurityGroup(client: Pool, id: string | undefined, prevState: GroupState, formData: FormData) {
-    if (!id) {
-        return {
-            message: 'Group ID is required.',
-        };
-    }
+export async function modifySecurityGroup(client: Pool, id: string, prevState: GroupState, formData: FormData) {
     // console.log('ModifySecurityGroup Group / formData :', formData);
     const validatedFields = ModifySecurityGroup.safeParse({
         groupName: formData.get('group_name')

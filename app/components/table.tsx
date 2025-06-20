@@ -48,7 +48,7 @@ interface ITable<DataType> {
     path?: string;
     sesseionUserName?: string;
     locale?: 'ko' | 'en';
-    deleteAction?: (id: string) => void;
+    deleteAction?: (id: string, deletedBy:string) => void;
     editable?: boolean;
     deletable?: boolean;
     checkable?: boolean;
@@ -221,11 +221,11 @@ export default function CustomizedTable<DataType>({
                                                 }
                                                 {!!column.type && column.type === 'thumbnail' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                    <img 
-                                                    src={`/${replaceThumbnailSrc(row[column.name])}`} 
-                                                    alt="No Image"  
-                                                    className="w-24 h-18"
-                                                    onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                    <Image
+                                                        src={`/${replaceThumbnailSrc(row[column.name])}`} 
+                                                        alt="No Image"  
+                                                        className="w-24 h-18"
+                                                        onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
                                                     />
                                                 </div>
                                                 }

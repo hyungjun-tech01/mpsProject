@@ -65,7 +65,6 @@ export default async function Page(props: {
                 <Table
                     columns={columns}
                     rows={users}
-                    currentPage={currentPage}
                     totalPages={totalPages}
                     path='user'
                     sesseionUserName={userName}

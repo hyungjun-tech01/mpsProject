@@ -43,7 +43,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ISettingTable<DataType> {
     columns: IColumnData[];
     rows: DataType[];
-    currentPage: number;
     totalPages: number;
     locale?: 'ko' | 'en';
     action: (prevState:object, formData:FormData) => void,

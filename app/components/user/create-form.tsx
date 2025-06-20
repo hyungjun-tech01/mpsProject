@@ -8,21 +8,18 @@ import { useActionState } from 'react';
 import { IButtonInfo, IEditItem, ISection, EditItem } from '../edit-items';
 
 
-export function EditForm({
-  id,
+export function CreateForm({
   items,
   buttons,
   action,
 }: {
-  id: string;
   items: ISection[];
   buttons?: IButtonInfo;
-  action: (id: string, prevState: UserState, formData: FormData)
+  action: (prevState: UserState, formData: FormData)
     => Promise<UserState | void>;
 }) {
   const initialState: UserState = { message: null, errors: {} };
-  const updatedAction = action.bind(null, id);
-  const [state, formAction] = useActionState(updatedAction, initialState);
+  const [state, formAction] = useActionState(action, initialState);
 
   return (
     <form action={formAction}>

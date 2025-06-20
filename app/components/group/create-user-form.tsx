@@ -9,8 +9,7 @@ import Grouping from '../grouping';
 import { Group, UserGroup } from '@/app/lib/definitions';
 
 
-export function EditUserGroupForm({
-    id,
+export function CreateUserGroupForm({
     userData,
     locale,
     translated,
@@ -19,7 +18,6 @@ export function EditUserGroupForm({
     inGroup,
     action,
 }: {
-    id: string;
     userData: Group;
     locale: string;
     translated: object;
@@ -27,7 +25,6 @@ export function EditUserGroupForm({
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
-        id: string,
         prevState: GroupState,
         formData: FormData
     ) => Promise<GroupState | void>;

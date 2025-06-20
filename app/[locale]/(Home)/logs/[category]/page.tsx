@@ -10,7 +10,7 @@ import Search from '@/app/components/search';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
-import AuditLogQuery from "@/app/components/log/AuditLogQuery";
+import AuditLogQuery from "@/app/components/log/auditLogQuery";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
@@ -150,7 +150,7 @@ export default async function Page(props: {
                       dateFrom = { t('logs.dateFrom')}
                       dateTo =  { t('logs.dateTo')}
                     />
-                    <Search placeholder={searchTexts[category].keySearchPlaceholder} />
+                    <Search placeholder={searchTexts[category as keyof typeof searchTexts].keySearchPlaceholder} />
                 </div>
                 <Suspense fallback={<TableSkeleton />}>
                 {( category === 'auditlogs' || category === 'auditlogsRetired' ) ?
@@ -165,13 +165,12 @@ export default async function Page(props: {
                     />
                     :
                     <Table
-                        columns={groupColumns[category]}
+                        columns={groupColumns[category as keyof typeof groupColumns]}
                         rows={logData}
-                        currentPage={currentPage}
                         totalPages={logPages}
                         locale={locale}
                         path={category}
-                        deleteAction={category === 'adminActionLogs' ? adapter.deleteRegularExp : null}
+                        deleteAction={category === 'adminActionLogs' ? adapter.deleteRegularExp : undefined}
                         editable={false}
                         deletable={false}
                     />

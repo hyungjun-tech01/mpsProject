@@ -27,7 +27,7 @@ async function handlePMGFileRequest(filename: string) {
     };
 
     const fileExt = filename.split(".").at(-1);
-    const contentType = contentTypeFromExt[fileExt] || 'image/png';
+    const contentType = contentTypeFromExt[fileExt as keyof typeof contentTypeFromExt] || 'image/png';
 
     const buffer = await readFile(filePath);
 
@@ -75,8 +75,8 @@ async function handleDecryptPDFFileRequest(filepath: string) {
         return new NextResponse(JSON.stringify({ error: 'File not found' }), { status: 404 });
       }
     } catch (err) {
-      console.error(err.message);
-      return new NextResponse(JSON.stringify({ error: err.message }), { status: 500 });
+      // console.error(err.message);
+      return new NextResponse(JSON.stringify({ error: err }), { status: 500 });
     }
   }
   
@@ -118,8 +118,8 @@ async function handleDecryptPDFFileRequest(filepath: string) {
         return new NextResponse(JSON.stringify({ error: 'File not found' }), { status: 404 });
       }
     } catch (err) {
-      console.error(err.message);
-      return new NextResponse(JSON.stringify({ error: err.message }), { status: 500 });
+      // console.error(err.message);
+      return new NextResponse(JSON.stringify({ error: err }), { status: 500 });
     }
   }
 
