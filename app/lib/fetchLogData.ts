@@ -358,6 +358,8 @@ export async function fetchFilteredAuditLogPages(
     dateTo : string|null,
 ) {
     try {
+
+        console.log('dateFrom',dateFrom, dateTo);
         const count =
             query !== ""
                 ? await client.query(`
