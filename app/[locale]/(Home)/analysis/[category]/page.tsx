@@ -79,24 +79,19 @@ export default async function Page(props: {
     ]);
 
     // Manipulate data
-    // console.log("Analysis (raw) : ", data);
-    const dataForCards = Object();
-    const dataForTable = Object();
+    // console.log("Analysis / periodStartParam : ", periodStartParam);
+    // console.log("Analysis / periodEndParam : ", periodEndParam);
+    // console.log("Analysis / deptParam : ", deptParam);
+    // console.log("Analysis / userParam : ", userParam);
+    // console.log("Analysis / deviceParam : ", deviceParam);
+    // console.log("Analysis / data : ", data);
+
+    let dataForCards = {};
+    let dataForTable = {};
 
     if(category === 'print') {
-        Object.defineProperties(dataForCards, {
-            total_pages: {value: 0, writable: true},
-            dept_count: {value: 0, writable: true},
-            user_count: {value: 0, writable: true},
-            device_count: {value: 0, writable: true},
-        });
-        console.log('dataForCards : ', dataForCards);
-
-        Object.defineProperties(dataForTable, {
-            dept: {value: [] as object[], writable: true},
-            user: {value: [] as object[], writable: true},
-            device: {value: [] as object[], writable: true},
-        });
+        dataForCards = { total_pages: 0, dept_count: 0, user_count: 0, device_count: 0 };
+        dataForTable = { dept: [], user: [], device: [] };
         
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
@@ -142,9 +137,7 @@ export default async function Page(props: {
             };
         };
     } else if(category === 'privacy') {
-        Object.defineProperty(dataForTable, "privacy", {
-            value: [ ...data ], writable: true
-        });
+        dataForTable = { privacy: [ ...data ] };
     }
     // console.log('Data For Table :', dataForTable);
 
