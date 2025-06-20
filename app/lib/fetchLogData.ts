@@ -326,7 +326,7 @@ export async function fetchFilteredAuditLogs(
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name		
             WHERE 1 = 1
-              and b.send_time <> '0'
+              and a.send_time <> '0'
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
             ORDER BY send_time DESC
