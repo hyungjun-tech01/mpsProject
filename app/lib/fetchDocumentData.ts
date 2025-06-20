@@ -25,6 +25,7 @@ export async function fetchFilteredDocumnets(
                 dj.total_pages,
                 dj.total_pages,
                 dj.archive_path,
+                dj.archive_path thumbnail,
                 dj.shared
             FROM tbl_document_job_info dj, tbl_device_info tdi, tbl_user_info tui
             WHERE dj.printer_id = tdi.device_id

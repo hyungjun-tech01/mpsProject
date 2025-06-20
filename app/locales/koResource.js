@@ -444,6 +444,7 @@ const koResource = {
             shared: '공유여부',
             subTitle_fax: '팩스함',
             subTitle_scan: '스캔함',
+            thumbnail:'썸네일',
         },
         print: {
             color_mode: '컬러모드',

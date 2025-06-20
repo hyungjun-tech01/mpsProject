@@ -143,6 +143,21 @@ export default function CustomizedTable<DataType>({
     if(checkable) columnLength += 1;
     if((editable || deletable)) columnLength += 1;
     
+    const replaceThumbnailSrc = (imagePath:string|null):string => {
+
+        if (!imagePath) return '';
+ 
+         const found_idx = imagePath.lastIndexOf('.');
+         if(found_idx !== -1){
+             //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
+             const nameWithoutExtension = imagePath.substring(0, found_idx);
+             const thumbnail_src = 'api/file?filename='+ nameWithoutExtension + '.png'; 
+             const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
+             return replace_thumbnail_src;
+         }else{    
+             return '';
+         }
+     }
 
     return (
         <div style={{ marginTop: '1.5rem', display: 'flow-root' }}>
@@ -203,6 +218,16 @@ export default function CustomizedTable<DataType>({
                                                 }
                                                 {!!column.type && column.type === 'view' &&
                                                     <Link href={`${path}/${row.id}/view`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
+                                                }
+                                                {!!column.type && column.type === 'thumbnail' &&
+                                                <div className='flex justify-center  bg-gray-200 border'>
+                                                    <img 
+                                                    src={`/${replaceThumbnailSrc(row[column.name])}`} 
+                                                    alt="No Image"  
+                                                    className="w-24 h-18"
+                                                    onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                    />
+                                                </div>
                                                 }
                                             </StyledTableCell>
                                         )

@@ -56,6 +56,7 @@ export default async function Page(props: {
     };
 
     const columns: IColumnData[] = [
+        { name: 'thumbnail', title: t('document.thumbnail'), align: 'center', type: 'thumbnail' },
         { name: 'archive_path', title: t('document.file'), align: 'center', type: 'file' },
         { name: 'created_date', title: t('document.created_date'), align: 'center', type: 'date' },
         { name: 'created_by', title: t('document.created_by'), align: 'center' },
