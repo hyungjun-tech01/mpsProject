@@ -221,7 +221,7 @@ export default function CustomizedTable<DataType>({
                                                 }
                                                 {!!column.type && column.type === 'thumbnail' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                    <Image
+                                                    <img
                                                         src={`/${replaceThumbnailSrc(row[column.name])}`} 
                                                         alt="No Image"  
                                                         className="w-24 h-18"
