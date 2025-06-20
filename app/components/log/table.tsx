@@ -271,6 +271,8 @@ export default function CustomizedTable<DataType>({
                                                 <Image 
                                                     src={`/${replaceThumbnailSrc(row[column.name])}`} 
                                                     alt="No Image"  
+                                                    width={96} // w-24 = 6 * 16px = 96px
+                                                    height={72} // h-18 = 4.5 * 16px = 72px
                                                     className="w-24 h-18"
                                                     onClick={() => handleThumnailClick(row[column.name])}
                                                     onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
