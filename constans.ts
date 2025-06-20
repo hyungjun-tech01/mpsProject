@@ -30,7 +30,7 @@ export const SideMenuList = {
             icon: SettingsOutlined ,
             submenu:[
                 { name: 'registerUsers', 
-                  title: '사용자 등록', 
+                  title: '사용자 일괄 등록', 
                   href: '/settings/registerUsers' ,
                   icon: PersonAddOutlined  
                 },
