@@ -293,6 +293,13 @@ export default function CustomizedTable<DataType>({
                                             { !!column.type && column.type === 'edit' &&
                                                 <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
                                             }
+                                            {!!column.type && column.type === 'longText' && (
+                                                <div
+                                                    className="truncate max-w-[100px] hover:whitespace-normal hover:overflow-visible hover:z-10 relative"
+                                                >
+                                                 {row[column.name]}
+                                                </div>
+                                            )}
                                         </StyledTableCell>
                                     )}
                                     
