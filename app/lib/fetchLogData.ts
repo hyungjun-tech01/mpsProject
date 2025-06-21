@@ -372,19 +372,19 @@ export async function fetchFilteredAuditLogPages(
                         document_name ILIKE '${`%${query}%`}' OR
                         privacy_text ILIKE '${`%${query}%`}'                        
                     )
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                     
+                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	                       
             `)
                 : await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log 
                  WHERE  1 = 1
                  and send_time <> '0'
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	            
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        console.log('totalPages', totalPages);
+        console.log('totalPages', totalPages, count.rows[0].count);
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
@@ -479,8 +479,8 @@ export async function fetchFilteredRetiredAuditLogPages(
                         a.privacy_text ILIKE '${`%${query}%`}'                        
                     )
                  and b.deleted = 'Y'   
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`%${dateFrom}%`}' 
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`%${dateTo}%`}'                     
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	                
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
