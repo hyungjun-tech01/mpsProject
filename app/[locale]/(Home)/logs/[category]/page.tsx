@@ -107,6 +107,7 @@ export default async function Page(props: {
             { name: 'color_total_pages', title: t('logs.color_total_pages'), align: 'center',  }, 
             { name: 'detect_privacy', title: t('logs.detect_privacy'), align: 'center',  },
             { name: 'privacy_text', title: t('logs.privacy_text'), align: 'center',  type:'longText' },
+            { name: 'security_text', title: t('logs.security_text'), align: 'center',  type:'longText' },
         ],
         auditlogsRetired: [
             { name: 'image_archive_path', title: t('logs.image'), align: 'center', type:'auditLogImage' },

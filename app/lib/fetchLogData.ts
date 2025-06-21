@@ -236,18 +236,34 @@ export function parsePrivacyText(
     if (!privacy_text) return ''; // Check for null or empty string
 
     try {
-        const nameMatch = privacy_text.match(/name:"([^"]+)"/);
-        const textMatch = privacy_text.match(/text:\["([^"]+)"\]/);
+        const result: string[] = [];
 
-        const name = nameMatch ? nameMatch[1] : '';
-        const text = textMatch ? textMatch[1] : '';
+        // 모든 name:"..." + text:["..."] 조합을 추출
+        const regex = /name:"([^"]+)"[^}]*?text:\["([^"]+)"\]/g;
+        let match;
 
-        return `Name: ${name}, Text: ${text} ....`;
+        while ((match = regex.exec(privacy_text)) !== null) {
+            const name = match[1];
+            const text = match[2];
+            result.push(`${name}: ${text}`);
+        }
+
+        return result.join(', ');
 
     } catch (error) {
         console.error('Failed to parse privacy_text:', error);
         return '';
     }
+}
+
+function parsePrivacyTextSafe(value: string|null) {
+    if (value === null) return null;
+
+    if (value.includes('[') && value.includes('{')) 
+        return parsePrivacyText(value);
+    else 
+        return value;
+    
 }
 
 export async function fetchFilteredAuditLogs(
@@ -287,7 +303,8 @@ export async function fetchFilteredAuditLogs(
                 a.original_job_id  ,
                 a.document_name,
                 a.total_pages,
-                a.color_total_pages
+                a.color_total_pages,
+                a.security_text
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
             WHERE 1 = 1
@@ -324,7 +341,8 @@ export async function fetchFilteredAuditLogs(
                 a.original_job_id  ,
                 a.document_name,
                 a.total_pages,
-                a.color_total_pages
+                a.color_total_pages,
+                a.security_text
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name		
             WHERE 1 = 1
@@ -338,7 +356,8 @@ export async function fetchFilteredAuditLogs(
         const converted = auditLogs.rows.map((data: AuditLogField) => ({
             ...data,
             id: data.job_log_id,
-            privacy_text: parsePrivacyText(data.privacy_text),
+            privacy_text: parsePrivacyTextSafe(data.privacy_text),
+            security_text: parsePrivacyTextSafe(data.security_text),
             image_archive_path: data.image_archive_path,
         }));
 

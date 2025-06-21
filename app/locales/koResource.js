@@ -420,7 +420,8 @@ const koResource = {
             dateFrom:'From',
             dateTo:'To',
             auditlogsRetired:'퇴사자감사로그',
-            adminActionLogs:'관리자작업로그'
+            adminActionLogs:'관리자작업로그',
+            security_text :'검출 결과2',
         },
         fax:{
             fax_line: '팩스 라인',

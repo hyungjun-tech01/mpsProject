@@ -177,6 +177,7 @@ export type AuditLogField ={
   document_name: string|null;
   total_pages: number|null;
   color_total_pages: number|null;
+  security_text: string|null;
 };
 
 export type Fax = {
