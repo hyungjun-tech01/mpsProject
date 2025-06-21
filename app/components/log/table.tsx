@@ -166,8 +166,16 @@ export default function CustomizedTable<DataType>({
         }
     }
 
-    const handleThumnailClick = async (imagePath:string|null) => {
+    const handleThumnailClick = async (e:React.MouseEvent<HTMLImageElement>, imagePath:string|null) => {
         try {
+            const currentImgSrc = e.currentTarget.src;
+
+            // fallback 이미지로 대체된 경우
+            if (currentImgSrc.includes('fallback-image.png')) {
+              alert('No Pdf Files.');
+              return;
+            }
+
             if (!imagePath) {
               throw new Error('Invalid pdf path');
             }
@@ -271,11 +279,12 @@ export default function CustomizedTable<DataType>({
                                                 <Image 
                                                     src={`/${replaceThumbnailSrc(row[column.name])}`} 
                                                     alt="No Image"  
-                                                    width={96} // w-24 = 6 * 16px = 96px
-                                                    height={72} // h-18 = 4.5 * 16px = 72px
+                                                    width={96}
+                                                    height={72}
                                                     className="w-24 h-18"
-                                                    onClick={() => handleThumnailClick(row[column.name])}
+                                                    onClick={(e) => handleThumnailClick(e, row[column.name])}
                                                     onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                    unoptimized
                                                 />
                                                 </div>
                                             }
