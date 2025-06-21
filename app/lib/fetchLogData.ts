@@ -577,6 +577,7 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
 
 export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
     try {
+        console.log('fetchPrintInfoByQuery', periodStart, periodEnd, dept, user, device);
         const response = await client.query(`
             SELECT
             *

@@ -3581,3 +3581,22 @@ CREATE TABLE IF NOT EXISTS public.tbl_application_log_info
 
 
 -------------------------table create 작업 끝-------------------------------------
+
+--2025.06.21 
+update tbl_audit_job_log 
+set job_type = 'P'
+where job_type = 'Print';
+
+update tbl_audit_job_log 
+set job_type = 'C'
+where job_type = 'Copy';
+
+
+update tbl_audit_job_log 
+set job_type = 'S'
+where job_type = 'Scan';
+
+
+update tbl_audit_job_log 
+set job_type = 'F'
+where job_type = 'Fax';
