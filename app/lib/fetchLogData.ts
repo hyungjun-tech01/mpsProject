@@ -429,7 +429,7 @@ export async function fetchFilteredRetiredAuditLogs(
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
             WHERE 1 = 1
-            and b.send_time <> '0'
+            and a.send_time <> '0'
             and (
                 printer_serial_number ILIKE '${`%${query}%`}' OR
                 b.full_name  ILIKE '${`%${query}%`}' OR
