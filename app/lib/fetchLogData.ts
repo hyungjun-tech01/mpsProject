@@ -294,8 +294,11 @@ export async function fetchFilteredAuditLogs(
                 to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
                 a.copies  ,
                 a.original_pages ,
-                CASE WHEN a.detect_privacy THEN 'Y' 
-                ELSE 'N' 
+                CASE
+                    WHEN a.detect_privacy IS TRUE AND a.detect_security IS TRUE THEN '개인/보안'
+                    WHEN a.detect_privacy IS NOT TRUE AND a.detect_security IS TRUE THEN '보안'
+                    WHEN a.detect_privacy IS TRUE AND a.detect_security IS NOT TRUE THEN '개인'
+                ELSE ''
                 END AS detect_privacy,
                 a.privacy_text,
                 a.image_archive_path ,
@@ -332,8 +335,11 @@ export async function fetchFilteredAuditLogs(
                 to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
                 a.copies  ,
                 a.original_pages ,
-                CASE WHEN a.detect_privacy THEN 'Y' 
-                ELSE 'N' 
+                CASE
+                    WHEN a.detect_privacy IS TRUE AND a.detect_security IS TRUE THEN '개인/보안'
+                    WHEN a.detect_privacy IS NOT TRUE AND a.detect_security IS TRUE THEN '보안'
+                    WHEN a.detect_privacy IS TRUE AND a.detect_security IS NOT TRUE THEN '개인'
+                    ELSE ''
                 END AS detect_privacy,
                 a.privacy_text,
                 a.image_archive_path ,
@@ -435,8 +441,11 @@ export async function fetchFilteredRetiredAuditLogs(
                 to_char(TO_TIMESTAMP(a.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') send_date ,
                 a.copies  ,
                 a.original_pages ,
-                CASE WHEN a.detect_privacy THEN 'Y' 
-                ELSE 'N' 
+                CASE
+                WHEN a.detect_privacy IS TRUE AND a.detect_security IS TRUE THEN '개인/보안'
+                WHEN a.detect_privacy IS NOT TRUE AND a.detect_security IS TRUE THEN '보안'
+                WHEN a.detect_privacy IS TRUE AND a.detect_security IS NOT TRUE THEN '개인'
+                ELSE ''
                 END AS detect_privacy,
                 a.privacy_text,
                 a.image_archive_path ,
@@ -586,7 +595,7 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
                     ui.user_id,
                     ui.user_name,
                     ui.external_user_name,
-                    ui.dept_id,
+                    di.dept_id,
                     di.dept_name,
                     ajl.job_type,
                     ajl.total_pages,

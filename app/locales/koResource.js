@@ -412,7 +412,7 @@ const koResource = {
             document_name : '문서이름',
             status: '상태',
             detect_privacy: '검출여부',
-            privacy_text: '검출 결과',
+            privacy_text: '개인정보',
             send_date:'작업시간',
             user_name:'작업자',
             serial_number:'출력장비',
@@ -421,7 +421,7 @@ const koResource = {
             dateTo:'To',
             auditlogsRetired:'퇴사자감사로그',
             adminActionLogs:'관리자작업로그',
-            security_text :'검출 결과2',
+            security_text :'보안단어',
         },
         fax:{
             fax_line: '팩스 라인',
