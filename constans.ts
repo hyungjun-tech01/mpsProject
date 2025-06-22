@@ -21,7 +21,7 @@ export const SideMenuList = {
         { name: 'device', title: '출력장치', href: '/device', icon: PrintOutlined },
         { name: 'group', title: '그룹', href: '/group/device', icon: PeopleOutline },
         { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
-        { name: 'analysis', title: '통계/조회', href: '/analysis/print', icon: AnalyticsOutlined },
+        { name: 'analysis', title: '통계', href: '/analysis/privacy', icon: AnalyticsOutlined },
         { name: 'logs', title: '로그', href: '/logs/auditlogs', icon: PlagiarismOutlined },
         { 
             name: 'settings', 

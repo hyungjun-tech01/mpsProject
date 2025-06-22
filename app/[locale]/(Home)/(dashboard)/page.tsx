@@ -49,7 +49,7 @@ export default async function Page(props: {
         </div>
       </div>
       {isAdmin && 
-          <div className="mt-4">
+          <div className="mt-4 border-t border-gray-300">
             <PrivacyInfoWrapper
               trans={t}
               locale={locale}

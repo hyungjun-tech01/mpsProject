@@ -1,34 +1,38 @@
 'use server';
 
-import PrivacyQuery from "./privacy-query";
-import Card from "./card";
+import PrivacyQuery from "@/app/components/dashboard/privacy-query";
+import Card from "@/app/components/dashboard/card";
 import PieChart from '../pieChart';
 import VerticalBarChart from '../verticalBarChart';
-import MyDBAdapter from '@/app/lib/adapter';
 import { formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
 
 
+export type IPrivacyData = {
+    user_id: string;
+    user_name: string;
+    send_time: number;
+    dept_name: string;
+    detect_privacy: string;
+}
 
-
-export default async function PrivacyInfoWrapper({
-    trans, locale, period, dept, user, periodStart, periodEnd
+export default async function DetectInfoWrapper({
+    trans, period, dept, periodStart, periodEnd, data, deptInfo
 }: {
     trans: (key: string) => string;
-    locale: "ko" | "en";
     period: "today" | "week" | "month" | "specified";
     dept?: string;
     user?: string;
     periodStart?: string;
     periodEnd?: string;
+    data: IPrivacyData[];
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
-    const adapter = MyDBAdapter();
-    const [ detectedData, allDepts] = await Promise.all([
-        adapter.getPrivacytDetectedData(period, periodStart, periodEnd, dept, user),
-        adapter.getAllDepts(),
-    ]);
+    // const adapter = MyDBAdapter();
+    // const [ detectedData] = await Promise.all([
+    //     adapter.getPrivacytDetectedData(period, periodStart, periodEnd, dept, user)
+    // ]);
 
-    const totalCount = detectedData.length;
+    const totalCount = data.length;
     let totalDetected = 0;
     let lastTime = "-";
 
@@ -40,14 +44,14 @@ export default async function PrivacyInfoWrapper({
     const detectDataOfDept: Record<string, IDetectData> = {};
     const detectRateOfDept: Record<string, number> = {};
 
-    for(const dept of allDepts) {
+    for(const dept of deptInfo) {
         detectDataOfDept[dept.dept_name] = {total: 0, detected:0};
         detectRateOfDept[dept.dept_name] = 0;
     };
 
     if(totalCount > 0) {
         let isFirstFound = false;
-        for(const item of detectedData) {
+        for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
                 detectDataOfDept[item.dept_name].total += 1;
             }
@@ -89,12 +93,12 @@ export default async function PrivacyInfoWrapper({
     }
 
     const deptOptions = [
-        ...allDepts.map((item:{dept_id:string, dept_name:string}) => ({title: item.dept_name, value: item.dept_id})),
+        ...deptInfo.map((item:{dept_id:string, dept_name:string}) => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
     ];
 
     // Data for Pie Bar Chart Component ---------------------------------------------------------
-    for(const dept of allDepts) {
+    for(const dept of deptInfo) {
         detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
             ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
             : 0;
@@ -106,7 +110,7 @@ export default async function PrivacyInfoWrapper({
         detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = totalCount;
     } else {
         const tempData: Record<string, number> = {};
-        for(const item of detectedData) {
+        for(const item of data) {
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
             if(!!tempData[tempDate]) {
                 tempData[tempDate] += 1;
@@ -139,7 +143,7 @@ export default async function PrivacyInfoWrapper({
                 <Card title={trans('dashboard.privacy_last_detect_time')} value={lastTime} />
             </div>
             <div className='w-full flex gap-4 mb-4'>
-                <div className='flex-1 p-4 border border-gray-300 rounded-lg  bg-white'>
+                <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
                     <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_dept')}</h3>
                     <div className="max-h-96 flex justify-center">
                         <PieChart
@@ -151,7 +155,7 @@ export default async function PrivacyInfoWrapper({
                         />
                     </div>
                 </div>
-                <div className='flex-1 p-4 border border-gray-300 rounded-lg  bg-white'>
+                <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
                     <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_date')}</h3>
                     <div className="max-h-96">
                         <VerticalBarChart
