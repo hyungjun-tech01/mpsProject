@@ -571,7 +571,7 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
                 sum(pav.total_count) as total_count,
                 ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
             FROM tbl_privacy_audit_v pav
-            JOIN tbl_dept_info di ON pav.department = di.dept_id
+            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
             WHERE send_date >= '${startDate}'
             ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
@@ -579,6 +579,7 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
             GROUP BY user_id, user_name, external_user_name, dept_name
             ORDER BY detect_privacy_count DESC
         `);
+        console.log('data:', response.rows);
         return response.rows;
     } catch (e) {
         console.log('fetchPrivacyDetectInfoByUsers :', e);
