@@ -453,7 +453,8 @@ export async function fetchFilteredRetiredAuditLogs(
                 a.original_job_id  ,
                 a.document_name,
                 a.total_pages,
-                a.color_total_pages
+                a.color_total_pages,
+                a.security_text
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
             WHERE 1 = 1
