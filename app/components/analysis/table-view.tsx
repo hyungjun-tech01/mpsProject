@@ -37,10 +37,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export type IAnalysisColumnNames = 'id' | 'name' | 'C' | 'S' | 'P' | 'F' | 'send_time' | 'user_name' | 'external_user_name' | 'document_name' | 'detected_items' | 'status';
+export type IAnalysisPrint = {
+    id: string;
+    name: string;
+    C: number;
+    S: number;
+    P: number;
+    F: number;
+};
 
-export type IAnalysisColumn = {
-    name: IAnalysisColumnNames;
+export type IAnalysisPrivacy = {
+    send_time: string;
+    user_name: string;
+    external_user_name: string;
+    document_name: string;
+    detected_items: string;
+    status: string;
+    //   action: string;
+}
+
+// export type IAnalysisColumnNames = keyof IAnalysisPrint | keyof IAnalysisPrivacy;
+
+export type IAnalysisPrintColumn = {
+    name: keyof IAnalysisPrint;
     title: string | React.JSX.Element;
     type?: string | null;
     width?: string | null | undefined;
@@ -48,23 +67,13 @@ export type IAnalysisColumn = {
     align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
 }
 
-export type IAnalysisPrint = {
-    id: string,
-    name: string,
-    C: number,
-    S: number,
-    P: number,
-    F: number
-};
-
-export type IAnalysisPrivacy = {
-    send_time: string,
-    user_name: string,
-    external_user_name: string,
-    document_name: string,
-    detected_items: string,
-    status: string,
-    //   action: string 
+export type IAnalysisPrivacyColumn = {
+    name: keyof IAnalysisPrivacy;
+    title: string | React.JSX.Element;
+    type?: string | null;
+    width?: string | null | undefined;
+    values?: object;
+    align?: 'right' | 'center' | 'left' | 'justify' | 'inherit';
 }
 
 export type IAnalysisTable = {
@@ -74,14 +83,13 @@ export type IAnalysisTable = {
     privacy?: IAnalysisPrivacy[]
 };
 
-
 interface ITable {
     defaultSection: "dept" | "user" | "device" | "privacy";
-    columns: { dept?: IAnalysisColumn[], user?: IAnalysisColumn[], device?: IAnalysisColumn[], privacy?: IAnalysisColumn[] };
+    columns: { dept?: IAnalysisPrintColumn[], user?: IAnalysisPrintColumn[], device?: IAnalysisPrintColumn[], privacy?: IAnalysisPrivacyColumn[] };
     rows: IAnalysisTable;
     itemsPerPage: number;
     currentPage: number;
-    translated: { dept: string, user: string, device: string };
+    translated: Record<string, string>;
     title?: string;
 }
 
@@ -157,21 +165,35 @@ export default function ViewTable({
                                 {showRows.length > 0 ? showRows.map((row, idx) => {
                                     return (
                                         <StyledTableRow key={idx}>
-                                            {selectedColumns.map((column, colIdx) => {
-                                                return (
-                                                    <StyledTableCell
-                                                        key={colIdx}
-                                                        component="th"
-                                                        align={column.align}
-                                                        scope="row"
-                                                    >
-                                                        {row[column.name]}
-                                                    </StyledTableCell>
-                                                )
-                                            })}
+                                            {selectedCategory !== "privacy" ?
+                                                selectedColumns.map((column, colIdx) => {
+                                                    return (
+                                                        <StyledTableCell
+                                                            key={colIdx}
+                                                            component="th"
+                                                            align={column.align}
+                                                            scope="row"
+                                                        >
+                                                            {(row as IAnalysisPrint)[column.name as keyof IAnalysisPrint]}
+                                                        </StyledTableCell>
+                                                    )
+                                                })
+                                                :
+                                                selectedColumns.map((column, colIdx) => {
+                                                    return (
+                                                        <StyledTableCell
+                                                            key={colIdx}
+                                                            component="th"
+                                                            align={column.align}
+                                                            scope="row"
+                                                        >
+                                                            {(row as IAnalysisPrivacy)[column.name as keyof IAnalysisPrivacy]}
+                                                        </StyledTableCell>
+                                                    )
+                                                })
+                                            }
                                         </StyledTableRow>
-                                    )
-                                })
+                                    )})
                                     :
                                     <StyledTableRow>
                                         <StyledTableCell

@@ -74,8 +74,8 @@ export default function CustomizedTable<DataType>({
                                                 align={column.align}
                                                 scope="row"
                                             >
-                                                {!column.type && row[column.name]}
-                                                {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                                {!column.type && (row as DataType)[column.name as keyof DataType]}
+                                                {!!column.type && column.type === 'date' && formatTimeToLocal(React.Component<(row as DataType)[column.name as keyof DataType], locale)}
                                                 {!!column.type && column.type === 'link' && 
                                                     <Link href={row.link} className='flex justify-center text-lime-700'>
                                                         <button className='rounded-md bg-lime-700 text-white text-sm px-2 py-1'>{locale === "ko" ? "보기" : "View"}</button>

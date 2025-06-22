@@ -7,9 +7,9 @@ import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { TableSkeleton } from "@/app/components/skeletons";
 import InfoQuery from "@/app/components/analysis/info-query";
-import type { IQueryData, IInfoQueryTR, IOptionsForAnalysis } from "@/app/components/analysis/info-query";
+import type { IQueryData, IOptionsForAnalysis } from "@/app/components/analysis/info-query";
 import TableView from "@/app/components/analysis/table-view";
-import type { IAnalysisColumn } from "@/app/components/analysis/table-view";
+import type { IAnalysisPrintColumn, IAnalysisPrivacyColumn } from "@/app/components/analysis/table-view";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
@@ -163,7 +163,7 @@ export default async function Page(props: {
         user: trans('analysis.category_user'),
     };
 
-    const translatedForIQ: IInfoQueryTR = {
+    const translatedForIQ = {
         user_name_or_id: trans('dashboard.user_name_or_id'),
         from: trans('dashboard.from'),
         to: trans('dashboard.to'),
@@ -212,7 +212,7 @@ export default async function Page(props: {
         { title: trans('analysis.print_users'), value: dataForCards.user_count },
     ];
 
-    const columnSubs: IAnalysisColumn[] = [
+    const columnSubs: IAnalysisPrintColumn[] = [
         { name: 'P', title: trans('common.print'), align: 'center' },
         { name: 'C', title: trans('common.copy'), align: 'center' },
         { name: 'S', title: trans('common.scan'), align: 'center' },
@@ -220,8 +220,8 @@ export default async function Page(props: {
     ];
     
     const columns: { 
-        print : { dept: IAnalysisColumn[], user: IAnalysisColumn[], device: IAnalysisColumn[] },
-        privacy: { privacy: IAnalysisColumn[] },
+        print : { dept: IAnalysisPrintColumn[], user: IAnalysisPrintColumn[], device: IAnalysisPrintColumn[] },
+        privacy: { privacy: IAnalysisPrivacyColumn[] },
     } = {
         print : {
             dept: [

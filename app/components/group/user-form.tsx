@@ -22,7 +22,7 @@ export function EditUserGroupForm({
     id: string;
     userData: Group;
     locale: string;
-    translated: object;
+    translated: Record<string, string>;
     candidates: { value: string, title: string }[],
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;

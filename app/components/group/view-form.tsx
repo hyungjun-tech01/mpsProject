@@ -14,7 +14,7 @@ export function ViewForm({
   inGroup,
 }: {
   items: ISection[];
-  translated: object;
+  translated: Record<string, string>;
   inGroup: {
     paramName: string;
     totalPages: number;

@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 
 import LogClient from '@/app/lib/logClient';
 import { TableSkeleton } from "@/app/components/skeletons";
 import { CreateButton } from '@/app/components/buttons';
-import { DosForm } from '@/app/components/settings/dosForm';
+// import { DosForm } from '@/app/components/settings/dosForm';
 
 export const metadata: Metadata = {
     title: 'Settings',

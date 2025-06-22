@@ -21,7 +21,7 @@ export function EditGroupForm({
   id: string;
   items: ISection[];
   buttons?: IButtonInfo;
-  translated: object;
+  translated: Record<string, string>;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
