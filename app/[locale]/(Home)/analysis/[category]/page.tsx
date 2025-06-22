@@ -113,10 +113,10 @@ export default async function Page(props: {
             if(deptIdx === -1) {
                 dataForCards.dept_count += 1;
 
-                const initData: IAnalysisPrint = {id: item.dept_id, name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData: IAnalysisPrint = {id: item.dept_id, name: item.dept_name, C:0, S:0, P:0, F:0};
                 dataForTable.dept.push(initData);
             } else {
-                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                const jobType = item.job_type as "C" | "S" | "P" | "F";
                 dataForTable.dept[deptIdx][jobType] += item.total_pages;
             };
 
@@ -124,10 +124,10 @@ export default async function Page(props: {
 
             if(userIdx === -1) {
                 dataForCards.user_count += 1;
-                const initData:IAnalysisPrint = {id: item.user_id, name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData:IAnalysisPrint = {id: item.user_id, name: item.user_name, C:0, S:0, P:0, F:0};
                 dataForTable.user.push(initData);
             } else {
-                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                const jobType = item.job_type as "C" | "S" | "P" | "F";
                 dataForTable.user[userIdx][jobType] += item.total_pages;
             };
 
@@ -135,10 +135,10 @@ export default async function Page(props: {
 
             if(deviceIdx === -1){
                 dataForCards.device_count += 1;
-                const initData:IAnalysisPrint = {id: item.device_id, name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData:IAnalysisPrint = {id: item.device_id, name: item.device_name, C:0, S:0, P:0, F:0};
                 dataForTable.device.push(initData);
             } else {
-                const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
+                const jobType = item.job_type as "C" | "S" | "P" | "F";
                 dataForTable.device[deviceIdx][jobType] += item.total_pages;
             };
         };
@@ -223,10 +223,10 @@ export default async function Page(props: {
     ];
 
     const columnSubs: IColumnData[] = [
-        { name: 'Print', title: trans('common.print'), align: 'center' },
-        { name: 'Copy', title: trans('common.copy'), align: 'center' },
-        { name: 'Scan', title: trans('common.scan'), align: 'center' },
-        { name: 'Fax', title: trans('common.fax'), align: 'center' },
+        { name: 'P', title: trans('common.print'), align: 'center' },
+        { name: 'C', title: trans('common.copy'), align: 'center' },
+        { name: 'S', title: trans('common.scan'), align: 'center' },
+        { name: 'F', title: trans('common.fax'), align: 'center' },
     ];
     
     const columns: { 

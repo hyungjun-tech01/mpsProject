@@ -196,10 +196,10 @@ export type Fax = {
 export type IAnalysisPrint = {
   id: string,
   name: string,
-  Copy: number,
-  Scan: number,
-  Print: number,
-  Fax: number
+  C: number,
+  S: number,
+  P: number,
+  F: number
 };
 
 export type IAnalysisPrivacy = {
