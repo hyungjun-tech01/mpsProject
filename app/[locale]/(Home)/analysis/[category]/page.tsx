@@ -148,8 +148,8 @@ export default async function Page(props: {
     } else if(category === 'privacy') {
         dataForTable.privacy = [ ...data ];
     };
-    console.log('Data For Cards :', dataForCards);
-    console.log('Data For Table :', dataForTable);
+    // console.log('Data For Cards :', dataForCards);
+    // console.log('Data For Table :', dataForTable);
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
