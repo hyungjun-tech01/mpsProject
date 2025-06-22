@@ -453,7 +453,8 @@ export async function fetchFilteredRetiredAuditLogs(
                 a.original_job_id  ,
                 a.document_name,
                 a.total_pages,
-                a.color_total_pages
+                a.color_total_pages,
+                a.security_text
             from tbl_audit_job_log a
             left join tbl_user_info b on a.user_name = b.user_name
             WHERE 1 = 1
@@ -474,7 +475,8 @@ export async function fetchFilteredRetiredAuditLogs(
         const converted = auditLogs.rows.map((data: AuditLogField) => ({
             ...data,
             id: data.job_log_id,
-            privacy_text: parsePrivacyText(data.privacy_text),
+            privacy_text: parsePrivacyTextSafe(data.privacy_text),
+            security_text: parsePrivacyTextSafe(data.security_text),
             image_archive_path: data.image_archive_path,
         }));
 
