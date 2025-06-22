@@ -12,6 +12,15 @@ import MyDBAdapter from '@/app/lib/adapter';
 import { formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
 
 
+export type IPrivacyInfoValue = {
+    user_name: string;
+    external_user_name: string;
+    dept_name: string;
+    total_count: string;
+    detect_privacy_count: string;
+    percent_detect: string;
+}
+
 export default async function PrivacyInfoWrapper({
     trans, locale, period, dept, user, periodStart, periodEnd
 }: {
@@ -34,8 +43,13 @@ export default async function PrivacyInfoWrapper({
     let totalDetected = 0;
     let lastTime = "-";
 
-    const detectDataOfDept = {};
-    const detectRateOfDept = {};
+    interface IDetectData {
+        total: number;
+        detected: number;
+    }
+
+    const detectDataOfDept: Record<string, IDetectData> = {};
+    const detectRateOfDept: Record<string, number> = {};
 
     for(const dept of allDepts) {
         detectDataOfDept[dept.dept_name] = {total: 0, detected:0};
@@ -79,7 +93,7 @@ export default async function PrivacyInfoWrapper({
     }
 
     const deptOptions = [
-        ...allDepts.map(item => ({title: item.dept_name, value: item.dept_id})),
+        ...allDepts.map((item:{dept_id:string, dept_name:string}) => ({title: item.dept_name, value: item.dept_id})),
         {title: trans('common.all'), value: "all"}
     ];
 
@@ -91,11 +105,11 @@ export default async function PrivacyInfoWrapper({
     };
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
-    const detectDataOfDate = {};
+    const detectDataOfDate: Record<string, number> = {};
     if(period === "today") {
         detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = totalCount;
     } else {
-        const tempData = {};
+        const tempData: Record<string, number> = {};
         for(const item of detectedData) {
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
             if(!!tempData[tempDate]) {
@@ -110,7 +124,7 @@ export default async function PrivacyInfoWrapper({
     }
 
     // Data for Table Component -----------------------------------------------------------------
-    const detectedUserList = detectedByUser.map((data, idx) => ({
+    const detectedUserList = detectedByUser.map((data:IPrivacyInfoValue, idx:number) => ({
         ...data,
         rank : idx+1,
         details: '/logs/auditLogs'

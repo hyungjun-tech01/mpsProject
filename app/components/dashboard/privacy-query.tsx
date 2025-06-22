@@ -15,7 +15,7 @@ export default function PrivacyQuery({
   periodEnd,
   dept,
 }: {
-  translated: object;
+  translated: Record<string, string>;
   departments: {title:string, value:string}[];
   period: "today" | "week" | "month" | "specified",
   periodStart?: string,
@@ -31,7 +31,7 @@ export default function PrivacyQuery({
   const { replace } = useRouter();
 
   const periodOptions = [
-    { title:translated.today, value: 'today'},
+    { title: translated.today, value: 'today'},
     { title: translated.week, value: 'week'},
     { title: translated.month, value: 'month'},
     { title: translated.specified, value: 'specified'},
@@ -96,7 +96,7 @@ export default function PrivacyQuery({
   };
 
   const handleUserSearch = useDebouncedCallback((term: string) => {
-    console.log(`Searching... ${term}`);
+    // console.log(`Searching... ${term}`);
 
     const params = new URLSearchParams(searchParams);
     if (term) {
@@ -121,12 +121,16 @@ export default function PrivacyQuery({
 
     if(!!periodStart) {
       const splittedStart = periodStart.split(".");
-      const startDateTemp = new Date(splittedStart[0], splittedStart[1] - 1, splittedStart[2]);
+      const startDateTemp = new Date(
+        Number(splittedStart[0]), Number(splittedStart[1]) - 1, Number(splittedStart[2])
+      );
       setStartDate(startDateTemp);
     };
     if(!!periodEnd) {
       const splittedEnd = periodEnd.split(".");
-      const endDateTemp = new Date(splittedEnd[0], splittedEnd[1] - 1, splittedEnd[2]);
+      const endDateTemp = new Date(
+        Number(splittedEnd[0]), Number(splittedEnd[1]) - 1, Number(splittedEnd[2])
+      );
       setEndDate(endDateTemp);
     };
   }, [period, periodStart, periodEnd, isPeriodSpecified]);

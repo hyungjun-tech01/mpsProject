@@ -15,13 +15,6 @@ export type IQueryData = {
   device?:string
 };
 
-export type IInfoQueryTR = {
-  from: string;
-  to: string;
-  user_name_or_id: string;
-  initialize: string;
-}
-
 export type IOptionsForAnalysis = {
     dept: {title:string, value:string}[];
     device: {title:string, value:string}[];
@@ -34,7 +27,7 @@ export default function InfoQuery({
   queryData,
   options
 }: {
-  translated: IInfoQueryTR;
+  translated: Record<string, string>;
   queryKeys: string[];
   queryData: IQueryData;
   options: IOptionsForAnalysis;

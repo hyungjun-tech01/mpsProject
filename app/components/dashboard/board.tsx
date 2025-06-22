@@ -10,9 +10,9 @@ import clsx from 'clsx';
 import MyDBAdapter from "@/app/lib/adapter";
 import { auth } from "@/auth";
 import Card from "./card";
+import type { IValueObject } from "./card";
 
 import { formatCurrency } from '../../lib/utils';
-
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 
@@ -29,7 +29,7 @@ const iconMap = {
 export default async function BoardWrapper({ trans }: { trans: (key: string) => string }) {
     const session = await auth();
     const adapter = MyDBAdapter();
-    const boardInfo: { title: string, value: string | number | object, type: string, color?: string }[] = [];
+    const boardInfo: { title: string, value: string | number, type: string, color?: string }[] = [];
 
     const userName = session?.user.name;
 
@@ -56,11 +56,11 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
         const offline_count = Number(device_status.offline_count);
         const total_count = normal_count + error_count + warning_count + low_supply_count + offline_count;
 
-        const top5userInfo = top5users.map(item => ({
+        const top5userInfo: IValueObject[] = top5users.map((item: {user_name:string, total_pages_sum:string}) => ({
             title: item.user_name, value: item.total_pages_sum
         }));
 
-        const top5devicesInfo = top5devices.map(item => ({
+        const top5devicesInfo: IValueObject[] = top5devices.map((item: {device_name:string, total_pages_sum:string}) => ({
             title: item.device_name, value: item.total_pages_sum
         }));
 
@@ -73,7 +73,7 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
             <>
                 <div className="rounded-xl bg-gray-50 p-2 border border-gray-300">
                     { boardInfo.map((item, idx) => {
-                        const Icon = iconMap[item.type];
+                        const Icon = iconMap[item.type as keyof typeof iconMap];
                         return (
                             <div key={idx} className="flex p-4 justify-between">
                                 <div className="flex justify-start">
@@ -108,7 +108,7 @@ export default async function BoardWrapper({ trans }: { trans: (key: string) => 
         return (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 { boardInfo.map((item, idx) => (
-                    <Card key={idx} title={item.title} value={item.value} type={item.type} />
+                    <Card key={idx} title={item.title} value={item.value} type={item.type as keyof typeof iconMap} />
                 ))}
             </div>
         )

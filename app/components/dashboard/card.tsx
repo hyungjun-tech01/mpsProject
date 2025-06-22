@@ -8,6 +8,11 @@ import {
   } from "@mui/icons-material";
   import clsx from 'clsx';
 
+  export type IValueObject = {
+    title: string;
+    value: string | number;
+  }
+
   const iconMap = {
     collected: PaidOutlined,
     users: AccountCircleOutlined,
@@ -25,7 +30,7 @@ import {
     
   }: {
     title: string;
-    value: number | string | object;
+    value: number | string | IValueObject[];
     type?: "users" | "devices" | "pages" | "collected" | "error" | "warning";
     color?: string;
   }) {
