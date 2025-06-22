@@ -236,15 +236,15 @@ export default async function Page(props: {
     } = {
         print : {
             dept: [
-                { name: 'dept_name', title: trans('user.department'), align: 'center' },
+                { name: 'name', title: trans('user.department'), align: 'center' },
                 ...columnSubs
             ],
             user: [
-                { name: 'user_name', title: trans('user.user_name'), align: 'center' },
+                { name: 'name', title: trans('user.user_name'), align: 'center' },
                 ...columnSubs
             ],
             device: [
-                { name: 'device_name', title: trans('device.device'), align: 'center' },
+                { name: 'name', title: trans('device.device'), align: 'center' },
                 ...columnSubs
             ],
         },
