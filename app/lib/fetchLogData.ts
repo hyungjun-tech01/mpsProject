@@ -475,7 +475,8 @@ export async function fetchFilteredRetiredAuditLogs(
         const converted = auditLogs.rows.map((data: AuditLogField) => ({
             ...data,
             id: data.job_log_id,
-            privacy_text: parsePrivacyText(data.privacy_text),
+            privacy_text: parsePrivacyTextSafe(data.privacy_text),
+            security_text: parsePrivacyTextSafe(data.security_text),
             image_archive_path: data.image_archive_path,
         }));
 
