@@ -191,30 +191,3 @@ export type Fax = {
   deleted_date: Date|null;
   deleted_by: string|null;
 };
-
-// ----- Begin : Analysis ----------------------------------------//
-export type IAnalysisPrint = {
-  id: string,
-  name: string,
-  C: number,
-  S: number,
-  P: number,
-  F: number
-};
-
-export type IAnalysisPrivacy = {
-  send_time: string,
-  user_name: string,
-  external_user_name: string,
-  document_name: string,
-  detected_items: string,
-  status: string,
-  action: string 
-}
-
-export type IAnalysisTable = {
-  dept?: IAnalysisPrint[],
-  user?: IAnalysisPrint[],
-  device?: IAnalysisPrint[],
-  privacy?: IAnalysisPrivacy[]
-};

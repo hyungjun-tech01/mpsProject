@@ -9,13 +9,13 @@ import { TableSkeleton } from "@/app/components/skeletons";
 import InfoQuery from "@/app/components/analysis/info-query";
 import type { IQueryData, IInfoQueryTR, IOptionsForAnalysis } from "@/app/components/analysis/info-query";
 import TableView from "@/app/components/analysis/table-view";
+import type { IAnalysisColumn } from "@/app/components/analysis/table-view";
 
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
-import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
-import { IAnalysisTable, IAnalysisPrint, IAnalysisPrivacy } from "@/app/lib/definitions";
+import { IAnalysisTable, IAnalysisPrint } from "@/app/components/analysis/table-view";
 
 
 export const metadata: Metadata = {
@@ -107,6 +107,7 @@ export default async function Page(props: {
         
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
+            const jobType = item.job_type as "C" | "S" | "P" | "F";
 
             const deptIdx = dataForTable.dept.findIndex((dept:IAnalysisPrint) => dept.name === item.dept_name);
 
@@ -114,9 +115,9 @@ export default async function Page(props: {
                 dataForCards.dept_count += 1;
 
                 const initData: IAnalysisPrint = {id: item.dept_id, name: item.dept_name, C:0, S:0, P:0, F:0};
+                initData[jobType] = item.total_pages;
                 dataForTable.dept.push(initData);
             } else {
-                const jobType = item.job_type as "C" | "S" | "P" | "F";
                 dataForTable.dept[deptIdx][jobType] += item.total_pages;
             };
 
@@ -125,6 +126,7 @@ export default async function Page(props: {
             if(userIdx === -1) {
                 dataForCards.user_count += 1;
                 const initData:IAnalysisPrint = {id: item.user_id, name: item.user_name, C:0, S:0, P:0, F:0};
+                initData[jobType] = item.total_pages;
                 dataForTable.user.push(initData);
             } else {
                 const jobType = item.job_type as "C" | "S" | "P" | "F";
@@ -136,6 +138,7 @@ export default async function Page(props: {
             if(deviceIdx === -1){
                 dataForCards.device_count += 1;
                 const initData:IAnalysisPrint = {id: item.device_id, name: item.device_name, C:0, S:0, P:0, F:0};
+                initData[jobType] = item.total_pages;
                 dataForTable.device.push(initData);
             } else {
                 const jobType = item.job_type as "C" | "S" | "P" | "F";
@@ -144,8 +147,9 @@ export default async function Page(props: {
         };
     } else if(category === 'privacy') {
         dataForTable.privacy = [ ...data ];
-    }
-    // console.log('Data For Table :', dataForTable);
+    };
+    console.log('Data For Cards :', dataForCards);
+    console.log('Data For Table :', dataForTable);
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
@@ -153,25 +157,11 @@ export default async function Page(props: {
         { category: 'privacy', title: trans('analysis.analize_privacy'), link: `/analysis/privacy` },
     ];
 
-    // const translated = {
-    //     period: trans('common.period'),
-    //     today: trans('common.today'),
-    //     week: trans('common.week'),
-    //     month: trans('common.month'),
-    //     specified: trans('common.specified_period'),
-    //     department: trans('user.department'),
-    //     user_name_or_id: trans('dashboard.user_name_or_id'),
-    //     dept_all: trans('common.all'),
-    //     device: trans('analysis.category_device'),
-    //     dept: trans('analysis.category_dept'),
-    //     user: trans('analysis.category_user'),
-    // };
-
     const translatedForTV = {
         device: trans('analysis.category_device'),
         dept: trans('analysis.category_dept'),
         user: trans('analysis.category_user'),
-    }
+    };
 
     const translatedForIQ: IInfoQueryTR = {
         user_name_or_id: trans('dashboard.user_name_or_id'),
@@ -200,7 +190,7 @@ export default async function Page(props: {
             dept: deptParam,
             user: userParam,
         }
-    }
+    };
 
     const optionsForQuery: IOptionsForAnalysis = {
         dept: [{title: trans('user.select_dept'), value: ""},
@@ -208,10 +198,10 @@ export default async function Page(props: {
         device: [{title: trans('device.select_device'), value: ""},
             ...allDevices.map((item: IAllDevices) => ({title: item.device_name, value: item.device_id}))],
         jobType: [{title: trans('analysis.select_jobtype'), value: ""},
-            {title: trans('common.copy'), value: "COPY"},
-            {title: trans('common.fax'), value: "FAX"},
-            {title: trans('common.scan'), value: "SCAN"},
-            {title: trans('common.print'), value: "PRINT"},
+            {title: trans('common.copy'), value: "C"},
+            {title: trans('common.fax'), value: "F"},
+            {title: trans('common.scan'), value: "S"},
+            {title: trans('common.print'), value: "P"},
         ],
     };
 
@@ -222,7 +212,7 @@ export default async function Page(props: {
         { title: trans('analysis.print_users'), value: dataForCards.user_count },
     ];
 
-    const columnSubs: IColumnData[] = [
+    const columnSubs: IAnalysisColumn[] = [
         { name: 'P', title: trans('common.print'), align: 'center' },
         { name: 'C', title: trans('common.copy'), align: 'center' },
         { name: 'S', title: trans('common.scan'), align: 'center' },
@@ -230,9 +220,8 @@ export default async function Page(props: {
     ];
     
     const columns: { 
-        print : { dept: IColumnData[], user: IColumnData[], device: IColumnData[]},
-        privacy: { privacy: IColumnData[]},
-
+        print : { dept: IAnalysisColumn[], user: IAnalysisColumn[], device: IAnalysisColumn[] },
+        privacy: { privacy: IAnalysisColumn[] },
     } = {
         print : {
             dept: [
@@ -255,7 +244,7 @@ export default async function Page(props: {
                 { name: 'document_name', title: trans('printer.document_name'), align: 'center' },
                 { name: 'detected_items', title: trans('analysis.detect_items'), align: 'center' },
                 { name: 'status', title: trans('analysis.action_status'), align: 'center' },
-                { name: 'action', title: trans('analysis.action'), align: 'center' },
+                // { name: 'action', title: trans('analysis.action'), align: 'center' },
             ]
         },
     };

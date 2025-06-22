@@ -586,7 +586,7 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
 
 export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
     try {
-        console.log('fetchPrintInfoByQuery', periodStart, periodEnd, dept, user, device);
+        // console.log('fetchPrintInfoByQuery', periodStart, periodEnd, dept, user, device);
         const response = await client.query(`
             SELECT
             *
@@ -633,13 +633,18 @@ export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, 
     try {
         const response = await client.query(`
             SELECT
-            *
+            send_time,
+            user_name,
+            external_user_name,
+            detected_items,
+            status
             FROM (
                 SELECT
                     ajl.send_time,
                     ui.user_name,
                     ui.external_user_name,
                     ajl.document_name,
+                    ajl.detected_items,
                     ajl.status,
                     di.dept_name
                 FROM tbl_audit_job_log ajl
