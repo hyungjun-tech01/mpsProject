@@ -110,13 +110,9 @@ export default function PrivacyQuery({
   useEffect(() => {
   //   console.log(`useEffect - parame : period ${period}, dept ${dept}`);
     if(period === "specified") {
-      if(!isPeriodSpecified) {
         setIsPeriodSpecified(true);
-      }
     } else {
-      if(isPeriodSpecified) {
         setIsPeriodSpecified(false);
-      }
     }
 
     if(!!periodStart) {
@@ -133,7 +129,7 @@ export default function PrivacyQuery({
       );
       setEndDate(endDateTemp);
     };
-  }, [period, periodStart, periodEnd, isPeriodSpecified]);
+  }, [period, periodStart, periodEnd]);
 
   return (
     <div className='flex gap-4 text-sm'>
