@@ -17,6 +17,7 @@ import { formatCurrency, formatTimeToLocal , formatTimeSimple} from '../lib/util
 import { UpdateButton, DeleteButtton } from './buttons';
 import Image from 'next/image';
 import Link from 'next/link';
+import {useState, useEffect} from 'react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -71,6 +72,23 @@ export default function CustomizedTable<DataType>({
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     
 
+    const [ipAddress, setIpAddress] = useState('');
+
+    useEffect(() => {
+      const fetchIp = async () => {
+        try {
+          const res = await fetch('/api/get-ip');
+          const data = await res.json();
+          setIpAddress(data.ip);
+        } catch (error) {
+          console.error('IP 가져오기 실패:', error);
+        }
+      };
+  
+      fetchIp();
+    }, []);
+  
+
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -119,7 +137,7 @@ export default function CustomizedTable<DataType>({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={sesseionUserName} action={deleteAction} />
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={sesseionUserName} ipAddress={ipAddress} action={deleteAction} />
                 </div>
             </div>
         </Menu>

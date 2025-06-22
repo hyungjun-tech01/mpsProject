@@ -23,6 +23,8 @@ export default function AuditLogQuery({
 }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [privacyChecked, setPrivacyChecked] = useState(false);
+  const [securityChecked, setSecurityChecked] = useState(false);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -40,7 +42,10 @@ export default function AuditLogQuery({
       params.set("periodEnd", formatTimeYYYYpMMpDD(today));
       replace(`${pathname}?${params.toString()}`);
     }
+    setPrivacyChecked(searchParams.get('privacy') === 'true');
+    setSecurityChecked(searchParams.get('security') === 'true'); 
   }, [startDate, endDate, replace, pathname, searchParams]);
+
 
   const handleStartDateChange = (date: Date | null) => {
     if(!!date) {
@@ -80,6 +85,32 @@ export default function AuditLogQuery({
     }
   };
 
+    
+  
+    const updateParams = (key: string, checked: boolean) => {
+      const params = new URLSearchParams(searchParams);
+  
+      if (checked) {
+        params.set(key, 'true');
+      } else {
+        params.delete(key);
+      }
+      replace(`${pathname}?${params.toString()}`);
+    };
+
+  const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setPrivacyChecked(checked);
+
+    updateParams('privacy', checked);
+
+  };
+
+  const handleSecurityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setSecurityChecked(checked);
+    updateParams('security', checked);
+  };
 
   return (
     <div className="flex gap-4 text-sm items-center">
@@ -107,6 +138,32 @@ export default function AuditLogQuery({
           onChange={handleEndDateChange}
         />
       </div>
+      {/* 개인 정보 */}
+      <div className="flex items-center gap-2 ml-2">
+        <label className="flex items-center ml-4 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={privacyChecked}
+            onChange={handlePrivacyChange}
+            className="mr-1"
+          />
+          개인정보
+        </label>
+      </div>
+
+      {/* Security 체크박스 */}
+      <div className="flex items-center gap-2 ml-2">
+        <label className="flex items-center ml-4 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={securityChecked}
+            onChange={handleSecurityChange}
+            className="mr-1"
+          />
+          보안단어
+        </label>
+      </div>
+      
     </div>
   </div>
   );

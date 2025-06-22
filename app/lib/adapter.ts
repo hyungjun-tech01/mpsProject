@@ -62,14 +62,18 @@ export default function MyDBAdapter() {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-        async deleteUser(userId: string, deletedBy: string) {
+        async deleteUser(userId: string, merged: string) {
             'use server';
+
+            const [deletedBy, ipAddress] = merged.split(',');
 
             const logData = new FormData();
             logData.append('application_page', '사용자');
             logData.append('application_action', '삭제');
             logData.append('application_parameter', `{userId:${userId}}`);
             logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
 
             Action.applicationLog(pool,  logData);
 
@@ -422,15 +426,17 @@ export default function MyDBAdapter() {
             currentPage: number,
             fromDate : string|null, 
             toDate:string|null,
+            privacy:string|null, 
+            security:string|null,
         ) {
            // console.log('fromDate', fromDate);
            //, fromDate , toDate
-            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate);
+            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate, privacy, security);
         },
-        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null) {
+        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null, privacy:string|null, security:string|null) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate);
+            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate, privacy, security);
         },
         async getFilteredRetiredAuditLogs(
             query:string,
@@ -438,15 +444,17 @@ export default function MyDBAdapter() {
             currentPage: number,
             fromDate : string|null, 
             toDate:string|null,
+            privacy:string|null, 
+            security:string|null,
         ) {
            // console.log('fromDate', fromDate);
            //, fromDate , toDate
-            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate);
+            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate, privacy, security);
         },
-        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null) {
+        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null, privacy:string|null, security:string|null) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate);
+            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate, privacy, security);
         },
         
         async getPrivacytDetectedData(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
@@ -523,9 +531,22 @@ export default function MyDBAdapter() {
             'use server';
             return SettingAction.createRegularExp(pool, prevState, formData);
         },
-        async deleteRegularExp( id: string){
+        async deleteRegularExp( id: string, merged:string){
             'use server';
             // console.log('deleteRegularExp', FormData);
+            const [deletedBy, ipAddress] = merged.split(',');
+            
+            const logData = new FormData();
+            logData.append('application_page', '정규식/보안단어');
+            logData.append('application_action', '삭제');
+            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+
+            Action.applicationLog(pool,  logData);
+
+
             return SettingAction.deleteRegularExp(pool, id);
         },       
 

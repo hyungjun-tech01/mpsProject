@@ -31,10 +31,11 @@ export function UpdateButton({ link, disabled }: { link: string, disabled: boole
   );
 }
 
-export function DeleteButtton({ id, title, deletedBy, action }: { id: string, title:string, deletedBy:string, action: (id:string, deletedBy:string) => void }) {
-  // console.log("DeleteButton / id :", id);
-  const actionWithId = action.bind(null, id, deletedBy);
+export function DeleteButtton({ id, title, deletedBy, ipAddress, action }: { id: string, title:string, deletedBy:string|undefined, ipAddress:string|undefined, action: (id:string, deletedBy:string) => void }) {
+   console.log("DeleteButton / id :", id, ipAddress);
 
+   const merged = `${deletedBy ?? 'unknown'},${ipAddress ?? 'unknown'}`;
+  const actionWithId = action.bind(null, id, merged);
   return (
     <form action={actionWithId}>
       <button type="submit" className="rounded-md border px-4 py-1 hover:bg-gray-100">

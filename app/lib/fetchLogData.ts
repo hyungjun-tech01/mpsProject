@@ -273,11 +273,26 @@ export async function fetchFilteredAuditLogs(
     currentPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null,
    
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
 
-    console.log(currentPage,itemsPerPage , offset);
+    
+
+    const detect_privacy = privacy === 'true'? true:false;
+    const detect_security = security === 'true'? true:false;
+
+    console.log(currentPage,itemsPerPage , offset, detect_privacy, detect_security);
+
+    let extraWhereClause = '';
+    if (detect_privacy) {
+        extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+    }
+    if (detect_security) {
+        extraWhereClause += ` AND a.detect_security IS TRUE`;
+    }
 
     try {
         const auditLogs =
@@ -320,6 +335,7 @@ export async function fetchFilteredAuditLogs(
                 )		
              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	    
+             ${extraWhereClause}
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
@@ -355,6 +371,7 @@ export async function fetchFilteredAuditLogs(
               and a.send_time <> '0'
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
+              ${extraWhereClause}
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -381,10 +398,23 @@ export async function fetchFilteredAuditLogPages(
     itemsPerPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null,
 ) {
     try {
+        const detect_privacy = privacy === 'true'? true:false;
+        const detect_security = security === 'true'? true:false;
+    
+        console.log(itemsPerPage , detect_privacy, detect_security);
+    
+        let extraWhereClause = '';
+        if (detect_privacy) {
+            extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+        }
+        if (detect_security) {
+            extraWhereClause += ` AND a.detect_security IS TRUE`;
+        }
 
-        console.log('dateFrom',dateFrom, dateTo, "'"+query+"'");
         const count =
             query !== ""
                 ? await client.query(`
