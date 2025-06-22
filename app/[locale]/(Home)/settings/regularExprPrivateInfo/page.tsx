@@ -70,7 +70,7 @@ export default async function Page(props: {
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder={t('settings.regularExprPrivateInfoQueryCondition')}/>
                 <CreateButton link="/settings/regularExprPrivateInfo/create" title={t("settings.create_regular")} />
-                <DosForm label={t("settings.dos")} />
+               {/* <DosForm label={t("settings.dos")} /> */}
             </div>
 
                 <Suspense fallback={<TableSkeleton />}>
