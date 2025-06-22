@@ -221,10 +221,12 @@ export default function CustomizedTable<DataType>({
                                                 }
                                                 {!!column.type && column.type === 'thumbnail' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                    <img
+                                                    <Image
                                                         src={`/${replaceThumbnailSrc(row[column.name])}`} 
-                                                        alt="No Image"  
-                                                        className="w-24 h-18"
+                                                        alt="No Image"
+                                                        height={64}
+                                                        width={96}
+                                                        className="w-24 h-16"
                                                         onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
                                                     />
                                                 </div>

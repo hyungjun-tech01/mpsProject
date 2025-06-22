@@ -583,8 +583,10 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
             *
             FROM (
                 SELECT
+                    ui.user_id,
                     ui.user_name,
                     ui.external_user_name,
+                    ui.dept_id,
                     di.dept_name,
                     ajl.job_type,
                     ajl.total_pages,

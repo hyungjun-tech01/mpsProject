@@ -193,36 +193,28 @@ export type Fax = {
 };
 
 // ----- Begin : Analysis ----------------------------------------//
+export type IAnalysisPrint = {
+  id: string,
+  name: string,
+  Copy: number,
+  Scan: number,
+  Print: number,
+  Fax: number
+};
+
+export type IAnalysisPrivacy = {
+  send_time: string,
+  user_name: string,
+  external_user_name: string,
+  document_name: string,
+  detected_items: string,
+  status: string,
+  action: string 
+}
+
 export type IAnalysisTable = {
-  dept?: {
-    dept_name: string,
-    Copy: number,
-    Scan: number,
-    Print: number,
-    Fax: number
-  }[],
-  user?: {
-    user_name: string,
-    Copy: number,
-    Scan: number,
-    Print: number,
-    Fax: number
-  }[],
-  device?: {
-    device_id: string,
-    device_name: string,
-    Copy: number,
-    Scan: number,
-    Print: number,
-    Fax: number
-  }[],
-  privacy?: { 
-    send_time: string,
-    user_name: string,
-    external_user_name: string,
-    document_name: string,
-    detected_items: string,
-    status: string,
-    action: string 
-  }[]
+  dept?: IAnalysisPrint[],
+  user?: IAnalysisPrint[],
+  device?: IAnalysisPrint[],
+  privacy?: IAnalysisPrivacy[]
 };

@@ -15,7 +15,7 @@ import { auth } from "@/auth";
 import LogClient from '@/app/lib/logClient';
 import { IColumnData } from "@/app/lib/definitions";
 import { formatTimeYYYYpMMpDD } from "@/app/lib/utils";
-import { IAnalysisTable } from "@/app/lib/definitions";
+import { IAnalysisTable, IAnalysisPrint, IAnalysisPrivacy } from "@/app/lib/definitions";
 
 
 export const metadata: Metadata = {
@@ -108,40 +108,34 @@ export default async function Page(props: {
         for(const item of data) {
             dataForCards.total_pages += item.total_pages;
 
-            const deptIdx = dataForTable.dept.findIndex((dept:{
-                dept_name:string, Copy:number, Scan:number, Print:number, Fax:number
-            }) => dept.dept_name === item.dept_name);
+            const deptIdx = dataForTable.dept.findIndex((dept:IAnalysisPrint) => dept.name === item.dept_name);
 
             if(deptIdx === -1) {
                 dataForCards.dept_count += 1;
 
-                const initData = {dept_name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData: IAnalysisPrint = {id: item.dept_id, name: item.dept_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
                 dataForTable.dept.push(initData);
             } else {
                 const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
                 dataForTable.dept[deptIdx][jobType] += item.total_pages;
             };
 
-            const userIdx = dataForTable.user.findIndex((user:{
-                user_name:string, Copy:number, Scan:number, Print:number, Fax:number
-            }) => user.user_name === item.user_name);
+            const userIdx = dataForTable.user.findIndex((user:IAnalysisPrint) => user.name === item.user_name);
 
             if(userIdx === -1) {
                 dataForCards.user_count += 1;
-                const initData = {user_name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData:IAnalysisPrint = {id: item.user_id, name: item.user_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
                 dataForTable.user.push(initData);
             } else {
                 const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';
                 dataForTable.user[userIdx][jobType] += item.total_pages;
             };
 
-            const deviceIdx = dataForTable.device.findIndex((device:{
-                device_id:string, Copy:number, Scan:number, Print:number, Fax:number
-            }) => device.device_id === item.device_id);
+            const deviceIdx = dataForTable.device.findIndex((device:IAnalysisPrint) => device.id === item.device_id);
 
             if(deviceIdx === -1){
                 dataForCards.device_count += 1;
-                const initData = {device_id: item.device_id, device_name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
+                const initData:IAnalysisPrint = {id: item.device_id, name: item.device_name, Copy: 0, Scan: 0, Print: 0, Fax: 0};
                 dataForTable.device.push(initData);
             } else {
                 const jobType = item.job_type as 'Copy' | 'Scan' | 'Print' | 'Fax';

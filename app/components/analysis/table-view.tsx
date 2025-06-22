@@ -13,7 +13,7 @@ import Pagination from '../pagination';
 import { IColumnData } from '@/app/lib/definitions';
 import clsx from 'clsx';
 import { FolderOutlined, PrintOutlined, PersonOutlined } from '@mui/icons-material';
-import { IAnalysisTable } from '@/app/lib/definitions';
+import { IAnalysisTable, IAnalysisPrint, IAnalysisPrivacy } from '@/app/lib/definitions';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -116,7 +116,7 @@ export default function ViewTable({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {showRows.length > 0 ? showRows.map((row, idx) => {
+                            {showRows.length > 0 ? showRows.map((row: IAnalysisPrint | IAnalysisPrivacy, idx: number) => {
                                 return (
                                     <StyledTableRow key={idx}>
                                         {!!columns[selectedCategory] && columns[selectedCategory].map((column, colIdx) => {
@@ -127,7 +127,7 @@ export default function ViewTable({
                                                     align={column.align}
                                                     scope="row"
                                                 >
-                                                    {row[column.name]}
+                                                    { row[column.name] }
                                                 </StyledTableCell>
                                             )
                                         })}
