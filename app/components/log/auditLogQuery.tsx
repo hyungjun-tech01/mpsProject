@@ -15,9 +15,11 @@ const getMonthStartAndToday = () => {
 export default function AuditLogQuery({
   dateFrom,
   dateTo,
+  category,
 }: {
   dateFrom: string,
   dateTo: string,
+  category:string,
   periodStart?: string|null,
   periodEnd?: string|null,
 }) {
