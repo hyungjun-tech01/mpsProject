@@ -62,11 +62,7 @@ export default function MyDBAdapter() {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-<<<<<<< HEAD
-        async deleteUser(userId: string, deletedBy?: string) {
-=======
         async deleteUser(userId: string, merged: string) {
->>>>>>> 1b87e1573842800d896d0764ce954680048362cb
             'use server';
 
             const [deletedBy, ipAddress] = merged.split(',');
@@ -75,13 +71,9 @@ export default function MyDBAdapter() {
             logData.append('application_page', '사용자');
             logData.append('application_action', '삭제');
             logData.append('application_parameter', `{userId:${userId}}`);
-<<<<<<< HEAD
-            logData.append('created_by', deletedBy ?? "");
-=======
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
->>>>>>> 1b87e1573842800d896d0764ce954680048362cb
 
             Action.applicationLog(pool,  logData);
 
