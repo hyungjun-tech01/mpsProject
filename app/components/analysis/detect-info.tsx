@@ -1,9 +1,9 @@
 'use server';
 
-import PrivacyQuery from "@/app/components/dashboard/privacy-query";
+import StatQuery from "@/app/components/analysis/stat-query";
 import Card from "@/app/components/dashboard/card";
-import PieChart from '../pieChart';
-import VerticalBarChart from '../verticalBarChart';
+import PieChart from '@/app/components/pieChart';
+import VerticalBarChart from '@/app/components/verticalBarChart';
 import { formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
 
 
@@ -27,10 +27,6 @@ export default async function DetectInfoWrapper({
     data: IPrivacyData[];
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
-    // const adapter = MyDBAdapter();
-    // const [ detectedData] = await Promise.all([
-    //     adapter.getPrivacytDetectedData(period, periodStart, periodEnd, dept, user)
-    // ]);
 
     const totalCount = data.length;
     let totalDetected = 0;
@@ -127,7 +123,7 @@ export default async function DetectInfoWrapper({
         <div className='w-full pt-6'>
             <div className='w-full flex justify-between items-center mb-8`'>
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
-                <PrivacyQuery
+                <StatQuery
                     translated={translated}
                     departments={deptOptions}
                     period={period}
