@@ -23,7 +23,7 @@ export function CreateGroupForm({
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
-    prevState: GroupState,
+    prevState: void | GroupState,
     formData: FormData,
   ) => Promise<GroupState | void>;
 }) {
@@ -46,7 +46,7 @@ export function CreateGroupForm({
                 )}
                 {Array.isArray(sec.description) &&
                   sec.description.map((item, idx) => {
-                    if (idx !== sec.description.length - 1) {
+                    if (idx !== (sec.description as string[]).length - 1) {
                       return (
                         <div key={idx} className="text-sm mb-4">
                           {item}
@@ -75,8 +75,8 @@ export function CreateGroupForm({
                     chartData={item.chartData}
                     other={item.other}
                     error={
-                      !!state?.errors && !!state?.errors[item.name]
-                        ? state?.errors[item.name]
+                      !!state?.errors && !!state?.errors[item.name as keyof GroupState['errors']]
+                        ? state?.errors[item.name as keyof GroupState['errors']]
                         : null
                     }
                   />

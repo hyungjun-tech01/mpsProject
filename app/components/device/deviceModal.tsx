@@ -3,11 +3,13 @@
 import { Close } from '@mui/icons-material';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
+
 interface DeviceModalProps {
     clickModal: () => void;
-    groupList: object[];
+    groupList: Record<string, string>[];
     groupId: string | undefined;
 }
+
 
 export default function DeviceModal({ clickModal, groupList, groupId}: DeviceModalProps) {
     console.log("DeviceModal : ", groupId);
@@ -27,7 +29,7 @@ export default function DeviceModal({ clickModal, groupList, groupId}: DeviceMod
         ...groupList
     ];
 
-    const changeGroup = (event, group) => {
+    const changeGroup = (event: React.ChangeEvent<HTMLInputElement>, group: string) => {
         if(event.target.checked) {
             if(group === '0') {
                 router.push(pathname);
@@ -60,7 +62,7 @@ export default function DeviceModal({ clickModal, groupList, groupId}: DeviceMod
                                     <input 
                                         id="device_group"
                                         type='radio'
-                                        name={`rb_${group.group_id}`}
+                                        name={`rb_${group.id}`}
                                         defaultChecked={group.id === convGroupId}
                                         className='mr-2'
                                         onChange={(e) => changeGroup(e, group.id) }

@@ -28,12 +28,13 @@ export function EditUserGroupForm({
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
         id: string,
-        prevState: GroupState,
+        prevState: void | GroupState,
         formData: FormData
     ) => Promise<GroupState | void>;
 }) {
     const initialState: GroupState = { message: null, errors: {} };
-    const [state, formAction] = useActionState(action, initialState);
+    const updateAction = action.bind(null, id);
+    const [state, formAction] = useActionState(updateAction, initialState);
     const [schedulePeriod, SetSchedulePeriod] = useState<string>(userData.schedule_period);
     const [scheduleStart, SetScheduleStart] = useState<number>(userData.schedule_start % 100);
     const [subScheduleStartSub, SetSubScheduleStart] = useState<number>(Math.floor(userData.schedule_start / 100));
@@ -116,7 +117,7 @@ export function EditUserGroupForm({
         setOptionsForYearDate(regenOptions);
     };
 
-    const handleChangeScheduleStart = (event: ChangeEvent) => {
+    const handleChangeScheduleStart = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const chosenValue = Number(event.target.value);
         SetScheduleStart(chosenValue);
         genOptionsForYearDate(chosenValue);
@@ -146,8 +147,8 @@ export function EditUserGroupForm({
                             type="input"
                             defaultValue={userData.group_name}
                             placeholder={translated.placeholder_group_name}
-                            error={(!!state?.errors && !!state?.errors.group_name)
-                                ? state?.errors.group_name
+                            error={(!!state?.errors && !!state?.errors.groupName)
+                                ? state?.errors.groupName
                                 : null
                             }
                         />
@@ -156,8 +157,8 @@ export function EditUserGroupForm({
                             title={translated.common_note}
                             type="input"
                             defaultValue={userData.group_notes}
-                            error={(!!state?.errors && !!state?.errors.group_name)
-                                ? state?.errors.group_name
+                            error={(!!state?.errors && !!state?.errors.groupName)
+                                ? state?.errors.groupName
                                 : null
                             }
                         />
@@ -175,11 +176,11 @@ export function EditUserGroupForm({
                             type="select"
                             defaultValue={userData.schedule_period}
                             options={optionsForSchedulePeriod}
-                            onChange={(event: ChangeEvent) => {
+                            onChange={(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
                                 SetSchedulePeriod(event.target.value);
                             }}
-                            error={(!!state?.errors && !!state?.errors.group_name)
-                                ? state?.errors.group_name
+                            error={(!!state?.errors && !!state?.errors.groupName)
+                                ? state?.errors.groupName
                                 : null
                             }
                         />
@@ -196,9 +197,9 @@ export function EditUserGroupForm({
                                             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                             defaultValue={scheduleStart}
                                             aria-describedby={"schedule_start-error"}
-                                            onChange={(event: ChangeEvent) => {
+                                            onChange={(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
                                                 // console.log("Change Schedule Period :", event.target.value);
-                                                SetScheduleStart(event.target.value);
+                                                SetScheduleStart(Number(event.target.value));
                                             }}
                                         >
                                             {optionsForWeek.map(day =>
@@ -215,9 +216,9 @@ export function EditUserGroupForm({
                                             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                             defaultValue={scheduleStart}
                                             aria-describedby={"schedule_start-error"}
-                                            onChange={(event: ChangeEvent) => {
+                                            onChange={(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
                                                 // console.log("Change Schedule Period :", event.target.value);
-                                                SetScheduleStart(event.target.value);
+                                                SetScheduleStart(Number(event.target.value));
                                             }}
                                         >
                                             {optionsForMonth.map(day =>
@@ -249,9 +250,9 @@ export function EditUserGroupForm({
                                                 className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                                 defaultValue={subScheduleStartSub}
                                                 aria-describedby={"schedule_start-error"}
-                                                onChange={(event: ChangeEvent) => {
+                                                onChange={(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
                                                     // console.log("Change Schedule Period :", event.target.value);
-                                                    SetSubScheduleStart(event.target.value);
+                                                    SetSubScheduleStart(Number(event.target.value));
                                                 }}
                                             >
                                                 {optionsForYearDate.map(day =>
@@ -264,8 +265,8 @@ export function EditUserGroupForm({
                                     }
                                 </div>
                                 <div id="schedule_start-error" aria-live="polite" aria-atomic="true">
-                                    {!!state?.errors && !!state?.errors.schedule_start &&
-                                        state?.errors.schedule_start.map((error: string) => (
+                                    {!!state?.errors && !!state?.errors.scheduleStart &&
+                                        state?.errors.scheduleStart.map((error: string) => (
                                             <p className="mt-2 text-sm text-red-500" key={error}>
                                                 {error}
                                             </p>
@@ -278,8 +279,8 @@ export function EditUserGroupForm({
                             title={translated.group_schedule_amount}
                             type="currency"
                             defaultValue={userData.schedule_amount}
-                            error={(!!state?.errors && !!state?.errors.group_name)
-                                ? state?.errors.group_name
+                            error={(!!state?.errors && !!state?.errors.groupName)
+                                ? state?.errors.groupName
                                 : null
                             }
                         />
@@ -288,9 +289,9 @@ export function EditUserGroupForm({
                                 name="remain_amount"
                                 title={translated.group_remain_amount}
                                 type="currency"
-                                defaultValue={userData.remain_amount}
-                                error={(!!state?.errors && !!state?.errors.group_name)
-                                    ? state?.errors.group_name
+                                defaultValue={String(userData.remain_amount) ?? ""}
+                                error={(!!state?.errors && !!state?.errors.groupName)
+                                    ? state?.errors.groupName
                                     : null
                                 }
                             />
@@ -310,8 +311,8 @@ export function EditUserGroupForm({
                             defaultValue={userData.manager_id}
                             placeholder=""
                             options={candidates}
-                            error={(!!state?.errors && !!state?.errors.group_manager)
-                                ? state?.errors.group_manager
+                            error={(!!state?.errors && !!state?.errors.groupManager)
+                                ? state?.errors.groupManager
                                 : null
                             }
                         />

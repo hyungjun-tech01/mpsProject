@@ -260,11 +260,11 @@ export async function fetchCreateDevice(
 
         const result = await client.query(`
         INSERT INTO tbl_device_info (
-          device_type, device_name, location, physical_device_id, 
-          ext_device_function, deleted, web_print_enabled, notes, device_model, serial_number,
-          created_date, created_by, modified_date, modified_by,
-          app_type, device_administrator, device_administrator_password,
-          black_toner_percentage, cyan_toner_percentage, magenta_toner_percentage, yellow_toner_percentage  
+            device_type, device_name, location, physical_device_id, 
+            ext_device_function, deleted, web_print_enabled, notes, device_model, serial_number,
+            created_date, created_by, modified_date, modified_by,
+            app_type, device_administrator, device_administrator_password,
+            black_toner_percentage, cyan_toner_percentage, magenta_toner_percentage, yellow_toner_percentage  
         ) VALUES (
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
             now(), -1, now(), -1,
@@ -449,13 +449,7 @@ export async function fetchModifyDevice(
 
 export async function fetchSaveFaxLineInfo(
     client: Pool,
-    saveFaxLineData: {
-        fax_line_id: string | null;
-        fax_line_name: string;
-        printer_id: string;
-        fax_line_user_id: string;
-        fax_line_shared_group_id: string;
-    },
+    saveFaxLineData:  Record<string, string | null>, 
     created_by: string) {
     try {
         //console.log('saveFaxLineData.fax_line_id,', saveFaxLineData.fax_line_id);

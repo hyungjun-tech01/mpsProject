@@ -5,7 +5,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-export async function executeDos(prevState: {status: string, message: string}, formData: FormData) {
+export async function executeDos(prevState: {status: string, message: string} | null, formData: FormData) {
     try {
         const command = formData.get('command') as string;
 

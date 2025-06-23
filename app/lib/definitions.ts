@@ -84,6 +84,7 @@ export type Group = {
   schedule_period: 'NONE' | 'PER_DAY' | 'PER_WEEK' | 'PER_MONTH' | 'PER_YEAR';
   schedule_amount: number;
   schedule_start: number;
+  remain_amount?: number;
 }
 
 export type UserGroup = {

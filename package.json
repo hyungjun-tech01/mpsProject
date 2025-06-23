@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -H localhost -p 443 --experimental-https",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H localhost -p 443 --experimental-https",
     "lint": "next lint"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "autoprefixer": "^10.4.21",
     "bcrypt": "^5.1.1",
     "canvas": "^3.1.0",
+    "chart.js": "^4.5.0",
     "chartjs": "^0.3.24",
     "clsx": "^2.1.1",
     "copy-webpack-plugin": "^13.0.0",
@@ -50,6 +51,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.17.30",
+    "@types/pg": "^8.15.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/react-pdf": "^7.0.0",

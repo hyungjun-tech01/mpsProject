@@ -137,7 +137,7 @@ export default function Grouping({
                     <MenuItem>
                         <div>
                             <span className='mr-3 font-medium'>User Name : </span>
-                            <span className='text-gray-600'>{shownMember.user_name}</span>
+                            <span className='text-gray-600'>{shownMember.name}</span>
                         </div>
                     </MenuItem>
                     <MenuItem>
@@ -318,7 +318,9 @@ export default function Grouping({
                                     >
                                         {member.name}
                                     </div>
-                                    <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup} />
+                                    <div id={member.id} className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup}>
+                                        <SearchOutlined />
+                                    </div>
                                 </div>
                             )} else {
                                 return ( 
@@ -330,7 +332,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id} className='bg-white' onClick={handleMenuOpenOutGroup} />
+                                        <div id={member.id} className='bg-white' onClick={handleMenuOpenOutGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                     </div>
                             )}
                         })}
@@ -369,7 +373,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup} />
+                                        <div id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                         <input key={member.id} type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )
@@ -383,7 +389,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup} />
+                                        <div id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                         <input type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )

@@ -3,9 +3,9 @@ import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import Breadcrumbs from '@/app/components/breadcrumbs';
 import Form  from '@/app/components/device/create-form';
-import FormFax from '@/app/components/device/create-form-fax';
-import {modifyDevice} from '@/app/components/device/actions';
-import { ISection, IItem } from '@/app/components/edit-items';
+import FormFax, { IFaxOption, IFaxItems } from '@/app/components/device/create-form-fax';
+import { modifyDevice } from '@/app/components/device/actions';
+import { ISection } from '@/app/components/edit-items';
 import { IFaxButtons } from '@/app/components/device/create-form-fax';
 
 
@@ -20,6 +20,7 @@ export default async function Page(props: {
     const locale = params.locale;
 
     const adapter = MyDBAdapter();
+
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([
         getDictionary(locale),
         adapter.getDeviceById(id),
@@ -86,20 +87,24 @@ export default async function Page(props: {
         },
     ];
 
-    const optionsUser = [
+    const optionsUser: IFaxOption[] = [
         {label:'-1 없음', value: ''},
-        ...allUsers.map((x:{user_id:string, user_name:string}) => ( 
-            {label:`${x.user_name}`, value:String(x.user_id)} 
-        ))
+        ...allUsers
+            .filter(user => user.user_id !== null && user.user_name !== null)
+            .map((x) => ({ 
+                label: x.user_name!, 
+                value: String(x.user_id!) 
+            }))
     ];
-    const optionsGroup = [
+
+    const optionsGroup: IFaxOption[] = [
         {label:'-1 없음', value: ''},
         ...allGroups.map((x:{group_id:string, group_name:string}) => ( 
             {label:`${x.group_name}`, value:String(x.group_id)} 
         ))
     ];
 
-    const editFaxItems: IItem[] =  fax.length > 0 
+    const editFaxItems: IFaxItems[] =  fax.length > 0 
         ? fax.map((faxLine:{fax_line_id:string, fax_line_name:string, fax_line_user_id:string, user_name:string, group_id:string, group_name:string }, index:number) => ({
             items: [
                 { name: `fax_line_id_${index}`, title: `${t('fax.fax_line_id')} ${index+1}` , type: 'hidden', defaultValue: faxLine.fax_line_id, placeholder: t('fax.fax_line_id') },

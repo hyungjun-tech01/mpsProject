@@ -5,7 +5,7 @@ import { DensitySmallOutlined } from '@mui/icons-material';
 import DeviceModal from './deviceModal';
 
 interface ModalButtonProps {
-    list: object[];
+    list: Record<string, string>[];
     modalId: string | undefined;
 }
 

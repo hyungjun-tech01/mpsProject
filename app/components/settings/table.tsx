@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IColumnData } from '@/app/lib/definitions';
 import { formatCurrency, formatTimeToLocal } from '@/app/lib/utils';
 import { DeleteButtton } from '../buttons';
+import type { BasicState2 } from '@/app/lib/actions';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,17 +41,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-interface ISettingTable<DataType> {
+interface ISettingTable {
     columns: IColumnData[];
-    rows: DataType[];
+    rows: Record<string, string | number | string[] | boolean>[];
     totalPages: number;
     locale?: 'ko' | 'en';
-    action: (prevState:object, formData:FormData) => void,
+    action: (prevState:void | BasicState2, formData:FormData) => Promise<BasicState2 | void>,
     deleteAction?: (id: string) => void;
     deletable?: boolean;
 }
 
-export default function CustomizedTable<DataType>({
+export default function CustomizedTable({
     columns,
     rows,
     totalPages,
@@ -58,9 +59,9 @@ export default function CustomizedTable<DataType>({
     action,
     deleteAction,
     deletable = true,
-}: ISettingTable<DataType>) {
-    const initialState: object = { message: null, errors: {} };
-    const [data, setData] = useState<object[]>([]);
+}: ISettingTable) {
+    const initialState: BasicState2 = { message: "", errors: [] };
+    const [data, setData] = useState<Record<string, string | number | string[] | boolean>[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
     const [isAnySelected, setIsAnySelected] = useState<boolean>(false);
     const [seletedIds, setSelectedIds] = useState<string[]>([]);
@@ -125,11 +126,11 @@ export default function CustomizedTable<DataType>({
         </Menu>
     );
 
-    const handleSelectAllClick = (event) => {
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.checked) {
             const selectedIds:string[] = [];
             const updatedData = data.map(row =>{
-                selectedIds.push(row.id);
+                selectedIds.push(String(row.id));
                 return {
                     ...row,
                     checked : true
@@ -150,7 +151,7 @@ export default function CustomizedTable<DataType>({
         }
     };
 
-    const handleSelectOneClick = (event) => {
+    const handleSelectOneClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selected = event.target.id;
         
         setData(prevState => {
@@ -158,10 +159,10 @@ export default function CustomizedTable<DataType>({
             let newIsAllSelected: boolean = true;
             const updated:string[] = [];
             const returnValue = prevState.map(row => {
-                const newChecked: boolean = (row.id === selected) ? event.target.checked : row.checked;
+                const newChecked: boolean = (String(row.id) === selected) ? event.target.checked : (row.checked as boolean);
                 newIsAnySelected ||= newChecked;
                 newIsAllSelected &&= newChecked;
-                if(newChecked) updated.push(row.id);
+                if(newChecked) updated.push(String(row.id));
                 return {...row, checked: newChecked};
             });
             setIsAllSelected(newIsAllSelected);
@@ -227,7 +228,7 @@ export default function CustomizedTable<DataType>({
                                         align='center'
                                         scope="row"
                                     >
-                                        <input type="checkbox" id={row.id} name={row.id} checked={row.checked} onChange={handleSelectOneClick} />
+                                        <input type="checkbox" id={String(row.id)} name={String(row.id)} checked={(row.checked as boolean)} onChange={handleSelectOneClick} />
                                     </StyledTableCell>
                                     {columns.map((column) => {
                                         return (
@@ -238,9 +239,9 @@ export default function CustomizedTable<DataType>({
                                                 scope="row"
                                             >
                                                 {!column.type && row[column.name]}
-                                                {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
-                                                {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
-                                                {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
+                                                {!!column.type && column.type === 'date' && formatTimeToLocal(String(row[column.name]), locale)}
+                                                {!!column.type && column.type === 'currency' && formatCurrency(String(row[column.name]), locale)}
+                                                {!!column.type && column.type === 'list' && (row[column.name] as string[]).map((item, idx) => (<div key={idx}>{item}</div>))}
                                             </StyledTableCell>
                                         )
                                     })}

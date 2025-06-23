@@ -14,6 +14,11 @@ export type BasicState = {
   message?: string;
 }
 
+export type BasicState2 = {
+  errors?: string[];
+  message?: string;
+}
+
 export type UserState = {
   errors?: {
     userName?: string[];
@@ -42,7 +47,7 @@ const CreateUser = UserFormSchema.omit({});
 
 export async function createUser(
   client: Pool,
-  prevState: UserState,
+  prevState: void | UserState,
   formData: FormData
 ) {
   const validatedFields = CreateUser.safeParse({
@@ -147,7 +152,7 @@ const ModifyUser = UserFormSchema.omit({
 export async function modifyUser(
   client: Pool,
   id: string,
-  prevState: UserState,
+  prevState: void | UserState,
   formData: FormData
 ) {
   if (!formData.has("userDisabledPrinting")) {
@@ -353,7 +358,7 @@ const ChangeBalance = z.object({
 export async function changeBalance(
   client: Pool,
   id: string,
-  prevState: UserState,
+  prevState: void | UserState,
   formData: FormData
 ) {
   const validatedFields = ChangeBalance.safeParse({
@@ -510,9 +515,9 @@ export async function deleteDocument(client: Pool, id: string) {
 //------- Account -----------------------------------------------------------------------------
 export async function updateAccount(
   client: Pool,
-  id?: string,
-  prevState: UserState,
-  formData: FormData
+  prevState: void | UserState,
+  formData: FormData,
+  id?: string
 ) {
   // console.log('[Account] Update account : ', formData);
   if (!id) {
@@ -657,7 +662,7 @@ export async function updateAccount(
 export async function batchCreateUser(
   client: Pool,
   id: string,
-  prevState: BasicState,
+  prevState: void | BasicState,
   formData: FormData
 ) {
   try {
@@ -708,9 +713,9 @@ export async function batchCreateUser(
           let idx = (records[0][0] === "user_name") ? 1 : 0;
           const adjusted = [];
           for (; idx < records.length; idx++) {
-            const temp = {};
+            const temp: Record<string, string> = {};
             for (let i = 0; i < records[0].length; i++) {
-              temp[headers[i]] = records[idx][i];
+              temp[headers[i] as keyof typeof temp] = records[idx][i];
             }
             adjusted.push(temp);
           }
@@ -807,7 +812,7 @@ export async function applicationLog(client: Pool, formData: FormData) {
 }
 
 //------- Settings -----------------------------------------------------------------------------
-export async function uploadSelectedUser(client: Pool, formData: FormData) {
+export async function uploadSelectedUser(client: Pool, prevState: void | BasicState2, formData: FormData) {
   const seleced_ids = formData.get("selected_ids") as string;
   console.log("[uploadSelectedUser] Selected : ", seleced_ids);
   const errMsg: string[] = [];
@@ -834,13 +839,15 @@ export async function uploadSelectedUser(client: Pool, formData: FormData) {
       await client.query("ROLLBACK"); // 에러 발생 시 롤백
       console.log("Create User / Error : ", error);
       return {
-        message: ["Database Error: Failed to Create User."],
+        errors: [String(error)?? "Unknown error"],
+        message: "Database Error: Failed to Create User.",
       };
     }
 
     if (errMsg.length > 0) {
       return {
-        message: errMsg,
+        errors: errMsg,
+        message: "Database Error: Failed to Create User.",
       };
     }
     revalidatePath("/settings/registerUsers");

@@ -6,7 +6,7 @@ import * as Document from "./fetchDocumentData";
 import * as Log from "./fetchLogData";
 import * as RegularExp from "./fetchRegularExpPrivateInfoData";
 import * as ApplicationLog from "./fetchApplicationLog";
-import type { BasicState, UserState } from "./actions";
+import type { BasicState, BasicState2, UserState } from "./actions";
 import * as Action from "./actions";
 import type { GroupState } from "./actionsGroup";
 import * as GroupAction from "./actionsGroup";
@@ -19,13 +19,13 @@ import type { RegularExpState } from "./actionSetting";
 
 const pool = new Pool({
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: Number(process.env.DB_PORT),
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     max: 20,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS,
+    connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS),
 });
 
 
@@ -54,22 +54,22 @@ export default function MyDBAdapter() {
         async getUserCount() {
             return User.fetchUserCount(pool);
         },
-        async createUser(prevState: UserState, formData: FormData) {
+        async createUser(prevState: void | UserState, formData: FormData) {
             'use server';
             return Action.createUser(pool, prevState, formData);
         },
-        async modifyUser(id: string, prevState: UserState, formData: FormData) {
+        async modifyUser(id: string, prevState: void | UserState, formData: FormData) {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-        async deleteUser(userId: string, deletedBy: string) {
+        async deleteUser(userId: string, deletedBy?: string) {
             'use server';
 
             const logData = new FormData();
             logData.append('application_page', '사용자');
             logData.append('application_action', '삭제');
             logData.append('application_parameter', `{userId:${userId}}`);
-            logData.append('created_by', deletedBy);
+            logData.append('created_by', deletedBy ?? "");
 
             Action.applicationLog(pool,  logData);
 
@@ -78,11 +78,11 @@ export default function MyDBAdapter() {
         async getAccount(userName: string) {
             return User.fetchAccount(pool, userName)
         },
-        async updateAccount(id: string | undefined, prevState: UserState, formData: FormData) {
+        async updateAccount(id: string | undefined, prevState: void | UserState, formData: FormData) {
             'use server';
-            return Action.updateAccount(pool, id, prevState, formData);
+            return Action.updateAccount(pool, prevState, formData, id);
         },
-        async changeBalance(id: string, prevState: UserState, formData: FormData) {
+        async changeBalance(id: string, prevState: void | UserState, formData: FormData) {
             'use server';
             return Action.changeBalance(pool, id, prevState, formData);
         },
@@ -220,27 +220,27 @@ export default function MyDBAdapter() {
         ) {
             return Group.fetchDeptsInGroupPages(pool, id, query, itemsPerPage);
         },
-        async createDeviceGroup(prevState: GroupState, formData: FormData) {
+        async createDeviceGroup(prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.createDeviceGroup(pool, prevState, formData);
         },
-        async modifyDeviceGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifyDeviceGroup(id: string, prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyDeviceGroup(pool, id, prevState, formData);
         },
-        async createUserGroup(prevState: GroupState, formData: FormData) {
+        async createUserGroup(prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.createUserGroup(pool, prevState, formData);
         },
-        async modifyUserGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifyUserGroup(id: string, prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifyUserGroup(pool, id, prevState, formData);
         },
-        async createSecurityGroup(prevState: GroupState, formData: FormData) {
+        async createSecurityGroup(prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.createSecurityGroup(pool, prevState, formData);
         },
-        async modifySecurityGroup(id: string, prevState: GroupState, formData: FormData) {
+        async modifySecurityGroup(id: string, prevState: void | GroupState, formData: FormData) {
             'use server';
             return GroupAction.modifySecurityGroup(pool, id, prevState, formData);
         },
@@ -319,7 +319,7 @@ export default function MyDBAdapter() {
             return Device.fetchModifyDevice(pool, newDevice);
         },
         async saveFaxLineInfo(
-            saveFaxLineData: object, 
+            saveFaxLineData: Record<string, string | null>, 
             created_by: string
         ){
             'use server';
@@ -494,7 +494,7 @@ export default function MyDBAdapter() {
         },
 
         // ----- Setting ---------------------------------------------
-        async batchCreateUser(id: string, prevState: BasicState, formData: FormData) {
+        async batchCreateUser(id: string, prevState: void | BasicState, formData: FormData) {
             'use server';
             return Action.batchCreateUser(pool, id, prevState, formData);
         },
@@ -504,9 +504,9 @@ export default function MyDBAdapter() {
         async getFilteredIFUserPages(query: string, itemsPerPage:number) {
             return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
         },
-        async submitSelectedUsers(prevState:object, formData: FormData ) {
+        async submitSelectedUsers(prevState: void | BasicState2, formData: FormData ) {
             'use server';
-            return Action.uploadSelectedUser(pool, formData);
+            return Action.uploadSelectedUser(pool, prevState, formData);
         },
         async deleteUserInIF(id: string) {
             'use server';
@@ -519,7 +519,7 @@ export default function MyDBAdapter() {
 
             return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
         },
-        async createRegularExp(prevState: RegularExpState, formData: FormData){
+        async createRegularExp(prevState: void | RegularExpState, formData: FormData){
             'use server';
             return SettingAction.createRegularExp(pool, prevState, formData);
         },

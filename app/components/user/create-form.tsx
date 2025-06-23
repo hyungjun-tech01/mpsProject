@@ -15,7 +15,7 @@ export function CreateForm({
 }: {
   items: ISection[];
   buttons?: IButtonInfo;
-  action: (prevState: UserState, formData: FormData)
+  action: (prevState: void | UserState, formData: FormData)
     => Promise<UserState | void>;
 }) {
   const initialState: UserState = { message: null, errors: {} };
@@ -36,7 +36,7 @@ export function CreateForm({
                 }
                 {Array.isArray(sec.description) &&
                   sec.description.map((item, idx) => {
-                    if (idx !== sec.description.length - 1) {
+                    if (idx !== (sec.description as string[]).length - 1) {
                       return <div key={idx} className='text-sm mb-4'>{item}</div>
                     } else {
                       return <div key={idx} className='text-sm'>{item}</div>
@@ -57,8 +57,8 @@ export function CreateForm({
                     locale={item.locale}
                     chartData={item.chartData}
                     other={item.other}
-                    error={(!!state?.errors && !!state?.errors[item.name])
-                      ? state?.errors[item.name]
+                    error={(!!state?.errors && !!state?.errors[item.name as keyof UserState['errors']])
+                      ? state?.errors[item.name as keyof UserState['errors']]
                       : null
                     }
                   />

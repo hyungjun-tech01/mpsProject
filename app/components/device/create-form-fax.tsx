@@ -1,11 +1,10 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import { State } from './actions';
+import { DeviceState } from './actions';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
 import {deleteFaxLineInfo, saveFaxLineInfo} from '@/app/components/device/actions';
-import { IOption, IItem} from '../edit-items';
 import Select, {SingleValue} from 'react-select';
 import { useRouter } from 'next/navigation';
 
@@ -16,6 +15,29 @@ export interface IFaxButtons {
     delete: { title: string };
 }
 
+export interface IFaxOption {
+    label: string;
+    value: string | number;
+}
+
+interface IFaxItem {
+    name: string;
+    title: string;
+    type: "input" | "hidden" | "react-select" | "button";
+    defaultValue: string | number | { value: string | number; label: string };
+    placeholder?: string;
+    options?: IFaxOption[];
+    locale?: string;
+    error?: string[] | null;
+    chartData?: { xlabels: string[], ydata: number[], maxY: number };
+    other?: React.JSX.Element;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  };
+
+export interface IFaxItems {
+    items: IFaxItem[];
+}
+
 
 export default function FormFax({
     id,title,description, items,  optionsUser,optionsGroup, buttons, action
@@ -23,28 +45,25 @@ export default function FormFax({
     title:string;
     description:string;
     id: string;  
-    items: IItem[]; 
-    optionsUser: IOption[];
-    optionsGroup: IOption[];
+    items: IFaxItems[]; 
+    optionsUser: IFaxOption[];
+    optionsGroup: IFaxOption[];
     buttons?: IFaxButtons;
-    action: (prevState: State, formData: FormData) => Promise<{
-        errors?: object | string;
-        message?: string;
-      } | void>;
+    action: (prevState: void | DeviceState, formData: FormData) => Promise<DeviceState | void>;
 }){
-    const initialState: State = { message: null, errors: {} };
+    const initialState: DeviceState = { message: null, errors: {} };
     const [state, formAction] = useActionState(action, initialState);
 
     const [faxItemOriginal, setFaxItemOriginal] = useState(items || []);
 
     const router = useRouter();
 
-    const [faxData, setFaxData] = useState<Record<string, object>>({});
+    const [faxData, setFaxData] = useState<Record<string, string>>({});
 
-    const handleChange = (name: string, newValue: SingleValue<{ value: string; label: string }>) => {
+    const handleChange = (name: string, newValue: SingleValue<{ value: string | number; label: string }>) => {
         setFaxData(prev => ({
             ...prev,
-            [name]: newValue ? newValue.value : ""  // 📌 값이 있으면 저장, 없으면 빈 값
+            [name]: newValue ? String(newValue.value) : ""
         }));
     };
 
@@ -169,7 +188,7 @@ export default function FormFax({
             alert('팩스 회선은 3개까지 추가됩니다.');
             return;
         }
-        const newFaxLine: IItem = {
+        const newFaxLine: IFaxItems = {
             items: [
                 { name: `fax_line_id_${index}`, title: `팩스라인 아이디 ${index}} ${index+1}` , type: 'hidden', defaultValue: '', placeholder: 'fax.fax_line_id' },
                 { name: `fax_line_name_${index}`, title: `팩스라인 번호 ${index+1}`, type: 'input', defaultValue: '', placeholder: '팩스라인 번호' },
@@ -225,6 +244,7 @@ export default function FormFax({
                                                     console.warn(`Item at index ${itemIndex} in group ${groupIndex} is missing a name property:`, item);
                                                     return null;
                                                 }
+
                                                 if (item.name.startsWith("space_line")) {
                                                     return <br key={item.name} />;
                                                 }
@@ -242,7 +262,7 @@ export default function FormFax({
                                                                     name={item.name}
                                                                     defaultValue={item.defaultValue}
                                                                     options={item.options}
-                                                                    onChange= {(selected) => handleChange(item.name, selected)} 
+                                                                    onChange= {(selected) => handleChange(item.name, selected as SingleValue<{ value: string | number; label: string }>)} 
                                                                     aria-describedby={`1-error`}
                                                                 />
                                                                 <div id={`${item.name}-error`} aria-live="polite" aria-atomic="true">
@@ -299,7 +319,7 @@ export default function FormFax({
                                                                         id={item.name}
                                                                         name={item.name}
                                                                         type="text"
-                                                                        defaultValue={item.defaultValue}
+                                                                        defaultValue={String(item.defaultValue)}
                                                                         placeholder={item.placeholder}
                                                                         onChange={(e) => handleInputChange(item.name, e.target.value)}
                                                                         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -325,7 +345,7 @@ export default function FormFax({
                                                                         id={item.name}
                                                                         name={item.name}
                                                                         type="hidden"
-                                                                        defaultValue={item.defaultValue}
+                                                                        defaultValue={String(item.defaultValue)}
                                                                         placeholder={item.placeholder}
                                                                         className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                                                     />

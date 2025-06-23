@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import {  State } from './actions';
+import { DeviceState } from './actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
@@ -13,12 +13,9 @@ export default function Form({
 } : {
     items: ISection[]; 
     buttons?: IButtonInfo;
-    action: (prevState: State, formData: FormData) => Promise<{
-        errors?: object | string;
-        message?: string;
-    } | void>;
+    action: (prevState: void |DeviceState, formData: FormData) => Promise<DeviceState | void>;
 }){
-    const initialState: State = { message: null, errors: null };
+    const initialState: DeviceState = { message: null, errors: {} };
     const [state, formAction] = useActionState(action, initialState);
 
     return (
@@ -30,26 +27,26 @@ export default function Form({
             )}>
                 <div  className='w-full md:w-1/3 pb-4 md:pr-6'>
                     <div className='mb-5 text-xl font-semibold'>{items[0].title}</div>
-                    <div className='text-sm'>{items[0].description}</div>
+                    <div className='text-sm'>{String(items[0].description) ?? ""}</div>
                 </div>
                 <div className="w-2/3 pl-6">
                     <div className='w-full md:w-2/3'>
                         { items[0].items.map((item: IEditItem) =>
                             <EditItem
-                            key={item.name}
-                            name={item.name}
-                            title={item.title}
-                            type={item.type}
-                            defaultValue={item.defaultValue}
-                            placeholder={item.placeholder}
-                            options={item.options}
-                            locale={item.locale}
-                            chartData={item.chartData}
-                            other={item.other}
-                            error={ (!!state?.errors && !!state?.errors[item.name]) 
-                                ? state?.errors[item.name]
-                                : null
-                            }
+                                key={item.name}
+                                name={item.name}
+                                title={item.title}
+                                type={item.type}
+                                defaultValue={item.defaultValue}
+                                placeholder={item.placeholder}
+                                options={item.options}
+                                locale={item.locale}
+                                chartData={item.chartData}
+                                other={item.other}
+                                error={ (!!state?.errors && !!state?.errors[item.name as keyof DeviceState['errors']]) 
+                                    ? state?.errors[item.name as keyof DeviceState['errors']]
+                                    : null
+                                }
                             />
                         )}
                     </div>
@@ -71,8 +68,8 @@ export default function Form({
                             locale={item.locale}
                             chartData={item.chartData}
                             other={item.other}
-                            error={ (!!state?.errors && !!state?.errors[item.name]) 
-                                ? state?.errors[item.name]
+                            error={ (!!state?.errors && !!state?.errors[item.name as keyof DeviceState['errors']]) 
+                                ? state?.errors[item.name as keyof DeviceState['errors']]
                                 : null
                             }
                             />
