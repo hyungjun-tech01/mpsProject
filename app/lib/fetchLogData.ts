@@ -273,11 +273,22 @@ export async function fetchFilteredAuditLogs(
     currentPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null,
    
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
 
-    console.log(currentPage,itemsPerPage , offset);
+    const detect_privacy = privacy === 'true'? true:false;
+    const detect_security = security === 'true'? true:false;
+
+    let extraWhereClause = '';
+    if (detect_privacy) {
+        extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+    }
+    if (detect_security) {
+        extraWhereClause += ` AND a.detect_security IS TRUE`;
+    }
 
     try {
         const auditLogs =
@@ -320,6 +331,7 @@ export async function fetchFilteredAuditLogs(
                 )		
              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	    
+             ${extraWhereClause}
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `)
@@ -355,6 +367,7 @@ export async function fetchFilteredAuditLogs(
               and a.send_time <> '0'
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
               and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
+              ${extraWhereClause}
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -381,14 +394,26 @@ export async function fetchFilteredAuditLogPages(
     itemsPerPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null,
 ) {
     try {
+        const detect_privacy = privacy === 'true'? true:false;
+        const detect_security = security === 'true'? true:false;
+    
+    
+        let extraWhereClause = '';
+        if (detect_privacy) {
+            extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+        }
+        if (detect_security) {
+            extraWhereClause += ` AND a.detect_security IS TRUE`;
+        }
 
-        console.log('dateFrom',dateFrom, dateTo, "'"+query+"'");
         const count =
             query !== ""
                 ? await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_job_log
+                SELECT COUNT(*) FROM tbl_audit_job_log a
                  WHERE 1 = 1
                   and send_time <> '0'
                   and (
@@ -398,18 +423,19 @@ export async function fetchFilteredAuditLogPages(
                         privacy_text ILIKE '${`%${query}%`}'                        
                     )
                   and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	                       
+                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	  
+                  ${extraWhereClause}                     
             `)
                 : await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_job_log 
+                SELECT COUNT(*) FROM tbl_audit_job_log a
                  WHERE  1 = 1
                  and send_time <> '0'
                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	            
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
+                 ${extraWhereClause}            
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        console.log('totalPages', totalPages, count.rows[0].count);
         return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
@@ -424,10 +450,24 @@ export async function fetchFilteredRetiredAuditLogs(
     currentPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null
    
 ) {
-    const offset = (currentPage - 1) * itemsPerPage;
-    try {
+   try {
+
+        const offset = (currentPage - 1) * itemsPerPage;
+
+        const detect_privacy = privacy === 'true'? true:false;
+        const detect_security = security === 'true'? true:false;
+
+        let extraWhereClause = '';
+        if (detect_privacy) {
+            extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+        }
+        if (detect_security) {
+            extraWhereClause += ` AND a.detect_security IS TRUE`;
+        }
         const auditLogs =
             await client.query(`
             select a.job_log_id as id,
@@ -467,7 +507,8 @@ export async function fetchFilteredRetiredAuditLogs(
                 )	
              and b.deleted = 'Y'	
              and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	    
+             and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	 
+             ${extraWhereClause}         
             ORDER BY send_time DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -494,8 +535,22 @@ export async function fetchFilteredRetiredAuditLogPages(
     itemsPerPage: number,
     dateFrom : string|null,
     dateTo : string|null,
+    privacy:string|null, 
+    security:string|null,
 ) {
     try {
+
+        const detect_privacy = privacy === 'true'? true:false;
+        const detect_security = security === 'true'? true:false;
+
+        let extraWhereClause = '';
+        if (detect_privacy) {
+            extraWhereClause += ` AND a.detect_privacy IS TRUE`;
+        }
+        if (detect_security) {
+            extraWhereClause += ` AND a.detect_security IS TRUE`;
+        }
+
         const count =
                 await client.query(`
                 SELECT COUNT(*) FROM tbl_audit_job_log a
@@ -510,7 +565,8 @@ export async function fetchFilteredRetiredAuditLogPages(
                     )
                  and b.deleted = 'Y'   
                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
-                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	                
+                 and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  <=  '${`${dateTo}`}' 	
+                 ${extraWhereClause}                   
             `);
 
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);

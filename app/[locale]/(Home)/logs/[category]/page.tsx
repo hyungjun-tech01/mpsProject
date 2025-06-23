@@ -24,6 +24,8 @@ export const metadata: Metadata = {
 interface IAuditLogParams {
     periodStart?:string,
     periodEnd?:string,
+    privacy?:string,
+    security?:string,
     query?: string,
     itemsPerPage?: string,
     page?: string,
@@ -41,7 +43,9 @@ export default async function Page(props: {
     const session = await auth();
 
     const periodStartParam = searchParams?.periodStart ?? null;
-    const periodEndParam = searchParams?.periodEnd ?? null;;
+    const periodEndParam = searchParams?.periodEnd ?? null;
+    const privacyParam = searchParams?.privacy ?? null;
+    const securityParam = searchParams?.security ?? null;
 
     const userName = session?.user.name ?? "";
     if(!userName) redirect('/login'); // '/login'으로 리다이렉트
@@ -57,11 +61,11 @@ export default async function Page(props: {
     let logDataPromise;
 
     if (category === "auditlogs") {
-        logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam);
-        logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam);
+        logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam);
+        logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam);
     } else if (category === "auditlogsRetired") {
-        logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam);
-        logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam);
+        logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam);
+        logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam);
     } else {
     // application logs
         logPagesPromise = adapter.getFilteredApplicationLogPages(query, itemsPerPage, periodStartParam, periodEndParam);
