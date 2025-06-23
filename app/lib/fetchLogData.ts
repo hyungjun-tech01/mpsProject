@@ -413,7 +413,7 @@ export async function fetchFilteredAuditLogPages(
         const count =
             query !== ""
                 ? await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_job_log
+                SELECT COUNT(*) FROM tbl_audit_job_log a
                  WHERE 1 = 1
                   and send_time <> '0'
                   and (
@@ -427,7 +427,7 @@ export async function fetchFilteredAuditLogPages(
                   ${extraWhereClause}                     
             `)
                 : await client.query(`
-                SELECT COUNT(*) FROM tbl_audit_job_log 
+                SELECT COUNT(*) FROM tbl_audit_job_log a
                  WHERE  1 = 1
                  and send_time <> '0'
                  and TO_CHAR(TO_TIMESTAMP(send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD')  >=  '${`${dateFrom}`}' 
