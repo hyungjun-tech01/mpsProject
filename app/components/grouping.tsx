@@ -248,7 +248,6 @@ export default function Grouping({
 
         setSelectedInNoneGroup(null);
         setSelectedInGroup(null);
-
     };
 
     const handleSelectInNoneGroup = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -287,13 +286,13 @@ export default function Grouping({
 
     useEffect(() => {
         // console.log('Grouping / check Group : ', inGroup);
-        const updatedOutGroup = outGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1);
+        const updatedOutGroup = outGroup.members;   //.filter(item => group.findIndex(member => member.id === item.id) === -1);
         setNonGroup(updatedOutGroup);
 
-        const checkInGroup = !!inGroup ? inGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
-        const updatedInGroup = [...checkInGroup, ...group];
+        const updatedInGroup = !!inGroup ? inGroup.members : [];   //.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
+        // const updatedInGroup = [...checkInGroup, ...group];
         setGroup(updatedInGroup);
-    }, [outGroup, inGroup, group]);
+    }, [outGroup, inGroup]);
 
     return (
         <div className={'w-full p-2 mb-4 flex md: flex-col'}>
