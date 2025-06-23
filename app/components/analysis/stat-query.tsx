@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { formatTimeYYYYpMMpDD } from '@/app/lib/utils';
 
-export default function PrivacyQuery({
+export default function StatQuery({
   translated,
   departments,
   period,

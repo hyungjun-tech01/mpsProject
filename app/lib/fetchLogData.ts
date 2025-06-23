@@ -635,7 +635,6 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
             GROUP BY user_id, user_name, external_user_name, dept_name
             ORDER BY detect_privacy_count DESC
         `);
-        console.log('data:', response.rows);
         return response.rows;
     } catch (e) {
         console.log('fetchPrivacyDetectInfoByUsers :', e);

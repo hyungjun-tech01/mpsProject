@@ -500,8 +500,9 @@ const koResource = {
         analysis: {
             action: '조치',
             action_status: '조치 상태',
-            analize_print: '출력량 통계/조회',
-            analize_privacy: '개인정보 검출 통계/조회',
+            analize_print: '출력량 통계',
+            analize_privacy: '개인정보 검출 통계',
+            analize_security: '보안단어 검출 통계',
             category_dept: '부서별',
             category_device: '기기별',
             category_user: '사용자별',
