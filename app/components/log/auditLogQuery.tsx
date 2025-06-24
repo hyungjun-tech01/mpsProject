@@ -19,6 +19,7 @@ export default function AuditLogQuery({
 }: {
   dateFrom: string,
   dateTo: string,
+  category:string,
   periodStart?: string | null,
   periodEnd?: string | null,
 }) {
@@ -31,6 +32,8 @@ export default function AuditLogQuery({
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  console.log('category', category);
+  
   useEffect(() => {
     if (!startDate || !endDate) {
       const { monthStart, today } = getMonthStartAndToday();

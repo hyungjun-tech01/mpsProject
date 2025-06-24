@@ -155,6 +155,7 @@ export default async function Page(props: {
                     <AuditLogQuery
                         dateFrom={t('logs.dateFrom')}
                         dateTo={t('logs.dateTo')}
+                        category={category}
                     />
                     <Search placeholder={searchTexts[category as keyof typeof searchTexts].keySearchPlaceholder} />
                 </div>
