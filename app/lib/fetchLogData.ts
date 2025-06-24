@@ -191,13 +191,14 @@ export async function fetchTop5UserFor30days(client: Pool) {
     try {
         const response = await client.query(`
             SELECT 
-                user_name,
-                SUM(total_pages) AS total_pages_sum
-            FROM tbl_audit_job_log
+                b.full_name  user_name,
+                COALESCE(SUM(a.total_pages), 0) AS total_pages_sum 
+            FROM tbl_audit_job_log a
+            join tbl_user_info b on a.user_name =b.user_name
             WHERE 1 = 1 
             and send_time <> '0'
             and send_time >= TO_CHAR(DATE_TRUNC('day',  current_date - INTERVAL '1 month'), 'YYMMDD') || '000000'
-            GROUP BY  user_name
+            GROUP BY  b.full_name 
             ORDER BY total_pages_sum DESC
             LIMIT 5`
         );
