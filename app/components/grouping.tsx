@@ -137,7 +137,7 @@ export default function Grouping({
                     <MenuItem>
                         <div>
                             <span className='mr-3 font-medium'>User Name : </span>
-                            <span className='text-gray-600'>{shownMember.user_name}</span>
+                            <span className='text-gray-600'>{shownMember.name}</span>
                         </div>
                     </MenuItem>
                     <MenuItem>
@@ -248,7 +248,6 @@ export default function Grouping({
 
         setSelectedInNoneGroup(null);
         setSelectedInGroup(null);
-
     };
 
     const handleSelectInNoneGroup = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -287,13 +286,13 @@ export default function Grouping({
 
     useEffect(() => {
         // console.log('Grouping / check Group : ', inGroup);
-        const updatedOutGroup = outGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1);
+        const updatedOutGroup = outGroup.members;   //.filter(item => group.findIndex(member => member.id === item.id) === -1);
         setNonGroup(updatedOutGroup);
 
-        const checkInGroup = !!inGroup ? inGroup.members.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
-        const updatedInGroup = [...checkInGroup, ...group];
+        const updatedInGroup = !!inGroup ? inGroup.members : [];   //.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
+        // const updatedInGroup = [...checkInGroup, ...group];
         setGroup(updatedInGroup);
-    }, [outGroup, inGroup, group]);
+    }, [outGroup, inGroup]);
 
     return (
         <div className={'w-full p-2 mb-4 flex md: flex-col'}>
@@ -318,7 +317,9 @@ export default function Grouping({
                                     >
                                         {member.name}
                                     </div>
-                                    <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup} />
+                                    <div id={member.id} className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup}>
+                                        <SearchOutlined />
+                                    </div>
                                 </div>
                             )} else {
                                 return ( 
@@ -330,7 +331,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id} className='bg-white' onClick={handleMenuOpenOutGroup} />
+                                        <div id={member.id} className='bg-white' onClick={handleMenuOpenOutGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                     </div>
                             )}
                         })}
@@ -369,7 +372,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup} />
+                                        <div id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                         <input key={member.id} type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )
@@ -383,7 +388,9 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <SearchOutlined id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup} />
+                                        <div id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                         <input type="hidden" name={memberName} value={member.id} />
                                     </div>
                                 )

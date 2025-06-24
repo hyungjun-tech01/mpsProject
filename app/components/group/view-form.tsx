@@ -126,7 +126,7 @@ export function ViewForm({
           <MenuItem>
             <div>
               <span className='mr-3 font-medium'>User Name : </span>
-              <span className='text-gray-600'>{shownMember.user_name}</span>
+              <span className='text-gray-600'>{shownMember.name}</span>
             </div>
           </MenuItem>
           <MenuItem>
@@ -205,7 +205,7 @@ export function ViewForm({
               )}
               {Array.isArray(sec.description) &&
                 sec.description.map((item, idx) => {
-                  if (idx !== sec.description.length - 1) {
+                  if (idx !== (sec.description as string[]).length - 1) {
                     return (
                       <div key={idx} className="text-sm mb-4">
                         {item}
@@ -271,11 +271,13 @@ export function ViewForm({
                       >
                         {member.name}
                       </div>
-                      <SearchOutlined
+                      <div 
                         id={member.id}
                         className="bg-white hover:cursor-pointer"
                         onClick={handleMenuOpenInGroup}
-                      />
+                      >
+                        <SearchOutlined />
+                      </div>
                       <input
                         type="hidden"
                         name={memberName}

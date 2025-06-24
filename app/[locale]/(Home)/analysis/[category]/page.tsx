@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import DetectInfoWrapper from "@/app/components/analysis/detect-info";
-import Table from '@/app/components/dashboard/table';
+import Table from '@/app/components/analysis/table';
 import { TableSkeleton } from "@/app/components/skeletons";
 import { IColumnData } from '@/app/lib/definitions';
 

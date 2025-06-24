@@ -35,7 +35,7 @@ const RegularExprFormSchema = z.object({
 // Regular Exp  ------------------------------------------------
 const CreateRegularExpr = RegularExprFormSchema;
 
-export async function createRegularExp(client: Pool, prevState: RegularExpState, formData: FormData) {
+export async function createRegularExp(client: Pool, prevState: void | RegularExpState, formData: FormData) {
     //console.log('createRegularExp  :', formData);
     const validatedFields = CreateRegularExpr.safeParse({
         regularExpName: formData.get('security_name'),
@@ -54,7 +54,7 @@ export async function createRegularExp(client: Pool, prevState: RegularExpState,
 
     const { regularExpName, regularExpType, regularExpValue, createdBy } = validatedFields.data;
     
-    console.log('Regular Exp :', regularExpName, regularExpType, regularExpValue, createdBy);
+    // console.log('Regular Exp :', regularExpName, regularExpType, regularExpValue, createdBy);
 
     // Create new user group  --------------------------------------
     try {
@@ -99,8 +99,7 @@ export async function deleteRegularExp(client: Pool, id: string ) {
     } catch (error) {
         console.log('Delete regular exp / Error : ', error);
         return {
-            result: false,
-            data: "Database Error: Failed to Delete regular exp",
+            message: "Database Error: Failed to Delete regular exp",
         };
     };
     

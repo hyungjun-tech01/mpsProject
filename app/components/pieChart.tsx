@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -26,13 +26,13 @@ const bdColors = [
 export default function PieChart({
   labels,
   dataSet,
- }: {
+}: {
   labels: string[];
   dataSet: {
     label: string;
     data: number[];
   }[];
- }) {
+}) {
   const options = {
     responsive: true,
     plugins: {
@@ -44,12 +44,12 @@ export default function PieChart({
   const inputData = {
     labels: labels,
     datasets: dataSet.map(item => ({
-        label: item.label,
-        data: item.data,
-        backgroundColor: bgColors.slice(0, labels.length),
-        borderColor: bdColors.slice(0, labels.length),
-        borderWidth: 1,
-      })),
+      label: item.label,
+      data: item.data,
+      backgroundColor: bgColors.slice(0, labels.length),
+      borderColor: bdColors.slice(0, labels.length),
+      borderWidth: 1,
+    })),
   };
   return <Pie options={options} data={inputData} />;
 }

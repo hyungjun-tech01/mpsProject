@@ -75,8 +75,10 @@ export default async function Page(props: {
 
   const userOptions: { value: string, title: string }[] = [
     { value: "", title: t("group.select_group_manager") },
-    ...users.map((item: { user_id: string, user_name: string }) => (
-      { value: item.user_id, title: item.user_name }))
+    ...users
+    .filter(user => user.user_id !== null && user.user_name !== null)
+    .map((item) => (
+      { value: String(item.user_id), title: item.user_name }))
   ];
 
   const outGroup = {

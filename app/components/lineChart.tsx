@@ -1,25 +1,26 @@
 "use client";
 
+import React from 'react';
 import {
   Chart as ChartJS,
-  LineElement,
+  CategoryScale,
+  LinearScale,
   PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend,
-  LinearScale,
-  LineController,
-  CategoryScale,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
+  CategoryScale,
   LinearScale,
-  LineElement,
   PointElement,
+  LineElement,
+  Title,
   Tooltip,
-  Legend,
-  LineController,
-  CategoryScale
+  Legend
 );
 
 export default function LineChart({

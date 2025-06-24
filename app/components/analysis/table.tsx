@@ -37,13 +37,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-interface ITable<DataType> {
+interface ITable<DataType extends Record<string, unknown>> {
     columns: IColumnData[];
     rows: DataType[];
     locale?: 'ko' | 'en';
 }
 
-export default function CustomizedTable<DataType>({
+export default function CustomizedTable<DataType extends Record<string, unknown>>({
     columns,
     rows,
     locale = 'ko',
@@ -74,10 +74,10 @@ export default function CustomizedTable<DataType>({
                                                 align={column.align}
                                                 scope="row"
                                             >
-                                                {!column.type && row[column.name]}
-                                                {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
+                                                {!column.type && String(row[column.name] ?? '')}
+                                                {!!column.type && column.type === 'date' && formatTimeToLocal(String(row[column.name] ?? ''), locale)}
                                                 {!!column.type && column.type === 'link' && 
-                                                    <Link href={row.link} className='flex justify-center text-lime-700'>
+                                                    <Link href={String(row.link ?? '')} className='flex justify-center text-lime-700'>
                                                         <button className='rounded-md bg-lime-700 text-white text-sm px-2 py-1'>{locale === "ko" ? "보기" : "View"}</button>
                                                     </Link>
                                                 }

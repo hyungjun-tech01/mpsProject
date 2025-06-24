@@ -34,7 +34,7 @@ export async function fetchFilteredGroups(
     locale: string
 ) {
 
-    console.log("==========fetchFilteredGroups=======");
+    // console.log("==========fetchFilteredGroups=======");
 
     const offset = (currentPage - 1) * itemsPerPage;
     let queryString = "";

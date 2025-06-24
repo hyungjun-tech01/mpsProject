@@ -22,13 +22,14 @@ export interface IEditItem {
 
 export interface ISection {
   title: string;
-  description: string | object;
+  description: string | object | string[];
   items: IEditItem[];
 };
 
 export interface IItem {
   items: IEditItem[];
 };
+
 export interface IButtonInfo {
   cancel: { title: string, link: string },
   go: { title: string },
@@ -38,8 +39,9 @@ export interface IButtonInfo {
 };
 
 export interface IOption {
-  label: string|null;
-  value: string|null;
+  label: string | null;
+  value: string | number |null;
+  suffix?: string;
 };
 
 

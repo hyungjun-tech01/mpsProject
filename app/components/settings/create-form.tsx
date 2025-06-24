@@ -1,7 +1,6 @@
 'use client';
 
 import { useActionState } from 'react';
-import {  State } from '../user/actions';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
@@ -14,9 +13,9 @@ export default function Form({
 } : {
     items: ISection[]; 
     buttons?: IButtonInfo;
-    action: (prevState: RegularExpState, formData: FormData) => Promise<RegularExpState | void>;
+    action: (prevState: void | RegularExpState, formData: FormData) => Promise<RegularExpState | void>;
 }){
-    const initialState: State = { message: null, errors: {} };
+    const initialState: RegularExpState = { message: null, errors: {} };
     // const [printerChecked, setPrinterChecked] = useState(false);
     // const [scanChecked, setScanChecked] = useState(false);
     // const [faxChecked, setFaxChecked] = useState(false);
@@ -53,7 +52,7 @@ export default function Form({
                     )}>
                         <div  className='w-full md:w-1/3 pb-4 md:pr-6'>
                             <div className='mb-5 text-xl font-semibold'>{items[0].title}</div>
-                            <div className='text-sm'>{items[0].description}</div>
+                            <div className='text-sm'>{String(items[0].description)}</div>
                         </div>
                         <div className="w-2/3 pl-6">
                             <div className='w-full md:w-2/3'>
@@ -80,8 +79,8 @@ export default function Form({
                                     locale={item.locale}
                                     chartData={item.chartData}
                                     other={item.other}
-                                    error={ (!!state?.errors && !!state?.errors[item.name]) 
-                                        ? state?.errors[item.name]
+                                    error={ (!!state?.errors && !!state?.errors[item.name as keyof RegularExpState['errors']]) 
+                                        ? state?.errors[item.name as keyof RegularExpState['errors']]
                                         : null
                                     }
                                     />

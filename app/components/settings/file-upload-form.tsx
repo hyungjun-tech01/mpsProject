@@ -18,8 +18,8 @@ export function FileUpload({
   title: string;
   button_title: string;
   detail_comment: string;
-  accepted: object;
-  action: (id:string, prevState: BasicState, formData: FormData) => Promise<BasicState | void>;
+  accepted: Record<string, string[]>;
+  action: (id:string, prevState: void | BasicState, formData: FormData) => Promise<BasicState | void>;
 }) {
   const initialState: BasicState = {};
   const updatedAction = action.bind(null, userId);
@@ -40,7 +40,7 @@ export function FileUpload({
     },
     noClick: true,
   });
-  const hiddenInputRef = useRef(null);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
 
   const getStrFileSize = (byteSize: number) => {
     if (byteSize < 1024) {

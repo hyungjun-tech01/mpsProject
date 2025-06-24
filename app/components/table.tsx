@@ -42,21 +42,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-interface ITable<DataType> {
+interface ITable {
     columns: IColumnData[];
-    rows: DataType[];
+    rows: Record<string, string | number | Date | string[] | boolean | React.ReactElement | null>[];
     totalPages: number;
     path?: string;
     sesseionUserName?: string;
     locale?: 'ko' | 'en';
-    deleteAction?: (id: string, deletedBy:string) => void;
+    deleteAction?: ((id: string, deletedBy?:string) => Promise<{message: string} | void>) | ((id:string) => Promise<{message: string} | void>);
     editable?: boolean;
     deletable?: boolean;
     checkable?: boolean;
 }
 
 
-export default function CustomizedTable<DataType>({
+export default function CustomizedTable({
     columns,
     rows,
     totalPages,
@@ -67,7 +67,7 @@ export default function CustomizedTable<DataType>({
     editable = true,
     deletable = true,
     checkable = false,
-}: ITable<DataType>) {
+}: ITable) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     
@@ -202,7 +202,7 @@ export default function CustomizedTable<DataType>({
                                             align='center'
                                             scope="row"
                                         >
-                                            <input type="checkbox" id={row.id} name={row.id} />
+                                            <input type="checkbox" id={String(row.id)} name={String(row.id)} />
                                         </StyledTableCell>
                                     }
                                     {columns.map((column) => {
@@ -213,37 +213,35 @@ export default function CustomizedTable<DataType>({
                                                 align={column.align}
                                                 scope="row"
                                             >
-                                                {!column.type && row[column.name]}
-                                                {!!column.type && column.type === 'date' && formatTimeToLocal(row[column.name], locale)}
-                                                {!!column.type && column.type === 'date_simple' && formatTimeSimple(row[column.name])}
-                                                {!!column.type && column.type === 'currency' && formatCurrency(row[column.name], locale)}
-                                                {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
+                                                {!column.type && String(row[column.name])}
+                                                {!!column.type && column.type === 'date' && formatTimeToLocal(String(row[column.name]), locale)}
+                                                {!!column.type && column.type === 'date_simple' && formatTimeSimple(String(row[column.name]))}
+                                                {!!column.type && column.type === 'currency' && formatCurrency(String(row[column.name]), locale)}
+                                                {!!column.type && column.type === 'list' && (row[column.name] as string[]).map((item, idx) => (<div key={idx}>{item}</div>))}
                                                 {!!column.type && column.type === 'file' &&
                                                     <div className='hover:cursor-pointer text-lime-700'
-                                                        onClick={() => handleFileClick(row[column.name])}>{row.name}</div>
+                                                        onClick={() => handleFileClick(String(row[column.name]))}>{String(row.name)}</div>
                                                 }
                                                 {!!column.type && column.type === 'icon' &&
                                                     <div className='flex justify-center'><Image src={`/${row[column.name]}`} alt="icon" width={24} height={24} className="w-6 h-6" /></div>
                                                 }
                                                 {!!column.type && column.type === 'enum_icon' &&
-                                                    <div className='flex justify-center'>{column.values[row[column.name]]}</div>
+                                                    <div className='flex justify-center'>{(column.values as Record<string, React.ReactElement>)[String(row[column.name])]}</div>
                                                 }
                                                 {!!column.type && column.type === 'hidden' &&
-                                                    <div className='flex justify-center'>{row[column.name]}</div>
+                                                    <div className='flex justify-center'>{String(row[column.name])}</div>
                                                 }
                                                 {!!column.type && column.type === 'edit' &&
-                                                    <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
+                                                    <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{String(row[column.name])}</Link>
                                                 }
                                                 {!!column.type && column.type === 'view' &&
-                                                    <Link href={`${path}/${row.id}/view`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
+                                                    <Link href={`${path}/${row.id}/view`} className='flex justify-center text-lime-700'>{String(row[column.name])}</Link>
                                                 }
                                                 {!!column.type && column.type === 'thumbnail' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                    <Image
-                                                        src={`/${replaceThumbnailSrc(row[column.name])}`} 
+                                                    <img
+                                                        src={`/${replaceThumbnailSrc(String(row[column.name]))}`} 
                                                         alt="No Image"
-                                                        height={64}
-                                                        width={96}
                                                         className="w-24 h-16"
                                                         onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
                                                         unoptimized

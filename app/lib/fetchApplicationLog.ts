@@ -6,14 +6,14 @@ export async function fetchFilteredApplicationLog(
     query: string,
     itemsPerPage: number,
     currentPage: number,
-    dateFrom :string,
-    dateTo : string,
+    dateFrom :string | null,
+    dateTo : string | null,
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
     try {
         const auditLogs =
            await client.query(`
-            select application_log_id   id,
+            select application_log_id as id,
                     application_page      ,
                     application_action   ,
                     application_parameter,
@@ -48,8 +48,8 @@ export async function fetchFilteredApplicationLogPages(
     client: Pool,
     query: string,
     itemsPerPage: number,
-    dateFrom :string,
-    dateTo : string,
+    dateFrom :string | null,
+    dateTo : string | null,
 ) {
     try {
         const count =

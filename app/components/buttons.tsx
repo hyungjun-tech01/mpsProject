@@ -17,7 +17,7 @@ export function CreateButton({ link, title }: { link: string, title: string}) {
   );
 }
 
-export function UpdateButton({ link, disabled }: { link: string, disabled: boolean }) {
+export function UpdateButton({ link, disabled }: { link: string, disabled?: boolean }) {
   return (
     <Link
       href={disabled ? "" : link}

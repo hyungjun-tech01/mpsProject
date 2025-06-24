@@ -38,19 +38,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-interface ITable<DataType> {
+interface ITable {
     columns: IColumnData[];
-    rows: DataType[];
+    rows: Record<string, string | number | string[]>[];
     currentPage: number;
     totalPages: number;
     path?: string;
-    t: object;
+    t: Record<string, string>;
     checkable?: boolean;
     deleteAction: (id: string[]) => void;
     printAction: (id: string[]) => void;
 }
 
-export default function CustomizedTable<DataType>({
+export default function CustomizedTable({
     columns,
     rows,
     totalPages,
@@ -59,10 +59,10 @@ export default function CustomizedTable<DataType>({
     checkable = false,
     deleteAction,
     printAction,
-}: ITable<DataType>) {
+}: ITable) {
     const [ selectedIds, setSelectedIds ] = useState<string[]>([]);
 
-    const handleCheck = (event) => {
+    const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
         if(event.target.checked) {
             const updateSelectedIds = [
                 ...selectedIds,
@@ -81,12 +81,12 @@ export default function CustomizedTable<DataType>({
         }
     }
     const handlePrintAll = () => {
-        const allIds = rows.map(row => row.id);
+        const allIds = rows.map(row => String(row.id));
         printAction(allIds);
         setSelectedIds([]);
     }
     const handleDeleteAll = () => {
-        const allIds = rows.map(row => row.id);
+        const allIds = rows.map(row => String(row.id));
         deleteAction(allIds);
         setSelectedIds([]);
     }
@@ -156,9 +156,9 @@ export default function CustomizedTable<DataType>({
                                             >
                                                 <input 
                                                     type="checkbox"
-                                                    id={row.id}
-                                                    name={row.id}
-                                                    defaultChecked={selectedIds.findIndex(id => id === row.id) !== -1}
+                                                    id={String(row.id)}
+                                                    name={String(row.id)}
+                                                    defaultChecked={selectedIds.findIndex(id => id === String(row.id)) !== -1}
                                                     onChange={handleCheck}
                                                 />
                                             </StyledTableCell>
@@ -172,13 +172,13 @@ export default function CustomizedTable<DataType>({
                                                     scope="row"
                                                 >
                                                     {!column.type && row[column.name]}
-                                                    {!!column.type && column.type === 'list' && row[column.name].map((item, idx) => (<div key={idx}>{item}</div>))}
+                                                    {!!column.type && column.type === 'list' && (row[column.name] as string[]).map((item, idx) => (<div key={idx}>{item}</div>))}
                                                     {!!column.type && column.type === 'icon' &&
                                                         <div className='flex justify-center'><Image src={`/${row[column.name]}`} alt="icon" width={24} height={24} className="w-6 h-6" /></div>
                                                     }
-                                                    {!!column.type && column.type === 'enum_icon' &&
+                                                    {/* {!!column.type && column.type === 'enum_icon' &&
                                                         <div className='flex justify-center'>{column.values[row[column.name]]}</div>
-                                                    }
+                                                    } */}
                                                     {!!column.type && column.type === 'edit' &&
                                                         <Link href={`${path}/${row.id}/edit`} className='flex justify-center text-lime-700'>{row[column.name]}</Link>
                                                     }

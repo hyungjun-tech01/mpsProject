@@ -141,7 +141,7 @@ export default async function DetectInfoWrapper({
             <div className='w-full flex gap-4 mb-4'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
                     <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_dept')}</h3>
-                    <div className="max-h-96 flex justify-center">
+                    <div className="max-h-96">
                         <PieChart
                             labels={Object.keys(detectRateOfDept)}
                             dataSet={[{
