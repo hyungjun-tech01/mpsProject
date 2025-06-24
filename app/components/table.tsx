@@ -246,6 +246,7 @@ export default function CustomizedTable<DataType>({
                                                         width={96}
                                                         className="w-24 h-16"
                                                         onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                        unoptimized
                                                     />
                                                 </div>
                                                 }
