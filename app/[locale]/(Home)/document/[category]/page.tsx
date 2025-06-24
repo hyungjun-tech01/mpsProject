@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Link from 'next/link';
 import { notFound } from "next/navigation";
 import Search from '@/app/components/search';
-import Table from '@/app/components/table';
+import Table from '@/app/components/document/table';
 // import { CreateButton } from '@/app/components/buttons';
 import { TableSkeleton } from "@/app/components/skeletons";
 import { IColumnData, ISearch } from '@/app/lib/definitions';
@@ -29,17 +29,21 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     
     const session = await auth();
-    if(!session?.user.name)
+    if(!session?.user.name || !session?.user.id)
         return notFound();
 
+    const currentId = session.user.id;
+    const isAdmin = session.user.role === 'admin';
+
     const adapter = MyDBAdapter();
-    const [t, totalPages, docs] = await Promise.all([
+    const [t, totalPages, docs, allUsers] = await Promise.all([
         getDictionary(locale),
-        adapter.getFilteredDocumnetsPages(query, session?.user.name, category, itemsPerPage),
-        adapter.getFilteredDocumnets(query, session?.user.name, category, itemsPerPage, currentPage),
+        adapter.getFilteredDocumnetsPages(query, session?.user.name, isAdmin, category, itemsPerPage),
+        adapter.getFilteredDocumnets(query, session?.user.name, isAdmin, category, itemsPerPage, currentPage),
+        adapter.getAllUsers(),
     ]);
 
-    // Tabs ----------------------------------------------------------------------
+    // Tabs ----------------------------------------------------------------------------
     const subTitles = [
         { category: 'fax', title: t('document.subTitle_fax'), link: `/document/fax` },
         { category: 'scan', title: t('document.subTitle_scan'), link: `/document/scan` },
@@ -54,6 +58,14 @@ export default async function Page(props: {
             keySearchPlaceholder : t('document.search_placehodler_scan'),
         },
     };
+
+    // Options for user selection ----------------------------------------------------------------------------
+    const userOptions = allUsers
+        .filter((user) => !!user.user_name && !!user.user_id && String(user.user_id) !== currentId)
+        .map((user) => ({
+            value: String(user.user_id),
+            title: String(user.user_name),
+    }));
 
     const columns: IColumnData[] = [
         { name: 'thumbnail', title: t('document.thumbnail'), align: 'center', type: 'thumbnail' },
@@ -87,8 +99,10 @@ export default async function Page(props: {
                         totalPages={totalPages}
                         path='document'
                         locale={locale}
-                        editable = {false}
+                        currentId={currentId}
+                        userOptions={userOptions}
                         deleteAction={adapter.deleteDocument}
+                        shareAction={adapter.shareDocument}
                     />
                 </Suspense>
             </div>

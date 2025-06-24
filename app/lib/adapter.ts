@@ -389,24 +389,30 @@ export default function MyDBAdapter() {
         // ----- Document ------------------------------------------
         async getFilteredDocumnets(
             query: string,
-            userId: string,
+            userName: string,
+            isAdmin: boolean,
             jobType: 'fax' | 'scan',
             itemsPerPage: number,
             currentPage: number
         ) {
-            return Document.fetchFilteredDocumnets(pool, query, userId, jobType, itemsPerPage, currentPage);
+            return Document.fetchFilteredDocumnets(pool, query, userName, isAdmin, jobType, itemsPerPage, currentPage);
         },
         async getFilteredDocumnetsPages(
             query: string,
-            userId: string,
+            userName: string,
+            isAdmin: boolean,
             jobType: 'fax' | 'scan',
             itemsPerPage: number
         ) {
-            return Document.fetchFilteredDocumnetPages(pool, query, userId, jobType, itemsPerPage);
+            return Document.fetchFilteredDocumnetPages(pool, query, userName, isAdmin, jobType, itemsPerPage);
         },
-        async deleteDocument(id: string) {
+        async shareDocument(initState: void | BasicState, formData: FormData) {
             'use server';
-            return Action.deleteDocument(pool, id);
+            return Action.shareDocument(pool, initState, formData);
+        },
+        async deleteDocument(id: string, user?:string) {
+            'use server';
+            return Action.deleteDocument(pool, id, user);
         },
 
         // ----- Log -----------------------------------------------

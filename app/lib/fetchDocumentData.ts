@@ -5,13 +5,14 @@ import type { Pool } from "pg";
 export async function fetchFilteredDocumnets(
     client: Pool,
     query: string,
-    user_id: string,
-    job_type: 'fax' | 'scan',
+    userName: string,
+    isAdmin: boolean,
+    jobType: 'fax' | 'scan',
     itemsPerPage: number,
     currentPage: number
 ) {
 
-    console.log('fetchFilteredDocumnets user_id', user_id);
+    console.log('fetchFilteredDocumnets user_name', userName);
 
     const offset = (currentPage - 1) * itemsPerPage;
     try{
@@ -30,10 +31,10 @@ export async function fetchFilteredDocumnets(
             FROM tbl_document_job_info dj, tbl_device_info tdi, tbl_user_info tui
             WHERE dj.printer_id = tdi.device_id
                 and dj.created_by = tui.user_id
-                and dj.job_type = '${job_type.toUpperCase()}' AND dj.deleted_date is NULL
-                ${user_id === 'admin' ? "" : "AND ( tui.user_name = '" + user_id
-                    + "' OR dj.document_id IN ( SELECT document_id  FROM tbl_document_shared_info tdsi, tbl_user_info t  WHERE tdsi.shared_to = t.user_id and t.user_name ='"
-                    + user_id + "'))"}
+                and dj.job_type = '${jobType.toUpperCase()}' AND dj.deleted_date is NULL
+                ${isAdmin? "" : "AND ( tui.user_name = '" + userName
+                    + "' OR dj.document_id IN ( SELECT document_id FROM tbl_document_shared_info tdsi, tbl_user_info t  WHERE tdsi.shared_to = t.user_id and t.user_name ='"
+                    + userName + "'))"}
                 ${query !== "" ? "AND (dj.document_name ILIKE '%" + query + "%' OR dj.archive_path ILIKE '%" + query + "%')" : ""}
             ORDER BY dj.created_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}`);
@@ -41,7 +42,7 @@ export async function fetchFilteredDocumnets(
             // return docs.rows;
             const converted = docs.rows.map((data) => ({
                 ...data,
-                editable: (data.created_by === user_id) || (user_id === 'admin')
+                deletable: (data.created_by.includes(userName)) || isAdmin
             }));
             return converted;
     } catch (error) {
@@ -54,6 +55,7 @@ export async function fetchFilteredDocumnetPages(
     client: Pool,
     query: string,
     user_id: string,
+    isAdmin: boolean,
     job_type: 'fax' | 'scan',
     itemsPerPage: number
 ) {

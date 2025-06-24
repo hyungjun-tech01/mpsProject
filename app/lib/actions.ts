@@ -478,27 +478,133 @@ export async function changeBalance(
   revalidatePath(`/user/${id}/charge`);
 }
 
-export async function deleteDocument(client: Pool, id: string) {
+export async function shareDocument(client: Pool, initState: void | BasicState, formData: FormData) {
+  // console.log("Share Document / Form Data : ", formData);
+  const users = formData.getAll("users") as string[];
+  const expireDate = formData.get("expire_date") as string;
+  const documentId = formData.get("document_id") as string;
+
+  if (Array.isArray(users)) {
+    if (users.length === 0) {
+      return {
+        message: "No selected users",
+      };
+    }
+  } else {
+    if (!users || users === "") {
+      return {
+        message: "No selected user",
+      };
+    }
+  };
+
+  if (!expireDate || expireDate === "") {
+    return {
+      message: "No expire date or invalid date",
+    };
+  };
+
+  let selected_job_type = "";
+
+  try {
+    await client.query("BEGIN"); // 트랜잭션 시작
+
+    let sharedDone = false;
+
+    const doc_job = await client.query(`
+      SELECT job_type, shared FROM tbl_document_job_info
+      WHERE document_id='${documentId}'
+    `);
+
+    selected_job_type = doc_job.rows[0].job_type.toLowerCase();
+    const currentShared = doc_job.rows[0].shared;
+
+    for (const user of users) {
+      const existed = await client.query(`
+        SELECT * FROM tbl_document_shared_info
+        WHERE document_id='${documentId}' AND shared_to='${user}'
+      `);
+      if (existed.rows.length > 0) {
+        let newest_expire_date = expireDate;
+        for (const shared of existed.rows) {
+          if (shared.expire_date > newest_expire_date) {
+            newest_expire_date = shared.expire_date;
+          }
+        };
+        await client.query(`
+          UPDATE tbl_document_shared_info
+          SET shared_expiry_date='${newest_expire_date}'
+          WHERE document_id='${documentId}' AND shared_to='${user}'
+        `);
+      } else {
+        sharedDone = true;
+        await client.query(`
+          INSERT INTO tbl_document_shared_info (document_id, shared_to, shared_type, shared_expiry_date)
+          VALUES ('${documentId}', '${user}', '${selected_job_type}', '${expireDate}')
+        `);
+      }
+    }
+
+    if (sharedDone && currentShared === 'N') {
+      await client.query(`
+        UPDATE tbl_document_job_info
+        SET shared='Y' WHERE document_id='${documentId}'
+      `);
+    }
+
+    await client.query("COMMIT"); // 모든 작업이 성공하면 커밋
+  } catch (error) {
+    await client.query("ROLLBACK"); // 에러 발생 시 롤백
+    console.log("Share Document / Error : ", error);
+    return {
+      message: "Database Error: Failed to share document.",
+    };
+  }
+
+  revalidatePath(`/document/${selected_job_type}`);
+  redirect(`/document/${selected_job_type}`);
+}
+
+export async function deleteDocument(client: Pool, id: string, user?: string) {
   let selected_job_type = "";
   try {
     await client.query("BEGIN"); // 트랜잭션 시작
 
     const doc_job = await client.query(`
-            SELECT job_type FROM tbl_document_job_info
+            SELECT job_type, created_by FROM tbl_document_job_info
             WHERE document_id='${id}'
-        `);
+    `);
     selected_job_type = doc_job.rows[0].job_type.toLowerCase();
+    const created_by = doc_job.rows[0].created_by;
 
-    await client.query(`
-            DELETE FROM tbl_document_shared_info
-            WHERE document_id='${id}'
-        `);
+    if (!user || created_by === user) {
+      await client.query(`
+              DELETE FROM tbl_document_shared_info
+              WHERE document_id='${id}'
+      `);
 
-    await client.query(`
-            UPDATE tbl_document_job_info
-            SET deleted_date = now()
-            WHERE document_id='${id}'
+      await client.query(`
+              UPDATE tbl_document_job_info
+              SET deleted_date = now(), shared='N'
+              WHERE document_id='${id}'
+      `);
+    } else {
+      await client.query(`
+              DELETE FROM tbl_document_shared_info
+              WHERE document_id='${id} AND shared_to='${user}'
+      `);
+      const check_shared = await client.query(`
+        SELECT COUNT(*) FROM tbl_document_shared_info
+        WHERE document_id='${id}'
+      `);
+      if (check_shared.rows[0].count === 0) {
+        await client.query(`
+          UPDATE tbl_document_job_info
+          SET shared='N'
+          WHERE document_id='${id}'
         `);
+      }
+    }
 
     await client.query("COMMIT"); // 모든 작업이 성공하면 커밋
   } catch (error) {
@@ -839,7 +945,7 @@ export async function uploadSelectedUser(client: Pool, prevState: void | BasicSt
       await client.query("ROLLBACK"); // 에러 발생 시 롤백
       console.log("Create User / Error : ", error);
       return {
-        errors: [String(error)?? "Unknown error"],
+        errors: [String(error) ?? "Unknown error"],
         message: "Database Error: Failed to Create User.",
       };
     }
