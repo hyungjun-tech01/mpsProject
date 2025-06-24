@@ -140,8 +140,9 @@ export default function AuditLogQuery({
           onChange={handleEndDateChange}
         />
       </div>
-      {/* 개인 정보 */}
-      <div className="flex items-center gap-2 ml-2">
+       {/* 개인 정보 */}
+      {category !== 'adminActionLogs' && 
+        <div className="flex items-center gap-2 ml-2">
         <label className="flex items-center ml-4 cursor-pointer select-none">
           <input
             type="checkbox"
@@ -152,8 +153,10 @@ export default function AuditLogQuery({
           개인정보
         </label>
       </div>
+      }
 
       {/* Security 체크박스 */}
+      {category !== 'adminActionLogs' && 
       <div className="flex items-center gap-2 ml-2">
         <label className="flex items-center ml-4 cursor-pointer select-none">
           <input
@@ -165,6 +168,7 @@ export default function AuditLogQuery({
           보안단어
         </label>
       </div>
+      }
       
     </div>
   </div>
