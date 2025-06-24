@@ -143,10 +143,10 @@ export default async function DetectInfoWrapper({
                     <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_dept')}</h3>
                     <div className="max-h-96">
                         <PieChart
-                            labels={Object.keys(detectRateOfDept)}
+                            labels={Object.keys(detectRateOfDept).slice(0, 10)}
                             dataSet={[{
                                 label: trans('dashboard.privacy_detect_by_dept'),
-                                data: Object.values(detectRateOfDept),
+                                data: Object.values(detectRateOfDept).slice(0, 10),
                             }]}
                         />
                     </div>
