@@ -90,7 +90,7 @@ export async function createRegularExp(client: Pool, prevState: void | RegularEx
 
 export async function deleteRegularExp(client: Pool, id: string ) {
     try {
-        console.log("deleteRegularExp", id);
+        // console.log("deleteRegularExp", id);
         await client.query(`
             delete from tbl_security_value_info
             where security_value_id =$1
@@ -105,4 +105,4 @@ export async function deleteRegularExp(client: Pool, id: string ) {
     
     revalidatePath('/settings/regularExprPrivateInfo');
     redirect('/settings/regularExprPrivateInfo');
-}
+};

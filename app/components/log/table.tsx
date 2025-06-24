@@ -55,7 +55,7 @@ interface ITable {
     totalPages: number;
     path?: string;
     locale?: 'ko' | 'en';
-    deleteAction?: (id: string, deletedBy?:string) => void;
+    deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
     editable?: boolean;
     deletable?: boolean;
     checkable?: boolean;

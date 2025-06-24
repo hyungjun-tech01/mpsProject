@@ -23,7 +23,6 @@ export default function StatQuery({
   dept?: string,
 }) {
 
-  console.log('StatQuery', translated, departments, period, periodStart, periodEnd, dept)
   const [isPeriodSpecified, setIsPeriodSpecified] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);

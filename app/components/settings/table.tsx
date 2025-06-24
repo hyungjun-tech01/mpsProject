@@ -47,7 +47,7 @@ interface ISettingTable {
     totalPages: number;
     locale?: 'ko' | 'en';
     action: (prevState:void | BasicState2, formData:FormData) => Promise<BasicState2 | void>,
-    deleteAction?: (id: string) => void;
+    deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
     deletable?: boolean;
 }
 

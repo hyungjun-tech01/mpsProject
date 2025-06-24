@@ -53,8 +53,8 @@ interface ITable {
     locale?: 'ko' | 'en';
     currentId: string;
     userOptions: { value: string, title: string }[];
-    deleteAction?: ((id: string, deletedBy?: string) => Promise<{ message: string } | void>) | ((id: string) => Promise<{ message: string } | void>);
-    shareAction?: (initState: void | BasicState, formData: FormData) => Promise<BasicState | void>;
+    deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
+    shareAction?: (initState: void | BasicState, formData: FormData) => Promise< BasicState | void>;
 };
 
 export default function CustomizedTable({

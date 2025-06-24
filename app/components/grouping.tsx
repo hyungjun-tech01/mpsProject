@@ -285,13 +285,8 @@ export default function Grouping({
     };
 
     useEffect(() => {
-        // console.log('Grouping / check Group : ', inGroup);
-        const updatedOutGroup = outGroup.members;   //.filter(item => group.findIndex(member => member.id === item.id) === -1);
-        setNonGroup(updatedOutGroup);
-
-        const updatedInGroup = !!inGroup ? inGroup.members : [];   //.filter(item => group.findIndex(member => member.id === item.id) === -1) : [];
-        // const updatedInGroup = [...checkInGroup, ...group];
-        setGroup(updatedInGroup);
+        setNonGroup([...outGroup.members]);
+        setGroup(!!inGroup ? [...inGroup.members] : []);
     }, [outGroup, inGroup]);
 
     return (

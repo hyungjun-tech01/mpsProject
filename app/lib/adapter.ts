@@ -62,10 +62,16 @@ export default function MyDBAdapter() {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-        async deleteUser(userId: string, merged: string) {
+        async deleteUser(userId: string, param?: string) {
             'use server';
+            
+            if(!param) {
+                return {
+                    message: 'Need more parameter'
+                };
+            };
 
-            const [deletedBy, ipAddress] = merged.split(',');
+            const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
             logData.append('application_page', '사용자');
@@ -537,10 +543,16 @@ export default function MyDBAdapter() {
             'use server';
             return SettingAction.createRegularExp(pool, prevState, formData);
         },
-        async deleteRegularExp( id: string, merged:string){
+        async deleteRegularExp( id: string, param:string|undefined){
             'use server';
             // console.log('deleteRegularExp', FormData);
-            const [deletedBy, ipAddress] = merged.split(',');
+            if(!param) {
+                return {
+                    message: 'Need more parameter'
+                };
+            }
+            
+            const [deletedBy, ipAddress] = param.split(',');
             
             const logData = new FormData();
             logData.append('application_page', '정규식/보안단어');
@@ -549,9 +561,7 @@ export default function MyDBAdapter() {
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
-
             Action.applicationLog(pool,  logData);
-
 
             return SettingAction.deleteRegularExp(pool, id);
         },       

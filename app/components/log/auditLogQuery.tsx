@@ -19,9 +19,8 @@ export default function AuditLogQuery({
 }: {
   dateFrom: string,
   dateTo: string,
-  category:string,
-  periodStart?: string|null,
-  periodEnd?: string|null,
+  periodStart?: string | null,
+  periodEnd?: string | null,
 }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -45,21 +44,20 @@ export default function AuditLogQuery({
       replace(`${pathname}?${params.toString()}`);
     }
     setPrivacyChecked(searchParams.get('privacy') === 'true');
-    setSecurityChecked(searchParams.get('security') === 'true'); 
+    setSecurityChecked(searchParams.get('security') === 'true');
   }, [startDate, endDate, replace, pathname, searchParams]);
 
-
   const handleStartDateChange = (date: Date | null) => {
-    if(!!date) {
+    if (!!date) {
       setStartDate(date);
 
-      if(!!endDate) {
+      if (!!endDate) {
         let endTemp = endDate;
-        if(endDate < date) {
+        if (endDate < date) {
           setEndDate(date);
           endTemp = date;
         }
-  
+
         const params = new URLSearchParams(searchParams);
         params.set("periodStart", formatTimeYYYYpMMpDD(date));
         params.set("periodEnd", formatTimeYYYYpMMpDD(endTemp));
@@ -69,12 +67,12 @@ export default function AuditLogQuery({
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    if(!!date) {
+    if (!!date) {
       setEndDate(date);
 
-      if(!!startDate) {
+      if (!!startDate) {
         let startTemp = startDate;
-        if(date < startDate) {
+        if (date < startDate) {
           setStartDate(date);
           startTemp = date;
         }
@@ -87,25 +85,22 @@ export default function AuditLogQuery({
     }
   };
 
-    
-  
-    const updateParams = (key: string, checked: boolean) => {
-      const params = new URLSearchParams(searchParams);
-  
-      if (checked) {
-        params.set(key, 'true');
-      } else {
-        params.delete(key);
-      }
-      replace(`${pathname}?${params.toString()}`);
-    };
+  const updateParams = (key: string, checked: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (checked) {
+      params.set(key, 'true');
+    } else {
+      params.delete(key);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
     setPrivacyChecked(checked);
 
     updateParams('privacy', checked);
-
   };
 
   const handleSecurityChange = (e: React.ChangeEvent<HTMLInputElement>) => {

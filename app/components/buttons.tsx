@@ -31,7 +31,14 @@ export function UpdateButton({ link, disabled }: { link: string, disabled?: bool
   );
 }
 
-export function DeleteButtton({ id, title, deletedBy, ipAddress, action }: { id: string, title:string, deletedBy:string|undefined, ipAddress:string|undefined, action: (id:string, deletedBy:string) => void }) {
+export function DeleteButtton({ 
+  id, title, deletedBy, ipAddress, action
+}: {
+  id: string, title:string,
+  deletedBy:string|undefined,
+  ipAddress: string|undefined,
+  action: (id:string, param?:string) => Promise<{message:string} | void>,
+}) {
   //  console.log("DeleteButton / id :", id, ipAddress);
 
    const merged = `${deletedBy ?? 'unknown'},${ipAddress ?? 'unknown'}`;

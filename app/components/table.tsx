@@ -49,7 +49,7 @@ interface ITable {
     path?: string;
     sesseionUserName?: string;
     locale?: 'ko' | 'en';
-    deleteAction?: ((id: string, deletedBy?:string) => Promise<{message: string} | void>) | ((id:string) => Promise<{message: string} | void>);
+    deleteAction?: (id: string, param:string|undefined) => Promise<{message: string} | void>;
     editable?: boolean;
     deletable?: boolean;
     checkable?: boolean;
