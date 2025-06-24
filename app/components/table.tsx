@@ -239,13 +239,15 @@ export default function CustomizedTable({
                                                 }
                                                 {!!column.type && column.type === 'thumbnail' &&
                                                 <div className='flex justify-center  bg-gray-200 border'>
-                                                    <img
-                                                        src={`/${replaceThumbnailSrc(String(row[column.name]))}`} 
-                                                        alt="No Image"
-                                                        className="w-24 h-16"
-                                                        onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
-                                                        unoptimized
-                                                    />
+                                                    <Image 
+                                                    src={`/${replaceThumbnailSrc(String(row[column.name]))}`} 
+                                                    alt="No Image"  
+                                                    width={96}
+                                                    height={72}
+                                                    className="w-24 h-18"
+                                                    onError={(e) => e.currentTarget.src = '/fallback-image.png'} 
+                                                    unoptimized
+                                                />
                                                 </div>
                                                 }
                                             </StyledTableCell>
