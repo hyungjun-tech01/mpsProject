@@ -1,6 +1,6 @@
-drop view tbl_privacy_audit_v;
+drop view tbl_security_audit_v;
 
-create or replace view tbl_privacy_audit_v as (
+create or replace view tbl_security_audit_v as (
     SELECT 
         send_date, 
         user_name,
@@ -9,7 +9,6 @@ create or replace view tbl_privacy_audit_v as (
         full_name,
         department, 
         dept_id,
-        SUM(detect_privacy_count) AS detect_privacy_count,
         SUM(detect_security_count) AS detect_security_count,
         SUM(total_count) AS total_count
     FROM (
@@ -21,10 +20,6 @@ create or replace view tbl_privacy_audit_v as (
             t1.full_name full_name,
             t2.dept_name department,
             t2.dept_id dept_id,
-            CASE 
-            WHEN t.detect_privacy = true THEN 1 
-            ELSE 0 
-            END AS detect_privacy_count,
             CASE 
             WHEN t.detect_security = true THEN 1 
             ELSE 0 
@@ -47,14 +42,11 @@ create or replace view tbl_privacy_audit_v as (
 
 
 -- 샘플 쿼리 
-select user_name, external_user_name, department, 
-sum(detect_privacy_count) as detect_privacy_count, 
-sum(detect_security_count) as detect_security_count, 
+select user_name, external_user_name, department, sum(detect_security_count) as detect_security_count, 
 sum(total_count) as total_count,
-ROUND(SUM(detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_privacy_detect,
-ROUND(SUM(detect_security_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_security_detect
-from tbl_privacy_audit_v
+ROUND(SUM(detect_security_count) / SUM(total_count) * 100, 2)  || '%' as percent_detect
+from tbl_security_audit_v
 where send_date >= '2024.04.01'
 and send_date <= '2024.10.31'  
 group by user_name, external_user_name, department
-order by  percent_privacy_detect, percent_security_detect desc;
+order by  percent_detect desc;
