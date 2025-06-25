@@ -58,7 +58,122 @@ export async function fetchPrinterUsageLogByUserIdPages(
     }
 };
 
-export async function fetchPrivacytDetectedData(
+export async function fetchPrintCountData(
+    client: Pool,
+    period: string,
+    periodStart?: string,
+    periodEnd?:string,
+    dept?: string,
+    user?: string,
+) {
+    const now = new Date();
+    let startTime = null;
+    let endTime = null;
+    const startDate = new Date();
+
+    if(period !== "specified") {
+        if(period === 'week') {
+            startDate.setDate(now.getDate() - 6);
+        } else if(period === 'month') {
+            startDate.setMonth(now.getMonth() - 1);
+        }
+        startTime = (startDate.getFullYear()%100)*1e12 + (startDate.getMonth()+1)*1e10 + startDate.getDate()*1e8;
+    } else {
+        if(!!periodStart) {
+            const splitted = periodStart.split('.');
+            startTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2])*1e8;
+        }
+        if(!!periodEnd) {
+            const splitted = periodEnd.split('.');
+            endTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2] + '23595999');
+        }
+    }
+    
+    try {
+        const sum = await client.query(`
+            SELECT
+                ui.user_id,
+                ui.user_name,
+                ajl.send_time,
+                di.dept_name,
+                ajl.total_pages,
+                ajl.color_total_pages
+            FROM tbl_audit_job_log ajl
+            JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+            JOIN tbl_dept_info di ON ui.department = di.dept_id
+            WHERE 1 = 1 
+            and ajl.send_time <> '0'
+            and ajl.send_time >= '${startTime}'
+            ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
+            ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
+            ${!!dept ? "AND ui.department='" + dept + "'" : ""}
+            ORDER BY send_time DESC
+        `);
+        return sum.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch detection data.");
+    }
+};
+
+export async function fetchPrivacyDetectedData(
+    client: Pool,
+    period: string,
+    periodStart?: string,
+    periodEnd?:string,
+    dept?: string,
+    user?: string,
+) {
+    const now = new Date();
+    let startTime = null;
+    let endTime = null;
+    const startDate = new Date();
+
+    if(period !== "specified") {
+        if(period === 'week') {
+            startDate.setDate(now.getDate() - 6);
+        } else if(period === 'month') {
+            startDate.setMonth(now.getMonth() - 1);
+        }
+        startTime = (startDate.getFullYear()%100)*1e12 + (startDate.getMonth()+1)*1e10 + startDate.getDate()*1e8;
+    } else {
+        if(!!periodStart) {
+            const splitted = periodStart.split('.');
+            startTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2])*1e8;
+        }
+        if(!!periodEnd) {
+            const splitted = periodEnd.split('.');
+            endTime = Number(splitted[0].slice(-2) + splitted[1] + splitted[2] + '23595999');
+        }
+    }
+    
+    try {
+        const sum = await client.query(`
+            SELECT
+                ui.user_id,
+                ui.user_name,
+                ajl.send_time,
+                di.dept_name,
+                ajl.detect_privacy
+            FROM tbl_audit_job_log ajl
+            JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+            JOIN tbl_dept_info di ON ui.department = di.dept_id
+            WHERE 1 = 1 
+            and ajl.send_time <> '0'
+            and ajl.send_time >= '${startTime}'
+            ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
+            ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
+            ${!!dept ? "AND ui.department='" + dept + "'" : ""}
+            ORDER BY send_time DESC
+        `);
+        return sum.rows;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch detection data.");
+    }
+};
+
+export async function fetchSecurityDetectedData(
     client: Pool,
     period: string,
     periodStart?: string,
@@ -599,7 +714,95 @@ export async function fetchUsageStatusByUser(
     }
 };
 
+export async function fetchPrintCountInfoByUsers(client: Pool, period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
+    let startDate = periodStart?? "";
+    const endDate = periodEnd?? "";
+
+    if(period !== 'specified') {
+        const now = new Date();
+        const startTime = new Date();
+
+        if(period === 'today') {
+            startDate = formatTimeYYYYpMMpDD(now);
+        } else if(period === 'week') {
+            startTime.setDate(now.getDate() - 6);
+        } else if(period === 'month') {
+            startTime.setMonth(now.getMonth() - 1);
+        }
+        startDate = formatTimeYYYYpMMpDD(startTime);
+    }
+
+    try {
+        const response = await client.query(`
+            SELECT
+                pav.user_id,
+                pav.user_name,
+                pav.external_user_name,
+                di.dept_name,
+                sum(pav.detect_privacy_count) as detect_privacy_count,
+                sum(pav.total_count) as total_count,
+                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_privacy_audit_v pav
+            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
+            WHERE send_date >= '${startDate}'
+            ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
+            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
+            GROUP BY user_id, user_name, external_user_name, dept_name
+            ORDER BY detect_privacy_count DESC
+        `);
+        return response.rows;
+    } catch (e) {
+        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        return [];
+    }
+};
+
 export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
+    let startDate = periodStart?? "";
+    const endDate = periodEnd?? "";
+
+    if(period !== 'specified') {
+        const now = new Date();
+        const startTime = new Date();
+
+        if(period === 'today') {
+            startDate = formatTimeYYYYpMMpDD(now);
+        } else if(period === 'week') {
+            startTime.setDate(now.getDate() - 6);
+        } else if(period === 'month') {
+            startTime.setMonth(now.getMonth() - 1);
+        }
+        startDate = formatTimeYYYYpMMpDD(startTime);
+    }
+
+    try {
+        const response = await client.query(`
+            SELECT
+                pav.user_id,
+                pav.user_name,
+                pav.external_user_name,
+                di.dept_name,
+                sum(pav.detect_privacy_count) as detect_privacy_count,
+                sum(pav.total_count) as total_count,
+                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_privacy_audit_v pav
+            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
+            WHERE send_date >= '${startDate}'
+            ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
+            ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
+            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
+            GROUP BY user_id, user_name, external_user_name, dept_name
+            ORDER BY detect_privacy_count DESC
+        `);
+        return response.rows;
+    } catch (e) {
+        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        return [];
+    }
+};
+
+export async function fetchSecurityDetectInfoByUsers(client: Pool, period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
     let startDate = periodStart?? "";
     const endDate = periodEnd?? "";
 
@@ -681,7 +884,6 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
         return [];
     }
 }
-
 
 export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string) {
     const splittedStart = periodStart.split('.');

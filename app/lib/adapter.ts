@@ -478,8 +478,14 @@ export default function MyDBAdapter() {
             return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security);
         },
 
-        async getPrivacytDetectedData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
-            return Log.fetchPrivacytDetectedData(pool, period, periodStart, periodEnd, dept, user);
+        async getPrintCountData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrintCountData(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getPrivacyDetectedData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrivacyDetectedData(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getSecurityDetectedData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchSecurityDetectedData(pool, period, periodStart, periodEnd, dept, user);
         },
         async getTodayTotalPageSum() {
             return Log.fetchTodayTotalPageSum(pool);
@@ -496,13 +502,19 @@ export default function MyDBAdapter() {
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
         },
+        async getPrintCountInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrintCountInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
+        },
         async getPrivacyDetectInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
             return Log.fetchPrivacyDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
         },
-        async getPrintInfoByQuerygetPrivacyDetectInfoByUsers(periodStart: string, periodEnd: string, dept?: string, user?: string, device?: string) {
+        async getSecurityDetectInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchSecurityDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getPrintInfoByQuery(periodStart: string, periodEnd: string, dept?: string, user?: string, device?: string) {
             return Log.fetchPrintInfoByQuery(pool, periodStart, periodEnd, dept, user, device);
         },
-        async getPrivacyInfoByQuerygetPrivacyDetectInfoByUsers(periodStart: string, periodEnd: string, dept?: string, user?: string) {
+        async getPrivacyInfoByQuery(periodStart: string, periodEnd: string, dept?: string, user?: string) {
             return Log.fetchPrivacyInfoByQuery(pool, periodStart, periodEnd, dept, user);
         },
 
