@@ -62,26 +62,19 @@ export default function MyDBAdapter() {
             'use server';
             return Action.modifyUser(pool, id, prevState, formData);
         },
-        async deleteUser(userId: string, param?: string) {
+        async deleteUser(userId: string, param: string) {
             'use server';
-            
-            if(!param) {
-                return {
-                    message: 'Need more parameter'
-                };
-            };
 
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', '사용자');
-            logData.append('application_action', '삭제');
+            logData.append('application_page', 'User');
+            logData.append('application_action', 'Delete');
             logData.append('application_parameter', `{userId:${userId}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
-
-            Action.applicationLog(pool,  logData);
+            Action.applicationLog(pool, logData);
 
             return Action.deleteUser(pool, userId)
         },
@@ -254,8 +247,20 @@ export default function MyDBAdapter() {
             'use server';
             return GroupAction.modifySecurityGroup(pool, id, prevState, formData);
         },
-        async deleteGroup(id: string) {
+        async deleteGroup(id: string, param: string) {
             'use server';
+
+            const [deletedBy, ipAddress] = param.split(',');
+
+            const logData = new FormData();
+            logData.append('application_page', 'Group');
+            logData.append('application_action', 'Delete');
+            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+            Action.applicationLog(pool, logData);
+
             return GroupAction.deleteGroup(pool, id);
         },
 
@@ -265,23 +270,16 @@ export default function MyDBAdapter() {
             itemsPerPage: number,
             currentPage: number,
             groupId?: string
-        ){
+        ) {
             return Device.fetchFilteredDevices(pool, query, itemsPerPage, currentPage, groupId);
         },
-        async getDevicesPages( 
-            query: string,
-            itemsPerPage: number
-        ) {
+        async getDevicesPages(query: string, itemsPerPage: number) {
             return Device.fetchDevicesPages(pool, query, itemsPerPage);
         },
-        async getDeviceById(
-            id:string
-        ){
+        async getDeviceById(id: string) {
             return Device.fetchDeviceById(pool, id);
-        },  
-        async getDeviceFaxLineById(
-            id:string
-        ){
+        },
+        async getDeviceFaxLineById(id: string) {
             return Device.fetchDeviceFaxLineById(pool, id);
         },
         async getDevicesbyGroupManager(
@@ -289,49 +287,48 @@ export default function MyDBAdapter() {
             query: string,
             itemsPerPage: number,
             currentPage: number
-        ){
+        ) {
             return Device.fetchDevicesbyGroupManager(pool, userId, query, itemsPerPage, currentPage);
         },
-        async getDevicesbyGroupManagerPages(
-            userId: string,
-            query: string,
-            itemsPerPage: number
-        ){
+        async getDevicesbyGroupManagerPages(userId: string, query: string, itemsPerPage: number) {
             return Device.fetchDevicesbyGroupManagerPages(pool, userId, query, itemsPerPage);
         },
-        async createDevice(
-            newDevice: object
-        ) {
+        async createDevice(newDevice: Record<string, string | null>) {
             'use server';
             return Device.fetchCreateDevice(pool, newDevice);
-        },        
-        async getPrinterGroup(
-        ) {
+        },
+        async getPrinterGroup() {
             return Device.fetchPrinterGroup(pool);
-        },  
-        async deleteDevice(
-            id: string
-        ) {
+        },
+        async deleteDevice(id: string, param: string) {
             'use server';
+
+            const [deletedBy, ipAddress] = param.split(',');
+
+            const logData = new FormData();
+            logData.append('application_page', 'Device');
+            logData.append('application_action', 'Delete');
+            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+            Action.applicationLog(pool, logData);
+
             return Device.fetchDeleteDevice(pool, id);
-        },   
-        async fetchDeleteFaxLineInfo(
-            id: string
-        ) {
+        },
+        async fetchDeleteFaxLineInfo(id: string) {
             'use server';
             console.log('adapter fetchDeleteFaxLineInfo', id);
             return Device.fetchDeleteFaxLineInfo(pool, id);
-        },   
-        async  modifyDevice(
-            newDevice: object
-        ) {
+        },
+        async modifyDevice(newDevice: Record<string, string | null>) {
             'use server';
             return Device.fetchModifyDevice(pool, newDevice);
         },
         async saveFaxLineInfo(
-            saveFaxLineData: Record<string, string | null>, 
+            saveFaxLineData: Record<string, string | null>,
             created_by: string
-        ){
+        ) {
             'use server';
             return Device.fetchSaveFaxLineInfo(pool, saveFaxLineData, created_by);
         },
@@ -416,9 +413,21 @@ export default function MyDBAdapter() {
             'use server';
             return Action.shareDocument(pool, initState, formData);
         },
-        async deleteDocument(id: string, user?:string) {
+        async deleteDocument(id: string, param: string) {
             'use server';
-            return Action.deleteDocument(pool, id, user);
+
+            const [deletedBy, ipAddress] = param.split(',');
+
+            const logData = new FormData();
+            logData.append('application_page', 'Document');
+            logData.append('application_action', 'Delete');
+            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+            Action.applicationLog(pool, logData);
+
+            return Action.deleteDocument(pool, id, deletedBy);
         },
 
         // ----- Log -----------------------------------------------
@@ -433,44 +442,50 @@ export default function MyDBAdapter() {
             return Log.fetchPrinterUsageLogByUserIdPages(pool, query, itemsPerPage);
         },
         async getFilteredAuditLogs(
-            query:string,
+            query: string,
             itemsPerPage: number,
             currentPage: number,
-            fromDate : string|null, 
-            toDate:string|null,
-            privacy:string|null, 
-            security:string|null,
+            fromDate: string | null,
+            toDate: string | null,
+            privacy: string | null,
+            security: string | null,
         ) {
-           // console.log('fromDate', fromDate);
-           //, fromDate , toDate
-            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate, privacy, security);
+            // console.log('fromDate', fromDate);
+            //, fromDate , toDate
+            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security);
         },
-        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null, privacy:string|null, security:string|null) {
+        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate: string | null, toDate: string | null, privacy: string | null, security: string | null) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate, privacy, security);
+            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security);
         },
         async getFilteredRetiredAuditLogs(
-            query:string,
+            query: string,
             itemsPerPage: number,
             currentPage: number,
-            fromDate : string|null, 
-            toDate:string|null,
-            privacy:string|null, 
-            security:string|null,
+            fromDate: string | null,
+            toDate: string | null,
+            privacy: string | null,
+            security: string | null,
         ) {
-           // console.log('fromDate', fromDate);
-           //, fromDate , toDate
-            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage , fromDate , toDate, privacy, security);
+            // console.log('fromDate', fromDate);
+            //, fromDate , toDate
+            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security);
         },
-        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate : string|null, toDate:string|null, privacy:string|null, security:string|null) {
+        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate: string | null, toDate: string | null, privacy: string | null, security: string | null) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage , fromDate, toDate, privacy, security);
+            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security);
         },
-        
-        async getPrivacytDetectedData(period:string, periodStart?:string, periodEnd?:string, dept?:string, user?: string) {
-            return Log.fetchPrivacytDetectedData(pool, period, periodStart, periodEnd, dept, user );
+
+        async getPrintCountData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrintCountData(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getPrivacyDetectedData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrivacyDetectedData(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getSecurityDetectedData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchSecurityDetectedData(pool, period, periodStart, periodEnd, dept, user);
         },
         async getTodayTotalPageSum() {
             return Log.fetchTodayTotalPageSum(pool);
@@ -487,13 +502,19 @@ export default function MyDBAdapter() {
         async getUsageStatusByUser(userName: string) {
             return Log.fetchUsageStatusByUser(pool, userName);
         },
-        async getPrivacyDetectInfoByUsers(period: string, periodStart?:string, periodEnd?:string, dept?:string, user?:string) {
+        async getPrintCountInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchPrintCountInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getPrivacyDetectInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
             return Log.fetchPrivacyDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
         },
-        async getPrintInfoByQuerygetPrivacyDetectInfoByUsers(periodStart:string, periodEnd:string, dept?:string, user?:string, device?:string) {
+        async getSecurityDetectInfoByUsers(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
+            return Log.fetchSecurityDetectInfoByUsers(pool, period, periodStart, periodEnd, dept, user);
+        },
+        async getPrintInfoByQuery(periodStart: string, periodEnd: string, dept?: string, user?: string, device?: string) {
             return Log.fetchPrintInfoByQuery(pool, periodStart, periodEnd, dept, user, device);
         },
-        async getPrivacyInfoByQuerygetPrivacyDetectInfoByUsers(periodStart:string, periodEnd:string, dept?:string, user?:string) {
+        async getPrivacyInfoByQuery(periodStart: string, periodEnd: string, dept?: string, user?: string) {
             return Log.fetchPrivacyInfoByQuery(pool, periodStart, periodEnd, dept, user);
         },
 
@@ -504,8 +525,19 @@ export default function MyDBAdapter() {
         async getFilteredPrintSpool(userName: string, itemsPerPage: number, currentPage: number) {
             return Print.fetchFilteredPrintSpool(pool, userName, itemsPerPage, currentPage);
         },
-        async deleteSelectedPrint(list: string[]) {
+        async deleteSelectedPrint(list: string[], param: string) {
             'use server';
+            const [deletedBy, ipAddress] = param.split(',');
+
+            const logData = new FormData();
+            logData.append('application_page', 'Print');
+            logData.append('application_action', 'Delete');
+            logData.append('application_parameter', `{id:${list}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+            Action.applicationLog(pool, logData);
+
             return PrintAction.deleteSelected(pool, list);
         },
         async printSelectedPrint(list: string[]) {
@@ -518,68 +550,74 @@ export default function MyDBAdapter() {
             'use server';
             return Action.batchCreateUser(pool, id, prevState, formData);
         },
-        async getFilteredIFUsers(query:string, itemsPerPage: number, currentPage: number) {
+        async getFilteredIFUsers(query: string, itemsPerPage: number, currentPage: number) {
             return User.fetchFilteredIFUsers(pool, query, itemsPerPage, currentPage);
         },
-        async getFilteredIFUserPages(query: string, itemsPerPage:number) {
+        async getFilteredIFUserPages(query: string, itemsPerPage: number) {
             return User.fetchFilteredIFUserPages(pool, query, itemsPerPage);
         },
-        async submitSelectedUsers(prevState: void | BasicState2, formData: FormData ) {
+        async submitSelectedUsers(prevState: void | BasicState2, formData: FormData) {
             'use server';
             return Action.uploadSelectedUser(pool, prevState, formData);
         },
-        async deleteUserInIF(id: string) {
+        async deleteUserInIF(id: string, param: string) {
             'use server';
-            return Action.deleteUserIF(pool, id);
-        },
-        async getFilteredRegularExp(query:string, itemsPerPage: number, currentPage: number){
-            return RegularExp.filteredRegularExp(pool, query, itemsPerPage, currentPage);
-        },
-        async getFilteredRegularExpPages(query:string, itemsPerPage: number){
-
-            return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
-        },
-        async createRegularExp(prevState: void | RegularExpState, formData: FormData){
-            'use server';
-            return SettingAction.createRegularExp(pool, prevState, formData);
-        },
-        async deleteRegularExp( id: string, param:string|undefined){
-            'use server';
-            // console.log('deleteRegularExp', FormData);
-            if(!param) {
-                return {
-                    message: 'Need more parameter'
-                };
-            }
-            
             const [deletedBy, ipAddress] = param.split(',');
-            
+
             const logData = new FormData();
-            logData.append('application_page', '정규식/보안단어');
-            logData.append('application_action', '삭제');
+            logData.append('application_page', 'UserInIF');
+            logData.append('application_action', 'Delete');
             logData.append('application_parameter', `{id:${id}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
-            Action.applicationLog(pool,  logData);
+            Action.applicationLog(pool, logData);
+
+            return Action.deleteUserIF(pool, id);
+        },
+        async getFilteredRegularExp(query: string, itemsPerPage: number, currentPage: number) {
+            return RegularExp.filteredRegularExp(pool, query, itemsPerPage, currentPage);
+        },
+        async getFilteredRegularExpPages(query: string, itemsPerPage: number) {
+
+            return RegularExp.filteredRegularExpPages(pool, query, itemsPerPage);
+        },
+        async createRegularExp(prevState: void | RegularExpState, formData: FormData) {
+            'use server';
+            return SettingAction.createRegularExp(pool, prevState, formData);
+        },
+        async deleteRegularExp(id: string, param: string) {
+            'use server';
+
+            // console.log('deleteRegularExp', FormData);
+            const [deletedBy, ipAddress] = param.split(',');
+
+            const logData = new FormData();
+            logData.append('application_page', 'RegEx/Security');
+            logData.append('application_action', 'Delete');
+            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('created_by', deletedBy);
+            logData.append('ip_address', ipAddress);
+
+            Action.applicationLog(pool, logData);
 
             return SettingAction.deleteRegularExp(pool, id);
-        },       
+        },
 
         // ----- Application Log ----------------------------------
         async applicationLog(formData: FormData) {
             'use server';
-            return Action.applicationLog(pool,  formData);
+            return Action.applicationLog(pool, formData);
         },
-        async getFilteredApplicationLog(query:string, itemsPerPage: number, currentPage: number, dateFrom:string|null, dateTo:string|null){
+        async getFilteredApplicationLog(query: string, itemsPerPage: number, currentPage: number, dateFrom: string | null, dateTo: string | null) {
 
             return ApplicationLog.fetchFilteredApplicationLog(pool, query, itemsPerPage, currentPage, dateFrom, dateTo);
         },
-        async getFilteredApplicationLogPages(query:string, itemsPerPage: number, dateFrom:string|null, dateTo:string|null){
+        async getFilteredApplicationLogPages(query: string, itemsPerPage: number, dateFrom: string | null, dateTo: string | null) {
 
             return ApplicationLog.fetchFilteredApplicationLogPages(pool, query, itemsPerPage, dateFrom, dateTo);
         },
-        
+
         // -----------------------------------------------------------
     }
 }

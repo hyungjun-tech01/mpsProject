@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/settings/table';
 import { FileUpload } from '@/app/components/settings/file-upload-form';
@@ -14,7 +13,7 @@ import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
-    title: 'Settings',
+    title: 'Settings/Register Users',
 }
 
 export default async function Page(props: {
@@ -28,19 +27,16 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+    
     const session = await auth();
 
-    const userName = session?.user.name ?? "";
-    if (!userName) {
-        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+    if(!session?.user.id || !session?.user.name) {
         redirect('/login'); // '/login'으로 리다이렉트
-        // notFound();
     };
 
-    if(!session?.user) return notFound();
-    if( session?.user.role !== 'admin') return notFound();
+    const userId = session.user.id;
+    const userName = session.user.name;
 
-    const userId = session?.user.id ?? "";
     const adapter = MyDBAdapter();
     const [t, settingData, settingDataPages] = await Promise.all([
         getDictionary(locale),

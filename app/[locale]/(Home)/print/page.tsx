@@ -5,8 +5,8 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import getDictionary from '@/app/locales/dictionaries';
 import { auth } from '@/auth';
-import { notFound } from "next/navigation";
 import { TableSkeleton } from "@/app/components/skeletons";
+import { redirect } from "next/navigation";
 
 
 export const metadata: Metadata = {
@@ -24,8 +24,11 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
 
     const session = await auth();
-    if(!session?.user)
-        return notFound();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+
+    const userName = session.user.name;
 
     const adapter = MyDBAdapter();
     const [t, totalPages, prints] = await Promise.all([
@@ -64,6 +67,7 @@ export default async function Page(props: {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     path='user'
+                    sesseionUserName={userName}
                     t={trans}
                     checkable={true}
                     printAction={adapter.printSelectedPrint}

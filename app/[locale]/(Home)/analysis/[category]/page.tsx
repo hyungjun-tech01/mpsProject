@@ -62,12 +62,12 @@ export default async function Page(props: {
     const adapter = MyDBAdapter();
     const [t, detectedData, detectedByUser, allDepts] = await Promise.all([
         getDictionary(locale),
-        category === 'privacy' ? adapter.getPrivacytDetectedData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
-            : (category === 'print' ? adapter.getPrivacytDetectedData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
-                : adapter.getPrivacytDetectedData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)),
+        category === 'privacy' ? adapter.getPrivacyDetectedData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
+            : (category === 'print' ? adapter.getPrintCountData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
+                : adapter.getSecurityDetectedData(periodParam, periodStartParam, periodEndParam, deptParam, userParam)),
         category === 'privacy' ? adapter.getPrivacyDetectInfoByUsers(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
-            : (category === 'print' ? adapter.getPrivacyDetectInfoByUsers(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
-                : adapter.getPrivacyDetectInfoByUsers(periodParam, periodStartParam, periodEndParam, deptParam, userParam)),
+            : (category === 'print' ? adapter.getPrintCountInfoByUsers(periodParam, periodStartParam, periodEndParam, deptParam, userParam)
+                : adapter.getSecurityDetectInfoByUsers(periodParam, periodStartParam, periodEndParam, deptParam, userParam)),
         adapter.getAllDepts(),
     ]);
 
@@ -77,6 +77,48 @@ export default async function Page(props: {
         { category: 'privacy', title: t('analysis.analize_privacy'), link: `/analysis/privacy` },
         { category: 'security', title: t('analysis.analize_security'), link: `/analysis/security` },
     ];
+
+    // Titles ----------------------------------------------------------------------
+    const titles = {
+        print: {
+            main: t('analysis.analize_print'),
+            card: [
+                t('analysis.print_total_pages'),
+                t('analysis.print_color_page_count'),
+                t('analysis.print_color_page_rate'),
+                t('analysis.print_last_time')
+            ],
+            pieChart: t('analysis.print_count_by_dept'),
+            barChart: t('analysis.print_count_by_date'),
+        },
+        privacy: {
+            main: t('analysis.privacy_info_detect_stats'),
+            card: [
+                t('analysis.total_print_count'),
+                t('analysis.privacy_detect_count'),
+                t('analysis.privacy_detect_rate'),
+                t('analysis.last_detect_time')
+            ],
+            pieChart: t('analysis.privacy_detect_by_dept'),
+            barChart: t('analysis.privacy_detect_by_date'),
+        },
+        security: {
+            main: t('analysis.analize_security'),
+            card: [
+                t('analysis.total_print_count'),
+                t('analysis.security_detect_count'),
+                t('analysis.security_detect_rate'),
+                t('analysis.last_detect_time')
+            ],
+            pieChart: t('analysis.security_detect_by_dept'),
+            barChart: t('analysis.security_detect_by_date'),
+        }
+    };
+    const tableTitle = {
+        print: t('analysis.print_count_rank_by_user'),
+        privacy: t('analysis.privacy_detect_rank_by_user'),
+        security: t('analysis.security_detect_rank_by_user'),
+    }
 
     // Data for Table Component -----------------------------------------------------------------
     const detectedUserList = detectedByUser.map((data: IPrivacyInfoValue, idx:number) => ({
@@ -110,6 +152,8 @@ export default async function Page(props: {
             </div>
             <div className="w-full p-4 bg-gray-50 rounded-md">
                 <DetectInfoWrapper
+                    category={category}
+                    titles={titles[category as keyof typeof titles]}
                     trans={t}
                     period={periodParam}
                     dept={deptParam}
@@ -120,7 +164,7 @@ export default async function Page(props: {
                 />
                 <div className='w-full gap-4'>
                     <div className='flex-col p-4 border border-gray-300 rounded-lg bg-white'>
-                        <h3 className="mb-4 text-md font-normal">{t('dashboard.privacy_info_detect_stats')}</h3>
+                        <h3 className="mb-4 text-md font-normal">{tableTitle[category as keyof typeof titles]}</h3>
                         <Suspense fallback={<TableSkeleton />}>
                             <Table
                                 columns={columns}

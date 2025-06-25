@@ -6,9 +6,9 @@ const key = process.env.CRYPTO_PASSWORD; // 32 바이트 키 (aes-256)
 const iv = process.env.CRYPTO_IV; // 16 바이트 IV
 
 // 암호화 함수
-export function encrypt(text: string): string {
+export function encrypt(text: string | null): string {
 
-    if (!algorithm || !key || !iv) {
+    if (!algorithm || !key || !iv || !text) {
         return 'error=-encypt';
     }
     const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), Buffer.from(iv));

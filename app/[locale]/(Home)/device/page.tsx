@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { IColumnData } from '@/app/lib/definitions';
@@ -49,11 +48,13 @@ export default async function Device(
     const session = await auth();
     // console.log('Session :', session);
     
-    if(!session?.user?.id)
-       return notFound();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
 
-    const isAdmin = session?.user.role === 'admin';
-    const userId = session?.user.id;
+    const userId = session.user.id;
+    const userName = session.user.name;
+    const isAdmin = session.user.role === 'admin';
 
     const adapter = MyDBAdapter();
     const [t, totalPages, devices, deviceGroup] = await Promise.all([
@@ -64,16 +65,7 @@ export default async function Device(
             : adapter.getDevicesbyGroupManager(userId, query, itemsPerPage, currentPage),
         isAdmin ? adapter.getFilteredGroups("", "device", itemsPerPage, currentGroupPage, locale) : null
     ]);
-
  
-     const userName = session?.user.name ?? "";
-     if (!userName) {
-         // 여기서 redirect 함수를 사용해 리다이렉트 처리
-         redirect('/login'); // '/login'으로 리다이렉트
-         // notFound();
-     };
- 
-
     //console.log('Check : ', devices);
 
     const columns: IColumnData[] = [
@@ -108,6 +100,7 @@ export default async function Device(
                         rows={devices}
                         totalPages={totalPages}
                         locale={locale}
+                        sesseionUserName={userName}
                         path='device'
                         deleteAction={deleteDevice}
                         editable={false}

@@ -133,7 +133,7 @@ export default function StatQuery({
   }, [period, periodStart, periodEnd]);
 
   return (
-    <div className='flex gap-4 text-sm'>
+    <div className='flex gap-4 text-sm flex-col md:flex-row'>
       <div>
         <label htmlFor="period-select">{ translated.period + ' :'}</label>
         <select id="period-select" 
@@ -147,7 +147,7 @@ export default function StatQuery({
         </select>
       </div>
       {isPeriodSpecified && (
-        <div className='flex-col md:flex-row'>
+        <div className='flex flex-row gap-2'>
           <DatePicker 
             selected={startDate}
             placeholderText={translated.from}

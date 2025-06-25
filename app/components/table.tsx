@@ -49,7 +49,7 @@ interface ITable {
     path?: string;
     sesseionUserName?: string;
     locale?: 'ko' | 'en';
-    deleteAction?: (id: string, param:string|undefined) => Promise<{message: string} | void>;
+    deleteAction?: (id: string, param:string) => Promise<{message: string} | void>;
     editable?: boolean;
     deletable?: boolean;
     checkable?: boolean;
@@ -70,8 +70,6 @@ export default function CustomizedTable({
 }: ITable) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    
-
     const [ipAddress, setIpAddress] = useState('');
 
     useEffect(() => {
@@ -87,7 +85,6 @@ export default function CustomizedTable({
   
       fetchIp();
     }, []);
-  
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

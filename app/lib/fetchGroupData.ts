@@ -1,11 +1,6 @@
 import type { Pool } from "pg";
 
 
-//const [applicationLog] = await Promise.all([
-
-   
-//]);
-
 const convertSchedulePeriod = {
     en: {
         NONE: 'N/A',
@@ -21,7 +16,9 @@ const convertSchedulePeriod = {
         PER_MONTH: '매월',
         PER_YEAR: '매년'
     }
-}
+} as const;
+
+type SchedulePeriod = keyof typeof convertSchedulePeriod.en;
 
 
 // ----- Begin : Group -------------------------------------------------------//
@@ -33,13 +30,12 @@ export async function fetchFilteredGroups(
     currentPage: number,
     locale: string
 ) {
-
     // console.log("==========fetchFilteredGroups=======");
 
     const offset = (currentPage - 1) * itemsPerPage;
     let queryString = "";
 
-    if(groupType === "device") {
+    if (groupType === "device") {
         queryString = `SELECT 
         g.group_id AS id,
         g.group_name AS group_name,
@@ -67,7 +63,7 @@ export async function fetchFilteredGroups(
         LIMIT 
             ${itemsPerPage} OFFSET ${offset}
         `;
-    } else if(groupType === "user") {
+    } else if (groupType === "user") {
         queryString = `
             SELECT 
                 g.group_id AS id,
@@ -82,7 +78,7 @@ export async function fetchFilteredGroups(
             ORDER BY g.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `;
-    } else if(groupType === "security") {
+    } else if (groupType === "security") {
         queryString = `
             SELECT 
                 g.group_id AS id,
@@ -101,32 +97,22 @@ export async function fetchFilteredGroups(
     }
     else {
         throw new Error("Wrong Group Type");
-    }
-
-;
-
+    };
 
     try {
         const resp = await client.query(queryString);
-        if(groupType === 'user') {
+        if (groupType === 'user') {
             const converted = resp.rows.map(item => {
+                const schedulePeriod = item.schedule_period as SchedulePeriod;
                 return {
                     ...item,
-                    schedule_period: convertSchedulePeriod[locale][item.schedule_period],
-                }    
+                    schedule_period: convertSchedulePeriod[locale as 'ko' | 'en'][schedulePeriod] || item.schedule_period,
+                }
             });
-
-
-
             return converted;
         } else {
-
             return resp.rows;
         }
-
-        
-      //  
-
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goups by group type");
@@ -155,7 +141,7 @@ export async function fetchFilteredGroupsPages(
                 WHERE group_type='${groupType}'
             `);
         const totalPages = Math.ceil(Number(resp.rows[0].count) / itemsPerPage);
-        return totalPages;     
+        return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goups by group type");
@@ -174,7 +160,7 @@ export async function fetchFilteredGroupsByManager(
     const offset = (currentPage - 1) * itemsPerPage;
     let queryString = "";
 
-    if(groupType === "device") {
+    if (groupType === "device") {
         queryString = `SELECT 
         g.group_id AS id,
         g.group_name AS group_name,
@@ -210,7 +196,7 @@ export async function fetchFilteredGroupsByManager(
         LIMIT 
             ${itemsPerPage} OFFSET ${offset}
         `;
-    } else if(groupType === "user") {
+    } else if (groupType === "user") {
         queryString = `
             SELECT 
                 g.group_id AS id,
@@ -234,7 +220,7 @@ export async function fetchFilteredGroupsByManager(
             ORDER BY g.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
         `;
-    } else if(groupType === "security") {
+    } else if (groupType === "security") {
         queryString = `
             SELECT 
                 g.group_id AS id,
@@ -266,12 +252,13 @@ export async function fetchFilteredGroupsByManager(
 
     try {
         const resp = await client.query(queryString);
-        if(groupType === 'user') {
+        if (groupType === 'user') {
             const converted = resp.rows.map(item => {
+                const schedulePeriod = item.schedule_period as SchedulePeriod;
                 return {
                     ...item,
-                    schedule_period: convertSchedulePeriod[locale][item.schedule_period],
-                }    
+                    schedule_period: convertSchedulePeriod[locale as 'ko' | 'en'][schedulePeriod] || item.schedule_period,
+                }
             });
             return converted;
         } else {
@@ -307,7 +294,7 @@ export async function fetchFilteredGroupsByManagerPages(
                 ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
         `)
         const totalPages = Math.ceil(Number(resp.rows[0].count) / itemsPerPage);
-        return totalPages;     
+        return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch goups by group type");
@@ -364,7 +351,7 @@ export async function fetchGroupInfoById(
             AND member_type='admin'
         `);
         const finalData = group_info.rows[0];
-        if(group_manager.rows.length > 0)
+        if (group_manager.rows.length > 0)
             finalData["manager_id"] = group_manager.rows[0].id;
         else
             finalData["manager_id"] = "";
@@ -536,13 +523,13 @@ export async function fetchDevicesNotInGroup(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
-                    ${query !== "" 
-                        ? "AND (d.device_name ILIKE '%" + query
-                            + "%' OR d.location ILIKE '%" + query
-                            + "%' OR d.physical_device_id ILIKE '%" + query
-                            + "%')"
-                        : ""
-                    }
+                    ${query !== ""
+                ? "AND (d.device_name ILIKE '%" + query
+                + "%' OR d.location ILIKE '%" + query
+                + "%' OR d.physical_device_id ILIKE '%" + query
+                + "%')"
+                : ""
+            }
                 ORDER BY d.modified_date DESC
                 LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
@@ -566,13 +553,13 @@ export async function fetchDevicesNotInGroupPages(
                 LEFT JOIN tbl_group_member_info gm ON gm.member_id = d.device_id
                 WHERE
                     d.deleted='N' AND  gm.member_id IS NULL
-                    ${query !== "" 
-                        ? "AND (d.device_name ILIKE '%" + query
-                            + "%' OR d.location ILIKE '%" + query
-                            + "%' OR d.physical_device_id ILIKE '%" + query
-                            + "%')"
-                        : ""
-                    }
+                    ${query !== ""
+                ? "AND (d.device_name ILIKE '%" + query
+                + "%' OR d.location ILIKE '%" + query
+                + "%' OR d.physical_device_id ILIKE '%" + query
+                + "%')"
+                : ""
+            }
             `);
         const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
         return totalPages;

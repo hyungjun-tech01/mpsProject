@@ -14,7 +14,7 @@ import { CreateButton } from '@/app/components/buttons';
 // import { DosForm } from '@/app/components/settings/dosForm';
 
 export const metadata: Metadata = {
-    title: 'Settings',
+    title: 'Settings/Regular Expr Private Info',
 }
 
 export default async function Page(props: {

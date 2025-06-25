@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from 'next/link';
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import Search from '@/app/components/search';
 import Table from '@/app/components/document/table';
 // import { CreateButton } from '@/app/components/buttons';
@@ -29,10 +29,12 @@ export default async function Page(props: {
     const currentPage = Number(searchParams?.page) || 1;
     
     const session = await auth();
-    if(!session?.user.name || !session?.user.id)
-        return notFound();
+    if(!session?.user.name || !session?.user.id) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
 
     const currentId = session.user.id;
+    const currentUserName = session.user.name;
     const isAdmin = session.user.role === 'admin';
 
     const adapter = MyDBAdapter();
@@ -99,7 +101,7 @@ export default async function Page(props: {
                         totalPages={totalPages}
                         path='document'
                         locale={locale}
-                        currentId={currentId}
+                        currentUserName={currentUserName}
                         userOptions={userOptions}
                         deleteAction={adapter.deleteDocument}
                         shareAction={adapter.shareDocument}

@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -51,9 +51,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface ITable {
     columns: IColumnData[];
     rows: Record<string, string | number | string[]>[];
-    currentPage: number;
     totalPages: number;
     path?: string;
+    sesseionUserName?: string;
     locale?: 'ko' | 'en';
     deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
     editable?: boolean;
@@ -66,22 +66,38 @@ export default function CustomizedTable({
     rows,
     totalPages,
     path,
+    sesseionUserName,
     locale = 'ko',
     deleteAction,
     editable = true,
     deletable = true,
     checkable = false,
 }: ITable) {
-    const [chosenID, setChosenID] = React.useState<string>('');
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [isPdfModalOpen, setIsPdfModalOpen] = React.useState(false);
-    const [pdfUrl, setPdfUrl] = React.useState<string | undefined>(undefined);
-    const [auditPdfContent, setAuditPdfContent] = React.useState<Blob | null>(null);
-    const [auditContent, setAuditContent] = React.useState<string | null>(null);
-    const [isTextModalOpen, setIsTextModalOpen] = React.useState(false);
+    const [chosenID, setChosenID] = useState<string>('');
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
+    const [auditPdfContent, setAuditPdfContent] = useState<Blob | null>(null);
+    const [auditContent, setAuditContent] = useState<string | null>(null);
+    const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+    const [ipAddress, setIpAddress] = useState('');
 
-    const closePdfModal = React.useCallback(() => setIsPdfModalOpen(false), []);
-    const closeTextModal = React.useCallback(() => setIsTextModalOpen(false), []);
+    useEffect(() => {
+      const fetchIp = async () => {
+        try {
+          const res = await fetch('/api/get-ip');
+          const data = await res.json();
+          setIpAddress(data.ip);
+        } catch (error) {
+          console.error('IP 가져오기 실패:', error);
+        }
+      };
+  
+      fetchIp();
+    }, []);
+
+    const closePdfModal = useCallback(() => setIsPdfModalOpen(false), []);
+    const closeTextModal = useCallback(() => setIsTextModalOpen(false), []);
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -131,7 +147,7 @@ export default function CustomizedTable({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction}/>
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={sesseionUserName} ipAddress={ipAddress} action={deleteAction} />
                 </div>
             </div>
         </Menu>
@@ -155,13 +171,12 @@ export default function CustomizedTable({
        if (!imagePath) return '';
 
         const found_idx = imagePath.lastIndexOf('.');
-        if(found_idx !== -1){
-            //const thumbnail_src = value?.slice(0, found_idx) + '_thumbnail.png';
+        if(found_idx !== -1) {
             const nameWithoutExtension = imagePath.substring(0, found_idx);
             const thumbnail_src = 'api/file?filename=ImageLog/'+ nameWithoutExtension + '_thumbnail.png'; 
             const replace_thumbnail_src = thumbnail_src.replace(/\\/g,'/');
             return replace_thumbnail_src;
-        }else{    
+        } else {
             return '';
         }
     }

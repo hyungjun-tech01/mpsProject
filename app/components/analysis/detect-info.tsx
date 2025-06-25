@@ -15,16 +15,32 @@ export type IPrivacyData = {
     detect_privacy: string;
 }
 
+export type IPrintData = {
+    user_id: string;
+    user_name: string;
+    send_time: number;
+    dept_name: string;
+    total_pages: number;
+    color_total_pages: number;
+}
+
 export default async function DetectInfoWrapper({
-    trans, period, dept, periodStart, periodEnd, data, deptInfo
+    category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo
 }: {
+    category: string;
+    titles: {
+        main: string;
+        card: string[];
+        pieChart: string;
+        barChart: string;
+    };
     trans: (key: string) => string;
     period: "today" | "week" | "month" | "specified";
     dept?: string;
     user?: string;
     periodStart?: string;
     periodEnd?: string;
-    data: IPrivacyData[];
+    data: IPrivacyData[] | IPrintData[];
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
@@ -49,18 +65,33 @@ export default async function DetectInfoWrapper({
         let isFirstFound = false;
         for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
-                detectDataOfDept[item.dept_name].total += 1;
-            }
-            if(item.detect_privacy) {
-                totalDetected += 1;
-                if(!isFirstFound) {
-                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                    isFirstFound = true;
+                if(category === "print") {
+                    detectDataOfDept[item.dept_name].total += (item as IPrintData).total_pages;
+                    if(!isFirstFound) {
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
+                        isFirstFound = true;
+                    }
+                } else {
+                    detectDataOfDept[item.dept_name].total += 1;
                 }
-                if(!!item.dept_name && item.dept_name !== "") {
-                    detectDataOfDept[item.dept_name].detected += 1;
+            };
+
+            if(category === "print") {
+                if((item as IPrintData).color_total_pages > 0) {
+                    totalDetected += (item as IPrintData).color_total_pages;
                 }
-            }
+            } else {
+                if((item as IPrivacyData).detect_privacy) {
+                    totalDetected += 1;
+                    if(!!item.dept_name && item.dept_name !== "") {
+                        detectDataOfDept[item.dept_name].detected += 1;
+                    }
+                    if(!isFirstFound) {
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
+                        isFirstFound = true;
+                    }
+                }
+            };
         }
     };
     
@@ -121,8 +152,8 @@ export default async function DetectInfoWrapper({
 
     return (
         <div className='w-full pt-6'>
-            <div className='w-full flex justify-between items-center mb-8`'>
-                <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
+            <div className='w-full flex justify-between items-center mb-8 flex-col md:flex-row'>
+                <h1 className="mb-4 text-xl md:text-2xl">{titles.main}</h1>
                 <StatQuery
                     translated={translated}
                     departments={deptOptions}
@@ -132,33 +163,33 @@ export default async function DetectInfoWrapper({
                     dept={dept}
                 />
             </div>
-            <div className='w-full flex justify-between gap-4 mb-4'>
-                <Card title={trans('dashboard.total_print_count')} value={totalCount + "건"} />
-                <Card title={trans('dashboard.privacy_detect_count')} value={totalDetected + "건"} />
-                <Card title={trans('dashboard.privacy_detect_rate')} value={detectRate} />
-                <Card title={trans('dashboard.privacy_last_detect_time')} value={lastTime} />
+            <div className='w-full flex justify-between gap-4 mb-4 flex-col md:flex-row'>
+                <Card title={titles.card[0]} value={totalCount + "건"} />
+                <Card title={titles.card[1]} value={totalDetected + "건"} />
+                <Card title={titles.card[2]} value={detectRate} />
+                <Card title={titles.card[3]} value={lastTime} />
             </div>
-            <div className='w-full flex gap-4 mb-4'>
+            <div className='w-full flex gap-4 mb-4 flex-col md:flex-row'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
-                    <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_dept')}</h3>
+                    <h3 className="mb-4 text-md font-normal">{titles.pieChart}</h3>
                     <div className="max-h-96">
                         <PieChart
                             labels={Object.keys(detectRateOfDept).slice(0, 10)}
                             dataSet={[{
-                                label: trans('dashboard.privacy_detect_by_dept'),
+                                label: titles.pieChart,
                                 data: Object.values(detectRateOfDept).slice(0, 10),
                             }]}
                         />
                     </div>
                 </div>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
-                    <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_date')}</h3>
+                    <h3 className="mb-4 text-md font-normal">{titles.barChart}</h3>
                     <div className="max-h-96">
                         <VerticalBarChart
                             title=""
                             xlabels={Object.keys(detectDataOfDate)}
                             dataSet={[{
-                                label: trans('dashboard.privacy_detect_count'),
+                                label: titles.barChart,
                                 data: Object.values(detectDataOfDate),
                                 backgroundColor: 'rgba(63, 98, 18, 0.5)',
                             }]}

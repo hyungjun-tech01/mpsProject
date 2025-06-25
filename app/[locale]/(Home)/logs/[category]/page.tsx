@@ -40,20 +40,22 @@ export default async function Page(props: {
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
-    const session = await auth();
 
     const periodStartParam = searchParams?.periodStart ?? null;
     const periodEndParam = searchParams?.periodEnd ?? null;
     const privacyParam = searchParams?.privacy ?? null;
     const securityParam = searchParams?.security ?? null;
 
-    const userName = session?.user.name ?? "";
-    if (!userName) redirect('/login'); // '/login'으로 리다이렉트
-    if (session?.user.role !== 'admin') return notFound();
-
     if (!['auditlogs', 'auditlogsRetired', 'adminActionLogs'].includes(category)) {
         notFound();
     };
+
+    const session = await auth();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+
+    const userName = session.user.name;
 
     const adapter = MyDBAdapter();
 
@@ -164,10 +166,10 @@ export default async function Page(props: {
                         <LogTable
                             columns={groupColumns[category]}
                             rows={logData}
-                            currentPage={currentPage}
                             totalPages={logPages}
                             locale={locale}
                             path={category}
+                            sesseionUserName={userName}
                             editable={false}
                         />
                         :
@@ -177,6 +179,7 @@ export default async function Page(props: {
                             totalPages={logPages}
                             locale={locale}
                             path={category}
+                            sesseionUserName={userName}
                             deleteAction={category === 'adminActionLogs' ? adapter.deleteRegularExp : undefined}
                             editable={false}
                             deletable={false}

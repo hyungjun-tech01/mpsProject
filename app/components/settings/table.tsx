@@ -46,8 +46,9 @@ interface ISettingTable {
     rows: Record<string, string | number | string[] | boolean>[];
     totalPages: number;
     locale?: 'ko' | 'en';
+    sesseionUserName?: string;
     action: (prevState:void | BasicState2, formData:FormData) => Promise<BasicState2 | void>,
-    deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
+    deleteAction?: (id: string, param:string) => Promise<{message: string} | void>;
     deletable?: boolean;
 }
 
@@ -56,6 +57,7 @@ export default function CustomizedTable({
     rows,
     totalPages,
     locale = 'ko',
+    sesseionUserName,
     action,
     deleteAction,
     deletable = true,
@@ -68,6 +70,7 @@ export default function CustomizedTable({
     const [chosenID, setChosenID] = useState<string>('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [state, formAction] = useActionState(action, initialState);
+    const [ipAddress, setIpAddress] = useState('');
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -120,7 +123,7 @@ export default function CustomizedTable({
                     </button>
                 </div>
                 <div className='font-medium'>
-                    <DeleteButtton id={chosenID} title={translate[locale].delete} action={deleteAction} />
+                    <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={sesseionUserName} ipAddress={ipAddress} action={deleteAction} />
                 </div>
             </div>
         </Menu>
@@ -183,7 +186,21 @@ export default function CustomizedTable({
         setIsAnySelected(false);
         setIsAllSelected(false);
         setSelectedIds([]);
-    }, [rows])
+    }, [rows]);
+
+    useEffect(() => {
+        const fetchIp = async () => {
+          try {
+            const res = await fetch('/api/get-ip');
+            const data = await res.json();
+            setIpAddress(data.ip);
+          } catch (error) {
+            console.error('IP 가져오기 실패:', error);
+          }
+        };
+    
+        fetchIp();
+      }, []);
 
     return (
         <div className="mt-3">
