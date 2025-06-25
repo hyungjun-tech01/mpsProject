@@ -60,7 +60,7 @@ export default async function DetectInfoWrapper({
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
-    // console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
+     console.log('DetectInfoWrapper', data);
 
     let lastTime = "-";
 

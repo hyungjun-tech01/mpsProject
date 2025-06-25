@@ -58,3 +58,18 @@ where send_date >= '2024.04.01'
 and send_date <= '2024.10.31'  
 group by user_name, external_user_name, department
 order by  percent_privacy_detect, percent_security_detect desc;
+
+-- dept 
+  select * from 
+          ( SELECT
+                
+                di.dept_name,
+                sum(pav.detect_privacy_count) as detect_privacy_count,
+                sum(pav.total_count) as total_count,
+                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_privacy_audit_v pav
+            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
+            WHERE send_date >= '2024.06.01'
+            GROUP BY dept_name
+            having  SUM(total_count) > 0 )
+            ORDER BY detect_privacy_count desc LIMIT 10;
