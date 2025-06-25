@@ -81,16 +81,12 @@ export default async function DetectInfoWrapper({
     };
 
     if(data.length > 0) {
-        let isFirstFound = false;
         for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
                 if(category === "print") {
                     totalCountForDept[item.dept_name] += (item as IPrintData).total_pages;
                     detectDataOfDept[item.dept_name].total += (item as IPrintData).total_pages;
-                    if(!isFirstFound) {
-                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                        isFirstFound = true;
-                    }
+                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                 } else {
                     totalCountForDept[item.dept_name] += 1;
                     detectDataOfDept[item.dept_name].total += 1;
@@ -105,26 +101,20 @@ export default async function DetectInfoWrapper({
                     }
                 }
             } else if(category === 'privacy') {
-                if((item as IPrivacyData).detect_privacy) {
+                if(!!(item as IPrivacyData).detect_privacy) {
                     totalDetected += 1;
                     if(!!item.dept_name && item.dept_name !== "") {
                         detectDataOfDept[item.dept_name].detected += 1;
                     }
-                    if(!isFirstFound) {
-                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                        isFirstFound = true;
-                    }
+                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                 }
             } else {
-                if((item as ISecurityData).detect_security) {
+                if(!!(item as ISecurityData).detect_security) {
                     totalDetected += 1;
                     if(!!item.dept_name && item.dept_name !== "") {
                         detectDataOfDept[item.dept_name].detected += 1;
                     }
-                    if(!isFirstFound) {
-                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                        isFirstFound = true;
-                    }
+                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                 }
             };
         }
