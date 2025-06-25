@@ -13,7 +13,7 @@ import { TableSkeleton } from "@/app/components/skeletons";
 
 
 export const metadata: Metadata = {
-    title: 'Settings',
+    title: 'Settings/Register Users',
 }
 
 export default async function Page(props: {
