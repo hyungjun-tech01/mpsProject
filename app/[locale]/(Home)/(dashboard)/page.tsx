@@ -6,6 +6,11 @@ import PrivacyInfoWrapper from "@/app/components/dashboard/privacy-info";
 import getDictionary from '@/app/locales/dictionaries';
 import clsx from "clsx";
 import { auth } from "@/auth";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+}
 
 interface IDashboardParams {
   period?: "today" | "week" | "month" | "specified",

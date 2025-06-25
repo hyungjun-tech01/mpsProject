@@ -1,6 +1,11 @@
 import { Suspense } from 'react';
 import LoginForm from '@/app/components/auth/login-form';
 import getDictionary from '@/app/locales/dictionaries';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Login',
+}
 
 export default async function LoginPage(props: {
   params: Promise<{ locale: "ko" | "en" }>;

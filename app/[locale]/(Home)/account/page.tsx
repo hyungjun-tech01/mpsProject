@@ -6,7 +6,11 @@ import Breadcrumbs from '@/app/components/breadcrumbs';
 import getDictionary from '@/app/locales/dictionaries';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth"
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: 'Account',
+}
 
 export default async function Page(props: {
     params: Promise<{ locale: "ko" | "en" }>
