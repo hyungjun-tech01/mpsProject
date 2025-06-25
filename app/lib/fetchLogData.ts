@@ -107,7 +107,7 @@ export async function fetchPrintCountData(
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC LIMIT 10
+            ORDER BY send_time DESC
         `);
         return sum.rows;
     } catch (error) {
@@ -211,17 +211,16 @@ export async function fetchSecurityDetectedData(
                 ui.user_name,
                 ajl.send_time,
                 di.dept_name,
-                ajl.detect_privacy
+                ajl.detect_security
             FROM tbl_audit_job_log ajl
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
             JOIN tbl_dept_info di ON ui.department = di.dept_id
-            WHERE 1 = 1 
             and ajl.send_time <> '0'
             and ajl.send_time >= '${startTime}'
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC LIMIT 10
+            ORDER BY send_time DESC
         `);
         return sum.rows;
     } catch (error) {
@@ -750,7 +749,7 @@ export async function fetchPrintCountInfoByUsers(client: Pool, period: string, p
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%"+ user +"%')" : ""}
             GROUP BY user_id, ui.user_name, external_user_name, dept_name
-            ORDER BY total_pages DESC
+            ORDER BY total_pages DESC LIMIT 10
         `);
         return response.rows;
     } catch (e) {
@@ -794,7 +793,7 @@ export async function fetchPrivacyDetectInfoByUsers(client: Pool, period: string
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
             ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
             GROUP BY user_id, user_name, external_user_name, dept_name
-            ORDER BY detect_privacy_count DESC
+            ORDER BY detect_privacy_count DESC LIMIT 10
         `);
         return response.rows;
     } catch (e) {
@@ -824,25 +823,25 @@ export async function fetchSecurityDetectInfoByUsers(client: Pool, period: strin
     try {
         const response = await client.query(`
             SELECT
-                pav.user_id,
-                pav.user_name,
-                pav.external_user_name,
+                sav.user_id,
+                sav.user_name,
+                sav.external_user_name,
                 di.dept_name,
-                sum(pav.detect_privacy_count) as detect_privacy_count,
-                sum(pav.total_count) as total_count,
-                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
-            FROM tbl_privacy_audit_v pav
-            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
+                sum(sav.detect_security_count) as detect_security_count,
+                sum(sav.total_count) as total_count,
+                ROUND(SUM(sav.detect_security_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
+            FROM tbl_security_audit_v sav
+            JOIN tbl_dept_info di ON sav.dept_id = di.dept_id
             WHERE send_date >= '${startDate}'
             ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
-            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
+            ${!!user ? "AND (sav.user_id like '%" + user + "%' OR sav.user_name like '%"+ user +"%')" : ""}
             GROUP BY user_id, user_name, external_user_name, dept_name
-            ORDER BY detect_privacy_count DESC
+            ORDER BY detect_security_count DESC LIMIT 10
         `);
         return response.rows;
     } catch (e) {
-        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        console.log('fetchSecurityDetectInfoByUsers :', e);
         return [];
     }
 };

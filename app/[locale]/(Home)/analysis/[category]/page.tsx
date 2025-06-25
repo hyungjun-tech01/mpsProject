@@ -154,7 +154,7 @@ export default async function Page(props: {
             { name: 'external_user_name', title: t('common.name'), align: 'center' },
             { name: 'dept_name', title: t('user.department'), align: 'center' },
             { name: 'total_count', title: t('print.print_count'), align: 'center' },
-            { name: 'detect_privacy_count', title: t('settings.detect_count'), align: 'center' },
+            { name: 'detect_security_count', title: t('settings.detect_count'), align: 'center' },
             { name: 'percent_detect', title: t('settings.detect_rate'), align: 'center' },
         ],
     };
