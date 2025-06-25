@@ -157,14 +157,10 @@ export default async function DetectInfoWrapper({
     // console.log('detect Rate Of Dept : ',detectRateOfDept);
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
-    const detectDataOfDate: Record<string, Record<string, number>> = {};
+    const detectDataOfDate: Record<string, number> = {};
 
     if(period === "today") {
-        const tempObj: Record<string, number> = {};
-        for(const dept of deptInfo) {
-            tempObj[dept.dept_name] = 0;
-        }
-        detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = tempObj;
+        detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = totalDetected;
     } else {
         for(const item of data) {
             const inputData = category === "print" 
@@ -174,38 +170,22 @@ export default async function DetectInfoWrapper({
                     : ((item as ISecurityData).detect_security ? 1 : 0));
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
             if(!detectDataOfDate[tempDate]) {
-                const tempObj: Record<string, number> = {};
-                for(const dept of deptInfo) {
-                    tempObj[dept.dept_name] = 0;
-                }
-                detectDataOfDate[tempDate] = tempObj;
+                detectDataOfDate[tempDate] = 0;
             }
-            detectDataOfDate[tempDate][item.dept_name] += inputData;
+            detectDataOfDate[tempDate] += inputData;
         };
     };
 
     const barDataSets:{ label: string; data: number[]; backgroundColor: string; }[] = [];
-    const barLabels: string[] = [];
-    let idx = 0;
-    for(const dept of deptInfo) {
-      const tempDataSet = {
-        label: dept.dept_name,
-        data: [],
-        backgroundColor: bgColors[idx % bgColors.length],
-      };
-      barDataSets.push(tempDataSet);
-      idx++;
+    const barLabels: string[] = Object.keys(detectDataOfDate);
+    const tempDataSet = {
+        label: '',
+        data: Object.values(detectDataOfDate),
+        backgroundColor: bgColors[0],
     };
-    for(const [key, value] of Object.entries(detectDataOfDate)) {
-        barLabels.push(key);
-        for(const dept of deptInfo) {
-            const foundidx = barDataSets.findIndex(set => set.label === dept.dept_name);
-            if(foundidx !== -1) {
-                barDataSets.at(foundidx)?.data.push(value[dept.dept_name]);
-            }
-        }
-    }
-    // console.log('bar data : ',barDataSets);
+    barDataSets.push(tempDataSet);
+
+     console.log('bar data : ',barDataSets);
 
     return (
         <div className='w-full pt-6'>
@@ -244,8 +224,8 @@ export default async function DetectInfoWrapper({
                     <div className="max-h-96">
                         <VerticalBarChart
                             xlabels={barLabels}
-                            dataSets={ barDataSets.slice(0, 10) }
-                            stack = {true}
+                            dataSets={ barDataSets }
+                            stack = {false}
                         />
                     </div>
                 </div>
