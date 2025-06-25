@@ -33,7 +33,7 @@ export default function AuditLogQuery({
   const { replace } = useRouter();
 
   console.log('category', category);
-  
+    
   useEffect(() => {
     if (!startDate || !endDate) {
       const { monthStart, today } = getMonthStartAndToday();

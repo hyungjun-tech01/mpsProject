@@ -173,7 +173,7 @@ export default function CustomizedTable({
     };
 
     useEffect(()=>{
-        console.log('Setting Table - useEffect');
+        // console.log('Setting Table - useEffect');
         setData(rows.map(row => {
             return ({
                 checked: false,

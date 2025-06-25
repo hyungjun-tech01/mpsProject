@@ -10,9 +10,9 @@ interface IAuditLogTextViewer {
 
 const AuditLogTextViewer = ({ Url, auditContent, onClose }: IAuditLogTextViewer) => {
 
-  console.log('AuditLogTextViewer / Url : ', Url);
-  console.log('AuditLogTextViewer / auditContent : ', auditContent);
-  console.log('AuditLogTextViewer / onClose : ', onClose);
+  //console.log('AuditLogTextViewer / Url : ', Url);
+  //console.log('AuditLogTextViewer / auditContent : ', auditContent);
+  //console.log('AuditLogTextViewer / onClose : ', onClose);
 
   return (
     <Box sx={{
