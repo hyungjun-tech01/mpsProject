@@ -6,6 +6,14 @@ import PieChart from '@/app/components/pieChart';
 import VerticalBarChart from '@/app/components/verticalBarChart';
 import { formatTimeYYYYpMMpDD, formatTimeYYYY_MM_DDbHHcMM_FromDB, formatTimeYYYYpMMpDD_FromDB } from '@/app/lib/utils';
 
+const bgColors = [
+  "rgba(255, 99, 132, 0.5)",
+  "rgba(54, 162, 235, 0.5)",
+  "rgba(255, 206, 86, 0.5)",
+  "rgba(75, 192, 192, 0.5)",
+  "rgba(153, 102, 255, 0.5)",
+  "rgba(255, 159, 64, 0.5)",
+];
 
 export type IPrivacyData = {
     user_id: string;
@@ -24,6 +32,14 @@ export type IPrintData = {
     color_total_pages: number;
 }
 
+export type ISecurityData = {
+    user_id: string;
+    user_name: string;
+    send_time: number;
+    dept_name: string;
+    detect_security: string;
+}
+
 export default async function DetectInfoWrapper({
     category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo
 }: {
@@ -40,13 +56,13 @@ export default async function DetectInfoWrapper({
     user?: string;
     periodStart?: string;
     periodEnd?: string;
-    data: IPrivacyData[] | IPrintData[];
+    data: IPrivacyData[] | IPrintData[] | ISecurityData[];
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
     console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
 
-    let totalCount = 0;
+    const totalCountForDept: Record<string, number> = {};
     let totalDetected = 0;
     let lastTime = "-";
 
@@ -59,6 +75,7 @@ export default async function DetectInfoWrapper({
     const detectRateOfDept: Record<string, number> = {};
 
     for(const dept of deptInfo) {
+        totalCountForDept[dept.dept_name]  = 0;
         detectDataOfDept[dept.dept_name] = {total: 0, detected:0};
         detectRateOfDept[dept.dept_name] = 0;
     };
@@ -68,14 +85,14 @@ export default async function DetectInfoWrapper({
         for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
                 if(category === "print") {
-                    totalCount += (item as IPrintData).total_pages;
+                    totalCountForDept[item.dept_name] += (item as IPrintData).total_pages;
                     detectDataOfDept[item.dept_name].total += (item as IPrintData).total_pages;
                     if(!isFirstFound) {
                         lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                         isFirstFound = true;
                     }
                 } else {
-                    totalCount += 1;
+                    totalCountForDept[item.dept_name] += 1;
                     detectDataOfDept[item.dept_name].total += 1;
                 }
             };
@@ -87,8 +104,19 @@ export default async function DetectInfoWrapper({
                         detectDataOfDept[item.dept_name].detected += (item as IPrintData).color_total_pages;
                     }
                 }
-            } else {
+            } else if(category === 'privacy') {
                 if((item as IPrivacyData).detect_privacy) {
+                    totalDetected += 1;
+                    if(!!item.dept_name && item.dept_name !== "") {
+                        detectDataOfDept[item.dept_name].detected += 1;
+                    }
+                    if(!isFirstFound) {
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
+                        isFirstFound = true;
+                    }
+                }
+            } else {
+                if((item as ISecurityData).detect_security) {
                     totalDetected += 1;
                     if(!!item.dept_name && item.dept_name !== "") {
                         detectDataOfDept[item.dept_name].detected += 1;
@@ -103,6 +131,10 @@ export default async function DetectInfoWrapper({
     };
     
     let detectRate = "-";
+    let totalCount = 0;
+    for(const dept of Object.keys(totalCountForDept))
+        totalCount += totalCountForDept[dept];
+
     if(totalCount > 0) {
         if(totalDetected === 0) {
             detectRate = "0 %";
@@ -141,24 +173,45 @@ export default async function DetectInfoWrapper({
     // console.log('detect Rate Of Dept : ',detectRateOfDept);
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
-    const detectDataOfDate: Record<string, number> = {};
+    const detectDataOfDate: Record<string, Record<string, number>> = {};
+    for(const dept of deptInfo) {
+        const tempObj: Record<string, number> = {};
+        detectDataOfDate[dept.dept_name] = tempObj;
+    };
+
     if(period === "today") {
-        detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = totalCount;
+        for(const dept of deptInfo) {
+            detectDataOfDate[dept.dept_name][formatTimeYYYYpMMpDD(new Date())] = totalCountForDept[dept.dept_name];
+        }
     } else {
-        const tempData: Record<string, number> = {};
         for(const item of data) {
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
-            if(!!tempData[tempDate]) {
-                tempData[tempDate] += category === "print" ? (item as IPrintData).total_pages : 1;
-            } else {
-                tempData[tempDate] = category === "print" ? (item as IPrintData).total_pages : 1;
+            for(const dept of deptInfo) {
+                if(!detectDataOfDate[dept.dept_name][tempDate]) {
+                    detectDataOfDate[dept.dept_name][tempDate] = 0;
+                };
             }
+            detectDataOfDate[item.dept_name][tempDate] += category === "print" ? (item as IPrintData).total_pages : 1;
         };
+    };
 
-        for(const key of Object.keys(tempData).sort()) {
-            detectDataOfDate[key] = tempData[key];
-        }
-    }
+    const barDataSets:{ label: string; data: number[]; backgroundColor: string; }[] = [];
+    let barLabels: string[] = [];
+    let idx = 0;
+    for(const [key, value] of Object.entries(detectDataOfDate)) {
+      const tempDataSet = {
+        label: key,
+        data: Object.values(value),
+        backgroundColor: bgColors[idx % bgColors.length],
+      };
+      barDataSets.push(tempDataSet);
+      if(barLabels.length === 0) {
+        barLabels = Object.keys(value);
+      }
+      idx++;
+    };
+    console.log('bar data : ',barDataSets);
+
 
     return (
         <div className='w-full pt-6'>
@@ -196,13 +249,9 @@ export default async function DetectInfoWrapper({
                     <h3 className="mb-4 text-md font-normal">{titles.barChart}</h3>
                     <div className="max-h-96">
                         <VerticalBarChart
-                            title=""
-                            xlabels={Object.keys(detectDataOfDate)}
-                            dataSet={[{
-                                label: titles.barChart,
-                                data: Object.values(detectDataOfDate),
-                                backgroundColor: 'rgba(63, 98, 18, 0.5)',
-                            }]}
+                            xlabels={barLabels}
+                            dataSets={ barDataSets.slice(0, 10) }
+                            stack = {true}
                         />
                     </div>
                 </div>

@@ -46,15 +46,17 @@ ChartJS.register(
 export default function VerticalBarChart({
   title,
   xlabels,
-  dataSet,
+  dataSets,
+  stack,
 }:{
   title?: string;
   xlabels: string[];
-  dataSet: {
+  dataSets: {
     label: string;
     data: number[];
     backgroundColor: string;
   }[];
+  stack: boolean;
 }) {
   const options = {
     responsive: true,
@@ -64,13 +66,21 @@ export default function VerticalBarChart({
       },
       title: {
         display: !!title && title !== "",
-        text: title?? "Bar Chart",
+        text: title?? "",
       },
     },
+    scales: stack ? {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    } : {},
   };
   const data = {
     labels:xlabels,
-    datasets: dataSet,
+    datasets: dataSets,
   }
   // console.log("Vertical Chart Data :", data);
   return (
