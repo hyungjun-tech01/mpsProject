@@ -107,7 +107,7 @@ export async function fetchPrintCountData(
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC
+            ORDER BY send_time DESC LIMIT 10
         `);
         return sum.rows;
     } catch (error) {
@@ -221,7 +221,7 @@ export async function fetchSecurityDetectedData(
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC
+            ORDER BY send_time DESC LIMIT 10
         `);
         return sum.rows;
     } catch (error) {

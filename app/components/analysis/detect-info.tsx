@@ -130,13 +130,13 @@ export default async function DetectInfoWrapper({
     ];
 
     // Data for Pie Bar Chart Component ---------------------------------------------------------
-    console.log('detect Data Of Dept : ',detectDataOfDept);
+    // console.log('detect Data Of Dept : ',detectDataOfDept);
     for(const dept of deptInfo) {
         detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
             ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
             : 0;
     };
-    console.log('detect Rate Of Dept : ',detectRateOfDept);
+    // console.log('detect Rate Of Dept : ',detectRateOfDept);
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
     const detectDataOfDate: Record<string, number> = {};
