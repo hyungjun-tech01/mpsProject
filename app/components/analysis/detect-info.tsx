@@ -44,7 +44,7 @@ export default async function DetectInfoWrapper({
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
-    const totalCount = data.length;
+    let totalCount = 0;
     let totalDetected = 0;
     let lastTime = "-";
 
@@ -61,17 +61,19 @@ export default async function DetectInfoWrapper({
         detectRateOfDept[dept.dept_name] = 0;
     };
 
-    if(totalCount > 0) {
+    if(data.length > 0) {
         let isFirstFound = false;
         for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
                 if(category === "print") {
+                    totalCount += (item as IPrintData).total_pages;
                     detectDataOfDept[item.dept_name].total += (item as IPrintData).total_pages;
                     if(!isFirstFound) {
                         lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                         isFirstFound = true;
                     }
                 } else {
+                    totalCount += 1;
                     detectDataOfDept[item.dept_name].total += 1;
                 }
             };
@@ -79,6 +81,9 @@ export default async function DetectInfoWrapper({
             if(category === "print") {
                 if((item as IPrintData).color_total_pages > 0) {
                     totalDetected += (item as IPrintData).color_total_pages;
+                    if(!!item.dept_name && item.dept_name !== "") {
+                        detectDataOfDept[item.dept_name].detected += (item as IPrintData).color_total_pages;
+                    }
                 }
             } else {
                 if((item as IPrivacyData).detect_privacy) {
@@ -125,11 +130,13 @@ export default async function DetectInfoWrapper({
     ];
 
     // Data for Pie Bar Chart Component ---------------------------------------------------------
+    console.log('detect Data Of Dept : ',detectDataOfDept);
     for(const dept of deptInfo) {
         detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
             ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
             : 0;
     };
+    console.log('detect Rate Of Dept : ',detectRateOfDept);
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
     const detectDataOfDate: Record<string, number> = {};
@@ -140,11 +147,12 @@ export default async function DetectInfoWrapper({
         for(const item of data) {
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
             if(!!tempData[tempDate]) {
-                tempData[tempDate] += 1;
+                tempData[tempDate] += category === "print" ? (item as IPrintData).total_pages : 1;
             } else {
-                tempData[tempDate] = 1;
+                tempData[tempDate] = category === "print" ? (item as IPrintData).total_pages : 1;
             }
-        }
+        };
+
         for(const key of Object.keys(tempData).sort()) {
             detectDataOfDate[key] = tempData[key];
         }

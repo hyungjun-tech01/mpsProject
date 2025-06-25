@@ -505,6 +505,7 @@ const koResource = {
             last_detect_time: '최종 검출 일시',
             print_color_page_count: '컬러 출력 수',
             print_color_page_rate: '컬러 출력 비율',
+            print_color_page_rate_by_dept: '부서별 컬러 출력 비율',
             print_count_by_dept: '부서별 출력 건수',
             print_count_by_date: '날자별 출력 건수',
             print_count_rank_by_user: '사용자별 출력 건수 순위',

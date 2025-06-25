@@ -429,6 +429,7 @@ const enResource = {
             last_detect_time: 'The last detected time',
             print_color_page_count: 'Color Print Count',
             print_color_page_rate: 'Color Print Rate',
+            print_color_page_rate_by_dept: 'Color Print Rate by Dept.',
             print_count_rank_by_user: 'User Rank by Print Count',
             print_count_by_dept: 'Print Count by Dept.',
             print_count_by_date: 'Print Count by Date',

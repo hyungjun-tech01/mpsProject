@@ -71,6 +71,8 @@ export default async function Page(props: {
         adapter.getAllDepts(),
     ]);
 
+    // console.log('Analysis data : ',detectedData);
+
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
         { category: 'print', title: t('analysis.analize_print'), link: `/analysis/print` },
@@ -88,7 +90,7 @@ export default async function Page(props: {
                 t('analysis.print_color_page_rate'),
                 t('analysis.print_last_time')
             ],
-            pieChart: t('analysis.print_count_by_dept'),
+            pieChart: t('analysis.print_color_page_rate_by_dept'),
             barChart: t('analysis.print_count_by_date'),
         },
         privacy: {
