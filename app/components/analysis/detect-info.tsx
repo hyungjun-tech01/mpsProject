@@ -62,8 +62,6 @@ export default async function DetectInfoWrapper({
 
     // console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
 
-    const totalCountForDept: Record<string, number> = {};
-    let totalDetected = 0;
     let lastTime = "-";
 
     interface IDetectData {
@@ -72,58 +70,45 @@ export default async function DetectInfoWrapper({
     }
 
     const detectDataOfDept: Record<string, IDetectData> = {};
-    const detectRateOfDept: Record<string, number> = {};
 
     for(const dept of deptInfo) {
-        totalCountForDept[dept.dept_name]  = 0;
         detectDataOfDept[dept.dept_name] = {total: 0, detected:0};
-        detectRateOfDept[dept.dept_name] = 0;
     };
 
     if(data.length > 0) {
         for(const item of data) {
             if(!!item.dept_name && item.dept_name !== "") {
                 if(category === "print") {
-                    totalCountForDept[item.dept_name] += (item as IPrintData).total_pages;
                     detectDataOfDept[item.dept_name].total += (item as IPrintData).total_pages;
-                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                } else {
-                    totalCountForDept[item.dept_name] += 1;
-                    detectDataOfDept[item.dept_name].total += 1;
-                }
-            };
-
-            if(category === "print") {
-                if((item as IPrintData).color_total_pages > 0) {
-                    totalDetected += (item as IPrintData).color_total_pages;
-                    if(!!item.dept_name && item.dept_name !== "") {
+                    if((item as IPrintData).color_total_pages > 0) {
                         detectDataOfDept[item.dept_name].detected += (item as IPrintData).color_total_pages;
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                     }
-                }
-            } else if(category === 'privacy') {
-                if(!!(item as IPrivacyData).detect_privacy) {
-                    totalDetected += 1;
-                    if(!!item.dept_name && item.dept_name !== "") {
+                } else if(category === 'privacy') {
+                    detectDataOfDept[item.dept_name].total += 1;
+                    if(!!(item as IPrivacyData).detect_privacy) {
                         detectDataOfDept[item.dept_name].detected += 1;
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                     }
-                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                }
-            } else {
-                if(!!(item as ISecurityData).detect_security) {
-                    totalDetected += 1;
-                    if(!!item.dept_name && item.dept_name !== "") {
+                } else {
+                    detectDataOfDept[item.dept_name].total += 1;
+                    if(!!(item as ISecurityData).detect_security) {
                         detectDataOfDept[item.dept_name].detected += 1;
+                        lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
                     }
-                    lastTime = formatTimeYYYY_MM_DDbHHcMM_FromDB(item.send_time);
-                }
+                };
             };
         }
     };
     
     let detectRate = "-";
     let totalCount = 0;
-    for(const dept of Object.keys(totalCountForDept))
-        totalCount += totalCountForDept[dept];
+    let totalDetected = 0;
+
+    for(const val of Object.values(detectDataOfDept)) {
+        totalCount += val.total;
+        totalDetected += val.detected;
+    }
 
     if(totalCount > 0) {
         if(totalDetected === 0) {
@@ -155,11 +140,20 @@ export default async function DetectInfoWrapper({
 
     // Data for Pie Bar Chart Component ---------------------------------------------------------
     // console.log('detect Data Of Dept : ',detectDataOfDept);
+    const detectRateOfDept = [];
+
     for(const dept of deptInfo) {
-        detectRateOfDept[dept.dept_name] = detectDataOfDept[dept.dept_name].detected > 0 
-            ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
-            : 0;
+        const tempData = {
+            dept_name: dept.dept_name, 
+            detect_rate: detectDataOfDept[dept.dept_name].detected > 0 
+                ? Math.round(detectDataOfDept[dept.dept_name].detected * 10000 / detectDataOfDept[dept.dept_name].total)*0.01
+                : 0
+        };
+        detectRateOfDept.push(tempData);
     };
+    detectRateOfDept.sort((a, b) => a.detect_rate - b.detect_rate);
+    const pieLabels = detectRateOfDept.map(data => data.dept_name).slice(0, 10);
+    const pieData = detectRateOfDept.map(data => data.detect_rate).slice(0, 10);
     // console.log('detect Rate Of Dept : ',detectRateOfDept);
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
@@ -237,10 +231,10 @@ export default async function DetectInfoWrapper({
                     <h3 className="mb-4 text-md font-normal">{titles.pieChart}</h3>
                     <div className="max-h-96">
                         <PieChart
-                            labels={Object.keys(detectRateOfDept).slice(0, 10)}
+                            labels={pieLabels}
                             dataSet={[{
                                 label: titles.pieChart,
-                                data: Object.values(detectRateOfDept).slice(0, 10),
+                                data: pieData,
                             }]}
                         />
                     </div>
