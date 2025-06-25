@@ -107,7 +107,9 @@ export default function Header({ extendSideNav }: IHeader) {
                         <MenuIcon className="text-lime-50" onClick={extendSideNav} />
                     </IconButton>
                     <Typography variant="h6" component="div" className="grow pl-1 text-lime-50">
-                        MPS Next
+                        <Link href="/">
+                            MPS Next
+                        </Link>
                     </Typography>
                     <Box className="grow" />
                     <Box className="hidden gap-2 md:flex">

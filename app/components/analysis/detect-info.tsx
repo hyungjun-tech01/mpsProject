@@ -121,7 +121,7 @@ export default async function DetectInfoWrapper({
 
     return (
         <div className='w-full pt-6'>
-            <div className='w-full flex justify-between items-center mb-8`'>
+            <div className='w-full flex justify-between items-center mb-8 flex-col md:flex-row'>
                 <h1 className="mb-4 text-xl md:text-2xl">{trans('dashboard.privacy_info_detect_stats')}</h1>
                 <StatQuery
                     translated={translated}
@@ -132,13 +132,13 @@ export default async function DetectInfoWrapper({
                     dept={dept}
                 />
             </div>
-            <div className='w-full flex justify-between gap-4 mb-4'>
+            <div className='w-full flex justify-between gap-4 mb-4 flex-col md:flex-row'>
                 <Card title={trans('dashboard.total_print_count')} value={totalCount + "건"} />
                 <Card title={trans('dashboard.privacy_detect_count')} value={totalDetected + "건"} />
                 <Card title={trans('dashboard.privacy_detect_rate')} value={detectRate} />
                 <Card title={trans('dashboard.privacy_last_detect_time')} value={lastTime} />
             </div>
-            <div className='w-full flex gap-4 mb-4'>
+            <div className='w-full flex gap-4 mb-4 flex-col md:flex-row'>
                 <div className='flex-1 p-4 border border-gray-300 rounded-lg'>
                     <h3 className="mb-4 text-md font-normal">{trans('dashboard.privacy_detect_by_dept')}</h3>
                     <div className="max-h-96">
