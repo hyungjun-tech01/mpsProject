@@ -8,6 +8,8 @@ import Search from '@/app/components/search';
 import { CreateButton } from '@/app/components/buttons';
 import Table from '@/app/components/table';
 import { deleteDevice } from '@/app/components/device/actions';
+import { auth } from "@/auth"
+import { redirect } from "next/navigation";
 
 
 export const metadata: Metadata = {
@@ -19,7 +21,6 @@ interface ISearchDevice {
     itemsPerPage?: string;
     page?: string;
 }
-
 
 export default async function Fax(
     props: { 
@@ -34,6 +35,14 @@ export default async function Fax(
     const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const session = await auth();
+    if(!session?.user.name || !session?.user.id) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+
+    const currentUserName = session.user.name;
+
     const [t, totalPages, devices] = await Promise.all([
         getDictionary(locale),
         fetchFaxesPages(query, itemsPerPage),
@@ -63,6 +72,7 @@ export default async function Fax(
                         totalPages={totalPages}
                         locale={locale}
                         path='device'
+                        sesseionUserName={currentUserName}
                         deleteAction={deleteDevice}
                     />
                 </Suspense>

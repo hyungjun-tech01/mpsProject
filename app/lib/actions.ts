@@ -570,14 +570,19 @@ export async function deleteDocument(client: Pool, id: string, user?: string) {
   try {
     await client.query("BEGIN"); // 트랜잭션 시작
 
-    const doc_job = await client.query(`
+    const check_user_role = await client.query(`
+      SELECT sysadmin FROM tbl_user_info WHERE user_name='${user}'
+    `);
+    const isAdmin = check_user_role.rows[0].sysadmin === 'Y';
+
+    const check_doc = await client.query(`
             SELECT job_type, created_by FROM tbl_document_job_info
             WHERE document_id='${id}'
     `);
-    selected_job_type = doc_job.rows[0].job_type.toLowerCase();
-    const created_by = doc_job.rows[0].created_by;
+    selected_job_type = check_doc.rows[0].job_type.toLowerCase();
+    const created_by = check_doc.rows[0].created_by;
 
-    if (!user || created_by === user) {
+    if (isAdmin || created_by === user) {
       await client.query(`
               DELETE FROM tbl_document_shared_info
               WHERE document_id='${id}'

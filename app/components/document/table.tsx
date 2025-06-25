@@ -51,9 +51,9 @@ interface ITable {
     totalPages: number;
     path?: string;
     locale?: 'ko' | 'en';
-    currentId: string;
+    currentUserName: string;
     userOptions: { value: string, title: string }[];
-    deleteAction?: (id: string, param?:string) => Promise<{message: string} | void>;
+    deleteAction: (id: string, param:string) => Promise<{message: string} | void>;
     shareAction?: (initState: void | BasicState, formData: FormData) => Promise< BasicState | void>;
 };
 
@@ -63,7 +63,7 @@ export default function CustomizedTable({
     totalPages,
     path,
     locale = 'ko',
-    currentId,
+    currentUserName,
     userOptions,
     deleteAction,
     shareAction,
@@ -180,7 +180,7 @@ export default function CustomizedTable({
                             </button>
                         </div>
                         <div className='font-medium'>
-                            <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={currentId} ipAddress={ipAddress} action={deleteAction} />
+                            <DeleteButtton id={chosenID} title={translate[locale].delete} deletedBy={currentUserName} ipAddress={ipAddress} action={deleteAction} />
                         </div>
                     </div>
                 </div>

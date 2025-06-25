@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -44,9 +44,10 @@ interface ITable {
     currentPage: number;
     totalPages: number;
     path?: string;
+    sesseionUserName?: string;
     t: Record<string, string>;
     checkable?: boolean;
-    deleteAction: (id: string[]) => void;
+    deleteAction: (id: string[], param: string) => void;
     printAction: (id: string[]) => void;
 }
 
@@ -55,6 +56,7 @@ export default function CustomizedTable({
     rows,
     totalPages,
     path,
+    sesseionUserName,
     t,
     checkable = false,
     deleteAction,
@@ -87,7 +89,9 @@ export default function CustomizedTable({
     }
     const handleDeleteAll = () => {
         const allIds = rows.map(row => String(row.id));
-        deleteAction(allIds);
+        const merged = `${sesseionUserName ?? 'unknown'},${ipAddress ?? 'unknown'}`;
+        
+        deleteAction(allIds, merged);
         setSelectedIds([]);
     }
     const handlePrintChecked = () => {
@@ -95,9 +99,26 @@ export default function CustomizedTable({
         setSelectedIds([]);
     }
     const handleDeleteChecked = () => {
-        deleteAction(selectedIds);
+        const merged = `${sesseionUserName ?? 'unknown'},${ipAddress ?? 'unknown'}`;
+        deleteAction(selectedIds, merged);
         setSelectedIds([]);
     }
+
+    const [ipAddress, setIpAddress] = useState('');
+
+    useEffect(() => {
+      const fetchIp = async () => {
+        try {
+          const res = await fetch('/api/get-ip');
+          const data = await res.json();
+          setIpAddress(data.ip);
+        } catch (error) {
+          console.error('IP 가져오기 실패:', error);
+        }
+      };
+  
+      fetchIp();
+    }, []);
 
     return (
         <div>

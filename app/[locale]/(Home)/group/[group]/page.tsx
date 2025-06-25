@@ -37,11 +37,14 @@ export default async function Page(props: {
         notFound();
     };
 
-    if(!session?.user) return notFound();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
 
-    const isAdmin = session?.user.role === 'admin';
-    const isManager = session?.user.role === 'manager';
-    const userId = session?.user.id ?? "";
+    const userId = session.user.id;
+    const userName = session.user.name;
+    const isAdmin = session.user.role === 'admin';
+    const isManager = session.user.role === 'manager';
 
     const adapter = MyDBAdapter();
     const [t, totalPages, groupData] = await Promise.all([
@@ -52,16 +55,6 @@ export default async function Page(props: {
             : adapter.getFilteredGroupsByManager(userId, query, group, itemsPerPage, currentPage, locale),
         
     ]);
-
-    ///// application log ----------------------------------------------------------------------
-    const userName = session?.user.name ?? "";
-    if (!userName) {
-        // 여기서 redirect 함수를 사용해 리다이렉트 처리
-        redirect('/login'); // '/login'으로 리다이렉트
-        // notFound();
-    };
-
-    ///// application log ----------------------------------------------------------------------
 
     // Tabs ----------------------------------------------------------------------
     const subTitles = [
@@ -130,6 +123,7 @@ export default async function Page(props: {
                         totalPages={totalPages}
                         path={`/group/${group}`}
                         locale={locale}
+                        sesseionUserName={userName}
                         deleteAction={adapter.deleteGroup}
                         editable={!!isAdmin}
                         deletable={!!isAdmin}

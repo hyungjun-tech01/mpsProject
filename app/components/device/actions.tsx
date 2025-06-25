@@ -136,8 +136,9 @@ export async function createDevice(prevState: void |DeviceState, formData: FormD
     redirect('/device');
 }
 
-export async function deleteDevice(id : string) {
-    const output = await adapter.deleteDevice(id);
+export async function deleteDevice(id : string, param:string) {
+
+    const output = await adapter.deleteDevice(id, param);
 
     if(!output.result) {
         return {

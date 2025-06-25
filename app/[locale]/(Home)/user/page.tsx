@@ -28,12 +28,11 @@ export default async function Page(props: {
 
     const session = await auth();
 
-    const userName = session?.user.name ?? "";
-    if (!userName) {
-        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+    if(!session?.user.id || !session?.user.name) {
         redirect('/login'); // '/login'으로 리다이렉트
-        // notFound();
     };
+
+    const userName = session.user.name;
 
     const adapter = MyDBAdapter();
     const [t, totalPages, users] = await Promise.all([
