@@ -520,6 +520,7 @@ const koResource = {
             privacy_detect_by_dept: '부서별 개인정보 검출 비율',
             privacy_detect_rank_by_user: '사용자별 개인정보 검출 순위',
             privacy_info_detect_stats: '개인정보 출력 검출 통계',
+            privacy_last_detect_time: '마지막 검출 일시',
             security_detect_by_dept: '부서별 보안단어 검출 비율',
             security_detect_by_date: '날자별 보안단어 검출 추이',
             security_detect_count: '보안단어 포함 건수',

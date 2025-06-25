@@ -216,7 +216,6 @@ export async function fetchSecurityDetectedData(
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
             JOIN tbl_dept_info di ON ui.department = di.dept_id
             and ajl.send_time <> '0'
-            and ajl.detect_security = true
             and ajl.send_time >= '${startTime}'
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
