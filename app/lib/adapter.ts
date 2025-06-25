@@ -68,8 +68,8 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', '사용자');
-            logData.append('application_action', '삭제');
+            logData.append('application_page', 'User');
+            logData.append('application_action', 'Delete');
             logData.append('application_parameter', `{userId:${userId}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
@@ -253,7 +253,7 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', 'RegEx/Security');
+            logData.append('application_page', 'Group');
             logData.append('application_action', 'Delete');
             logData.append('application_parameter', `{id:${id}}`);
             logData.append('created_by', deletedBy);
@@ -293,7 +293,7 @@ export default function MyDBAdapter() {
         async getDevicesbyGroupManagerPages(userId: string, query: string, itemsPerPage: number) {
             return Device.fetchDevicesbyGroupManagerPages(pool, userId, query, itemsPerPage);
         },
-        async createDevice(newDevice: object) {
+        async createDevice(newDevice: Record<string, string | null>) {
             'use server';
             return Device.fetchCreateDevice(pool, newDevice);
         },
@@ -321,7 +321,7 @@ export default function MyDBAdapter() {
             console.log('adapter fetchDeleteFaxLineInfo', id);
             return Device.fetchDeleteFaxLineInfo(pool, id);
         },
-        async modifyDevice(newDevice: object) {
+        async modifyDevice(newDevice: Record<string, string | null>) {
             'use server';
             return Device.fetchModifyDevice(pool, newDevice);
         },
@@ -553,7 +553,7 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', 'RegEx/Security');
+            logData.append('application_page', 'UserInIF');
             logData.append('application_action', 'Delete');
             logData.append('application_parameter', `{id:${id}}`);
             logData.append('created_by', deletedBy);

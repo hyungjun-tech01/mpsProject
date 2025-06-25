@@ -70,8 +70,6 @@ export default function CustomizedTable({
 }: ITable) {
     const [chosenID, setChosenID] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    
-
     const [ipAddress, setIpAddress] = useState('');
 
     useEffect(() => {
@@ -87,7 +85,6 @@ export default function CustomizedTable({
   
       fetchIp();
     }, []);
-  
 
     const isMenuOpen = Boolean(anchorEl);
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

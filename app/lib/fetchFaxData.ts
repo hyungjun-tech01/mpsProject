@@ -7,9 +7,9 @@ const client = new pg.Client({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: Number(process.env.DB_PORT),
     database: process.env.DB_NAME,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT_MS
+    connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS)
 });
 
 await client.connect();
@@ -144,7 +144,7 @@ export async function fetchFaxById(id:string){
     }
 }
 
-export async function fetchCreateFax(newDevice: object) {
+export async function fetchCreateFax(newDevice: Record<string, string | null>) {
     try {
 
         // 트랜잭션 시작
@@ -216,7 +216,7 @@ export async function fetchDeleteFax(id: string) {
         };
     };
 }
-export async function fetchModifyFax(newDevice: object) {
+export async function fetchModifyFax(newDevice: Record<string, string | null>) {
 
     try {
         // 트랜잭션 시작

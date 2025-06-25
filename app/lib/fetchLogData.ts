@@ -685,18 +685,23 @@ export async function fetchPrintInfoByQuery(client: Pool, periodStart:string, pe
 
 export async function fetchPrivacyInfoByQuery(client: Pool, periodStart:string, periodEnd:string, dept?:string, user?:string) {
     const splittedStart = periodStart.split('.');
-    const startTime = splittedStart.at(0)?.slice(-2) + splittedStart.at(1) + splittedStart.at(2) + "00000000";
     const splittedEnd = periodEnd.split('.');
-    const endTime = splittedEnd.at(0)?.slice(-2) + splittedEnd.at(1) + splittedEnd.at(2) + "23595999";
+    if(splittedStart.length !== 3 || splittedEnd.length !== 3) {
+        return [];
+    }
+    const startYear = splittedStart.at(0)?.slice(-2) ?? '25';
+    const endYear = splittedEnd.at(0)?.slice(-2) ?? '25';
+    const startTime = startYear + splittedStart.at(1) + splittedStart.at(2) + "00000000";
+    const endTime = endYear + splittedEnd.at(1) + splittedEnd.at(2) + "23595999";
 
     try {
         const response = await client.query(`
             SELECT
-            send_time,
-            user_name,
-            external_user_name,
-            detected_items,
-            status
+                send_time,
+                user_name,
+                external_user_name,
+                detected_items,
+                status
             FROM (
                 SELECT
                     ajl.send_time,

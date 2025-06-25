@@ -166,10 +166,10 @@ export default async function Page(props: {
                         <LogTable
                             columns={groupColumns[category]}
                             rows={logData}
-                            currentPage={currentPage}
                             totalPages={logPages}
                             locale={locale}
                             path={category}
+                            sesseionUserName={userName}
                             editable={false}
                         />
                         :

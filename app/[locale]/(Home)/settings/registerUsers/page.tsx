@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { notFound } from 'next/navigation';
 import Search from '@/app/components/search';
 import Table from '@/app/components/settings/table';
 import { FileUpload } from '@/app/components/settings/file-upload-form';
@@ -37,7 +36,6 @@ export default async function Page(props: {
 
     const userId = session.user.id;
     const userName = session.user.name;
-    const isAdmin = session.user.role === 'admin';
 
     const adapter = MyDBAdapter();
     const [t, settingData, settingDataPages] = await Promise.all([

@@ -54,7 +54,7 @@ interface ITable {
     currentUserName: string;
     userOptions: { value: string, title: string }[];
     deleteAction: (id: string, param:string) => Promise<{message: string} | void>;
-    shareAction?: (initState: void | BasicState, formData: FormData) => Promise< BasicState | void>;
+    shareAction: (initState: void | BasicState, formData: FormData) => Promise< BasicState | void>;
 };
 
 export default function CustomizedTable({

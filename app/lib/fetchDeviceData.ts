@@ -122,7 +122,7 @@ export async function fetchDevicesPages(
     try {
         await client.query('SELECT 1');
     } catch (error) {
-        throw new Error('Database connection failed: ' + error.message);
+        throw new Error('Database connection failed: ' + error);
     }
 
     try {
@@ -244,7 +244,7 @@ export async function fetchDeviceFaxLineById(
 
 export async function fetchCreateDevice(
     client: Pool,
-    newDevice: object
+    newDevice: Record<string, string | null>
 ) {
     try {
 
@@ -296,7 +296,7 @@ export async function fetchCreateDevice(
         console.error('Insert Error:', error); // 오류 출력
         return {
             result: false,
-            data: `Database Error: ${error.message}`,
+            data: `Database Error: ${error}`,
         };
     }
 }
@@ -368,11 +368,9 @@ export async function fetchDeleteFaxLineInfo(
 
 export async function fetchModifyDevice(
     client: Pool,
-    newDevice: object
+    newDevice: Record<string, string | null>
 ) {
-
     try {
-
         // 트랜잭션 시작
         await client.query('BEGIN');
 
