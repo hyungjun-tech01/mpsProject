@@ -60,7 +60,7 @@ export default async function DetectInfoWrapper({
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
-    console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
+    // console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
 
     const totalCountForDept: Record<string, number> = {};
     let totalDetected = 0;
@@ -174,44 +174,54 @@ export default async function DetectInfoWrapper({
 
     // Data for Vertical Bar Chart Component ---------------------------------------------------------
     const detectDataOfDate: Record<string, Record<string, number>> = {};
-    for(const dept of deptInfo) {
-        const tempObj: Record<string, number> = {};
-        detectDataOfDate[dept.dept_name] = tempObj;
-    };
 
     if(period === "today") {
+        const tempObj: Record<string, number> = {};
         for(const dept of deptInfo) {
-            detectDataOfDate[dept.dept_name][formatTimeYYYYpMMpDD(new Date())] = totalCountForDept[dept.dept_name];
+            tempObj[dept.dept_name] = 0;
         }
+        detectDataOfDate[formatTimeYYYYpMMpDD(new Date())] = tempObj;
     } else {
         for(const item of data) {
+            const inputData = category === "print" 
+                ? (item as IPrintData).color_total_pages
+                : (category === 'privacy' 
+                    ? ((item as IPrivacyData).detect_privacy ? 1 : 0)
+                    : ((item as ISecurityData).detect_security ? 1 : 0));
             const tempDate = formatTimeYYYYpMMpDD_FromDB(item.send_time);
-            for(const dept of deptInfo) {
-                if(!detectDataOfDate[dept.dept_name][tempDate]) {
-                    detectDataOfDate[dept.dept_name][tempDate] = 0;
-                };
+            if(!detectDataOfDate[tempDate]) {
+                const tempObj: Record<string, number> = {};
+                for(const dept of deptInfo) {
+                    tempObj[dept.dept_name] = 0;
+                }
+                detectDataOfDate[tempDate] = tempObj;
             }
-            detectDataOfDate[item.dept_name][tempDate] += category === "print" ? (item as IPrintData).total_pages : 1;
+            detectDataOfDate[tempDate][item.dept_name] += inputData;
         };
     };
 
     const barDataSets:{ label: string; data: number[]; backgroundColor: string; }[] = [];
-    let barLabels: string[] = [];
+    const barLabels: string[] = [];
     let idx = 0;
-    for(const [key, value] of Object.entries(detectDataOfDate)) {
+    for(const dept of deptInfo) {
       const tempDataSet = {
-        label: key,
-        data: Object.values(value),
+        label: dept.dept_name,
+        data: [],
         backgroundColor: bgColors[idx % bgColors.length],
       };
       barDataSets.push(tempDataSet);
-      if(barLabels.length === 0) {
-        barLabels = Object.keys(value);
-      }
       idx++;
     };
-    console.log('bar data : ',barDataSets);
-
+    for(const [key, value] of Object.entries(detectDataOfDate)) {
+        barLabels.push(key);
+        for(const dept of deptInfo) {
+            const foundidx = barDataSets.findIndex(set => set.label === dept.dept_name);
+            if(foundidx !== -1) {
+                barDataSets.at(foundidx)?.data.push(value[dept.dept_name]);
+            }
+        }
+    }
+    // console.log('bar data : ',barDataSets);
 
     return (
         <div className='w-full pt-6'>
