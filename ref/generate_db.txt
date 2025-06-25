@@ -3600,3 +3600,13 @@ where job_type = 'Scan';
 update tbl_audit_job_log 
 set job_type = 'F'
 where job_type = 'Fax';
+
+-- 2025.06.25
+
+update tbl_audit_job_log 
+set detect_security = true, security_text = '보안'
+WHERE ctid IN (
+  SELECT ctid 
+  FROM tbl_audit_job_log 
+  LIMIT 10
+);

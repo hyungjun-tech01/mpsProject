@@ -746,11 +746,11 @@ export async function fetchPrintCountInfoByUsers(client: Pool, period: string, p
             JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
             JOIN tbl_dept_info di ON ui.department = di.dept_id
             WHERE TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') >= '${startDate}'
-            and ajl.total_pages <> 0
             ${endDate !== "" ? "AND TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') <= '" + endDate + "'" : ""}
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%"+ user +"%')" : ""}
-            GROUP BY user_id, ui.user_name, external_user_name, dept_name) a
+            GROUP BY user_id, ui.user_name, external_user_name, dept_name
+            having  SUM(ajl.total_pages) > 0 ) a
             ORDER BY total_pages DESC LIMIT 10
         `);
         return response.rows;
