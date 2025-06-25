@@ -129,16 +129,35 @@ export default async function Page(props: {
         details: '/logs/auditLogs'
     }));
 
-    const columns: IColumnData[] = [
-        { name: 'rank', title: t('common.rank'), align: 'center' },
-        { name: 'user_name', title: t('user.user_name'), align: 'center' },
-        { name: 'external_user_name', title: t('common.name'), align: 'center' },
-        { name: 'dept_name', title: t('user.department'), align: 'center' },
-        { name: 'total_count', title: t('print.print_count'), align: 'center' },
-        { name: 'detect_privacy_count', title: t('settings.detect_count'), align: 'center' },
-        { name: 'percent_detect', title: t('settings.detect_rate'), align: 'center' },
-        // { name: 'details', title: trans('user.subTitle_detail'), align: 'center', type:'link' },
-    ];
+    const columns: {print: IColumnData[], privacy: IColumnData[], security: IColumnData[]} = {
+        print: [
+            { name: 'rank', title: t('common.rank'), align: 'center' },
+            { name: 'user_name', title: t('user.user_name'), align: 'center' },
+            { name: 'external_user_name', title: t('common.name'), align: 'center' },
+            { name: 'dept_name', title: t('user.department'), align: 'center' },
+            { name: 'total_pages', title: t('analysis.print_total_pages'), align: 'center' },
+            { name: 'total_color_pages', title: t('analysis.print_color_page_count'), align: 'center' },
+            { name: 'percent_detect', title: t('analysis.print_color_page_rate'), align: 'center' },
+        ],
+        privacy: [
+            { name: 'rank', title: t('common.rank'), align: 'center' },
+            { name: 'user_name', title: t('user.user_name'), align: 'center' },
+            { name: 'external_user_name', title: t('common.name'), align: 'center' },
+            { name: 'dept_name', title: t('user.department'), align: 'center' },
+            { name: 'total_count', title: t('print.print_count'), align: 'center' },
+            { name: 'detect_privacy_count', title: t('settings.detect_count'), align: 'center' },
+            { name: 'percent_detect', title: t('settings.detect_rate'), align: 'center' },
+        ],
+        security: [
+            { name: 'rank', title: t('common.rank'), align: 'center' },
+            { name: 'user_name', title: t('user.user_name'), align: 'center' },
+            { name: 'external_user_name', title: t('common.name'), align: 'center' },
+            { name: 'dept_name', title: t('user.department'), align: 'center' },
+            { name: 'total_count', title: t('print.print_count'), align: 'center' },
+            { name: 'detect_privacy_count', title: t('settings.detect_count'), align: 'center' },
+            { name: 'percent_detect', title: t('settings.detect_rate'), align: 'center' },
+        ],
+    };
 
     return (
         <div className='w-full flex-col justify-start'>
@@ -169,7 +188,7 @@ export default async function Page(props: {
                         <h3 className="mb-4 text-md font-normal">{tableTitle[category as keyof typeof titles]}</h3>
                         <Suspense fallback={<TableSkeleton />}>
                             <Table
-                                columns={columns}
+                                columns={columns[category as keyof typeof columns]}
                                 rows={detectedUserList}
                                 locale={locale}
                             />
