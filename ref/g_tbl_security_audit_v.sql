@@ -49,4 +49,5 @@ from tbl_security_audit_v
 where send_date >= '2024.04.01'
 and send_date <= '2024.10.31'  
 group by user_name, external_user_name, department
+having SUM(total_count) > 0
 order by  percent_detect desc;
