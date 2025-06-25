@@ -107,7 +107,7 @@ export async function fetchPrintCountData(
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC
+            ORDER BY send_time DESC LIMIT 10
         `);
         return sum.rows;
     } catch (error) {
@@ -221,7 +221,7 @@ export async function fetchSecurityDetectedData(
             ${!!endTime ? "AND ajl.send_time <= '" + endTime + "'" : "" }
             ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%" + user + "%')" : ""}
             ${!!dept ? "AND ui.department='" + dept + "'" : ""}
-            ORDER BY send_time DESC
+            ORDER BY send_time DESC LIMIT 10
         `);
         return sum.rows;
     } catch (error) {
@@ -735,25 +735,26 @@ export async function fetchPrintCountInfoByUsers(client: Pool, period: string, p
     try {
         const response = await client.query(`
             SELECT
-                pav.user_id,
-                pav.user_name,
-                pav.external_user_name,
+                ui.user_id,
+                ui.user_name,
+                ui.external_user_name,
                 di.dept_name,
-                sum(pav.detect_privacy_count) as detect_privacy_count,
-                sum(pav.total_count) as total_count,
-                ROUND(SUM(pav.detect_privacy_count)::numeric / SUM(total_count) * 100, 2)  || '%' as percent_detect
-            FROM tbl_privacy_audit_v pav
-            JOIN tbl_dept_info di ON pav.dept_id = di.dept_id
-            WHERE send_date >= '${startDate}'
-            ${endDate !== "" ? "AND send_date <= '" + endDate + "'" : ""}
+                sum(ajl.total_pages) as total_pages,
+                sum(ajl.color_total_pages) as total_color_pages,
+                ROUND(SUM(ajl.color_total_pages)::numeric / SUM(ajl.total_pages) * 100, 2)  || '%' as percent_detect
+            FROM tbl_audit_job_log ajl
+            JOIN tbl_user_info ui ON ajl.user_name = ui.user_name
+            JOIN tbl_dept_info di ON ui.department = di.dept_id
+            WHERE TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') >= '${startDate}'
+            ${endDate !== "" ? "AND TO_CHAR(TO_TIMESTAMP(ajl.send_time, 'YYMMDDHH24MISS'), 'YYYY.MM.DD') <= '" + endDate + "'" : ""}
             ${!!dept ? "AND di.dept_name = '" + dept + "'" : ""}
-            ${!!user ? "AND (pav.user_id like '%" + user + "%' OR pav.user_name like '%"+ user +"%')" : ""}
-            GROUP BY user_id, user_name, external_user_name, dept_name
-            ORDER BY detect_privacy_count DESC
+            ${!!user ? "AND (ui.user_id like '%" + user + "%' OR ui.user_name like '%"+ user +"%')" : ""}
+            GROUP BY user_id, ui.user_name, external_user_name, dept_name
+            ORDER BY total_pages DESC
         `);
         return response.rows;
     } catch (e) {
-        console.log('fetchPrivacyDetectInfoByUsers :', e);
+        console.log('fetchPrintCountInfoByUsers :', e);
         return [];
     }
 };
