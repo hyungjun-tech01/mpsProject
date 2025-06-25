@@ -151,7 +151,7 @@ export default async function DetectInfoWrapper({
         };
         detectRateOfDept.push(tempData);
     };
-    detectRateOfDept.sort((a, b) => a.detect_rate - b.detect_rate);
+    detectRateOfDept.sort((a, b) => b.detect_rate - a.detect_rate);
     const pieLabels = detectRateOfDept.map(data => data.dept_name).slice(0, 10);
     const pieData = detectRateOfDept.map(data => data.detect_rate).slice(0, 10);
     // console.log('detect Rate Of Dept : ',detectRateOfDept);
