@@ -44,6 +44,8 @@ export default async function DetectInfoWrapper({
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
+    console.log('DetectInfoWrapper', category, titles, trans, period, dept, periodStart, periodEnd, data, deptInfo);
+
     let totalCount = 0;
     let totalDetected = 0;
     let lastTime = "-";
