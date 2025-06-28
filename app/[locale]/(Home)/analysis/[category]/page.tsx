@@ -161,7 +161,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
-            <LogClient userName={userName} groupId='' query=""   applicationPage='anaysis' applicationAction='조회'/>
+            <LogClient userName={userName} groupId='' query='' applicationPage={`통계/${t(`analysis.${category}`)}`} applicationAction='조회' />
             <div className="pl-2">
                 {subTitles.map(item => {
                     return <Link key={item.category} href={item.link}

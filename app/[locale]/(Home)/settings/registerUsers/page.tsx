@@ -61,7 +61,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
-            <LogClient userName={userName} groupId='' query={query}   applicationPage='사용자일괄등록' applicationAction='조회'/>
+            <LogClient userName={userName} groupId='' query={query}   applicationPage='설정/사용자일괄등록' applicationAction='조회'/>
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-2xl">{t("settings.registerUsers")}</h1>
             </div>

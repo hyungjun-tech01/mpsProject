@@ -343,7 +343,10 @@ const koResource = {
             subTitle_device: '장치 그룹',
             subTitle_user: '사용자 그룹',
             subTitle_security: '보안 그룹',
-            update_group: '그룹 변경하기'
+            update_group: '그룹 변경하기',
+            device:'장치 그룹',
+            user:'사용자 그룹',
+            security:'보안 그룹'
         },
         device :{
             create_device: '장치 추가',
@@ -439,6 +442,8 @@ const koResource = {
             subTitle_fax: '팩스함',
             subTitle_scan: '스캔함',
             thumbnail:'썸네일',
+            fax:'팩스함',
+            scan:'스캔함'
         },
         print: {
             color_mode: '컬러모드',
@@ -528,6 +533,9 @@ const koResource = {
             security_detect_rank_by_user: '사용자별 보안단어 검출 순위',
             select_jobtype: '-- 작업구분 선택 --',
             total_print_count: '총 출력 건수',
+            print: '출력량 통계',
+            privacy: '개인정보 검출 통계',
+            security: '보안단어 검출 통계',
         }
     },
 }

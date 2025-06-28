@@ -20,7 +20,7 @@ export default function LogClient({
       const logData = new FormData();
       logData.append('application_page', applicationPage);
       logData.append('application_action', applicationAction);
-      logData.append('application_parameter', `{groupId:${groupId}}, query{${query}}`);
+      logData.append('application_parameter', `조회조건{${query}}`);
       logData.append('created_by', userName);
 
       await fetch('/api/log', {

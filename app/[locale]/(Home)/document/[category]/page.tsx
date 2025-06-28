@@ -12,6 +12,7 @@ import getDictionary from '@/app/locales/dictionaries';
 import { auth } from "@/auth"
 import clsx from 'clsx';
 import { LinkOutlined, LinkOffOutlined } from '@mui/icons-material';
+import LogClient from '@/app/lib/logClient';
 
 
 export const metadata: Metadata = {
@@ -22,6 +23,9 @@ export default async function Page(props: {
     searchParams?: Promise<ISearch>;
     params: Promise<{ category: "fax" | "scan", locale: "ko" | "en" }>;
 }) {
+
+
+
     const {locale, category} = (await props.params);
     const searchParams = await props.searchParams;
     const query = searchParams?.query || '';
@@ -35,6 +39,7 @@ export default async function Page(props: {
 
     const currentId = session.user.id;
     const currentUserName = session.user.name;
+    const userName = session.user.name;
     const isAdmin = session.user.role === 'admin';
 
     const adapter = MyDBAdapter();
@@ -81,6 +86,7 @@ export default async function Page(props: {
 
     return (
         <div className='w-full flex-col justify-start'>
+            <LogClient userName={userName} groupId='' query={query}  applicationPage={`문서/${t(`document.${category}`)}`}  applicationAction='조회'/>
             <div className="pl-2">
             {subTitles.map(item => {
                 return <Link key={item.category} href={item.link}

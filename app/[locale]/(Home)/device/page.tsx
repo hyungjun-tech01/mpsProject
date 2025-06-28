@@ -84,7 +84,7 @@ export default async function Device(
     ];
     return (
             <div className="w-full">
-                <LogClient userName={userName} groupId={groupId} query={query}   applicationPage='출력장치' applicationAction='조회'/>
+                <LogClient userName={userName} groupId={groupId} query={query} applicationPage='출력장치' applicationAction='조회'/>
                 
                 <div className="flex w-full items-center justify-between">
                     <h1 className="text-2xl">{t('device.device')}</h1>
