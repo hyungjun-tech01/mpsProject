@@ -211,7 +211,7 @@ export default function CustomizedTable({
                                                 scope="row"
                                             >
                                                 {!column.type && String(row[column.name])}
-                                                {!!column.type && column.type === 'string' && 'A'+String(row[column.name])}
+                                                {!!column.type && column.type === 'string' && String(row[column.name])}
                                                 {!!column.type && column.type === 'date' && formatTimeToLocal(String(row[column.name]), locale)}
                                                 {!!column.type && column.type === 'date_simple' && formatTimeSimple(String(row[column.name]))}
                                                 {!!column.type && column.type === 'currency' && formatCurrency(String(row[column.name]), locale)}
