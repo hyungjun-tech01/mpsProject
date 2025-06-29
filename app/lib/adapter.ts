@@ -76,8 +76,8 @@ export default function MyDBAdapter() {
             const logData = new FormData();
             logData.append('application_page',  t('user.user'));
             logData.append('application_action', t('user.delete'));
-            const deltedUser = await User.fetchUserById(pool, userId);
-            logData.append('application_parameter', `{${t('user.full_name')}:${deltedUser.full_name}, ${t('user.user_name')}:${deltedUser.user_name}, ${t('user.email')}:${deltedUser.email}}`);
+            const deletedUser = await User.fetchUserById(pool, userId);
+            logData.append('application_parameter', `{${t('user.full_name')}:${deletedUser.full_name}, ${t('user.user_name')}:${deletedUser.user_name}, ${t('user.email')}:${deletedUser.email}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
@@ -259,12 +259,11 @@ export default function MyDBAdapter() {
 
             const [deletedBy, ipAddress] = param.split(',');
 
-
             const logData = new FormData();
             logData.append('application_page', t('group.group'));
             logData.append('application_action', t('group.delete'));
-            const deltedGroup = await Group.fetchGroupById(pool, id);
-            logData.append('application_parameter', `{${t('group.group_name')}:${deltedGroup.group_name}, ${t('group.group_type')}:${deltedGroup.group_type}}`);
+            const deletedGroup = await Group.fetchGroupById(pool, id);
+            logData.append('application_parameter', `{${t('group.group_name')}:${deletedGroup.group_name}, ${t('group.group_type')}:${deletedGroup.group_type}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
@@ -315,9 +314,10 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', 'Device');
-            logData.append('application_action', 'Delete');
-            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('application_page', t('device.device'));
+            logData.append('application_action', t('device.delete'));
+            const deletedDevice = await Device.fetchDeviceById(pool, id);
+            logData.append('application_parameter', `{${t('device.device_name')}:${deletedDevice.device_name}, ${t('device.location')}:${deletedDevice.location} ${t('device.physical_device_id')}:${deletedDevice.physical_device_id} ${t('device.device_model')}:${deletedDevice.device_model} ${t('device.serial_number')}:${deletedDevice.serial_number}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
@@ -427,10 +427,27 @@ export default function MyDBAdapter() {
 
             const [deletedBy, ipAddress] = param.split(',');
 
+            // logData.append('application_page', t('device.device'));
+            // logData.append('application_action', t('device.delete'));
+            // const deletedDevice = await Device.fetchDeviceById(pool, id);
+            // logData.append('application_parameter', `{${t('device.device_name')}:${deletedDevice.device_name}, ${t('device.location')}:${deletedDevice.location} ${t('device.physical_device_id')}:${deletedDevice.physical_device_id} ${t('device.device_model')}:${deletedDevice.device_model} ${t('device.serial_number')}:${deletedDevice.serial_number}}`);
+            // logData.append('created_by', deletedBy);
+            // tui.user_name||'/'||tui.full_name created_by,
+            // dj.created_date,
+            // dj.document_name name,
+            // tdi.device_name||'/'||tdi.location device_name,
+            // dj.total_pages,
+            // dj.total_pages,
+            // dj.archive_path,
+            // dj.archive_path thumbnail,
+            // dj.shared,
+            // dj.job_type
+
             const logData = new FormData();
-            logData.append('application_page', 'Document');
-            logData.append('application_action', 'Delete');
-            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('application_page', t('document.document'));
+            logData.append('application_action', t('document.delete'));
+            const deletedDocument = await Document.fetchdDocumnetById(pool, id);
+            logData.append('application_parameter', `{${t('document.document_name')}:${deletedDocument.document_name}, ${t('document.created_by')}:${deletedDocument.created_by} ${t('document.job_type')}:${deletedDocument.job_type}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 

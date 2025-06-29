@@ -122,6 +122,7 @@ export default function CustomizedTable({
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+        setMenuType('delete');
         setChosenID('');
     };
 

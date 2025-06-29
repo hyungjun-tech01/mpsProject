@@ -612,6 +612,7 @@ export async function deleteDocument(client: Pool, id: string, user?: string) {
     }
 
     await client.query("COMMIT"); // 모든 작업이 성공하면 커밋
+
   } catch (error) {
     await client.query("ROLLBACK"); // 에러 발생 시 롤백
     console.log("Delete document / Error : ", error);
@@ -621,6 +622,7 @@ export async function deleteDocument(client: Pool, id: string, user?: string) {
   }
 
   revalidatePath(`/document/${selected_job_type}`);
+  redirect(`/document/${selected_job_type}`);
 }
 
 //------- Account -----------------------------------------------------------------------------

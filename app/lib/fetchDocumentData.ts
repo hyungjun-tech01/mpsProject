@@ -12,8 +12,6 @@ export async function fetchFilteredDocumnets(
     currentPage: number
 ) {
 
-    console.log('fetchFilteredDocumnets user_name', userName);
-
     const offset = (currentPage - 1) * itemsPerPage;
     try{
         const docs = await client.query(`
@@ -76,5 +74,39 @@ export async function fetchFilteredDocumnetPages(
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch depts not in group.");
+    }
+};
+
+export async function fetchdDocumnetById(
+    client: Pool,
+    id : string,
+) {
+
+    try{
+        const docs = await client.query(`
+            SELECT
+                dj.document_id id,
+                tui.user_name||'/'||tui.full_name created_by,
+                dj.created_date,
+                dj.document_name,
+                tdi.device_name||'/'||tdi.location device_name,
+                dj.total_pages,
+                dj.total_pages,
+                dj.archive_path,
+                dj.archive_path thumbnail,
+                dj.shared,
+                dj.job_type
+            FROM tbl_document_job_info dj, tbl_device_info tdi, tbl_user_info tui
+            WHERE dj.printer_id = tdi.device_id
+                and dj.created_by = tui.user_id
+                and  dj.deleted_date is NULL 
+                and dj.document_id = $1`,[id]);
+
+            // return docs.rows;
+            const converted = docs.rows[0];
+            return converted;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch documents.");
     }
 };

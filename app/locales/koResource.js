@@ -356,7 +356,7 @@ const koResource = {
         },
         device :{
             create_device: '장치 추가',
-            device:'장치',
+            device:'출력 장치',
             device_id:'장치 ID',
             external_device_list:'External Device List',
             scan_actions:'Scan Actions',
@@ -398,6 +398,7 @@ const koResource = {
             mono_printer:'흑벡프린터',
             search_placeholder_grouping: '장치이름, 위치, IP주소로 조회할 수 있습니다.',
             select_device: '-- 장치 선택 --',
+            delete:'삭제',
         },
         security: {
             dept_count: '부서 수',
@@ -449,7 +450,10 @@ const koResource = {
             subTitle_scan: '스캔함',
             thumbnail:'썸네일',
             fax:'팩스함',
-            scan:'스캔함'
+            scan:'스캔함',
+            document:'문서',
+            delete:'삭제',
+            job_type:'스캔/팩스'
         },
         print: {
             color_mode: '컬러모드',
