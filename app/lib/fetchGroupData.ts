@@ -362,6 +362,33 @@ export async function fetchGroupInfoById(
     }
 };
 
+export async function fetchGroupById(
+    client: Pool,
+    groupId: string,
+) {
+    try {
+        const group_info = await client.query(`
+            SELECT
+                group_id id,
+                group_name,
+                group_type,
+                group_notes,
+                schedule_period,
+                schedule_amount,
+                schedule_start,
+                remain_amount
+            FROM tbl_group_info
+            WHERE group_id = '${groupId}'
+        `);
+        const finalData = group_info.rows[0];
+      
+        return finalData;
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch goup by ID");
+    }
+};
+
 // ----- Begin : User -------------------------------------------------------//
 // const ITEMS_PER_PAGE = 10;
 // export async function fetchDevices(

@@ -349,7 +349,10 @@ const koResource = {
             update_group: '그룹 변경하기',
             device:'장치 그룹',
             user:'사용자 그룹',
-            security:'보안 그룹'
+            security:'보안 그룹',
+            group:'그룹',
+            delete:'삭제',
+            group_type:'그룹타입',
         },
         device :{
             create_device: '장치 추가',

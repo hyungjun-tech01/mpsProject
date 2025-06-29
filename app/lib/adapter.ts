@@ -259,10 +259,12 @@ export default function MyDBAdapter() {
 
             const [deletedBy, ipAddress] = param.split(',');
 
+
             const logData = new FormData();
-            logData.append('application_page', 'Group');
-            logData.append('application_action', 'Delete');
-            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('application_page', t('group.group'));
+            logData.append('application_action', t('group.delete'));
+            const deltedGroup = await Group.fetchGroupById(pool, id);
+            logData.append('application_parameter', `{${t('group.group_name')}:${deltedGroup.group_name}, ${t('group.group_type')}:${deltedGroup.group_type}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
