@@ -79,7 +79,7 @@ export default async function Device(
         { name: 'device_status', title: t('device.device_status'), align: 'center' },
         { name: 'location', title: t('device.location'), align: 'center' },
         { name: 'device_model', title: t('device.device_model'), align: 'center' },
-        { name: 'serial_number', title: t('device.serial_number'), align: 'center' },
+        { name: 'serial_number', title: t('device.serial_number'), align: 'center' , type:'string' },
         { name: 'app_type', title: t('device.app_type'), align: 'center' },
     ];
     return (
