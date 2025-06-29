@@ -133,8 +133,8 @@ export default async function Page(props: {
             { name: 'log_date', type: 'date_simple', title: t('adminActionLog.creation_date'), align: 'center' },
             { name: 'created_by', title: t('adminActionLog.created_by'), align: 'center' },
             { name: 'application_page', title: t('adminActionLog.path'), align: 'left' },
-            { name: 'application_parameter', title: t('adminActionLog.parameter'), align: 'left' },
             { name: 'application_action', title: t('adminActionLog.action'), align: 'center' },
+            { name: 'application_parameter', title: t('adminActionLog.parameter'), align: 'left' },
             { name: 'ip_address', title: t('adminActionLog.ip_address'), align: 'center' },
         ],
     }

@@ -285,6 +285,9 @@ const koResource = {
             user_id:'사용자 ID',
             user_name:'사용자 이름',
             user_role:'사용자 권한',
+            user:'사용자',
+            delete:'삭제',
+            email:'이메일주소',
             //-----------------------------------------------------------
             change_password_same:'변경 비밀번호 확인과 변경 비밀번호는 같아야 합니다.',
             import_csv_file: "CSV 파일 가져오기",

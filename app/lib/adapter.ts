@@ -15,6 +15,7 @@ import * as Print from "./fetchPrintSpoolData";
 import * as PrintAction from "./actionPrint";
 import * as SettingAction from "./actionSetting";
 import type { RegularExpState } from "./actionSetting";
+import getDictionary from '@/app/locales/dictionaries';
 
 
 const pool = new Pool({
@@ -27,6 +28,11 @@ const pool = new Pool({
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS),
 });
+
+// 관리자 작업 로그를 위해 다국어 적용을 가지고 옴.
+const [t] = await Promise.all([
+    getDictionary('ko')
+]);
 
 
 export default function MyDBAdapter() {
@@ -68,9 +74,10 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', 'User');
-            logData.append('application_action', 'Delete');
-            logData.append('application_parameter', `{userId:${userId}}`);
+            logData.append('application_page',  t('user.user'));
+            logData.append('application_action', t('user.delete'));
+            const deltedUser = await User.fetchUserById(pool, userId);
+            logData.append('application_parameter', `{${t('user.full_name')}:${deltedUser.full_name}, ${t('user.user_name')}:${deltedUser.user_name}, ${t('user.email')}:${deltedUser.email}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 
