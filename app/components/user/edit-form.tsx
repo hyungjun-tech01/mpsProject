@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import type { UserState } from '@/app/lib/actions';
 import { useActionState } from 'react';
 import { IButtonInfo, IEditItem, ISection, EditItem } from '../edit-items';
-
+import {useState, useEffect} from 'react';
 
 export function EditForm({
   id,
@@ -23,6 +23,26 @@ export function EditForm({
   const initialState: UserState = { message: null, errors: {} };
   const updatedAction = action.bind(null, id);
   const [state, formAction] = useActionState(updatedAction, initialState);
+
+  //const { data: session } = useSession();
+
+  const updateUserName = null;
+
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const fetchIp = async () => {
+      try {
+        const res = await fetch('/api/get-ip');
+        const data = await res.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error('IP 가져오기 실패:', error);
+      }
+    };
+
+    fetchIp();
+  }, []);
 
   return (
     <form action={formAction}>
