@@ -174,6 +174,8 @@ export async function modifyUser(
     };
   }
 
+  const ipAddress = formData.get("ipAddress");
+  const updatedBy = formData.get("updatedBy");
   const newFullName = formData.get("userFullName");
   const newEmail = formData.get("userEmail");
   const newHomeDir = formData.get("userHomeDirectory");
@@ -213,10 +215,12 @@ export async function modifyUser(
                 u.home_directory,
                 u.disabled_printing,
                 u.department,
+                di.dept_name,
                 u.card_number,
                 u.card_number2,
                 u.password
-            FROM tbl_user_info u
+            FROM tbl_user_info u 
+            LEFT JOIN tbl_dept_info di ON di.dept_id = u.department
             WHERE u.user_id='${id}'
         `);
 
@@ -229,30 +233,51 @@ export async function modifyUser(
     const currCardNo2 = resp.rows[0].card_number2;
     // const currRestricted = resp.rows[0].restricted;
     const currPassword = resp.rows[0].password;
+    const currDeptName = resp.rows[0].dept_name;
 
     let checkNeedUpdate = false;
     //        let sqlText = "UPDATE tbl_user_info SET";
 
+    let changedValues = '';
+
     if (newFullName !== currFullName) {
       checkNeedUpdate = true;
+      changedValues += 'oldFullName:'+currFullName +' newFullName:'+newFullName;
     }
     if (newEmail !== currEmail) {
       checkNeedUpdate = true;
+      changedValues += ',oldEmail:'+currEmail+' newEmail:'+newEmail;
     }
     if (newHomeDir !== currHomeDir) {
       checkNeedUpdate = true;
+      changedValues += ',oldHomeDir:'+currHomeDir + ' newHomeDir:'+newHomeDir;
     }
     if (newDisabledPrinting !== currDisabledPrinting) {
       checkNeedUpdate = true;
+      changedValues += ',oldDisabledPrinting:'+currDisabledPrinting  + ' newDisabledPrinting:'+newDisabledPrinting;
     }
     if (newDept !== currDept) {
       checkNeedUpdate = true;
+
+
+      const newDeptResp = await client.query(`
+      SELECT
+          di.dept_name
+      FROM tbl_dept_info di 
+      WHERE di.dept_id='${newDept}'
+      `);
+
+      const newDeptName = newDeptResp.rows[0].dept_name;
+
+      changedValues += ',oldDept:'+currDeptName  + ' newDept:'+newDeptName;
     }
     if (newCardNo1 !== currCardNo1) {
       checkNeedUpdate = true;
+      changedValues += ',oldCardNo1:'+currCardNo1  + ' newCardNo1:'+newCardNo1;
     }
     if (newCardNo2 !== currCardNo2) {
       checkNeedUpdate = true;
+      changedValues += ',oldCardNo2:'+currCardNo2  + ' newCardNo2:'+newCardNo2;
     }
     // if(newRestricted !== currRestricted) {
     //     if(checkNeedUpdate) {
@@ -271,7 +296,9 @@ export async function modifyUser(
       // console.log("Check :", isMatched);
       if (!isMatched) {
         hashed = await bcrypt.hash(String(newPwd), salt);
-        checkNeedUpdate = true;
+        checkNeedUpdate = true; 
+
+        changedValues += ',Password Changed';
       }
     }
 
@@ -281,6 +308,18 @@ export async function modifyUser(
       };
     }
 
+    //application Log 생성 
+
+    const logData = new FormData();
+    logData.append('application_page', '사용자');
+    logData.append('application_action', '수정');
+    logData.append('application_parameter', changedValues);
+    logData.append('created_by', updatedBy ? String(updatedBy) : "");
+    logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+    applicationLog(client, logData);
+
+  
     try {
       await client.query(
         `update tbl_user_info 
@@ -291,7 +330,8 @@ export async function modifyUser(
                 department= $6,
                 card_number = $7,
                 card_number2 = $8,
-                password = $9
+                password = $9,
+                modified_by = $10
             where user_id= $1
             `,
         [
@@ -304,6 +344,7 @@ export async function modifyUser(
           newCardNo1,
           newCardNo2,
           changePwd && !isMatched ? hashed : currPassword,
+          updatedBy
         ]
       );
     } catch (error) {
@@ -984,4 +1025,83 @@ export async function deleteUserIF(client: Pool, id: string) {
 
   revalidatePath("/settings/registerUsers");
   redirect("/settings/registerUsers");
+}
+
+export async function fetchModifyDevice(
+  client: Pool,
+  newDevice: Record<string, string | null>
+) {
+  try {
+      // 트랜잭션 시작
+      await client.query('BEGIN');
+
+      let ext_device_function;
+      ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
+      ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN' : '';
+      ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX' : '';
+
+      ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
+      const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
+
+      const result = await client.query(`
+          update tbl_device_info
+          set device_type = $1, 
+              device_name = $2, 
+              location = $3, 
+              physical_device_id = $4, 
+              notes = $5,
+              device_model = $6, 
+              serial_number = $7, 
+              ext_device_function = $8, 
+              device_administrator = $9,
+              device_administrator_password = $10
+          where device_id = $11
+      `, [newDevice.device_type,
+      newDevice.device_name,
+      newDevice.location,
+      newDevice.physical_device_id,
+      newDevice.notes,
+      newDevice.device_model,
+      newDevice.serial_number,
+          ext_device_function,
+      newDevice.device_administrator,
+          encrypt_device_admin_pwd,
+      newDevice.device_id]);
+
+      // tbl_group_member_info 데이터가 있으면, update 
+      // tbl_group_member_info 데이터가 없으면, insert 
+      const queryResult1 = await client.query(`
+          select count(*) cnt from tbl_group_member_info t
+          where t.member_id = $1`, [newDevice.device_id]);
+
+      // 결과에서 카운트를 정수로 변환
+      const count = parseInt(queryResult1.rows[0].cnt, 10);
+
+      if (count > 0) {
+          await client.query(`
+          update tbl_group_member_info
+             set group_id = $1
+             where member_id = $2`, [newDevice.device_group, newDevice.device_id]);
+      } else {
+          await client.query(`
+          insert into tbl_group_member_info(group_id, member_id, member_type)
+          values($1, $2, $3)`, [newDevice.device_group, newDevice.device_id, 'device']);
+      }
+
+      // 모든 쿼리 성공 시 커밋
+      await client.query('COMMIT');
+
+      // 성공 처리
+      return { result: true, data: result.rows[0] };
+
+  } catch (error) {
+      // 오류 발생 시 롤백
+      await client.query('ROLLBACK');
+
+      console.log('Modify device / Error : ', error);
+      return {
+          result: false,
+          data: "Database Error",
+      };
+  };
 }

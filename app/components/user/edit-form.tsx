@@ -12,11 +12,13 @@ export function EditForm({
   id,
   items,
   buttons,
+  sessionUserName,
   action,
 }: {
   id: string;
   items: ISection[];
   buttons?: IButtonInfo;
+  sessionUserName: string;
   action: (id: string, prevState: void | UserState, formData: FormData)
     => Promise<UserState | void>;
 }) {
@@ -26,7 +28,6 @@ export function EditForm({
 
   //const { data: session } = useSession();
 
-  const updateUserName = null;
 
   const [ipAddress, setIpAddress] = useState('');
 
@@ -46,6 +47,8 @@ export function EditForm({
 
   return (
     <form action={formAction}>
+      <input type="hidden" name="ipAddress" value={ipAddress}/>
+      <input type="hidden" name="updatedBy" value={sessionUserName}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {items.map((sec: ISection, idx) => {
           return (

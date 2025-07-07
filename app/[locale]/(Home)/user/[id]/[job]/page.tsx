@@ -12,6 +12,8 @@ import { IColumnData, ISearch } from '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import { formatCurrency } from "@/app/lib/utils";
 
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
@@ -25,6 +27,14 @@ export default async function Page(props: {
     // const query = searchParams?.query || '';
     const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
     const currentPage = Number(searchParams?.page) || 1;
+
+    const session = await auth();
+
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+
+    const userName = session.user.name;
 
     const adapter = MyDBAdapter();
     const [t, user, allDept] = await Promise.all([
@@ -156,7 +166,7 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.modifyUser}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.modifyUser}/>}
             {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.changeBalance}/>}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
