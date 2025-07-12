@@ -226,7 +226,11 @@ export function generateChangeLog(
   const changes: string[] = [];
 
   for (const key in newData) {
-  
+    // 비교에서 제외할 필드이거나, 이전 데이터에 없는 키는 건너뜁니다.
+    if (ignoreFields.includes(key) || !oldData.hasOwnProperty(key)) {
+      continue;
+    }
+
     const oldValue = oldData[key];
     const newValue = newData[key];
 

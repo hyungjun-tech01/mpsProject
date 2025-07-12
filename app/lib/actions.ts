@@ -289,7 +289,7 @@ export async function modifyUser(
     };
 
     // 변경 로그를 생성.
-    changedValues += generateChangeLog(oldUserData, newUserData, userFieldLabels);
+    changedValues += generateChangeLog(oldUserData, newUserData, userFieldLabels );
 
     if (changedValues) { // changeLog가 빈 문자열이 아니면 true
       checkNeedUpdate = true;
@@ -1025,6 +1025,9 @@ export async function modifyDevice(
   newDevice: Record<string, string | null>
 ) {
   try {
+
+      console.log('newDevice', newDevice);
+      
      // First, get current data
      const resp = await client.query(`
       SELECT 						
@@ -1042,34 +1045,10 @@ export async function modifyDevice(
       WHERE u.device_id='${newDevice.device_id}'
     `);
 
-    const currDeviceType = resp.rows[0].device_type;
-    const currDeviceName = resp.rows[0].device_name;
-    const currLocation = resp.rows[0].location;
-    const currPhysicalDeviceId = resp.rows[0].physical_device_id;
-    const currDept = resp.rows[0].notes;
-    const currNotes = resp.rows[0].device_model;
-    const currSerailNumber = resp.rows[0].serial_number;
-    const currExtDeviceFunction = resp.rows[0].ext_device_function;
-    const currDeviceAdmiistrator = resp.rows[0].device_administrator;
-    const currDeviceAdministratorPassword = resp.rows[0].device_administrator_password;
-
     let checkNeedUpdate = false;
-    //        let sqlText = "UPDATE tbl_user_info SET";
-
+   
     let changedValues = '';
 
-    if (newDevice.device_type !== currDeviceType) {
-      checkNeedUpdate = true;
-      changedValues += 'oldDeviceType:'+currDeviceType +' newDeviceType:'+newDevice.device_type;
-    }
-
-    if (newDevice.device_name !== currDeviceName) {
-      checkNeedUpdate = true;
-      changedValues += 'oldDeviceName:'+currDeviceName +' newDeviceName:'+newDevice.device_name;
-    }
-
-    // 트랜잭션 시작
-    await client.query('BEGIN');
 
     let ext_device_function;
     ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
@@ -1078,6 +1057,68 @@ export async function modifyDevice(
 
     ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
     const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
+
+
+    // 변경 값
+    const newDeviceData = {
+      device_type: newDevice.device_type,
+      device_name: newDevice.device_name,
+      location: newDevice.location,
+      physical_device_id:  newDevice.physical_device_id,
+      notes: newDevice.notes,
+      device_model: newDevice.device_model,
+      serial_number: newDevice.serial_number ,
+      ext_device_function: ext_device_function,
+      device_administrator: newDevice.device_administrator,
+    };
+
+    //이전 값
+    const oldDeviceData = resp.rows[0];
+
+    // Field Lable 
+    const deviceFieldLabels: Record<string, string> = {
+      device_type: t('device.device_type'),
+      device_name: t('device.device_name'),
+      location: t('device.location'),
+      physical_device_id: t('device.physical_device_id'),
+      notes: t('device.notes'),
+      device_model:  t('device.device_model'),
+      serial_number: t('device.serial_number'),
+      ext_device_function:  t('device.ext_device_function'),
+      device_administrator: t('device.device_administrator'),
+    };
+
+    if( encrypt_device_admin_pwd !== resp.rows[0].device_administrator_password){
+      changedValues += 'Administrator Password Chnage,';
+    }
+    // 변경 로그를 생성.
+    changedValues += generateChangeLog(oldDeviceData, newDeviceData, deviceFieldLabels);
+
+    if (changedValues) { // changeLog가 빈 문자열이 아니면 true
+      checkNeedUpdate = true;
+    } 
+
+    if (!checkNeedUpdate) {
+      return {
+        message: "변경 사항이 없습니다.",
+      };
+    }
+
+     //application Log 생성 
+
+     const logData = new FormData();
+     logData.append('application_page', '사용자');
+     logData.append('application_action', '수정');
+     logData.append('application_parameter', changedValues);
+     logData.append('created_by', newDevice.updatedBy ? String(newDevice.updatedBy) : "");
+     logData.append('ip_address', newDevice.ipAddress ? String(newDevice.ipAddress) : "");
+ 
+     applicationLog(client, logData);
+
+    // 트랜잭션 시작
+    await client.query('BEGIN');
+
+  
 
     const result = await client.query(`
         update tbl_device_info

@@ -70,6 +70,8 @@ const FormSchema = z.object({
         invalid_type_error: 'Host Name or Ip address is required',
     }).min(1, 'Host Name or Ip address is required'),
     serial_number : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    updatedBy : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    ipAddress : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
     // enable_print_release :  z.enum(["Y", "N"], {
     //     invalid_type_error: 'Please select Y or N',
     // }),
@@ -228,6 +230,8 @@ export async function modifyDevice(prevState: void | DeviceState, formData: Form
         notes: formData.get('notes'),
         physical_device_id: formData.get('physical_device_id'),
         serial_number: formData.get('serial_number'),
+        updatedBy: formData.get('updatedBy'),
+        ipAddress: formData.get('ipAddress'),
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
