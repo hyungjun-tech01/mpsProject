@@ -6,21 +6,42 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
 import { IButtonInfo, ISection, IEditItem, EditItem } from '../edit-items';
+import {useState, useEffect} from 'react';
 
 
 export default function Form({
-    items,  buttons, action
+    items,  buttons, sessionUserName, action
 } : {
     items: ISection[]; 
     buttons?: IButtonInfo;
+    sessionUserName:string;
     action: (prevState: void |DeviceState, formData: FormData) => Promise<DeviceState | void>;
 }){
     const initialState: DeviceState = { message: null, errors: {} };
     const [state, formAction] = useActionState(action, initialState);
 
+    
+    const [ipAddress, setIpAddress] = useState('');
+
+    useEffect(() => {
+        const fetchIp = async () => {
+        try {
+            const res = await fetch('/api/get-ip');
+            const data = await res.json();
+            setIpAddress(data.ip);
+        } catch (error) {
+            console.error('IP 가져오기 실패:', error);
+        }
+        };
+
+        fetchIp();
+    }, []);
+
     return (
         <div>
             <form action={formAction}>
+            <input type="hidden" name="ipAddress" value={ipAddress}/>
+            <input type="hidden" name="updatedBy" value={sessionUserName}/>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
             <div key={1} className={clsx('w-full p-2 flex flex-col md:flex-row',
               { 'border-b': 1 !== items.length - 1 }

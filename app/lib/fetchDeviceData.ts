@@ -1,7 +1,6 @@
 import type { Pool } from "pg";
 
 import { Device } from '@/app/lib/definitions';
-import { encrypt } from '@/app/lib/cryptoFunc';
 
 
 export async function fetchFilteredDevices(

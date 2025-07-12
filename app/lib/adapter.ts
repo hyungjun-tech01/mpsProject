@@ -332,7 +332,7 @@ export default function MyDBAdapter() {
         },
         async modifyDevice(newDevice: Record<string, string | null>) {
             'use server';
-            return Action.fetchModifyDevice(pool, newDevice);
+            return Action.modifyDevice(pool, newDevice);
         },
         async saveFaxLineInfo(
             saveFaxLineData: Record<string, string | null>,

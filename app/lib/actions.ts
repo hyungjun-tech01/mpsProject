@@ -6,6 +6,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { parse } from "csv-parse";
 import bcrypt from "bcrypt";
+import { encrypt } from '@/app/lib/cryptoFunc';
+import getDictionary from '@/app/locales/dictionaries';
+import {generateChangeLog} from '@/app/lib/utils';
+
+const [t] = await Promise.all([
+  getDictionary('ko')
+]);
+
+
 
 const salt = await bcrypt.genSalt(11);
 
@@ -207,6 +216,7 @@ export async function modifyUser(
 
   // Prepare data for updating the database
   try {
+   
     // First, get current data
     const resp = await client.query(`
             SELECT
@@ -214,79 +224,30 @@ export async function modifyUser(
                 u.email,
                 u.home_directory,
                 u.disabled_printing,
-                u.department,
                 di.dept_name,
                 u.card_number,
                 u.card_number2,
                 u.password
             FROM tbl_user_info u 
             LEFT JOIN tbl_dept_info di ON di.dept_id = u.department
-            WHERE u.user_id='${id}'
-        `);
+            WHERE u.user_id= $1
+        `, [id]);
 
-    const currFullName = resp.rows[0].full_name;
-    const currEmail = resp.rows[0].email;
-    const currHomeDir = resp.rows[0].home_directory;
-    const currDisabledPrinting = resp.rows[0].disabled_printing;
-    const currDept = resp.rows[0].department;
-    const currCardNo1 = resp.rows[0].card_number;
-    const currCardNo2 = resp.rows[0].card_number2;
-    // const currRestricted = resp.rows[0].restricted;
     const currPassword = resp.rows[0].password;
-    const currDeptName = resp.rows[0].dept_name;
 
     let checkNeedUpdate = false;
-    //        let sqlText = "UPDATE tbl_user_info SET";
 
     let changedValues = '';
 
-    if (newFullName !== currFullName) {
-      checkNeedUpdate = true;
-      changedValues += 'oldFullName:'+currFullName +' newFullName:'+newFullName;
-    }
-    if (newEmail !== currEmail) {
-      checkNeedUpdate = true;
-      changedValues += ',oldEmail:'+currEmail+' newEmail:'+newEmail;
-    }
-    if (newHomeDir !== currHomeDir) {
-      checkNeedUpdate = true;
-      changedValues += ',oldHomeDir:'+currHomeDir + ' newHomeDir:'+newHomeDir;
-    }
-    if (newDisabledPrinting !== currDisabledPrinting) {
-      checkNeedUpdate = true;
-      changedValues += ',oldDisabledPrinting:'+currDisabledPrinting  + ' newDisabledPrinting:'+newDisabledPrinting;
-    }
-    if (newDept !== currDept) {
-      checkNeedUpdate = true;
-
-
-      const newDeptResp = await client.query(`
+    const newDeptResp = await client.query(`
       SELECT
           di.dept_name
       FROM tbl_dept_info di 
-      WHERE di.dept_id='${newDept}'
-      `);
+      WHERE di.dept_id= $1
+      `, [newDept]);
 
-      const newDeptName = newDeptResp.rows[0].dept_name;
-
-      changedValues += ',oldDept:'+currDeptName  + ' newDept:'+newDeptName;
-    }
-    if (newCardNo1 !== currCardNo1) {
-      checkNeedUpdate = true;
-      changedValues += ',oldCardNo1:'+currCardNo1  + ' newCardNo1:'+newCardNo1;
-    }
-    if (newCardNo2 !== currCardNo2) {
-      checkNeedUpdate = true;
-      changedValues += ',oldCardNo2:'+currCardNo2  + ' newCardNo2:'+newCardNo2;
-    }
-    // if(newRestricted !== currRestricted) {
-    //     if(checkNeedUpdate) {
-    //         sqlText += `, restricted='${newCardNo2}'`;
-    //     } else {
-    //         sqlText += ` restricted='${newCardNo2}'`;
-    //         checkNeedUpdate = true;
-    //     }
-    // }
+    const newDeptName = newDeptResp.rows[0].dept_name;
+    
     let hashed = null;
     let isMatched = true;
     if (changePwd) {
@@ -298,9 +259,41 @@ export async function modifyUser(
         hashed = await bcrypt.hash(String(newPwd), salt);
         checkNeedUpdate = true; 
 
-        changedValues += ',Password Changed';
+        changedValues += 'Password Change,';
       }
     }
+
+    // 변경 값
+    const newUserData = {
+      full_name: newFullName,
+      email: newEmail,
+      home_directory: newHomeDir,
+      disabled_printing: newDisabledPrinting,
+      dept_name: newDeptName,
+      card_number: newCardNo1,
+      card_number2: newCardNo2,
+    };
+
+    //이전 값
+    const oldUserData = resp.rows[0];
+
+    // Field Lable 
+    const userFieldLabels: Record<string, string> = {
+      full_name: t('user.full_name'),
+      email: t('common.email'),
+      home_directory: t('user.home_directory'),
+      disabled_printing: t('user.enable_disable_printing'),
+      dept_name: t('user.department'),
+      card_number: t('user.card_number'),
+      card_number2: t('user.card_number2'),
+    };
+
+    // 변경 로그를 생성.
+    changedValues += generateChangeLog(oldUserData, newUserData, userFieldLabels);
+
+    if (changedValues) { // changeLog가 빈 문자열이 아니면 true
+      checkNeedUpdate = true;
+    } 
 
     if (!checkNeedUpdate) {
       return {
@@ -1027,72 +1020,115 @@ export async function deleteUserIF(client: Pool, id: string) {
   redirect("/settings/registerUsers");
 }
 
-export async function fetchModifyDevice(
+export async function modifyDevice(
   client: Pool,
   newDevice: Record<string, string | null>
 ) {
   try {
-      // 트랜잭션 시작
-      await client.query('BEGIN');
+     // First, get current data
+     const resp = await client.query(`
+      SELECT 						
+        device_type , 
+        device_name , 
+        location , 
+        physical_device_id, 
+        notes ,
+        device_model , 
+        serial_number, 
+        ext_device_function , 
+        device_administrator ,
+        device_administrator_password 
+      FROM tbl_device_info u 
+      WHERE u.device_id='${newDevice.device_id}'
+    `);
 
-      let ext_device_function;
-      ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
-      ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN' : '';
-      ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX' : '';
+    const currDeviceType = resp.rows[0].device_type;
+    const currDeviceName = resp.rows[0].device_name;
+    const currLocation = resp.rows[0].location;
+    const currPhysicalDeviceId = resp.rows[0].physical_device_id;
+    const currDept = resp.rows[0].notes;
+    const currNotes = resp.rows[0].device_model;
+    const currSerailNumber = resp.rows[0].serial_number;
+    const currExtDeviceFunction = resp.rows[0].ext_device_function;
+    const currDeviceAdmiistrator = resp.rows[0].device_administrator;
+    const currDeviceAdministratorPassword = resp.rows[0].device_administrator_password;
 
-      ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
-      const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
+    let checkNeedUpdate = false;
+    //        let sqlText = "UPDATE tbl_user_info SET";
 
-      const result = await client.query(`
-          update tbl_device_info
-          set device_type = $1, 
-              device_name = $2, 
-              location = $3, 
-              physical_device_id = $4, 
-              notes = $5,
-              device_model = $6, 
-              serial_number = $7, 
-              ext_device_function = $8, 
-              device_administrator = $9,
-              device_administrator_password = $10
-          where device_id = $11
-      `, [newDevice.device_type,
-      newDevice.device_name,
-      newDevice.location,
-      newDevice.physical_device_id,
-      newDevice.notes,
-      newDevice.device_model,
-      newDevice.serial_number,
-          ext_device_function,
-      newDevice.device_administrator,
-          encrypt_device_admin_pwd,
-      newDevice.device_id]);
+    let changedValues = '';
 
-      // tbl_group_member_info 데이터가 있으면, update 
-      // tbl_group_member_info 데이터가 없으면, insert 
-      const queryResult1 = await client.query(`
-          select count(*) cnt from tbl_group_member_info t
-          where t.member_id = $1`, [newDevice.device_id]);
+    if (newDevice.device_type !== currDeviceType) {
+      checkNeedUpdate = true;
+      changedValues += 'oldDeviceType:'+currDeviceType +' newDeviceType:'+newDevice.device_type;
+    }
 
-      // 결과에서 카운트를 정수로 변환
-      const count = parseInt(queryResult1.rows[0].cnt, 10);
+    if (newDevice.device_name !== currDeviceName) {
+      checkNeedUpdate = true;
+      changedValues += 'oldDeviceName:'+currDeviceName +' newDeviceName:'+newDevice.device_name;
+    }
 
-      if (count > 0) {
-          await client.query(`
-          update tbl_group_member_info
-             set group_id = $1
-             where member_id = $2`, [newDevice.device_group, newDevice.device_id]);
-      } else {
-          await client.query(`
-          insert into tbl_group_member_info(group_id, member_id, member_type)
-          values($1, $2, $3)`, [newDevice.device_group, newDevice.device_id, 'device']);
-      }
+    // 트랜잭션 시작
+    await client.query('BEGIN');
 
-      // 모든 쿼리 성공 시 커밋
-      await client.query('COMMIT');
+    let ext_device_function;
+    ext_device_function = newDevice.ext_device_function_printer === 'Y' ? 'COPIER' : '';
+    ext_device_function += newDevice.ext_device_function_scan === 'Y' ? ',SCAN' : '';
+    ext_device_function += newDevice.ext_device_function_fax === 'Y' ? ',FAX' : '';
 
-      // 성공 처리
-      return { result: true, data: result.rows[0] };
+    ext_device_function = ext_device_function.startsWith(",") ? ext_device_function.slice(1) : ext_device_function;
+    const encrypt_device_admin_pwd = encrypt(newDevice.device_administrator_password);
+
+    const result = await client.query(`
+        update tbl_device_info
+        set device_type = $1, 
+            device_name = $2, 
+            location = $3, 
+            physical_device_id = $4, 
+            notes = $5,
+            device_model = $6, 
+            serial_number = $7, 
+            ext_device_function = $8, 
+            device_administrator = $9,
+            device_administrator_password = $10
+        where device_id = $11
+    `, [newDevice.device_type,
+        newDevice.device_name,
+        newDevice.location,
+        newDevice.physical_device_id,
+        newDevice.notes,
+        newDevice.device_model,
+        newDevice.serial_number,
+        ext_device_function,
+        newDevice.device_administrator,
+        encrypt_device_admin_pwd,
+        newDevice.device_id]);
+
+    // tbl_group_member_info 데이터가 있으면, update 
+    // tbl_group_member_info 데이터가 없으면, insert 
+    const queryResult1 = await client.query(`
+        select count(*) cnt from tbl_group_member_info t
+        where t.member_id = $1`, [newDevice.device_id]);
+
+    // 결과에서 카운트를 정수로 변환
+    const count = parseInt(queryResult1.rows[0].cnt, 10);
+
+    if (count > 0) {
+        await client.query(`
+        update tbl_group_member_info
+           set group_id = $1
+           where member_id = $2`, [newDevice.device_group, newDevice.device_id]);
+    } else {
+        await client.query(`
+        insert into tbl_group_member_info(group_id, member_id, member_type)
+        values($1, $2, $3)`, [newDevice.device_group, newDevice.device_id, 'device']);
+    }
+
+    // 모든 쿼리 성공 시 커밋
+    await client.query('COMMIT');
+
+    // 성공 처리
+    return { result: true, data: result.rows[0] };
 
   } catch (error) {
       // 오류 발생 시 롤백

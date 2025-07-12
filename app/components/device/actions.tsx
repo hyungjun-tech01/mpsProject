@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import {FaxLineInfo} from  '@/app/lib/definitions';
 import MyDBAdapter from '@/app/lib/adapter';
 import { notFound } from "next/navigation";
-import { auth } from "@/auth"
+import { auth } from "@/auth";
 
 
 export type DeviceState = {
@@ -38,7 +38,7 @@ const adapter = MyDBAdapter();
 // }),
 
 const FormSchema = z.object({
-    app_type : z.string({
+    app_type :  z.enum(["Workpath SDK", "OpenAPI"], {
         invalid_type_error: 'Please select app type',
     }),
     device_administrator : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
@@ -189,6 +189,8 @@ export async function saveFaxLineInfo(saveFaxLineData: FaxLineInfo, deviceId: st
 }
 
 export async function modifyDevice(prevState: void | DeviceState, formData: FormData) {
+
+    console.log(formData);
 
     if (!(formData instanceof FormData)) {
         console.error("Error: formData가 FormData 인스턴스가 아닙니다.");

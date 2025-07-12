@@ -8,6 +8,9 @@ import { modifyDevice } from '@/app/components/device/actions';
 import { ISection } from '@/app/components/edit-items';
 import { IFaxButtons } from '@/app/components/device/create-form-fax';
 
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
+
 
 export default async function Page(props: {
     searchParams?: Promise<ISearch>;
@@ -18,6 +21,12 @@ export default async function Page(props: {
     const id = params.id;
     const job = params.job;
     const locale = params.locale;
+
+    const session = await auth();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+    const userName = session.user.name;
 
     const adapter = MyDBAdapter();
 
@@ -37,7 +46,7 @@ export default async function Page(props: {
             items: [
                 { name: 'device_id', title: t('device.device_id'), type: 'hidden', defaultValue: device.device_id, placeholder: t('device.device_id') },             
                 {
-                    name: ' ', title: t('device.app_type'), type: 'select', defaultValue: device.app_type, 
+                    name: 'app_type', title: t('device.app_type'), type: 'select', defaultValue: device.app_type, 
                     options: [
                         { title: t('device.open_api'), value: 'OpenAPI' },
                         { title: t('device.workpath_sdk'), value: 'Workpath SDK' }
@@ -146,7 +155,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-             {job === 'edit' && <Form items={editItems} buttons={buttonItems} action={modifyDevice}/>}
+             {job === 'edit' && <Form items={editItems} buttons={buttonItems} sessionUserName={userName} action={modifyDevice}/>}
              {fax && job === 'edit' && editFaxItems.length >= 0 && (
                 <FormFax id={id} 
                     title = { `${t('fax.fax_line')}` }

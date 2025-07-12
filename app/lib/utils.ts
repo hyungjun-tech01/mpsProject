@@ -216,3 +216,27 @@ export const formatTimeYYYY_MM_DDbHHcMM_FromDB = (inputValue: number) => {
   const inputStr = String(inputValue);
   return `20${inputStr.slice(0,2)}-${inputStr.slice(2,4)}-${inputStr.slice(4,6)} ${inputStr.slice(6,8)}:${inputStr.slice(8,10)}`
 }
+
+export function generateChangeLog(
+  oldData: Record<string, any>,
+  newData: Record<string, any>,
+  fieldLabels: Record<string, string>,
+  ignoreFields: string[] = []
+): string {
+  const changes: string[] = [];
+
+  for (const key in newData) {
+  
+    const oldValue = oldData[key];
+    const newValue = newData[key];
+
+    // 값이 변경되었는지 확인합니다 (null, undefined 처리 포함).
+    if (String(oldValue) !== String(newValue)) {
+      const label = fieldLabels[key] || key; // 매핑된 한글 이름이 없으면 키 값을 그대로 사용
+      changes.push(`${label}: '${oldValue}' -> '${newValue}'`);
+    }
+  }
+
+  console.log(changes);
+  return changes.join(', ');
+}
