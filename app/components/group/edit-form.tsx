@@ -7,7 +7,7 @@ import { useActionState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
-
+import {useState, useEffect} from 'react';
 
 export function EditGroupForm({
   id,
@@ -16,6 +16,7 @@ export function EditGroupForm({
   translated,
   outGroup,
   inGroup,
+  sessionUserName,
   action,
 }: {
   id: string;
@@ -24,6 +25,7 @@ export function EditGroupForm({
   translated: Record<string, string>;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
+  sessionUserName:string;
   action: (
     id: string,
     prevState: void | GroupState,
@@ -33,9 +35,26 @@ export function EditGroupForm({
   const initialState: GroupState = { message: null, errors: {} };
   const updatedAction = action.bind(null, id);
   const [state, formAction] = useActionState(updatedAction, initialState);
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const fetchIp = async () => {
+    try {
+        const res = await fetch('/api/get-ip');
+        const data = await res.json();
+        setIpAddress(data.ip);
+    } catch (error) {
+        console.error('IP 가져오기 실패:', error);
+    }
+    };
+
+    fetchIp();
+}, []);
 
   return (
     <form action={formAction}>
+      <input type="hidden" name="ipAddress" value={ipAddress}/>
+      <input type="hidden" name="updatedBy" value={sessionUserName}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-4">
         {items.map((sec: ISection, idx) => {
           return (

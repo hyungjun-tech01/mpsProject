@@ -7,6 +7,8 @@ import Breadcrumbs from "@/app/components/breadcrumbs";
 import { IGroupSearch, IBreadCrums } from "@/app/lib/definitions";
 import getDictionary from "@/app/locales/dictionaries";
 import MyDBAdapter from '@/app/lib/adapter';
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 
 export default async function Page(props: {
@@ -32,6 +34,14 @@ export default async function Page(props: {
   if (!["device", "user", "security"].includes(group)) {
     notFound();
   }
+
+  const session = await auth();
+  if(!session?.user.id || !session?.user.name) {
+      redirect('/login'); // '/login'으로 리다이렉트
+  };
+  const userName = session.user.name;
+
+
 
   const adapter = MyDBAdapter();
   const [
@@ -243,6 +253,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
+          sessionUserName={userName}
           action={adapter.modifyDeviceGroup}
         />
       )}
@@ -266,6 +277,7 @@ export default async function Page(props: {
           translated={translated}
           outGroup={outGroup}
           inGroup={inGroup}
+          sessionUserName={userName}
           action={adapter.modifySecurityGroup}
         />
       )}

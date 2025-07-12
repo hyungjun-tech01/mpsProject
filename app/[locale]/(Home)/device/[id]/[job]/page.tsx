@@ -28,8 +28,6 @@ export default async function Page(props: {
     };
     const userName = session.user.name;
 
-    console.log('session username', session.user.name);
-
     const adapter = MyDBAdapter();
 
     const [t, device, printerGroup, fax, allUsers, allGroups] = await Promise.all([

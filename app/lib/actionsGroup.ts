@@ -39,6 +39,8 @@ const GroupFormSchema = z.object({
     }),
     scheduleAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
     remainAmount: z.coerce.number().min(0, { message: 'Please enter an amount not less than 0.' }),
+    updatedBy : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    ipAddress : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
 });
 
 
@@ -162,6 +164,9 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         const memberID = formData.get(tempName);
         groupMembers.push(memberID);
     }
+
+    const updatedBy = formData.get('updatedBy');
+    const ipAddress = formData.get('ipAddress');
 
     //console.log('[Modify Device Group] Member :', groupMembers);
     // console.log('[Modify Device Group] Manager :', groupManager);
