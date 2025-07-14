@@ -244,3 +244,49 @@ export function generateChangeLog(
   console.log(changes);
   return changes.join(', ');
 }
+
+export function generateDeleteLog(
+  oldData: Record<string, any>,
+  fieldLabels: Record<string, string>,
+  ignoreFields: string[] = []
+): string {
+  const changes: string[] = [];
+
+  for (const key in oldData) {
+    // 비교에서 제외할 필드이거나, 이전 데이터에 없는 키는 건너뜁니다.
+    if (ignoreFields.includes(key) || !oldData.hasOwnProperty(key)) {
+      continue;
+    }
+
+    const oldValue = oldData[key];
+
+    const label = fieldLabels[key] || key; // 매핑된 한글 이름이 없으면 키 값을 그대로 사용
+    changes.push(`${label}: '${oldValue}'`);
+  }
+
+  console.log(changes);
+  return changes.join(', ');
+}
+
+export function generateCreateLog(
+  newData: Record<string, any>,
+  fieldLabels: Record<string, string>,
+  ignoreFields: string[] = []
+): string {
+  const changes: string[] = [];
+
+  for (const key in newData) {
+    // 비교에서 제외할 필드이거나, 이전 데이터에 없는 키는 건너뜁니다.
+    if (ignoreFields.includes(key) || !newData.hasOwnProperty(key)) {
+      continue;
+    }
+
+    const newValue = newData[key];
+
+    const label = fieldLabels[key] || key; // 매핑된 한글 이름이 없으면 키 값을 그대로 사용
+    changes.push(`${label}: '${newValue}'`);
+  }
+
+  console.log(changes);
+  return changes.join(', ');
+}

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import getDictionary from '@/app/locales/dictionaries';
-import {generateChangeLog} from '@/app/lib/utils';
+import {generateChangeLog, generateDeleteLog, generateCreateLog} from '@/app/lib/utils';
 import {applicationLog} from '@/app/lib/actions';
 
 
@@ -231,32 +231,61 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         // 변경 로그를 생성.
         changedValues += generateChangeLog(oldDeviceGroupData, newDeviceGroupData, deviceGroupFieldLabels);
 
+         //application Log 생성 
 
-        // 변경 값
-        const newDeviceGroupMemberData = {
-            group_name: groupName,
-            group_notes: groupNotes,
-        };
-
-        //이전 값
-        const oldDeviceGroupMemberData = newData2.rows;
+         const logData = new FormData();
+         logData.append('application_page', '그룹/장치그룹');
+         logData.append('application_action', '수정');
+         logData.append('application_parameter', changedValues);
+         logData.append('created_by', updatedBy ? String(updatedBy) : "");
+         logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+ 
+         applicationLog(client, logData);
+ 
+        //초기화
+        changedValues = '';
+      
+        //이전 값 삭제
+        const oldDeviceGroupMemberData = oldData2.rows;
 
         // Field Lable 
         const deviceGroupMemberFieldLabels: Record<string, string> = {
-            group_name: t('group.group_name'),
-            group_notes: t('device.notes'),
+            member_type: t('group.member_type'),
+            device_name: t('device.device_name'),
         };       
 
-        //application Log 생성 
+        for(let i=0 ; i <  oldDeviceGroupMemberData.length; i++ )
+        {
+            changedValues += generateDeleteLog(oldDeviceGroupMemberData[i], deviceGroupMemberFieldLabels);
+        }
+       
+        const logData2 = new FormData();
+         logData2.append('application_page', '그룹/장치그룹');
+         logData2.append('application_action', '수정-멤버삭제');
+         logData2.append('application_parameter', changedValues);
+         logData2.append('created_by', updatedBy ? String(updatedBy) : "");
+         logData2.append('ip_address', ipAddress ? String(ipAddress) : "");
+ 
+         applicationLog(client, logData2);
 
-        const logData = new FormData();
-        logData.append('application_page', '그룹/장치그룹');
-        logData.append('application_action', '수정');
-        logData.append('application_parameter', changedValues);
-        logData.append('created_by', updatedBy ? String(updatedBy) : "");
-        logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+        //초기화
+        changedValues = '';
+      
+        // 새 값 추가 
+        const newDeviceGroupMemberData = newData2.rows;
 
-        applicationLog(client, logData);
+        for(let i=0 ; i <  newDeviceGroupMemberData.length; i++ )
+        {
+            changedValues += generateCreateLog(newDeviceGroupMemberData[i], deviceGroupMemberFieldLabels);
+        }
+        const logData3 = new FormData();
+        logData3.append('application_page', '그룹/장치그룹');
+        logData3.append('application_action', '수정-멤버추가');
+        logData3.append('application_parameter', changedValues);
+        logData3.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData3.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData3);
 
 
         await client.query("BEGIN"); // 트랜잭션 시작  
