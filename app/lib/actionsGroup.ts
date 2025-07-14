@@ -4,6 +4,15 @@ import type { Pool } from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import getDictionary from '@/app/locales/dictionaries';
+import {generateChangeLog} from '@/app/lib/utils';
+import {applicationLog} from '@/app/lib/actions';
+
+
+const [t] = await Promise.all([
+    getDictionary('ko')
+  ]);
+  
 
 // const client = new pg.Client({
 //     user: process.env.DB_USER,
@@ -173,6 +182,83 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
     // Modify device group  --------------------------------------
     try {
+
+        let changedValues = '';
+
+        const oldData1 = await client.query(`
+            SELECT
+                group_name, 
+                group_notes
+            FROM tbl_group_info
+            WHERE group_id= $1
+        `, [groupID]);
+
+        const oldData2 = await client.query(`
+            SELECT
+                member_type,
+                device_name
+            FROM tbl_group_member_info tgmi, tbl_device_info tdi
+            WHERE tgmi.group_id= $1
+            and tgmi.member_id = tdi.device_id
+        `, [groupID]);
+
+        const newData2 = await client.query(`
+            SELECT 
+                member_type,    
+                device_name
+            FROM tbl_device_info tdi, tbl_group_member_info tgmi
+            WHERE tdi.device_id = ANY($1)
+            and tgmi.member_id = tdi.device_id
+        `, [groupMembers]);
+
+
+        // 변경 값
+        const newDeviceGroupData = {
+            group_name: groupName,
+            group_notes: groupNotes,
+        };
+
+        //이전 값
+        const oldDeviceGroupData = oldData1.rows[0];
+
+        // Field Lable 
+        const deviceGroupFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_notes: t('device.notes'),
+        };
+
+ 
+        // 변경 로그를 생성.
+        changedValues += generateChangeLog(oldDeviceGroupData, newDeviceGroupData, deviceGroupFieldLabels);
+
+
+        // 변경 값
+        const newDeviceGroupMemberData = {
+            group_name: groupName,
+            group_notes: groupNotes,
+        };
+
+        //이전 값
+        const oldDeviceGroupMemberData = newData2.rows;
+
+        // Field Lable 
+        const deviceGroupMemberFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_notes: t('device.notes'),
+        };       
+
+        //application Log 생성 
+
+        const logData = new FormData();
+        logData.append('application_page', '그룹/장치그룹');
+        logData.append('application_action', '수정');
+        logData.append('application_parameter', changedValues);
+        logData.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData);
+
+
         await client.query("BEGIN"); // 트랜잭션 시작  
 
         await client.query(`
