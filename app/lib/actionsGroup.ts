@@ -232,14 +232,16 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
          //application Log 생성 
 
-         const logData = new FormData();
-         logData.append('application_page', '그룹/장치그룹');
-         logData.append('application_action', '수정');
-         logData.append('application_parameter', changedValues);
-         logData.append('created_by', updatedBy ? String(updatedBy) : "");
-         logData.append('ip_address', ipAddress ? String(ipAddress) : "");
- 
-         applicationLog(client, logData);
+         if(changedValues !== ''){
+            const logData = new FormData();
+            logData.append('application_page', '그룹/장치그룹');
+            logData.append('application_action', '수정');
+            logData.append('application_parameter', changedValues);
+            logData.append('created_by', updatedBy ? String(updatedBy) : "");
+            logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+    
+            applicationLog(client, logData);
+         }
  
         //초기화
         changedValues = '';
@@ -286,6 +288,7 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
         applicationLog(client, logData3);
 
+        changedValues = '';
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -315,16 +318,52 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
         const currentMangerData = await client.query(`
             SELECT
-                member_id id
-            FROM tbl_group_member_info
-            WHERE group_id='${groupID}'
+                a.member_id id,
+                b.full_name full_name
+            FROM tbl_group_member_info a, tbl_user_info b
+            WHERE group_id= $1
             AND member_type='admin'
-        `);
+            AND a.member_id = b.user_id
+        `,[groupID]);
 
         const currentManager = currentMangerData.rows.length > 0 ? 
             currentMangerData.rows[0].id : "";
-        // console.log('Current Manager : ', currentManager);
-        // console.log('New Manager : ', groupManager);
+
+        let oldManager;
+        if(currentMangerData.rows.length > 0) 
+             oldManager = currentMangerData.rows[0];    
+
+        const newMangerData = await client.query(`
+            SELECT
+                b.full_name full_name
+            FROM tbl_user_info b
+            WHERE b.user_id = $1
+        `,[groupManager]);
+
+        let newManager;
+        if(newMangerData.rows.length > 0) 
+            newManager = newMangerData.rows[0];   
+
+             // Field Lable 
+        const deviceGroupAdminFieldLabels: Record<string, string> = {
+            full_name: t('user.full_name'),
+        };      
+
+        // 변경 로그를 생성.
+        changedValues += generateChangeLog(oldManager, newManager, deviceGroupAdminFieldLabels);
+
+        //application Log 생성 
+
+        if(changedValues !== ''){
+            const logData4 = new FormData();
+            logData4.append('application_page', '그룹/장치그룹');
+            logData4.append('application_action', '수정-그룹관리자');
+            logData4.append('application_parameter', changedValues);
+            logData4.append('created_by', updatedBy ? String(updatedBy) : "");
+            logData4.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+            applicationLog(client, logData4);
+        }
 
         if(currentManager !== groupManager) {
             if(currentManager !== "") {
