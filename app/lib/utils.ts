@@ -261,7 +261,7 @@ export function generateDeleteLog(
     const oldValue = oldData[key];
 
     const label = fieldLabels[key] || key; // 매핑된 한글 이름이 없으면 키 값을 그대로 사용
-    changes.push(`${label}: '${oldValue}'`);
+    changes.push(`${label}:'${oldValue}' `);
   }
 
   console.log(changes);
@@ -284,7 +284,7 @@ export function generateCreateLog(
     const newValue = newData[key];
 
     const label = fieldLabels[key] || key; // 매핑된 한글 이름이 없으면 키 값을 그대로 사용
-    changes.push(`${label}: '${newValue}'`);
+    changes.push(`${label}:'${newValue}' `);
   }
 
   console.log(changes);

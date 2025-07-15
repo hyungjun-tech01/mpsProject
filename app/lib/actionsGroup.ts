@@ -204,11 +204,10 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
         const newData2 = await client.query(`
             SELECT 
-                member_type,    
+                'device' member_type,    
                 device_name
-            FROM tbl_device_info tdi, tbl_group_member_info tgmi
+            FROM tbl_device_info tdi
             WHERE tdi.device_id = ANY($1)
-            and tgmi.member_id = tdi.device_id
         `, [groupMembers]);
 
 
