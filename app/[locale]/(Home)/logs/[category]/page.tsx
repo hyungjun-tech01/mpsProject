@@ -56,6 +56,7 @@ export default async function Page(props: {
     };
 
     const userName = session.user.name;
+    const userId = session.user.id;
 
     const adapter = MyDBAdapter();
 
@@ -63,8 +64,8 @@ export default async function Page(props: {
     let logDataPromise;
 
     if (category === "auditlogs") {
-        logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam);
-        logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam);
+        logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
+        logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
     } else if (category === "auditlogsRetired") {
         logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam);
         logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam);

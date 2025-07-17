@@ -64,7 +64,7 @@ export default async function Page(props: {
                 ]}
             />
 
-            <EditForm id={user.user_id} items={items} buttons={buttonItems} action={adapter.updateAccount}/>
+            <EditForm id={user.user_id} items={items} buttons={buttonItems} sessionUserName='-1' action={adapter.updateAccount}/>
         </main>
     );
 }

@@ -475,15 +475,24 @@ export default function MyDBAdapter() {
             toDate: string | null,
             privacy: string | null,
             security: string | null,
+            sessionUserId : string|null,
         ) {
             // console.log('fromDate', fromDate);
             //, fromDate , toDate
-            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security);
+            return Log.fetchFilteredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security, sessionUserId);
         },
-        async getFilteredAuditLogsPages(query: string, itemsPerPage: number, fromDate: string | null, toDate: string | null, privacy: string | null, security: string | null) {
+        async getFilteredAuditLogsPages(
+            query: string, 
+            itemsPerPage: number, 
+            fromDate: string | null, 
+            toDate: string | null, 
+            privacy: string | null, 
+            security: string | null,
+            sessionUserId : string|null,
+            ) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security);
+            return Log.fetchFilteredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security, sessionUserId);
         },
         async getFilteredRetiredAuditLogs(
             query: string,

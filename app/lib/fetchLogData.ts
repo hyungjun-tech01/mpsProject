@@ -390,14 +390,60 @@ export async function fetchFilteredAuditLogs(
     dateTo : string|null,
     privacy:string|null, 
     security:string|null,
+    sessionUserId:string|null,
    
 ) {
     const offset = (currentPage - 1) * itemsPerPage;
 
+    let extraWhereClause = '';
+
+    // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+    // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
+    // 이것도 저것도 아니라면, [] 리턴해 줌.
+    const resp = await client.query(`
+        SELECT sysadmin FROM tbl_user_info a
+        WHERE 1 = 1
+        and user_id = $1`,[sessionUserId]);
+
+    const resp1 = await client.query(`
+        select tgmi.member_id 
+            from tbl_group_info tgi, tbl_group_member_info tgmi
+            where tgi.group_id = tgmi.group_id
+            and tgi.group_type = 'security'
+            and tgmi.member_type = 'admin'
+            and tgmi.member_id = $1`,[sessionUserId]);
+    
+    console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
+
+    if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+        extraWhereClause = '';
+    else if( resp1.rows.length > 0 )
+    extraWhereClause += `and a.user_name in (
+            select b.user_name from tbl_user_info b
+            where 1 = 1
+            and b.department in (
+                select t.member_id 
+                from tbl_group_member_info t
+                where 1= 1 
+                and t.member_type = 'dept'
+                and t.group_id in (
+                    select tgi.group_id 
+                        from tbl_group_info tgi, tbl_group_member_info tgmi
+                        where tgi.group_id = tgmi.group_id
+                        and tgi.group_type = 'security'
+                        and tgmi.member_type = 'admin'
+                        and  tgmi.member_id = '${sessionUserId}')
+            )
+        )`;
+    else
+        extraWhereClause = 'and 1 = 2';
+
+    console.log('extraWhereClause', extraWhereClause);
+
     const detect_privacy = privacy === 'true'? true:false;
     const detect_security = security === 'true'? true:false;
 
-    let extraWhereClause = '';
+
     if (detect_privacy) {
         extraWhereClause += ` AND a.detect_privacy IS TRUE`;
     }
@@ -511,13 +557,55 @@ export async function fetchFilteredAuditLogPages(
     dateTo : string|null,
     privacy:string|null, 
     security:string|null,
+    sessionUserId:string|null,
 ) {
     try {
+
+        let extraWhereClause = '';
+
+        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+        // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
+        // 이것도 저것도 아니라면, [] 리턴해 줌.
+        const resp = await client.query(`
+            SELECT sysadmin FROM tbl_user_info a
+            WHERE 1 = 1
+            and user_id = $1`,[sessionUserId]);
+
+        const resp1 = await client.query(`
+            select tgmi.member_id 
+              from tbl_group_info tgi, tbl_group_member_info tgmi
+             where tgi.group_id = tgmi.group_id
+               and tgi.group_type = 'security'
+               and tgmi.member_type = 'admin'
+               and tgmi.member_id = $1`,[sessionUserId]);
+        
+        if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+            extraWhereClause = '';
+        else if( resp1.rows[0].length > 0 )
+            extraWhereClause += `and a.user_name in (
+                select b.user_name from tbl_user_info b
+                where 1 = 1
+                and b.department in (
+                    select t.member_id 
+                    from tbl_group_member_info t
+                    where 1= 1 
+                    and t.member_type = 'dept'
+                    and t.group_id in (
+                        select tgi.group_id 
+                          from tbl_group_info tgi, tbl_group_member_info tgmi
+                         where tgi.group_id = tgmi.group_id
+                           and tgi.group_type = 'security'
+                           and tgmi.member_type = 'admin'
+                           and  tgmi.member_id = '${sessionUserId}')
+                )
+            )`;
+        else
+            extraWhereClause = 'and 1 = 2';
+
         const detect_privacy = privacy === 'true'? true:false;
         const detect_security = security === 'true'? true:false;
     
-    
-        let extraWhereClause = '';
+        
         if (detect_privacy) {
             extraWhereClause += ` AND a.detect_privacy IS TRUE`;
         }
