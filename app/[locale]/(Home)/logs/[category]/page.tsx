@@ -57,6 +57,7 @@ export default async function Page(props: {
 
     const userName = session.user.name;
     const userId = session.user.id;
+    const userRole = session.user.role;
 
     const adapter = MyDBAdapter();
 
@@ -67,8 +68,8 @@ export default async function Page(props: {
         logPagesPromise = adapter.getFilteredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
         logDataPromise = adapter.getFilteredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
     } else if (category === "auditlogsRetired") {
-        logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam);
-        logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam);
+        logPagesPromise = adapter.getFilteredRetiredAuditLogsPages(query, itemsPerPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
+        logDataPromise = adapter.getFilteredRetiredAuditLogs(query, itemsPerPage, currentPage, periodStartParam, periodEndParam, privacyParam, securityParam, userId);
     } else {
         // application logs
         logPagesPromise = adapter.getFilteredApplicationLogPages(query, itemsPerPage, periodStartParam, periodEndParam);
@@ -82,11 +83,15 @@ export default async function Page(props: {
     ]);
 
     // Tabs ----------------------------------------------------------------------
-    const subTitles = [
+    const subTitles = userRole ==='admin' ? [
         { category: 'auditlogs', title: t('logs.auditlogs'), link: `/logs/auditlogs` },
         { category: 'auditlogsRetired', title: t('logs.auditlogsRetired'), link: `/logs/auditlogsRetired` },
         { category: 'adminActionLogs', title: t('adminActionLog.adminActionLog'), link: `/logs/adminActionLogs` },
-    ];
+    ] :  [
+        { category: 'auditlogs', title: t('logs.auditlogs'), link: `/logs/auditlogs` },
+        { category: 'auditlogsRetired', title: t('logs.auditlogsRetired'), link: `/logs/auditlogsRetired` },
+    ] 
+    ;
 
     // Search Text ---------------------------------------------------------------------
     const searchTexts = {

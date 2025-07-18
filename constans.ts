@@ -48,6 +48,7 @@ export const SideMenuList = {
         { name: 'group', title: '그룹', href: '/group/device', icon: PeopleOutline },
         { name: 'document', title: '문서', href: '/document/fax', icon: Inventory2Outlined },
         { name: 'print', title: '출력 리스트', href: '/print', icon: ArticleOutlined },
+        { name: 'logs', title: '로그', href: '/logs/auditlogs', icon: PlagiarismOutlined },
     ],
     user: [
         { name: 'dashboard', title: '대쉬보드', href: '/', icon: SpaceDashboardOutlined },

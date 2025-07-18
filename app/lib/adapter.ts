@@ -502,15 +502,24 @@ export default function MyDBAdapter() {
             toDate: string | null,
             privacy: string | null,
             security: string | null,
+            sessionUserId:string|null,
         ) {
             // console.log('fromDate', fromDate);
             //, fromDate , toDate
-            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security);
+            return Log.fetchFilteredRetiredAuditLogs(pool, query, itemsPerPage, currentPage, fromDate, toDate, privacy, security,sessionUserId);
         },
-        async getFilteredRetiredAuditLogsPages(query: string, itemsPerPage: number, fromDate: string | null, toDate: string | null, privacy: string | null, security: string | null) {
+        async getFilteredRetiredAuditLogsPages(
+            query: string, 
+            itemsPerPage: number, 
+            fromDate: string | null, 
+            toDate: string | null, 
+            privacy: string | null, 
+            security: string | null,
+            sessionUserId:string|null,
+        ) {
             //, fromDate : string|null, toDate:string|null
             // , fromDate, toDate
-            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security);
+            return Log.fetchFilteredRetiredAuditLogPages(pool, query, itemsPerPage, fromDate, toDate, privacy, security, sessionUserId);
         },
 
         async getPrintCountData(period: string, periodStart?: string, periodEnd?: string, dept?: string, user?: string) {
