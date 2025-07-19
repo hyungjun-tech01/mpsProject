@@ -80,17 +80,25 @@ export async function fetchFilteredGroups(
         `;
     } else if (groupType === "security") {
         queryString = `
+            	
             SELECT 
-                g.group_id AS id,
-                g.group_name AS group_name,
-                g.created_date AS created_date,
-                g.group_notes AS group_notes,
-                COUNT(gm.member_id) as dept_count
+            g.group_id AS id,
+            g.group_name AS group_name,
+            g.created_date AS created_date,
+            g.group_notes AS group_notes,
+            (
+                select count(*) from tbl_group_member_info gm
+                where gm.group_id = g.group_id
+                and gm.member_type = 'dept'
+            ) as dept_count,
+            (
+                select count(*) from tbl_group_member_info gm
+                where gm.group_id = g.group_id
+                and gm.member_type = 'admin'
+            ) as manager_count
             FROM tbl_group_info g
-            LEFT JOIN tbl_group_member_info gm ON g.group_id = gm.group_id
-            WHERE g.group_type = 'security'
+            WHERE g.group_type = 'security'	
             ${query !== "" ? "AND g.group_name ILIKE '%" + query + "%'" : ""}
-            GROUP BY g.group_id, g.group_name, g.group_notes, g.created_date, g.modified_date
             ORDER BY g.modified_date DESC
             LIMIT ${itemsPerPage} OFFSET ${offset}
             `;
