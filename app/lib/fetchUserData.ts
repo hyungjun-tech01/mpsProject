@@ -219,17 +219,47 @@ export async function fetchAccount(
         `);
     const userInfo = account.rows[0];
     const deviceGroup = await client.query(`
-            SELECT
-                Count(*)
-            FROM tbl_group_member_info
-            WHERE member_id='${userInfo.id}'
-            AND member_type='admin'
-        `);
+    SELECT
+        Count(*)
+    FROM tbl_group_member_info a, tbl_group_info b 
+    WHERE member_id='${userInfo.id}'
+    AND member_type='admin'
+    and a.group_id = b.group_id
+    and b.group_type = 'device'
+    `);
     if (deviceGroup.rows[0].count > 0) {
       if (userInfo.role !== "admin") {
         userInfo.role = "manager";
       }
-    }
+    }    
+    const userGroup = await client.query(`
+    SELECT
+        Count(*)
+    FROM tbl_group_member_info a, tbl_group_info b 
+    WHERE member_id='${userInfo.id}'
+    AND member_type='admin'
+    and a.group_id = b.group_id
+    and b.group_type = 'user'
+    `);
+    if (userGroup.rows[0].count > 0) {
+      if (userInfo.role !== "admin") {
+        userInfo.role = "manager";
+      }
+    }  
+    const securityGroup = await client.query(`
+    SELECT
+        Count(*)
+    FROM tbl_group_member_info a, tbl_group_info b 
+    WHERE member_id='${userInfo.id}'
+    AND member_type='admin'
+    and a.group_id = b.group_id
+    and b.group_type = 'security'
+    `);
+    if (securityGroup.rows[0].count > 0) {
+      if (userInfo.role !== "admin") {
+        userInfo.role = "security_manager";
+      }
+    }    
     return userInfo;
   } catch (error) {
     console.error("Failed to fetch user:", error);
