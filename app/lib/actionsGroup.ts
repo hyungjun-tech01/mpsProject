@@ -720,7 +720,7 @@ export async function createSecurityGroup(client: Pool, prevState: void | GroupS
                     member_id,
                     member_type
                 )
-                VALUES ($1, $2, 'user')
+                VALUES ($1, $2, 'security')
             `, [groupId, member]);
         }
 

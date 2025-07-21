@@ -743,7 +743,7 @@ export async function fetchDeptsInGroup(
                     d.dept_name as name,
                     d.dept_name as dept_name
                 FROM tbl_dept_info d
-                JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
+                JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='security')
                 WHERE
                     gm.group_id = '${id}'
                     ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
