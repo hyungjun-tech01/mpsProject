@@ -23,7 +23,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.queryOutGroup || '';
   const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
-  const currentPage = Number(searchParams?.outGroupPage) || 1;
+  const currentPage = Number(searchParams?.page) || 1;
 
   if (!["device", "user", "security"].includes(group)) {
     notFound();
@@ -65,7 +65,7 @@ export default async function Page(props: {
     remain_amount: 0,
   }
 
-  const outGroup = { paramName: 'outGroupPage', totalPages: totalPages, members: outGroupData };
+  const outGroup = { paramName: 'page', totalPages: totalPages, members: outGroupData };
 
   const groupBreadcrumbs: {
     device: IBreadCrums[];
@@ -213,8 +213,7 @@ export default async function Page(props: {
           items={contentsItems.device}
           buttons={buttonItems}
           translated={translated}
-          currentOutGroupPage={String(currentPage)}
-          currentInGroupPage={String(1)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createDeviceGroup}
@@ -226,8 +225,7 @@ export default async function Page(props: {
           userData={dummyData}
           translated={translated}
           candidates={userOptions}
-          currentOutGroupPage={String(currentPage)}
-          currentInGroupPage={String(1)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createUserGroup}
@@ -238,8 +236,7 @@ export default async function Page(props: {
           items={contentsItems.security}
           buttons={buttonItems}
           translated={translated}
-          currentOutGroupPage={String(currentPage)}
-          currentInGroupPage={String(1)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createSecurityGroup}

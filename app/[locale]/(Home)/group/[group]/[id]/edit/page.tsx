@@ -28,8 +28,7 @@ export default async function Page(props: {
   const queryOutGroup = searchParams?.queryOutGroup || "";
   const queryInGroup = searchParams?.queryInGroup || "";
   const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
-  const currentOutPage = Number(searchParams?.outGroupPage) || 1;
-  const currentInPage = Number(searchParams?.inGroupPage) || 1;
+  const currentPage = Number(searchParams?.page) || 1;
 
   if (!["device", "user", "security"].includes(group)) {
     notFound();
@@ -50,32 +49,26 @@ export default async function Page(props: {
     users,
     outGroupData,
     outGroupTotalPages,
-    inGroupData,
-    inGroupTotalPages,
+    inGroupData
   ] = await Promise.all([
     getDictionary(locale),
     adapter.getGroupInfoById(id, group),
     adapter.getAllUsers(),
     group === "user"
-      ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
+      ? adapter.getUsersNotInGroup(queryOutGroup, itemsPerPage, currentPage)
       : group === "device"
-        ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentOutPage)
-        : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentOutPage),
+        ? adapter.getDevicesNotInGroup(queryOutGroup, itemsPerPage, currentPage)
+        : adapter.getDeptsNotInGroup(queryOutGroup, itemsPerPage, currentPage),
     group === "user"
       ? adapter.getUsersNotInGroupPages(queryOutGroup, itemsPerPage)
       : group === "device"
         ? adapter.getDevicesNotInGroupPages(queryOutGroup, itemsPerPage)
         : adapter.getDeptsNotInGroupPages(queryOutGroup, itemsPerPage),
     group === "user"
-      ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+      ? adapter.getUsersInGroup(id, queryInGroup)
       : group === "device"
-        ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
-        : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
-    group === "user"
-      ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
-      : group === "device"
-        ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
-        : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
+        ? adapter.getDevicesInGroup(id, queryInGroup)
+        : adapter.getDeptsInGroup(id, queryInGroup)
   ]);
 
   // console.log("[Group Edit] data:", data);
@@ -92,14 +85,14 @@ export default async function Page(props: {
   ];
 
   const outGroup = {
-    paramName: "outGroupPage",
+    paramName: "page",
     totalPages: outGroupTotalPages,
     members: outGroupData,
   };
 
   const inGroup = {
-    paramName: "inGroupPage",
-    totalPages: inGroupTotalPages,
+    paramName: "",
+    totalPages: 1,
     members: inGroupData,
   };
 
@@ -251,8 +244,7 @@ export default async function Page(props: {
           items={contentsItems.device}
           buttons={buttonItems}
           translated={translated}
-          currentOutGroupPage={String(currentOutPage)}
-          currentInGroupPage={String(currentInPage)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}
@@ -266,8 +258,7 @@ export default async function Page(props: {
           locale={locale}
           translated={translated}
           candidates={userOptions}
-          currentOutGroupPage={String(currentOutPage)}
-          currentInGroupPage={String(currentInPage)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           action={adapter.modifyUserGroup}
@@ -279,8 +270,7 @@ export default async function Page(props: {
           items={contentsItems.security}
           buttons={buttonItems}
           translated={translated}
-          currentOutGroupPage={String(currentOutPage)}
-          currentInGroupPage={String(currentInPage)}
+          currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}

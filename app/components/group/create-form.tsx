@@ -13,8 +13,7 @@ export function CreateGroupForm({
   items,
   buttons,
   translated,
-  currentOutGroupPage,
-  currentInGroupPage,
+  currentPage,
   outGroup,
   inGroup,
   action,
@@ -22,8 +21,7 @@ export function CreateGroupForm({
   items: ISection[];
   buttons?: IButtonInfo;
   translated: Record<string, string>;
-  currentOutGroupPage: string;
-  currentInGroupPage: string;
+  currentPage: string;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   action: (
@@ -95,8 +93,7 @@ export function CreateGroupForm({
           noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
           groupMemberTitle={translated.group_member}
           groupSearchPlaceholder={translated.search_placeholder_in_group}
-          currentOutGroupPage={currentOutGroupPage}
-          currentInGroupPage={currentInGroupPage}
+          currentPage={currentPage}
           outGroup={outGroup}
           inGroup={inGroup}
         />

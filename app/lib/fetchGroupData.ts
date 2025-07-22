@@ -482,12 +482,8 @@ export async function fetchUsersNotInGroupPages(
 export async function fetchUsersInGroup(
     client: Pool,
     id: string,
-    query: string,
-    itemsPerPage: number,
-    currentPage: number
+    query: string
 ) {
-    const offset = (currentPage - 1) * itemsPerPage;
-
     try {
         const users = await client.query(`
                 SELECT
@@ -503,33 +499,8 @@ export async function fetchUsersInGroup(
                     u.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY u.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return users.rows;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch users in group.");
-    }
-};
-
-export async function fetchUsersInGroupPages(
-    client: Pool,
-    id: string,
-    query: string,
-    itemsPerPage: number
-) {
-    try {
-        const count = await client.query(`
-                SELECT
-                    COUNT(*)
-                FROM tbl_user_info u
-                JOIN tbl_group_member_info gm ON (gm.member_id = u.user_id AND gm.member_type='user')
-                WHERE
-                    u.deleted='N' AND gm.group_id = '${id}'
-                    ${query !== "" ? "AND u.user_name ILIKE '%" + query + "%'" : ""}
-            `);
-        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch users in group.");
@@ -614,12 +585,8 @@ export async function fetchDevicesNotInGroupPages(
 export async function fetchDevicesInGroup(
     client: Pool,
     id: string,
-    query: string,
-    itemsPerPage: number,
-    currentPage: number
+    query: string
 ) {
-    const offset = (currentPage - 1) * itemsPerPage;
-
     try {
         const devices = await client.query(`
                 SELECT
@@ -640,36 +607,11 @@ export async function fetchDevicesInGroup(
                     d.deleted='N' AND gm.group_id = '${id}'
                     ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
                 ORDER BY d.modified_date DESC
-                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return devices.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch devices not in group.");
-    }
-};
-
-export async function fetchDevicesInGroupPages(
-    client: Pool,
-    id: string,
-    query: string,
-    itemsPerPage: number
-) {
-    try {
-        const count = await client.query(`
-                SELECT
-                    COUNT(*)
-                FROM tbl_device_info d
-                JOIN tbl_group_member_info gm ON (gm.member_id = d.device_id AND gm.member_type='device')
-                WHERE
-                    d.deleted='N' AND gm.group_id = '${id}'
-                    ${query !== "" ? "AND d.device_name ILIKE '%" + query + "%'" : ""}
-            `);
-        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        return totalPages;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch depts not in group.");
     }
 };
 
@@ -730,12 +672,8 @@ export async function fetchDeptsNotInGroupPages(
 export async function fetchDeptsInGroup(
     client: Pool,
     id: string,
-    query: string,
-    itemsPerPage: number,
-    currentPage: number
+    query: string
 ) {
-    const offset = (currentPage - 1) * itemsPerPage;
-
     try {
         const depts = await client.query(`
                 SELECT
@@ -747,33 +685,8 @@ export async function fetchDeptsInGroup(
                 WHERE
                     gm.group_id = '${id}'
                     ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
-                LIMIT ${itemsPerPage} OFFSET ${offset}
             `);
         return depts.rows;
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Failed to fetch depts not in group.");
-    }
-};
-
-export async function fetchDeptsInGroupPages(
-    client: Pool,
-    id: string,
-    query: string,
-    itemsPerPage: number
-) {
-    try {
-        const count = await client.query(`
-                SELECT
-                    COUNT(*)
-                FROM tbl_dept_info d
-                JOIN tbl_group_member_info gm ON (gm.member_id = d.dept_id AND gm.member_type='dept')
-                WHERE
-                    d.dept_id = '${id}'
-                    ${query !== "" ? "AND d.dept_name ILIKE '%" + query + "%'" : ""}
-            `);
-        const totalPages = Math.ceil(Number(count.rows[0].count) / itemsPerPage);
-        return totalPages;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch depts not in group.");

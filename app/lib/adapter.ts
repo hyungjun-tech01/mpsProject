@@ -161,18 +161,9 @@ export default function MyDBAdapter() {
         },
         async getUsersInGroup(
             id: string,
-            query: string,
-            itemsPerPage: number,
-            currentPage: number
+            query: string
         ) {
-            return Group.fetchUsersInGroup(pool, id, query, itemsPerPage, currentPage);
-        },
-        async getUsersInGroupPages(
-            id: string,
-            query: string,
-            itemsPerPage: number
-        ) {
-            return Group.fetchUsersInGroupPages(pool, id, query, itemsPerPage);
+            return Group.fetchUsersInGroup(pool, id, query);
         },
         async getDevicesNotInGroup(
             query: string,
@@ -189,18 +180,9 @@ export default function MyDBAdapter() {
         },
         async getDevicesInGroup(
             id: string,
-            query: string,
-            itemsPerPage: number,
-            currentPage: number
+            query: string
         ) {
-            return Group.fetchDevicesInGroup(pool, id, query, itemsPerPage, currentPage);
-        },
-        async getDevicesInGroupPages(
-            id: string,
-            query: string,
-            itemsPerPage: number
-        ) {
-            return Group.fetchDevicesInGroupPages(pool, id, query, itemsPerPage);
+            return Group.fetchDevicesInGroup(pool, id, query);
         },
         async getDeptsNotInGroup(
             query: string,
@@ -217,18 +199,9 @@ export default function MyDBAdapter() {
         },
         async getDeptsInGroup(
             id: string,
-            query: string,
-            itemsPerPage: number,
-            currentPage: number
+            query: string
         ) {
-            return Group.fetchDeptsInGroup(pool, id, query, itemsPerPage, currentPage);
-        },
-        async getDeptsInGroupPages(
-            id: string,
-            query: string,
-            itemsPerPage: number
-        ) {
-            return Group.fetchDeptsInGroupPages(pool, id, query, itemsPerPage);
+            return Group.fetchDeptsInGroup(pool, id, query);
         },
         async createDeviceGroup(prevState: void | GroupState, formData: FormData) {
             'use server';

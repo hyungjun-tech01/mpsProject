@@ -8,8 +8,7 @@ export interface IGroupSearch {
   queryOutGroup?: string;
   queryInGroup?: string;
   itemsPerPage?: string;
-  outGroupPage?: string;
-  inGroupPage?: string;
+  page?: string;
 };
 
 export type IBreadCrums = {
