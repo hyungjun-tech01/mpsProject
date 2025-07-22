@@ -14,6 +14,8 @@ export function CreateUserGroupForm({
     locale,
     translated,
     candidates,
+    currentOutGroupPage,
+    currentInGroupPage,
     outGroup,
     inGroup,
     action,
@@ -22,6 +24,8 @@ export function CreateUserGroupForm({
     locale: string;
     translated: Record<string, string>;
     candidates: { value: string, title: string }[],
+    currentOutGroupPage: string;
+    currentInGroupPage: string;
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     action: (
@@ -320,6 +324,8 @@ export function CreateUserGroupForm({
                     noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
                     groupMemberTitle={translated.group_member}
                     groupSearchPlaceholder={translated.search_placeholder_in_group}
+                    currentOutGroupPage={currentOutGroupPage}
+                    currentInGroupPage={currentInGroupPage}
                     outGroup={outGroup}
                     inGroup={inGroup}
                 />

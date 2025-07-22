@@ -60,7 +60,7 @@ export default async function DetectInfoWrapper({
     deptInfo: {dept_id:string, dept_name:string}[];
 }) {
 
-     console.log('DetectInfoWrapper', data);
+    // console.log('DetectInfoWrapper', data);
 
     let lastTime = "-";
 
@@ -185,7 +185,7 @@ export default async function DetectInfoWrapper({
     };
     barDataSets.push(tempDataSet);
 
-     console.log('bar data : ',barDataSets);
+    // console.log('bar data : ',barDataSets);
 
     return (
         <div className='w-full pt-6'>

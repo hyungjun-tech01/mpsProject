@@ -251,6 +251,8 @@ export default async function Page(props: {
           items={contentsItems.device}
           buttons={buttonItems}
           translated={translated}
+          currentOutGroupPage={String(currentOutPage)}
+          currentInGroupPage={String(currentInPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}
@@ -264,6 +266,8 @@ export default async function Page(props: {
           locale={locale}
           translated={translated}
           candidates={userOptions}
+          currentOutGroupPage={String(currentOutPage)}
+          currentInGroupPage={String(currentInPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           action={adapter.modifyUserGroup}
@@ -275,6 +279,8 @@ export default async function Page(props: {
           items={contentsItems.security}
           buttons={buttonItems}
           translated={translated}
+          currentOutGroupPage={String(currentOutPage)}
+          currentInGroupPage={String(currentInPage)}
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}

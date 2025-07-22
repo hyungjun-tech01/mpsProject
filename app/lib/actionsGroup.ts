@@ -821,7 +821,7 @@ export async function modifySecurityGroup(client: Pool, id: string, prevState: v
                     member_id,
                     member_type
                 )
-                VALUES ($1, $2, 'dept')
+                VALUES ($1, $2, 'security')
             `, [groupID, member]);
         }
 

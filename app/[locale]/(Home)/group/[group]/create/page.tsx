@@ -213,6 +213,8 @@ export default async function Page(props: {
           items={contentsItems.device}
           buttons={buttonItems}
           translated={translated}
+          currentOutGroupPage={String(currentPage)}
+          currentInGroupPage={String(1)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createDeviceGroup}
@@ -224,6 +226,8 @@ export default async function Page(props: {
           userData={dummyData}
           translated={translated}
           candidates={userOptions}
+          currentOutGroupPage={String(currentPage)}
+          currentInGroupPage={String(1)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createUserGroup}
@@ -234,6 +238,8 @@ export default async function Page(props: {
           items={contentsItems.security}
           buttons={buttonItems}
           translated={translated}
+          currentOutGroupPage={String(currentPage)}
+          currentInGroupPage={String(1)}
           outGroup={outGroup}
           inGroup={null}
           action={adapter.createSecurityGroup}

@@ -14,6 +14,8 @@ export default function Grouping({
     noneGroupSearchPlaceholder,
     groupMemberTitle,
     groupSearchPlaceholder,
+    currentOutGroupPage,
+    currentInGroupPage,
     outGroup,
     inGroup,
 }: {
@@ -22,6 +24,8 @@ export default function Grouping({
     noneGroupSearchPlaceholder: string;
     groupMemberTitle: string;
     groupSearchPlaceholder: string;
+    currentOutGroupPage: string;
+    currentInGroupPage: string;
     outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] };
     inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] } | null;
 }) {
@@ -205,24 +209,76 @@ export default function Grouping({
     const [group, setGroup] = useState<(DeviceGroup | UserGroup | SecurityGroup)[]>([]);
     const [selectedInNoneGroup, setSelectedInNoneGroup] = useState<DeviceGroup | UserGroup | SecurityGroup | null>(null);
     const [selectedInGroup, setSelectedInGroup] = useState<DeviceGroup | UserGroup | SecurityGroup | null>(null);
+    const [changedNonGroup, setChangedNonGroup] = useState<Record<string, (DeviceGroup | UserGroup | SecurityGroup)[]>>({});
+    const [changedGroup, setChangedGroup] = useState<Record<string, (DeviceGroup | UserGroup | SecurityGroup)[]>>({});
 
     const handleMemberInGroup = () => {
         if (!selectedInNoneGroup) return;
+
         const selected = selectedInNoneGroup;
-        const foundIdx = nonGroup.findIndex(member => member.id === selected.id);
-        if (foundIdx === -1) return;
+        // const foundIdxInNonGroup = nonGroup.findIndex(member => member.id === selected.id);
+        // if(foundIdxInNonGroup !== -1) {
+        //     const updatedNonGroup = [
+        //         ...nonGroup.slice(0, foundIdxInNonGroup),
+        //         ...nonGroup.slice(foundIdxInNonGroup + 1,)
+        //     ];
+        //     setNonGroup(updatedNonGroup);
+        // }
 
-        const updateNonGroup = [
-            ...nonGroup.slice(0, foundIdx),
-            ...nonGroup.slice(foundIdx + 1,)
-        ];
-        setNonGroup(updateNonGroup);
-
-        const updateGroup = [
-            selectedInNoneGroup,
-            ...group
-        ];
-        setGroup(updateGroup);
+        const foundIdxInChangedNonGroup = changedNonGroup[currentOutGroupPage]?.findIndex(member => member.id === selected.id);
+        if(!!foundIdxInChangedNonGroup && foundIdxInChangedNonGroup !== -1) {
+            const updated = [
+                ...changedNonGroup[currentOutGroupPage].slice(0, foundIdxInChangedNonGroup),
+                ...changedNonGroup[currentOutGroupPage].slice(foundIdxInChangedNonGroup + 1,)
+            ];
+            const updatedChangedNonGroup = {
+                ...changedNonGroup,
+                [currentOutGroupPage]: updated
+            };
+            setChangedNonGroup(updatedChangedNonGroup);
+        }
+        else
+        {
+            const updated = [
+                ...(changedNonGroup[currentOutGroupPage] || []),
+                selected
+            ];
+            const updatedChangedNonGroup = {
+                ...changedNonGroup,
+                [currentOutGroupPage]: updated
+            };
+            setChangedNonGroup(updatedChangedNonGroup);
+        }
+        // const updatedGroup = [
+        //     ...group,
+        //     selected
+        // ]
+        // setGroup(updatedGroup);
+        
+        const foundIdxInChangedGroup = changedGroup[currentInGroupPage]?.findIndex(member => member.id === selected.id);
+        if(!!foundIdxInChangedGroup && foundIdxInChangedGroup !== -1) {
+            const updated = [
+                ...changedGroup[currentInGroupPage].slice(0, foundIdxInChangedGroup),
+                ...changedGroup[currentInGroupPage].slice(foundIdxInChangedGroup + 1,)
+            ];
+            const updatedChangedGroup = {
+                ...changedGroup,
+                [currentInGroupPage]: updated
+            };
+            setChangedGroup(updatedChangedGroup);
+        }
+        else
+        {
+            const updated = [
+                ...(changedGroup[currentInGroupPage] || []),
+                selected
+            ];
+            const updatedChangedGroup = {
+                ...changedGroup,
+                [currentInGroupPage]: updated
+            };
+            setChangedGroup(updatedChangedGroup);
+        }
 
         setSelectedInGroup(null);
         setSelectedInNoneGroup(null);
@@ -230,21 +286,72 @@ export default function Grouping({
 
     const handleMemberOutGroup = () => {
         if (!selectedInGroup) return;
+
         const selected = selectedInGroup;
-        const foundIdx = group.findIndex(member => member.id === selected.id);
-        if (foundIdx === -1) return;
+        // const foundIdxInGroup = group.findIndex(member => member.id === selected.id);
+        // if(foundIdxInGroup !== -1) {
+        //     const updatedInGroup = [
+        //         ...group.slice(0, foundIdxInGroup),
+        //         ...group.slice(foundIdxInGroup + 1,)
+        //     ];
+        //     setGroup(updatedInGroup);
+        // }
 
-        const updateGroup = [
-            ...group.slice(0, foundIdx),
-            ...group.slice(foundIdx + 1,)
-        ];
-        setGroup(updateGroup);
+        const foundIdxInChangedGroup = changedGroup[currentInGroupPage]?.findIndex(member => member.id === selected.id);
+        if(!!foundIdxInChangedGroup &&foundIdxInChangedGroup !== -1) {
+            const updated = [
+                ...changedGroup[currentInGroupPage].slice(0, foundIdxInChangedGroup),
+                ...changedGroup[currentInGroupPage].slice(foundIdxInChangedGroup + 1,)
+            ];
+            const updatedChangedGroup = {
+                ...changedGroup,
+                [currentInGroupPage]: updated
+            };
+            setChangedGroup(updatedChangedGroup);
+        }
+        else
+        {
+            const updated = [
+                ...(changedGroup[currentInGroupPage] || []),
+                selected
+            ];
+            const updatedChangedGroup = {
+                ...changedGroup,
+                [currentInGroupPage]: updated
+            };
+            setChangedGroup(updatedChangedGroup);
+        }
 
-        const updateNonGroup = [
-            selected,
-            ...nonGroup,
-        ];
-        setNonGroup(updateNonGroup);
+        // const updatedNonGroup = [
+        //     ...nonGroup,
+        //     selected
+        // ]
+        // setNonGroup(updatedNonGroup);
+
+        const foundIdxInChangedNonGroup = changedNonGroup[currentOutGroupPage]?.findIndex(member => member.id === selected.id);
+        if(!!foundIdxInChangedNonGroup && foundIdxInChangedNonGroup !== -1) {
+            const updated = [
+                ...changedNonGroup[currentOutGroupPage].slice(0, foundIdxInChangedNonGroup),
+                ...changedNonGroup[currentOutGroupPage].slice(foundIdxInChangedNonGroup + 1,)
+            ];
+            const updatedChangedNonGroup = {
+                ...changedNonGroup,
+                [currentOutGroupPage]: updated
+            };
+            setChangedNonGroup(updatedChangedNonGroup);
+        }
+        else
+        {
+            const updated = [
+                ...(changedNonGroup[currentOutGroupPage] || []),
+                selected
+            ];
+            const updatedChangedNonGroup = {
+                ...changedNonGroup,
+                [currentOutGroupPage]: updated
+            };
+            setChangedNonGroup(updatedChangedNonGroup);
+        }
 
         setSelectedInNoneGroup(null);
         setSelectedInGroup(null);
@@ -285,9 +392,55 @@ export default function Grouping({
     };
 
     useEffect(() => {
-        setNonGroup([...outGroup.members]);
-        setGroup(!!inGroup ? [...inGroup.members] : []);
-    }, [outGroup, inGroup]);
+        // console.log("parameter related groups is changed");
+        // console.log("- outGroup : ", outGroup);
+        // console.log("- inGroup : ", inGroup);
+        // console.log("- currentOutGroupPage : ", currentOutGroupPage);
+        // console.log("- currentInGroupPage : ", currentInGroupPage);
+        // console.log("- changedNonGroup : ", changedNonGroup);
+        // console.log("- changedGroup : ", changedGroup);
+        const adjustedNonGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
+        outGroup.members.forEach(member => {
+            if(!changedNonGroup[currentOutGroupPage]) {
+                adjustedNonGroup.push(member);
+            } else {
+                const foundIdx = changedNonGroup[currentOutGroupPage].findIndex(changedMember => changedMember.id === member.id);
+                if(foundIdx === -1) {
+                    adjustedNonGroup.push(member);
+                }
+            }
+        });
+        changedNonGroup[currentOutGroupPage]?.forEach(member => {
+            const foundIdx = outGroup.members.findIndex(group => group.id === member.id);
+            if(foundIdx === -1) {
+                adjustedNonGroup.push(member);
+            }
+        });
+        setNonGroup(adjustedNonGroup);
+
+        const adjustedGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
+        if(!!inGroup) {
+            inGroup.members.forEach(member => {
+                if(!changedGroup[currentInGroupPage]) {
+                    adjustedGroup.push(member);
+                } else {
+                    const foundIdx = changedGroup[currentInGroupPage].findIndex(changedMember => changedMember.id === member.id);
+                    if(foundIdx === -1) {
+                        adjustedGroup.push(member);
+                    }
+                    changedGroup[currentInGroupPage]?.forEach(member => {
+                        const foundIdx = inGroup.members.findIndex(group => group.id === member.id);
+                        if(foundIdx === -1) {
+                            adjustedGroup.push(member);
+                        }
+                    });
+                }
+            });
+        } else {
+            adjustedGroup.push(...changedGroup[currentInGroupPage] || []);
+        }
+        setGroup(adjustedGroup);
+    }, [outGroup, inGroup, changedNonGroup, changedGroup, currentOutGroupPage, currentInGroupPage]);
 
     return (
         <div className={'w-full p-2 mb-4 flex md: flex-col'}>

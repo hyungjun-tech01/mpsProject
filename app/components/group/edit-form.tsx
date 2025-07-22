@@ -14,6 +14,8 @@ export function EditGroupForm({
   items,
   buttons,
   translated,
+  currentOutGroupPage,
+  currentInGroupPage,
   outGroup,
   inGroup,
   sessionUserName,
@@ -23,6 +25,8 @@ export function EditGroupForm({
   items: ISection[];
   buttons?: IButtonInfo;
   translated: Record<string, string>;
+  currentOutGroupPage: string;
+  currentInGroupPage: string;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   sessionUserName:string;
@@ -114,6 +118,8 @@ export function EditGroupForm({
           noneGroupSearchPlaceholder={translated.search_placeholder_in_nonegroup}
           groupMemberTitle={translated.group_member}
           groupSearchPlaceholder={translated.search_placeholder_in_group}
+          currentOutGroupPage={currentOutGroupPage}
+          currentInGroupPage={currentInGroupPage}
           outGroup={outGroup}
           inGroup={inGroup}
         />
