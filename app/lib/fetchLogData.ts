@@ -425,7 +425,7 @@ export async function fetchFilteredAuditLogs(
                 select t.member_id 
                 from tbl_group_member_info t
                 where 1= 1 
-                and t.member_type = 'dept'
+                and t.member_type = 'security'
                 and t.group_id in (
                     select tgi.group_id 
                         from tbl_group_info tgi, tbl_group_member_info tgmi
@@ -589,7 +589,7 @@ export async function fetchFilteredAuditLogPages(
                     select t.member_id 
                     from tbl_group_member_info t
                     where 1= 1 
-                    and t.member_type = 'dept'
+                    and t.member_type = 'security'
                     and t.group_id in (
                         select tgi.group_id 
                           from tbl_group_info tgi, tbl_group_member_info tgmi
@@ -691,7 +691,7 @@ export async function fetchFilteredRetiredAuditLogs(
                     select t.member_id 
                     from tbl_group_member_info t
                     where 1= 1 
-                    and t.member_type = 'dept'
+                    and t.member_type = 'security'
                     and t.group_id in (
                         select tgi.group_id 
                             from tbl_group_info tgi, tbl_group_member_info tgmi
@@ -818,7 +818,7 @@ export async function fetchFilteredRetiredAuditLogPages(
                     select t.member_id 
                     from tbl_group_member_info t
                     where 1= 1 
-                    and t.member_type = 'dept'
+                    and t.member_type = 'security'
                     and t.group_id in (
                         select tgi.group_id 
                             from tbl_group_info tgi, tbl_group_member_info tgmi

@@ -89,7 +89,7 @@ export async function fetchFilteredGroups(
             (
                 select count(*) from tbl_group_member_info gm
                 where gm.group_id = g.group_id
-                and gm.member_type = 'dept'
+                and gm.member_type = 'security'
             ) as dept_count,
             (
                 select count(*) from tbl_group_member_info gm
@@ -238,7 +238,7 @@ export async function fetchFilteredGroupsByManager(
                 (
                     select count(*) from tbl_group_member_info gm
                     where gm.group_id = g.group_id
-                    and gm.member_type = 'dept'
+                    and gm.member_type = 'security'
                 ) as dept_count,
                 (
                     select count(*) from tbl_group_member_info gm
