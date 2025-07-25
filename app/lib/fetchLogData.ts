@@ -397,13 +397,13 @@ export async function fetchFilteredAuditLogs(
 
     let extraWhereClause = '';
 
-    // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+    // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 => admin도 볼수 없도록 수정
     // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
     // 이것도 저것도 아니라면, [] 리턴해 줌.
-    const resp = await client.query(`
+    /* const resp = await client.query(`
         SELECT sysadmin FROM tbl_user_info a
         WHERE 1 = 1
-        and user_id = $1`,[sessionUserId]);
+        and user_id = $1`,[sessionUserId]); */
 
     const resp1 = await client.query(`
         select tgmi.member_id 
@@ -413,11 +413,12 @@ export async function fetchFilteredAuditLogs(
             and tgmi.member_type = 'admin'
             and tgmi.member_id = $1`,[sessionUserId]);
     
-    console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
+    // console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
 
-    if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+    /* if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
         extraWhereClause = '';
-    else if( resp1.rows.length > 0 )
+    else */ 
+    if( resp1.rows.length > 0 )
     extraWhereClause += `and a.user_name in (
             select b.user_name from tbl_user_info b
             where 1 = 1
@@ -438,7 +439,7 @@ export async function fetchFilteredAuditLogs(
     else
         extraWhereClause = 'and 1 = 2';
 
-    console.log('extraWhereClause', extraWhereClause);
+    // console.log('extraWhereClause', extraWhereClause);
 
     const detect_privacy = privacy === 'true'? true:false;
     const detect_security = security === 'true'? true:false;
@@ -562,14 +563,14 @@ export async function fetchFilteredAuditLogPages(
     try {
 
         let extraWhereClause = '';
-
-        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+ 
+        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행  => admin 도 볼수 없도록 수정
         // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
         // 이것도 저것도 아니라면, [] 리턴해 줌.
-        const resp = await client.query(`
+        /* const resp = await client.query(`
             SELECT sysadmin FROM tbl_user_info a
             WHERE 1 = 1
-            and user_id = $1`,[sessionUserId]);
+            and user_id = $1`,[sessionUserId]); */
 
         const resp1 = await client.query(`
             select tgmi.member_id 
@@ -579,9 +580,10 @@ export async function fetchFilteredAuditLogPages(
                and tgmi.member_type = 'admin'
                and tgmi.member_id = $1`,[sessionUserId]);
         
-        if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+        /* if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
             extraWhereClause = '';
-        else if( resp1.rows[0].length > 0 )
+        else */
+        if( resp1.rows.length > 0 )
             extraWhereClause += `and a.user_name in (
                 select b.user_name from tbl_user_info b
                 where 1 = 1
@@ -663,13 +665,13 @@ export async function fetchFilteredRetiredAuditLogs(
 
         let extraWhereClause = '';
 
-        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행  => admin 조회 막음
         // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
         // 이것도 저것도 아니라면, [] 리턴해 줌.
-        const resp = await client.query(`
+        /* const resp = await client.query(`
             SELECT sysadmin FROM tbl_user_info a
             WHERE 1 = 1
-            and user_id = $1`,[sessionUserId]);
+            and user_id = $1`,[sessionUserId]); */
     
         const resp1 = await client.query(`
             select tgmi.member_id 
@@ -679,11 +681,12 @@ export async function fetchFilteredRetiredAuditLogs(
                 and tgmi.member_type = 'admin'
                 and tgmi.member_id = $1`,[sessionUserId]);
         
-        console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
+        //console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
     
-        if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+        /* if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
             extraWhereClause = '';
-        else if( resp1.rows.length > 0 )
+        else */ 
+        if( resp1.rows.length > 0 )
         extraWhereClause += `and a.user_name in (
                 select b.user_name from tbl_user_info b
                 where 1 = 1
@@ -790,13 +793,13 @@ export async function fetchFilteredRetiredAuditLogPages(
 
         let extraWhereClause = '';
 
-        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행 
+        // 만약 tbl_user_info 에서 sysadmin이 Y이면 아래 쿼리 진행  => admin 조회 삭제
         // 만약 보안그룹의 관리자이면 , 해당 그룹의 사용자의 log 쿼리 할 수 있도록 extraQuery 작성
         // 이것도 저것도 아니라면, [] 리턴해 줌.
-        const resp = await client.query(`
+        /* const resp = await client.query(`
             SELECT sysadmin FROM tbl_user_info a
             WHERE 1 = 1
-            and user_id = $1`,[sessionUserId]);
+            and user_id = $1`,[sessionUserId]); */
     
         const resp1 = await client.query(`
             select tgmi.member_id 
@@ -806,11 +809,12 @@ export async function fetchFilteredRetiredAuditLogPages(
                 and tgmi.member_type = 'admin'
                 and tgmi.member_id = $1`,[sessionUserId]);
         
-        console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
+        //console.log('extraWhereClause', sessionUserId, resp.rows[0], resp1.rows[1]);
     
-        if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
+        /* if (resp.rows.length > 0  && resp.rows[0].sysadmin === 'Y')
             extraWhereClause += '';
-        else if( resp1.rows.length > 0 )
+        else */
+        if( resp1.rows.length > 0 )
         extraWhereClause += `and a.user_name in (
                 select b.user_name from tbl_user_info b
                 where 1 = 1
@@ -831,7 +835,7 @@ export async function fetchFilteredRetiredAuditLogPages(
         else
             extraWhereClause += 'and 1 = 2';
     
-        console.log('extraWhereClause', extraWhereClause);        
+        //console.log('extraWhereClause', extraWhereClause);        
 
         const detect_privacy = privacy === 'true'? true:false;
         const detect_security = security === 'true'? true:false;
