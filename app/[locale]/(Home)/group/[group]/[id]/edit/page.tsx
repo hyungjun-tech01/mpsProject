@@ -261,6 +261,7 @@ export default async function Page(props: {
           currentPage={String(currentPage)}
           outGroup={outGroup}
           inGroup={inGroup}
+          sessionUserName={userName}
           action={adapter.modifyUserGroup}
         />
       )}

@@ -18,6 +18,7 @@ export function EditUserGroupForm({
     currentPage,
     outGroup,
     inGroup,
+    sessionUserName,
     action,
 }: {
     id: string;
@@ -28,6 +29,7 @@ export function EditUserGroupForm({
     currentPage: string;
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
+    sessionUserName: string;
     action: (
         id: string,
         prevState: void | GroupState,
@@ -134,8 +136,26 @@ export function EditUserGroupForm({
         }
     }, [userData])
 
+    const [ipAddress, setIpAddress] = useState('');
+
+    useEffect(() => {
+      const fetchIp = async () => {
+      try {
+          const res = await fetch('/api/get-ip');
+          const data = await res.json();
+          setIpAddress(data.ip);
+      } catch (error) {
+          console.error('IP 가져오기 실패:', error);
+      }
+      };
+  
+      fetchIp();
+  }, []);
+
     return (
         <form action={formAction}>
+            <input type="hidden" name="ipAddress" value={ipAddress}/>
+            <input type="hidden" name="updatedBy" value={sessionUserName}/>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 <div className={'w-full p-2 flex flex-col md:flex-row border-b'}>
                     <div className='w-full md:w-1/3 pb-4 md:pr-6'>
