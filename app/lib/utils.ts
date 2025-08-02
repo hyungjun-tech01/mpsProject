@@ -241,7 +241,7 @@ export function generateChangeLog(
     }
   }
 
-  console.log(changes);
+  //console.log(changes);
   return changes.join(', ');
 }
 
@@ -264,7 +264,7 @@ export function generateDeleteLog(
     changes.push(`${label}:'${oldValue}' `);
   }
 
-  console.log(changes);
+  //console.log(changes);
   return changes.join(', ');
 }
 

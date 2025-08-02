@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import getDictionary from '@/app/locales/dictionaries';
 import {generateChangeLog, generateDeleteLog, generateCreateLog} from '@/app/lib/utils';
 import {applicationLog} from '@/app/lib/actions';
+import { GTranslate } from '@mui/icons-material';
 
 
 const [t] = await Promise.all([
@@ -553,8 +554,169 @@ export async function modifyUserGroup(client: Pool, id:string, prevState: void |
         groupMembers.push(memberID);
     }
 
+    const updatedBy = formData.get('updatedBy');
+    const ipAddress = formData.get('ipAddress');
+
     // Modify user group  --------------------------------------
     try {
+        let changedValues = '';
+        const oldData1 = await client.query(`
+            SELECT
+                group_name,
+                group_notes,
+                schedule_period,
+                schedule_amount,
+                remain_amount,
+                schedule_start
+            FROM tbl_group_info
+            WHERE group_id= $1
+        `, [groupID]);
+
+        const newUserGroupData = {group_name:groupName, group_notes:groupNotes,schedule_period:schedulePeriod,
+            schedule_amount:scheduleAmount, remain_amount:remainAmount, schedule_start:scheduleStart};
+
+        //이전 값
+        const oldUserGroupData = oldData1.rows[0];
+
+        // Field Lable 
+        const userGroupFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_notes: t('device.notes'),
+            schedule_period : t('group.schedule_period'),
+            schedule_amount : t('group.schedule_amount'),
+            remain_amount : t('group.remain_amount'),
+            schedule_start : t('group.schedule_start'),
+        };
+
+        // 변경 로그를 생성.
+        changedValues += generateChangeLog(oldUserGroupData, newUserGroupData, userGroupFieldLabels);
+         //application Log 생성 
+
+        if(changedValues !== ''){
+            const logData = new FormData();
+            logData.append('application_page', '그룹/사용자그룹');
+            logData.append('application_action', '수정');
+            logData.append('application_parameter', changedValues);
+            logData.append('created_by', updatedBy ? String(updatedBy) : "");
+            logData.append('ip_address', ipAddress ? String(ipAddress) : "");
+    
+            applicationLog(client, logData);
+        }
+
+        changedValues = '';
+
+        const oldData2 = await client.query(`
+        SELECT
+            member_type,
+            user_name
+        FROM tbl_group_member_info tgmi, tbl_user_info tdi
+        WHERE tgmi.group_id= $1
+        and tgmi.member_id = tdi.user_id
+        `, [groupID]);
+
+        const newData2 = await client.query(`
+            SELECT 
+                'user' member_type,    
+                user_name
+            FROM tbl_user_info tdi
+            WHERE tdi.user_id = ANY($1)
+        `, [groupMembers]);
+
+        //이전 값 삭제
+        const oldUserGroupMemberData = oldData2.rows;
+
+        // Field Lable 
+        const deviceUserMemberFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('user.user_name'),
+        };       
+
+        for(let i=0 ; i <  oldUserGroupMemberData.length; i++ )
+        {
+            changedValues += generateDeleteLog(oldUserGroupMemberData[i], deviceUserMemberFieldLabels);
+        }
+
+        const logData2 = new FormData();
+        logData2.append('application_page', '그룹/사용자그룹');
+        logData2.append('application_action', '수정-멤버삭제');
+        logData2.append('application_parameter', changedValues);
+        logData2.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData2.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData2);
+
+        //초기화
+        changedValues = '';
+
+        // 새 값 추가 
+        const newUserGroupMemberData = newData2.rows;
+
+        for(let i=0 ; i <  newUserGroupMemberData.length; i++ )
+        {
+            changedValues += generateCreateLog(newUserGroupMemberData[i], deviceUserMemberFieldLabels);
+        }
+        const logData3 = new FormData();
+        logData3.append('application_page', '그룹/사용자그룹');
+        logData3.append('application_action', '수정-멤버추가');
+        logData3.append('application_parameter', changedValues);
+        logData3.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData3.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData3);        
+
+
+        // user 그룹 admin 수정 
+
+        const oldUserGroupMangerData = await client.query(`
+        SELECT
+            a.member_id user_id,
+            b.full_name full_name
+        FROM tbl_group_member_info a, tbl_user_info b
+        WHERE group_id= $1
+        AND member_type='admin'
+        AND a.member_id = b.user_id
+    `,[groupID]);
+
+    let oldManager;
+    if(oldUserGroupMangerData.rows.length > 0) 
+         oldManager = oldUserGroupMangerData.rows[0];    
+
+    const newUserGroupMangerData = await client.query(`
+        SELECT
+            b.user_id user_id,
+            b.full_name full_name
+        FROM tbl_user_info b
+        WHERE b.user_id = $1
+    `,[groupManager]);
+
+    let newManager;
+    if(newUserGroupMangerData.rows.length > 0) 
+        newManager = newUserGroupMangerData.rows[0];   
+
+         // Field Lable 
+    const userGroupAdminFieldLabels: Record<string, string> = {
+        user_id : t('user.user_id'),
+        full_name: t('user.full_name'),
+    };      
+    changedValues = '';
+
+    // 변경 로그를 생성.
+    changedValues += generateChangeLog(oldManager, newManager, userGroupAdminFieldLabels);
+
+    //application Log 생성 
+
+    if(changedValues !== ''){
+        const logData4 = new FormData();
+        logData4.append('application_page', '그룹/사용자 그룹');
+        logData4.append('application_action', '수정-그룹관리자');
+        logData4.append('application_parameter', changedValues);
+        logData4.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData4.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData4);
+    }
+
+
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
