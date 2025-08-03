@@ -227,11 +227,11 @@ export function generateChangeLog(
 
   for (const key in newData) {
     // 비교에서 제외할 필드이거나, 이전 데이터에 없는 키는 건너뜁니다.
-    if (ignoreFields.includes(key) || !oldData.hasOwnProperty(key)) {
+    if (ignoreFields.includes(key) ) {
       continue;
     }
 
-    const oldValue = oldData[key];
+    const oldValue = oldData?.hasOwnProperty(key) ? oldData[key] : '';
     const newValue = newData[key];
 
     // 값이 변경되었는지 확인합니다 (null, undefined 처리 포함).
@@ -240,8 +240,19 @@ export function generateChangeLog(
       changes.push(`${label}: '${oldValue}' -> '${newValue}'`);
     }
   }
+  
+  if (!newData && oldData) {
+    for (const key in oldData) {
+      if (ignoreFields.includes(key)) continue;
 
-  //console.log(changes);
+      const oldValue = oldData[key];
+      const label = fieldLabels[key] || key;
+
+      changes.push(`${label}: '${oldValue}' -> ''`);
+    }
+  }
+
+  console.log('changes', changes);
   return changes.join(', ');
 }
 

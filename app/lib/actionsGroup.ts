@@ -186,6 +186,7 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
         let changedValues = '';
 
+        console.log('groupID', groupID);
         const oldData1 = await client.query(`
             SELECT
                 group_name, 
@@ -193,6 +194,10 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
             FROM tbl_group_info
             WHERE group_id= $1
         `, [groupID]);
+
+        console.log('groupID');
+
+        console.log('groupID', oldData1.rows[0]);
 
         const oldData2 = await client.query(`
             SELECT
@@ -219,7 +224,9 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         };
 
         //이전 값
-        const oldDeviceGroupData = oldData1.rows[0];
+        let oldDeviceGroupData;
+        if(oldData1.rows.length > 0) 
+            oldDeviceGroupData = oldData1.rows[0];
 
         // Field Lable 
         const deviceGroupFieldLabels: Record<string, string> = {
@@ -228,9 +235,11 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         };
 
  
+        console.log('changedValues', oldDeviceGroupData, newDeviceGroupData);
         // 변경 로그를 생성.
         changedValues += generateChangeLog(oldDeviceGroupData, newDeviceGroupData, deviceGroupFieldLabels);
 
+        console.log('changedValues111111111', changedValues);
          //application Log 생성 
 
          if(changedValues !== ''){
@@ -246,6 +255,8 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
  
         //초기화
         changedValues = '';
+
+        console.log('changedValues22222', changedValues);
       
         //이전 값 삭제
         const oldDeviceGroupMemberData = oldData2.rows;
@@ -261,6 +272,7 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
             changedValues += generateDeleteLog(oldDeviceGroupMemberData[i], deviceGroupMemberFieldLabels);
         }
        
+        console.log('changedValues3333', changedValues);
         const logData2 = new FormData();
          logData2.append('application_page', '그룹/장치그룹');
          logData2.append('application_action', '수정-멤버삭제');
@@ -319,7 +331,6 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
 
         const currentMangerData = await client.query(`
             SELECT
-                a.member_id id,
                 b.full_name full_name
             FROM tbl_group_member_info a, tbl_user_info b
             WHERE group_id= $1
