@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState , useEffect, useState} from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
@@ -9,43 +9,39 @@ import { RegularExpState } from '@/app/lib/actionSetting';
 
 
 export default function Form({
-    items,  buttons, action
+    items,  sessionUserName, buttons, action
 } : {
     items: ISection[]; 
+    sessionUserName:string;
     buttons?: IButtonInfo;
     action: (prevState: void | RegularExpState, formData: FormData) => Promise<RegularExpState | void>;
 }){
     const initialState: RegularExpState = { message: null, errors: {} };
-    // const [printerChecked, setPrinterChecked] = useState(false);
-    // const [scanChecked, setScanChecked] = useState(false);
-    // const [faxChecked, setFaxChecked] = useState(false);
-    // const [enablePrintChecked, setEnablePrintChecked] = useState(false);
-
-    // const updatedAction = !!id ? action.bind(null, id) : action;
+ 
     const [state, formAction] = useActionState(action, initialState);
 
+  
+    const [ipAddress, setIpAddress] = useState('');
 
-    // 체크박스 상태 변경 핸들러
-    // const handlePrinterChange = (e) => {
-    //     setPrinterChecked(e.target.checked);
-    // };
+    useEffect(() => {
+      const fetchIp = async () => {
+      try {
+          const res = await fetch('/api/get-ip');
+          const data = await res.json();
+          setIpAddress(data.ip);
+      } catch (error) {
+          console.error('IP 가져오기 실패:', error);
+      }
+      };
+  
+      fetchIp();
+  }, []);
 
-    // const handleScanChange = (e) => {
-    //     setScanChecked(e.target.checked);
-    // };
-
-    // const handleFaxChange = (e) => {
-    //         setFaxChecked(e.target.checked);
-    // };
-
-    // const handleEnablePrintChange = (e) => {
-    //     setEnablePrintChecked(e.target.checked);
-    // };
-
-    //console.log('create form');
     return (
         <div>
             <form action={formAction}>
+                <input type="hidden" name="ipAddress" value={ipAddress}/>
+                <input type="hidden" name="updatedBy" value={sessionUserName}/>
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <div className={clsx('w-full p-2 flex flex-col md:flex-row',
                             { 'border-b': 1 !== items.length - 1 }

@@ -610,9 +610,10 @@ export default function MyDBAdapter() {
             const [deletedBy, ipAddress] = param.split(',');
 
             const logData = new FormData();
-            logData.append('application_page', 'RegEx/Security');
-            logData.append('application_action', 'Delete');
-            logData.append('application_parameter', `{id:${id}}`);
+            logData.append('application_page', t('settings.regularExprPrivateInfo'));
+            logData.append('application_action', t('settings.delete'));
+            const deletedRegExp = await RegularExp.fetchRegularExpById(pool, id);
+            logData.append('application_parameter', `{${t('settings.regularExpName')}:${deletedRegExp.security_name}, ${t('settings.regularExpType')}:${deletedRegExp.security_type}, ${t('settings.regularExpValue')}:${deletedRegExp.security_word}}`);
             logData.append('created_by', deletedBy);
             logData.append('ip_address', ipAddress);
 

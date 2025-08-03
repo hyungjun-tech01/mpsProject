@@ -495,6 +495,8 @@ const koResource = {
             regularExpValuePlaceholder:'정규식 값을 입력하세요',
             regularExpType_regex:'정규식',
             regularExpType_security_word:'보안 단어',
+            delete:'삭제',
+            insert:'추가'
         },
         adminActionLog:{
             adminActionLog:'관리자 작업 로그',

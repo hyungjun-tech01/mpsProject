@@ -50,3 +50,26 @@ export async function filteredRegularExpPages(
     }
 };
 
+export async function fetchRegularExpById(
+    client: Pool,
+    id : string,
+) {
+
+    try {
+        const response = await client.query(`
+            SELECT security_value_id id,
+                security_name            , 
+                security_type            ,
+                security_word            ,
+                created_by               ,
+                creation_date         
+            FROM tbl_security_value_info 
+            WHERE ( security_value_id = $1 )
+        `, [id]);
+
+        return response.rows[0];
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch tbl_security_value_info.");
+    }
+};

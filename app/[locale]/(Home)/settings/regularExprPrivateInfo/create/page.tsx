@@ -28,12 +28,6 @@ export default async function CreateRegularExprPrivateInfo(
         // notFound();
     };
 
-    const logData = new FormData();
-    logData.append('application_page', 'Regular Exp Private Info');
-    logData.append('application_action', 'Create');
-    logData.append('application_parameter', '');
-    logData.append('created_by', userName);
-    adapter.applicationLog(logData);
 
     ///// application log ----------------------------------------------------------------------
     const [t] = await Promise.all([
@@ -77,7 +71,7 @@ export default async function CreateRegularExprPrivateInfo(
                     },
                 ]}
             />
-            <Form items={formItems}  buttons={buttonItems} action={adapter.createRegularExp}/>
+            <Form items={formItems}  sessionUserName={userName} buttons={buttonItems} action={adapter.createRegularExp}/>
         </main>
     );
 }

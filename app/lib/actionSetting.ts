@@ -4,7 +4,13 @@ import type { Pool } from 'pg';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import getDictionary from '@/app/locales/dictionaries';
+import {generateCreateLog} from '@/app/lib/utils';
+import {applicationLog} from '@/app/lib/actions';
 
+const [t] = await Promise.all([
+    getDictionary('ko')
+  ]);
 
 export type RegularExpState = {
     errors?: {
@@ -29,6 +35,8 @@ const RegularExprFormSchema = z.object({
     createdBy: z.string({
         invalid_type_error: 'Created By must be string ',
     }).min(1, { message: "Value is required" }),    
+    updatedBy : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
+    ipAddress : z.union([z.union([z.string().nullish(), z.literal("")]), z.literal("")]),
 });
 
 
@@ -42,6 +50,8 @@ export async function createRegularExp(client: Pool, prevState: void | RegularEx
         regularExpType: formData.get('security_type'),
         regularExpValue: formData.get('security_value'),
         createdBy: formData.get('created_by'),
+        updatedBy: formData.get('updatedBy'),
+        ipAddress: formData.get('ipAddress'),        
     });
 
     // If form validation fails, return errors early. Otherwise, continue.
@@ -52,9 +62,37 @@ export async function createRegularExp(client: Pool, prevState: void | RegularEx
         };
     };
 
-    const { regularExpName, regularExpType, regularExpValue, createdBy } = validatedFields.data;
+    const { regularExpName, regularExpType, regularExpValue, createdBy, updatedBy, ipAddress } = validatedFields.data;
     
     // console.log('Regular Exp :', regularExpName, regularExpType, regularExpValue, createdBy);
+
+      //초기화
+    let changedValues = '';
+      
+    // 변경 값
+    const newRegulareExpData = {
+        security_name: regularExpName,
+        security_type: regularExpType,
+        security_value: regularExpValue
+    };      
+
+    // Field Lable 
+    const deviceGroupMemberFieldLabels: Record<string, string> = {
+        security_name: t('settings.regularExpName'),
+        security_type: t('settings.regularExpType'),
+        security_value : t('settings.regularExpValue'),
+    };  
+
+    changedValues += generateCreateLog(newRegulareExpData, deviceGroupMemberFieldLabels);
+
+    const logData3 = new FormData();
+    logData3.append('application_page', t('settings.create_regular'));
+    logData3.append('application_action', t('settings.insert'));
+    logData3.append('application_parameter', changedValues);
+    logData3.append('created_by', updatedBy ? String(updatedBy) : "");
+    logData3.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+    applicationLog(client, logData3);
 
     // Create new user group  --------------------------------------
     try {
