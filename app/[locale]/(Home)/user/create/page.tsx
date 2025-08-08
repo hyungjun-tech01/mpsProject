@@ -3,6 +3,9 @@ import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import getDictionary from '@/app/locales/dictionaries';
 import { CreateForm } from '@/app/components/user/create-form';
 import MyDBAdapter from '@/app/lib/adapter';
+import { notFound } from 'next/navigation';
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 
 export default async function Page(props: {
@@ -15,6 +18,17 @@ export default async function Page(props: {
         getDictionary(locale),
         adapter.getAllDepts()
     ]);
+    const session = await auth();
+
+    if(!session?.user) return notFound();
+
+    ///// application log ----------------------------------------------------------------------
+    const userName = session?.user.name ?? "";
+    if (!userName) {
+        // 여기서 redirect 함수를 사용해 리다이렉트 처리
+        redirect('/login'); // '/login'으로 리다이렉트
+        // notFound();
+    };
 
     const formItems: ISection[] = [
         {
@@ -65,7 +79,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <CreateForm items={formItems} buttons={buttonItems} action={adapter.createUser}/>
+            <CreateForm items={formItems} buttons={buttonItems}  sessionUserName={userName} action={adapter.createUser}/>
             {/* <CreateForm items={formItems} /> */}
         </main>
     );

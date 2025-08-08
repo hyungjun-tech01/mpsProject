@@ -8,7 +8,7 @@ import { parse } from "csv-parse";
 import bcrypt from "bcrypt";
 import { encrypt } from '@/app/lib/cryptoFunc';
 import getDictionary from '@/app/locales/dictionaries';
-import {generateChangeLog} from '@/app/lib/utils';
+import {generateChangeLog, generateCreateLog} from '@/app/lib/utils';
 
 const [t] = await Promise.all([
   getDictionary('ko')
@@ -86,6 +86,9 @@ export async function createUser(
   const userCardNumber = formData.get("userCardNumber");
   const userCardNumber2 = formData.get("userCardNumber2");
 
+  const ipAddress = formData.get("ipAddress");
+  const updatedBy = formData.get("updatedBy");
+
   // Create new user  --------------------------------------
   try {
     // 값 배열로 변환
@@ -109,6 +112,48 @@ export async function createUser(
       userBalanceCurrent,
       //    userRestricted === 'Y' ? 'Y' : 'N',
     ];
+
+
+    let changedValues;
+    // 변경 값
+    const newUserData = {
+      user_name: userName,
+      full_name: userFullName,
+      email: userEmail,
+      home_directory: userHomeDirectory,
+      user_notes : userNotes,
+      disabled_printing: userDisabledPrinting,
+      dept_name: userDepartment,
+      card_number: userCardNumber,
+      card_number2: userCardNumber2,
+      user_balance_count:userBalanceCurrent,
+    };
+
+    // Field Lable 
+    const userFieldLabels: Record<string, string> = {
+      user_name: t('user.user_name'),
+      full_name: t('user.full_name'),
+      email: t('common.email'),
+      home_directory: t('user.home_directory'),
+      user_notes:t('user.user_notes'),
+      disabled_printing: t('user.enable_disable_printing'),
+      dept_name: t('user.department'),
+      card_number: t('user.card_number'),
+      card_number2: t('user.card_number2'),
+      user_balance_count:  t('user.user_balance_count'),
+    };
+
+    // 변경 로그를 생성.
+    changedValues = generateCreateLog(newUserData, userFieldLabels );
+
+    const logData3 = new FormData();
+    logData3.append('application_page', t('user.create_user'));
+    logData3.append('application_action', t('user.insert'));
+    logData3.append('application_parameter', changedValues);
+    logData3.append('created_by', updatedBy ? String(updatedBy) : "");
+    logData3.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+    applicationLog(client, logData3);
 
     await client.query("BEGIN"); // 트랜잭션 시작
 

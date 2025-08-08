@@ -4,25 +4,45 @@ import Link from 'next/link';
 import { Button } from '@mui/material';
 import clsx from 'clsx';
 import type { UserState } from '@/app/lib/actions';
-import { useActionState } from 'react';
+import { useActionState, useState, useEffect } from 'react';
 import { IButtonInfo, IEditItem, ISection, EditItem } from '../edit-items';
 
 
 export function CreateForm({
   items,
   buttons,
+  sessionUserName,
   action,
 }: {
   items: ISection[];
   buttons?: IButtonInfo;
+  sessionUserName:string;
   action: (prevState: void | UserState, formData: FormData)
     => Promise<UserState | void>;
 }) {
   const initialState: UserState = { message: null, errors: {} };
   const [state, formAction] = useActionState(action, initialState);
 
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const fetchIp = async () => {
+    try {
+        const res = await fetch('/api/get-ip');
+        const data = await res.json();
+        setIpAddress(data.ip);
+    } catch (error) {
+        console.error('IP 가져오기 실패:', error);
+    }
+    };
+
+    fetchIp();
+}, []);
+
   return (
     <form action={formAction}>
+      <input type="hidden" name="ipAddress" value={ipAddress}/>
+      <input type="hidden" name="updatedBy" value={sessionUserName}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {items.map((sec: ISection, idx) => {
           return (
