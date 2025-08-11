@@ -88,7 +88,7 @@ export default async function Page(props: {
                 { name: 'deleted', title: t('device.deleted'), type: 'checked', defaultValue: device.deleted, placeholder: t('device.deleted') },
                 {
                     name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: device.group_id, 
-                    options: [{title: '-1 없음', value: '' }, 
+                    options: [{title: '-- 그룹 선택 --', value: '' }, 
                         ...printerGroup.map((x:{group_name:string, group_id:string}) =>
                             ({title:x.group_name, value:x.group_id}))]
                 },
@@ -97,7 +97,7 @@ export default async function Page(props: {
     ];
 
     const optionsUser: IFaxOption[] = [
-        {label:'-1 없음', value: ''},
+        {label:'-- 사용자선택 -- ', value: ''},
         ...allUsers
             .filter(user => user.user_id !== null && user.user_name !== null)
             .map((x) => ({ 
@@ -107,7 +107,7 @@ export default async function Page(props: {
     ];
 
     const optionsGroup: IFaxOption[] = [
-        {label:'-1 없음', value: ''},
+        {label:'-- 그룹 선택 --', value: ''},
         ...allGroups.map((x:{group_id:string, group_name:string}) => ( 
             {label:`${x.group_name}`, value:String(x.group_id)} 
         ))

@@ -356,6 +356,7 @@ const koResource = {
             group_type:'그룹타입',
             member_type:'멤버타입',
             schedule_start:'스케쥴 시작',
+            group_notes:'비고',
         },
         device :{
             create_device: '장치 추가',

@@ -17,6 +17,7 @@ export function CreateUserGroupForm({
     currentPage,
     outGroup,
     inGroup,
+    sessionUserName,
     action,
 }: {
     userData: Group;
@@ -26,6 +27,7 @@ export function CreateUserGroupForm({
     currentPage: string;
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
+    sessionUserName: string;
     action: (
         prevState: void | GroupState,
         formData: FormData

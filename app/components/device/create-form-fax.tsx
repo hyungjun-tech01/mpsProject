@@ -193,11 +193,11 @@ export default function FormFax({
                 { name: `fax_line_id_${index}`, title: `팩스라인 아이디 ${index}} ${index+1}` , type: 'hidden', defaultValue: '', placeholder: 'fax.fax_line_id' },
                 { name: `fax_line_name_${index}`, title: `팩스라인 번호 ${index+1}`, type: 'input', defaultValue: '', placeholder: '팩스라인 번호' },
                 { 
-                    name: `fax_line_user_id_${index}`, title: '회선 사용자', type: 'react-select', defaultValue: { value: '', label: '-1 없음' }, placeholder: '회선 사용자',
+                    name: `fax_line_user_id_${index}`, title: '회선 사용자', type: 'react-select', defaultValue: { value: '', label: '-- 사용자선택 --' }, placeholder: '회선 사용자',
                     options: optionsUser
                 },
                 { 
-                    name: `fax_line_shared_group_id_${index}`, title: '회선 공유그룹', type: 'react-select', defaultValue: { value: '', label: '-1 없음' }, placeholder: '회선 공유그룹',
+                    name: `fax_line_shared_group_id_${index}`, title: '회선 공유그룹', type: 'react-select', defaultValue: { value: '', label: '-- 그룹 선택 --' }, placeholder: '회선 공유그룹',
                     options: optionsGroup
                 },
                 { name: `button_${index}`, title: '저장' , type: 'button', defaultValue: '', placeholder: '' },

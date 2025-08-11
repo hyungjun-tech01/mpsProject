@@ -83,6 +83,9 @@ export async function createDeviceGroup(client: Pool, prevState: void | GroupSta
         groupMembers.push(memberID);
     }
 
+    const updatedBy = formData.get('updatedBy');
+    const ipAddress = formData.get('ipAddress');
+
     // Create new group  --------------------------------------
     try {
         // 값 배열로 변환
@@ -91,6 +94,70 @@ export async function createDeviceGroup(client: Pool, prevState: void | GroupSta
             "device",
             groupNotes,
         ];
+
+
+        // log 생성 
+        const newData ={
+            group_name: groupName,
+            group_type: "device",
+            group_notes: groupNotes,
+        }
+        // Field Lable 
+        const groupFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_type: t('group.group_type'),
+            group_notes: t('group.group_notes'),
+        };
+
+        let changedValues = '';
+        // 변경 로그를 생성.
+        changedValues = generateCreateLog(newData, groupFieldLabels);
+
+         // Field Lable 
+         const deviceGroupMemberFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            device_name: t('device.device_name'),
+        };       
+
+        const newData2 = await client.query(`
+            SELECT 
+                'device' member_type,    
+                device_name
+            FROM tbl_device_info tdi
+            WHERE tdi.device_id = ANY($1)
+        `, [groupMembers]);
+
+        for(let i=0 ; i <  newData2.rows.length; i++ )
+        {
+            changedValues += generateCreateLog(newData2.rows[i], deviceGroupMemberFieldLabels);
+        }
+
+        const newData3 = await client.query(`
+            SELECT 
+                'admin' member_type,    
+                full_name||'('||user_name||')' user_name
+            FROM tbl_user_info tui
+            WHERE tui.user_id = $1
+        `, [groupManager]);
+
+        // Field Lable 
+        const deviceGroupAdminFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('user.user_name'),
+        };
+
+        changedValues += generateCreateLog(newData3.rows[0], deviceGroupAdminFieldLabels);
+
+  
+
+        const logData2 = new FormData();
+        logData2.append('application_page', t('group.create_group'));
+        logData2.append('application_action', t('group.create_group'));
+        logData2.append('application_parameter', changedValues);
+        logData2.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData2.append('ip_address', ipAddress ? String(ipAddress) : "");
+ 
+        applicationLog(client, logData2);
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
@@ -235,11 +302,11 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         };
 
  
-        console.log('changedValues', oldDeviceGroupData, newDeviceGroupData);
+        //console.log('changedValues', oldDeviceGroupData, newDeviceGroupData);
         // 변경 로그를 생성.
         changedValues += generateChangeLog(oldDeviceGroupData, newDeviceGroupData, deviceGroupFieldLabels);
 
-        console.log('changedValues111111111', changedValues);
+        //console.log('changedValues111111111', changedValues);
          //application Log 생성 
 
          if(changedValues !== ''){
@@ -256,7 +323,7 @@ export async function modifyDeviceGroup(client: Pool, id: string, prevState: voi
         //초기화
         changedValues = '';
 
-        console.log('changedValues22222', changedValues);
+        //console.log('changedValues22222', changedValues);
       
         //이전 값 삭제
         const oldDeviceGroupMemberData = oldData2.rows;

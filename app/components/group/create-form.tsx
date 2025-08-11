@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@mui/material";
 import type { GroupState } from "@/app/lib/actionsGroup";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
@@ -16,6 +16,7 @@ export function CreateGroupForm({
   currentPage,
   outGroup,
   inGroup,
+  sessionUserName,
   action,
 }: {
   items: ISection[];
@@ -24,6 +25,7 @@ export function CreateGroupForm({
   currentPage: string;
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
+  sessionUserName: string;
   action: (
     prevState: void | GroupState,
     formData: FormData,
@@ -32,8 +34,28 @@ export function CreateGroupForm({
   const initialState: GroupState = { message: null, errors: {} };
   const [state, formAction] = useActionState(action, initialState);
 
+  // ip address
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    const fetchIp = async () => {
+    try {
+        const res = await fetch('/api/get-ip');
+        const data = await res.json();
+        setIpAddress(data.ip);
+    } catch (error) {
+        console.error('IP 가져오기 실패:', error);
+    }
+    };
+
+    fetchIp();
+  }, []);
+  // ip address
+
   return (
     <form action={formAction}>
+      <input type="hidden" name="ipAddress" value={ipAddress}/>
+      <input type="hidden" name="updatedBy" value={sessionUserName}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-4">
         {items.map((sec: ISection, idx) => {
           return (

@@ -14,6 +14,7 @@ import * as Print from "./fetchPrintSpoolData";
 // import type { PrintState } from "./actionPrint";
 import * as PrintAction from "./actionPrint";
 import * as SettingAction from "./actionSetting";
+import * as DeviceAction from "./actionDevice";
 import type { RegularExpState } from "./actionSetting";
 import getDictionary from '@/app/locales/dictionaries';
 
@@ -276,7 +277,7 @@ export default function MyDBAdapter() {
         },
         async createDevice(newDevice: Record<string, string | null>) {
             'use server';
-            return Device.fetchCreateDevice(pool, newDevice);
+            return DeviceAction.createDevice(pool, newDevice);
         },
         async getPrinterGroup() {
             return Device.fetchPrinterGroup(pool);
@@ -296,12 +297,12 @@ export default function MyDBAdapter() {
 
             Action.applicationLog(pool, logData);
 
-            return Device.fetchDeleteDevice(pool, id);
+            return DeviceAction.deleteDevice(pool, id);
         },
         async fetchDeleteFaxLineInfo(id: string) {
             'use server';
             console.log('adapter fetchDeleteFaxLineInfo', id);
-            return Device.fetchDeleteFaxLineInfo(pool, id);
+            return DeviceAction.deleteFaxLineInfo(pool, id);
         },
         async modifyDevice(newDevice: Record<string, string | null>) {
             'use server';
@@ -312,7 +313,7 @@ export default function MyDBAdapter() {
             created_by: string
         ) {
             'use server';
-            return Device.fetchSaveFaxLineInfo(pool, saveFaxLineData, created_by);
+            return DeviceAction.saveFaxLineInfo(pool, saveFaxLineData, created_by);
         },
         async getLatestDeviceStatus() {
             try {
