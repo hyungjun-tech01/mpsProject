@@ -159,6 +159,8 @@ export async function createDeviceGroup(client: Pool, prevState: void | GroupSta
  
         applicationLog(client, logData2);
 
+        // Log 생성 끝
+
         await client.query("BEGIN"); // 트랜잭션 시작  
 
         const newGroup = await client.query(`
@@ -514,10 +516,84 @@ export async function createUserGroup(client: Pool, prevState: void | GroupState
         const memberID = formData.get(tempName);
         groupMembers.push(memberID);
     }
-    // console.log('groupMembers :', groupMembers);
+
+    const updatedBy = formData.get('updatedBy');
+    const ipAddress = formData.get('ipAddress');
 
     // Create new user group  --------------------------------------
     try {
+        
+        // Log 생성 
+        const newData ={
+            group_name: groupName,
+            group_type: "user",
+            group_notes: groupNotes,
+            schedule_period: schedulePeriod,
+            schedule_start: scheduleStart,
+            schedule_amount: scheduleAmount,
+        }
+        // Field Lable 
+        const groupFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_type: t('group.group_type'),
+            group_notes: t('group.group_notes'),
+            schedule_period: t('group.schedule_period'),
+            schedule_start: t('group.schedule_start'),
+            schedule_amount: t('group.schedule_amount'),
+        };
+
+        let changedValues = '';
+        // 변경 로그를 생성.
+        changedValues = generateCreateLog(newData, groupFieldLabels);
+
+        // Field Lable 
+        const userGroupMemberFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('user.user_name'),
+        };       
+
+        const newData2 = await client.query(`
+            SELECT 
+                'user' member_type,    
+                full_name||'('||user_name||')' user_name
+            FROM tbl_user_info tdi
+            WHERE tdi.user_id = ANY($1)
+        `, [groupMembers]);
+
+        for(let i=0 ; i <  newData2.rows.length; i++ )
+        {
+            changedValues += generateCreateLog(newData2.rows[i], userGroupMemberFieldLabels);
+        }
+
+        const newData3 = await client.query(`
+            SELECT 
+                'admin' member_type,    
+                full_name||'('||user_name||')' user_name
+            FROM tbl_user_info tui
+            WHERE tui.user_id = $1
+        `, [groupManager]);
+
+        // Field Lable 
+        const deviceGroupAdminFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('user.user_name'),
+        };
+
+        changedValues += generateCreateLog(newData3.rows[0], deviceGroupAdminFieldLabels);
+
+
+
+        const logData2 = new FormData();
+        logData2.append('application_page', t('group.create_group'));
+        logData2.append('application_action', t('group.create_group'));
+        logData2.append('application_parameter', changedValues);
+        logData2.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData2.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData2);
+
+        // Log 생성 끝 
+
         // 값 배열로 변환
         const groupInputData = [
             groupName,
@@ -925,6 +1001,9 @@ export async function createSecurityGroup(client: Pool, prevState: void | GroupS
         groupMembers.push(memberID);
     }
 
+    const updatedBy = formData.get('updatedBy');
+    const ipAddress = formData.get('ipAddress');
+
     // Create new group  --------------------------------------
     try {
         // 값 배열로 변환
@@ -933,6 +1012,72 @@ export async function createSecurityGroup(client: Pool, prevState: void | GroupS
             "security",
             groupNotes,
         ];
+
+        // Log 생성 
+        const newData ={
+            group_name: groupName,
+            group_type: "security",
+            group_notes: groupNotes,
+        }
+        // Field Lable 
+        const groupFieldLabels: Record<string, string> = {
+            group_name: t('group.group_name'),
+            group_type: t('group.group_type'),
+            group_notes: t('group.group_notes'),
+        };
+
+        let changedValues = '';
+        // 변경 로그를 생성.
+        changedValues = generateCreateLog(newData, groupFieldLabels);
+
+        // Field Lable 
+        const securityGroupMemberFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('dept.dept_name'),
+        };       
+
+        const newData2 = await client.query(`
+            SELECT 
+                'security' member_type,    
+                 dept_name dept_name
+            FROM tbl_dept_info tdi
+            WHERE tdi.dept_id = ANY($1)
+        `, [groupMembers]);
+
+        for(let i=0 ; i <  newData2.rows.length; i++ )
+        {
+            changedValues += generateCreateLog(newData2.rows[i], securityGroupMemberFieldLabels);
+        }
+
+        const newData3 = await client.query(`
+            SELECT 
+                'admin' member_type,    
+                full_name||'('||user_name||')' user_name
+            FROM tbl_user_info tui
+            WHERE tui.user_id = $1
+        `, [groupManager]);
+
+        // Field Lable 
+        const deviceGroupAdminFieldLabels: Record<string, string> = {
+            member_type: t('group.member_type'),
+            user_name: t('user.user_name'),
+        };
+
+        changedValues += generateCreateLog(newData3.rows[0], deviceGroupAdminFieldLabels);
+
+
+
+        const logData2 = new FormData();
+        logData2.append('application_page', t('group.create_group'));
+        logData2.append('application_action', t('group.create_group'));
+        logData2.append('application_parameter', changedValues);
+        logData2.append('created_by', updatedBy ? String(updatedBy) : "");
+        logData2.append('ip_address', ipAddress ? String(ipAddress) : "");
+
+        applicationLog(client, logData2);
+
+        // Log 생성 끝 
+
 
         await client.query("BEGIN"); // 트랜잭션 시작  
 
