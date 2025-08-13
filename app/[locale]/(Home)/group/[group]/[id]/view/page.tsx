@@ -29,8 +29,6 @@ export default async function Page(props: {
     const id = params.id;
     const searchParams = await props.searchParams;
     const queryInGroup = searchParams?.queryInGroup || '';
-    const itemsPerPage = Number(searchParams?.itemsPerPage) || 10;
-    const currentInPage = Number(searchParams?.inGroupPage) || 1;
     const session = await auth();
 
     if (!['device', 'user', 'security'].includes(group)) {
@@ -44,23 +42,17 @@ export default async function Page(props: {
         t,
         data,
         inGroupData,
-        inGroupTotalPages,
     ] = await Promise.all([
         getDictionary(locale),
         adapter.getGroupInfoById(id, group),
         group === "user"
-            ? adapter.getUsersInGroup(id, queryInGroup, itemsPerPage, currentInPage)
+            ? adapter.getUsersInGroup(id, queryInGroup)
             : group === "device"
-                ? adapter.getDevicesInGroup(id, queryInGroup, itemsPerPage, currentInPage)
-                : adapter.getDeptsInGroup(id, queryInGroup, itemsPerPage, currentInPage),
-        group === "user"
-            ? adapter.getUsersInGroupPages(id, queryInGroup, itemsPerPage)
-            : group === "device"
-                ? adapter.getDevicesInGroupPages(id, queryInGroup, itemsPerPage)
-                : adapter.getDeptsInGroupPages(id, queryInGroup, itemsPerPage),
+                ? adapter.getDevicesInGroup(id, queryInGroup)
+                : adapter.getDeptsInGroup(id, queryInGroup),
     ]);
 
-    const inGroup = { paramName: 'inGroupPage', totalPages: inGroupTotalPages, members: inGroupData };
+    const inGroup = { paramName: 'inGroupPage', members: inGroupData };
 
     const groupBreadcrumbs: {
         device: IBreadCrums[];

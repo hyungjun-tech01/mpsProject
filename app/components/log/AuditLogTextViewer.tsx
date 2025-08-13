@@ -8,7 +8,7 @@ interface IAuditLogTextViewer {
   onClose: (value: boolean) => void,
 };
 
-const AuditLogTextViewer = ({ Url, auditContent, onClose }: IAuditLogTextViewer) => {
+const AuditLogTextViewer = ({ auditContent }: IAuditLogTextViewer) => {
 
   //console.log('AuditLogTextViewer / Url : ', Url);
   //console.log('AuditLogTextViewer / auditContent : ', auditContent);

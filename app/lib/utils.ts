@@ -218,8 +218,8 @@ export const formatTimeYYYY_MM_DDbHHcMM_FromDB = (inputValue: number) => {
 }
 
 export function generateChangeLog(
-  oldData: Record<string, any>,
-  newData: Record<string, any>,
+  oldData: Record<string, object | string | number | null>,
+  newData: Record<string, object | string | number | null>,
   fieldLabels: Record<string, string>,
   ignoreFields: string[] = []
 ): string {
@@ -257,7 +257,7 @@ export function generateChangeLog(
 }
 
 export function generateDeleteLog(
-  oldData: Record<string, any>,
+  oldData: Record<string, object | string | number>,
   fieldLabels: Record<string, string>,
   ignoreFields: string[] = []
 ): string {
@@ -280,7 +280,7 @@ export function generateDeleteLog(
 }
 
 export function generateCreateLog(
-  newData: Record<string, any>,
+  newData: Record<string, object | string | number | FormDataEntryValue | null>,
   fieldLabels: Record<string, string>,
   ignoreFields: string[] = []
 ): string {

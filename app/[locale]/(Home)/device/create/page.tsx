@@ -5,7 +5,8 @@ import Form from '@/app/components/device/create-form';
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
 import {createDevice} from '@/app/components/device/actions';
 import MyDBAdapter from '@/app/lib/adapter';
-
+import { auth } from "@/auth";
+import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 export default async function CreateDevice(
     props: { 
@@ -15,6 +16,12 @@ export default async function CreateDevice(
     const params = await props.params;
     const locale = params.locale;
     const adapter = MyDBAdapter();
+
+    const session = await auth();
+    if(!session?.user.id || !session?.user.name) {
+        redirect('/login'); // '/login'으로 리다이렉트
+    };
+    const userName = session.user.name;
 
     const [t, printerGroup] = await Promise.all([
         getDictionary(locale),
@@ -86,7 +93,7 @@ export default async function CreateDevice(
                     },
                 ]}
             />
-            <Form items={formItems}  buttons={buttonItems} action={createDevice}/>
+            <Form items={formItems}  buttons={buttonItems} sessionUserName={userName} action={createDevice}/>
         </main>
     );
 }

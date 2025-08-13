@@ -167,7 +167,7 @@ export default async function Page(props: {
                 })}
             </div>
             {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.modifyUser}/>}
-            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} action={adapter.changeBalance}/>}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.changeBalance}/>}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

@@ -1,8 +1,5 @@
 import type { Pool } from "pg";
 
-import { Device } from '@/app/lib/definitions';
-
-
 
 export async function createDevice(
     client: Pool,

@@ -6,7 +6,6 @@ import { SearchOutlined } from '@mui/icons-material';
 import { IEditItem, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup, UserGroup } from "@/app/lib/definitions";
 import Search from "../search";
-import Pagination from '../pagination';
 
 export function ViewForm({
   items,
@@ -17,7 +16,6 @@ export function ViewForm({
   translated: Record<string, string>;
   inGroup: {
     paramName: string;
-    totalPages: number;
     members: DeviceGroup[] | SecurityGroup[];
   };
 }) {
@@ -293,16 +291,7 @@ export function ViewForm({
         <div className="w-full flex">
           <div className="w-20 flex-0 flex flex-col justify-center"> </div>
           <div className="flex-1 p-2 flex flex-col gap-2">
-            {!!inGroup ? (
-              <div className="flex-none flex justify-center py-2">
-                <Pagination
-                  paramName={inGroup.paramName}
-                  totalPages={inGroup.totalPages}
-                />
-              </div>
-            ) : (
-              " "
-            )}
+            {" "}
           </div>
         </div>
       </div>

@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 import getDictionary from '@/app/locales/dictionaries';
 import {generateChangeLog, generateDeleteLog, generateCreateLog} from '@/app/lib/utils';
 import {applicationLog} from '@/app/lib/actions';
-import { GTranslate } from '@mui/icons-material';
 
 
 const [t] = await Promise.all([

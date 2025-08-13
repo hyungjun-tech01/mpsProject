@@ -74,9 +74,9 @@ export async function createUser(
   }
 
   // Prepare data for insertion into the database ------
-  const { userName, userDisabledPrinting, userBalanceCurrent } =
-    validatedFields.data;
-
+  const userName = formData.get("userName");
+  const userDisabledPrinting = formData.get("userDisabledPrinting");
+  const userBalanceCurrent = formData.get("userBalanceCurrent");
   const userFullName = formData.get("userFullName");
   const userEmail = formData.get("userEmail");
   const userHomeDirectory = formData.get("userHomeDirectory");
@@ -114,7 +114,6 @@ export async function createUser(
     ];
 
 
-    let changedValues;
     // 변경 값
     const newUserData = {
       user_name: userName,
@@ -144,7 +143,7 @@ export async function createUser(
     };
 
     // 변경 로그를 생성.
-    changedValues = generateCreateLog(newUserData, userFieldLabels );
+    const changedValues = generateCreateLog(newUserData, userFieldLabels );
 
     const logData3 = new FormData();
     logData3.append('application_page', t('user.create_user'));
