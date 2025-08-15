@@ -17,13 +17,32 @@ async function handlePMGFileRequest(filename: string) {
 
     const filePath = path.join(process.cwd(), 'upload', filename);
 
-    console.log("handleRouteRequest :", filePath);
+    //console.log("handleRouteRequest :", filePath);
 
     if (!existsSync(filePath)) {
-        return new Response('File is Not Found', {
-            status: 404,
-            statusText: "Not Found"
-        })
+      // fallback 이미지 경로를 지정합니다.
+      const fallbackPath = path.join(process.cwd(), 'public', 'fallback-image.png');
+              
+      // fallback 파일도 존재하지 않으면 404 에러를 반환합니다.
+      if (!existsSync(fallbackPath)) {
+        console.log('not extist fallback');
+          return new Response('Fallback File Not Found', {
+              status: 404,
+              statusText: "Not Found"
+          });
+      }
+
+      // fallback 파일을 읽습니다.
+      const fallbackBuffer = await readFile(fallbackPath);
+
+      const headers = new Headers();
+      headers.append('Content-Type', 'image/png'); // 이미지 타입은 png로 설정
+
+      // fallback 이미지를 성공(200 OK) 응답으로 반환합니다.
+      return new Response(fallbackBuffer, {
+          status: 200,
+          headers,
+      });
     };
 
     const fileExt = filename.split(".").at(-1);

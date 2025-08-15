@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -H localhost -p 443 --experimental-https",
     "build": "next build",
-    "start": "next start -H localhost -p 443",
+    "start": "next start -H localhost -p 80",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,7 +14,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
-    "@mui/icons-material": "^6.4.11",
+    "@mui/icons-material": "^6.4.11", 
     "@mui/material": "^6.4.11",
     "@mui/material-nextjs": "^6.4.3",
     "@react-pdf-viewer/core": "^3.12.0",

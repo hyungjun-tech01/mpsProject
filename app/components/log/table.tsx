@@ -158,6 +158,8 @@ export default function CustomizedTable({
         const onlyfilename = filePath.split("\\").at(-1);
         const encodedPath = encodeURIComponent(filePath);
         const response = await fetch(`/api/file?filename=${encodedPath}`);
+        // 파일이 없을 떄, 
+        // 예외 처리 하고 싶음.
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');

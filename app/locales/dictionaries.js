@@ -8,7 +8,8 @@ const dictionaries = {
 }
 
 const getDictionary = async (locale) => (key) => {
-  const langData = dictionaries[locale]();
+  const langLoader = dictionaries[locale] || dictionaries.ko;
+  const langData = langLoader();
   const subKeys = key.split('.');
   if(subKeys.length !== 2) return key;
 
