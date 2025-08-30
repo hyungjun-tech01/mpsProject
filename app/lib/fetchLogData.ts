@@ -749,7 +749,7 @@ export async function fetchFilteredRetiredAuditLogs(
         else
             extraWhereClause = 'and 1 = 2';
     
-        console.log('extraWhereClause', extraWhereClause);        
+        //console.log('extraWhereClause', extraWhereClause);        
 
         const detect_privacy = privacy === 'true'? true:false;
         const detect_security = security === 'true'? true:false;

@@ -35,14 +35,26 @@ async function handlePMGFileRequest(filename: string) {
       // fallback 파일을 읽습니다.
       const fallbackBuffer = await readFile(fallbackPath);
 
+
+      // Buffer → ArrayBuffer 변환
+      const arrayBuffer = fallbackBuffer.buffer.slice(
+        fallbackBuffer.byteOffset,
+        fallbackBuffer.byteOffset + fallbackBuffer.byteLength
+      );
+
       const headers = new Headers();
       headers.append('Content-Type', 'image/png'); // 이미지 타입은 png로 설정
 
       // fallback 이미지를 성공(200 OK) 응답으로 반환합니다.
-      return new Response(fallbackBuffer, {
+      return new Response(new Uint8Array(arrayBuffer) as BodyInit, {
           status: 200,
           headers,
       });
+
+    //   return new Response(fallbackBuffer, {
+    //     status: 200,
+    //     headers,
+    // });     
     };
 
     const fileExt = filename.split(".").at(-1);
@@ -50,13 +62,21 @@ async function handlePMGFileRequest(filename: string) {
 
     const buffer = await readFile(filePath);
 
+    const arrayBuffer2 = buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength
+    );
+
     const headers = new Headers();
     headers.append('Content-Disposition', `attachment; filename="${filename}"`);
     headers.append('Content-Type', contentType);
 
-    return new Response(buffer, {
+    return new Response(new Uint8Array(arrayBuffer2) as BodyInit, {
         headers,
     });
+  //   return new Response(buffer, {
+  //     headers,
+  // });    
 }
 
 async function handleDecryptPDFFileRequest(filepath: string) {
