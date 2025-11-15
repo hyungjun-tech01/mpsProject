@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-// import DeleteIcon from '@mui/icons-material/Delete';
 import clsx from 'clsx';
 
 
@@ -39,8 +38,6 @@ export function DeleteButtton({
   ipAddress: string | undefined,
   action: (id: string, param: string) => Promise<{ message: string } | void>,
 }) {
-  //  console.log("DeleteButton / id :", id, ipAddress);
-
   const merged = `${deletedBy ?? 'unknown'},${ipAddress ?? 'unknown'}`;
   
   const handleAction = async () => {
@@ -50,8 +47,6 @@ export function DeleteButtton({
   return (
     <form action={handleAction}>
       <button className="rounded-md border px-4 py-1 hover:bg-gray-100">
-        {/* <span className="sr-only">Delete</span> */}
-        {/* <DeleteIcon className="w-5" /> */}
         {title}
       </button>
     </form>

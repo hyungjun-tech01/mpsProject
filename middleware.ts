@@ -1,11 +1,12 @@
 import type { NextRequest } from 'next/server';
 import { i18nRouter } from 'next-i18n-router';
 import i18nConfig from './i18nConfig';
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
+// import NextAuth from 'next-auth';
+// import { authConfig } from './auth.config';
+import { auth } from './auth';
 
 
-const { auth } = NextAuth(authConfig)
+// const { auth } = NextAuth(authConfig)
 
 
 export default auth(async function middleware(request: NextRequest) {
