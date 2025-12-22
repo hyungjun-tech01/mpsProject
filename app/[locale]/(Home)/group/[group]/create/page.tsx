@@ -31,10 +31,10 @@ export default async function Page(props: {
     notFound();
   };
 
-  
+
   const session = await auth();
-  if(!session?.user.id || !session?.user.name) {
-      redirect('/login'); // '/login'으로 리다이렉트
+  if (!session?.user.id || !session?.user.name) {
+    redirect('/login'); // '/login'으로 리다이렉트
   };
   const userName = session.user.name;
 
@@ -54,15 +54,15 @@ export default async function Page(props: {
         : adapter.getDeptsNotInGroupPages(query, itemsPerPage),
   ]);
 
-  const userOptions: {value:string, title:string}[] = [
-    {value:"", title:t("group.select_group_manager")},
+  const userOptions: { value: string, title: string }[] = [
+    { value: "", title: t("group.select_group_manager") },
     ...users
-    .filter(user => user.user_id !== null && user.user_name !== null)
-    .map((item) => (
-    {value: String(item.user_id), title: item.user_name}))
+      .filter(user => user.user_id !== null && user.user_name !== null)
+      .map((item) => (
+        { value: String(item.user_id), title: item.user_name }))
   ];
 
-  const dummyData : Group = {
+  const dummyData: Group = {
     group_id: "",
     group_name: "",
     group_type: group,
@@ -226,6 +226,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={null}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.createDeviceGroup}
         />
       )}
@@ -239,6 +240,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={null}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.createUserGroup}
         />
       )}
@@ -251,6 +253,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={null}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.createSecurityGroup}
         />
       )}

@@ -5,7 +5,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import { ArrowForwardOutlined, ArrowBackOutlined, SearchOutlined } from '@mui/icons-material';
 import Pagination from './pagination';
 import Search from './search';
-import { DeviceGroup, UserGroup, SecurityGroup } from '../lib/definitions';
+import { DeviceGroup, UserGroup, SecurityGroup, IGroupSearch } from '../lib/definitions';
 
 
 export default function Grouping({
@@ -17,6 +17,7 @@ export default function Grouping({
     currentPage,
     outGroup,
     inGroup,
+    searchParams,
 }: {
     title: string;
     noneGroupMemberTitle: string;
@@ -26,6 +27,7 @@ export default function Grouping({
     currentPage: string;
     outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] };
     inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | UserGroup[] | SecurityGroup[] } | null;
+    searchParams?: IGroupSearch;
 }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -367,15 +369,22 @@ export default function Grouping({
         changedNonGroup[currentPage]?.forEach(member => {
             const foundIdx = outGroup.members.findIndex(group => group.id === member.id);
             if (foundIdx === -1) {
-                adjustedNonGroup.push(member);
+                if (!!searchParams?.queryOutGroup && !!member.name) {
+                    if (member.name.includes(searchParams.queryOutGroup)) {
+                        adjustedNonGroup.push(member);
+                    }
+                } else {
+                    adjustedNonGroup.push(member);
+                }
             }
         });
         setNonGroup(adjustedNonGroup);
-    }, [outGroup, changedNonGroup, currentPage]);
+    }, [outGroup, changedNonGroup, currentPage, searchParams?.queryOutGroup]);
 
     useEffect(() => {
         // console.log("- inGroup : ", inGroup);
         // console.log("- changedGroup : ", changedGroup);
+        console.log("- searchParams / InGroup : ", searchParams?.queryInGroup);
 
         const adjustedGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
         if (!!inGroup) {
@@ -392,14 +401,28 @@ export default function Grouping({
             changedGroup?.forEach(member => {
                 const foundIdx = inGroup.members.findIndex(group => group.id === member.id);
                 if (foundIdx === -1) {
-                    adjustedGroup.push(member);
+                    if (!!searchParams?.queryInGroup && !!member.name) {
+                        if (member.name.includes(searchParams.queryInGroup)) {
+                            adjustedGroup.push(member);
+                        }
+                    } else {
+                        adjustedGroup.push(member);
+                    }
                 }
             });
         } else {
-            adjustedGroup.push(...changedGroup);
+            if (!!searchParams?.queryInGroup) {
+                changedGroup?.forEach(member => {
+                    if (!!member.name && member.name.includes(searchParams.queryInGroup)) {
+                        adjustedGroup.push(member);
+                    }
+                });
+            } else {
+                adjustedGroup.push(...changedGroup);
+            }
         }
         setGroup(adjustedGroup);
-    }, [inGroup, changedGroup]);
+    }, [inGroup, changedGroup, searchParams?.queryInGroup]);
 
     return (
         <div className={'w-full p-2 mb-4 flex md: flex-col'}>

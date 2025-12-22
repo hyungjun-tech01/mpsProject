@@ -6,7 +6,7 @@ import type { GroupState } from '@/app/lib/actionsGroup';
 import { ChangeEvent, useActionState, useState, useEffect } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
-import { Group, UserGroup } from '@/app/lib/definitions';
+import { Group, IGroupSearch, UserGroup } from '@/app/lib/definitions';
 
 
 export function CreateUserGroupForm({
@@ -18,6 +18,7 @@ export function CreateUserGroupForm({
     outGroup,
     inGroup,
     sessionUserName,
+    searchParams,
     action,
 }: {
     userData: Group;
@@ -28,6 +29,7 @@ export function CreateUserGroupForm({
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     sessionUserName: string;
+    searchParams?: IGroupSearch;
     action: (
         prevState: void | GroupState,
         formData: FormData
@@ -137,13 +139,13 @@ export function CreateUserGroupForm({
 
     useEffect(() => {
         const fetchIp = async () => {
-        try {
-            const res = await fetch('/api/get-ip');
-            const data = await res.json();
-            setIpAddress(data.ip);
-        } catch (error) {
-            console.error('IP 가져오기 실패:', error);
-        }
+            try {
+                const res = await fetch('/api/get-ip');
+                const data = await res.json();
+                setIpAddress(data.ip);
+            } catch (error) {
+                console.error('IP 가져오기 실패:', error);
+            }
         };
 
         fetchIp();
@@ -152,8 +154,8 @@ export function CreateUserGroupForm({
 
     return (
         <form action={formAction}>
-            <input type="hidden" name="ipAddress" value={ipAddress}/>
-            <input type="hidden" name="updatedBy" value={sessionUserName}/>
+            <input type="hidden" name="ipAddress" value={ipAddress} />
+            <input type="hidden" name="updatedBy" value={sessionUserName} />
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 <div className={'w-full p-2 flex flex-col md:flex-row border-b'}>
                     <div className='w-full md:w-1/3 pb-4 md:pr-6'>
@@ -298,7 +300,7 @@ export function CreateUserGroupForm({
                             name="schedule_amount"
                             title={translated.group_schedule_amount}
                             type="currency"
-                            defaultValue={String(userData.schedule_amount)?? ""}
+                            defaultValue={String(userData.schedule_amount) ?? ""}
                             error={(!!state?.errors && !!state?.errors.groupName)
                                 ? state?.errors.groupName
                                 : null
@@ -309,7 +311,7 @@ export function CreateUserGroupForm({
                                 name="remain_amount"
                                 title={translated.group_remain_amount}
                                 type="currency"
-                                defaultValue={String(userData.remain_amount)?? ""}
+                                defaultValue={String(userData.remain_amount) ?? ""}
                                 error={(!!state?.errors && !!state?.errors.remainAmount)
                                     ? state?.errors.remainAmount
                                     : null
@@ -347,6 +349,7 @@ export function CreateUserGroupForm({
                     currentPage={currentPage}
                     outGroup={outGroup}
                     inGroup={inGroup}
+                    searchParams={searchParams}
                 />
                 <div id="input-error" aria-live="polite" aria-atomic="true">
                     {!!state?.message &&

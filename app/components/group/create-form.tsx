@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@mui/material";
 import type { GroupState } from "@/app/lib/actionsGroup";
 import { useActionState, useEffect, useState } from "react";
-import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
+import { IButtonInfo, IEditItem, IGroupSearch, ISection, EditItem } from "../edit-items";
 import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
@@ -17,6 +17,7 @@ export function CreateGroupForm({
   outGroup,
   inGroup,
   sessionUserName,
+  searchParams,
   action,
 }: {
   items: ISection[];
@@ -26,6 +27,7 @@ export function CreateGroupForm({
   outGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] };
   inGroup: { paramName: string, totalPages: number, members: DeviceGroup[] | SecurityGroup[] } | null;
   sessionUserName: string;
+  searchParams?: IGroupSearch;
   action: (
     prevState: void | GroupState,
     formData: FormData,
@@ -39,13 +41,13 @@ export function CreateGroupForm({
 
   useEffect(() => {
     const fetchIp = async () => {
-    try {
+      try {
         const res = await fetch('/api/get-ip');
         const data = await res.json();
         setIpAddress(data.ip);
-    } catch (error) {
+      } catch (error) {
         console.error('IP 가져오기 실패:', error);
-    }
+      }
     };
 
     fetchIp();
@@ -54,8 +56,8 @@ export function CreateGroupForm({
 
   return (
     <form action={formAction}>
-      <input type="hidden" name="ipAddress" value={ipAddress}/>
-      <input type="hidden" name="updatedBy" value={sessionUserName}/>
+      <input type="hidden" name="ipAddress" value={ipAddress} />
+      <input type="hidden" name="updatedBy" value={sessionUserName} />
       <div className="rounded-md bg-gray-50 p-4 md:p-4">
         {items.map((sec: ISection, idx) => {
           return (
@@ -118,6 +120,7 @@ export function CreateGroupForm({
           currentPage={currentPage}
           outGroup={outGroup}
           inGroup={inGroup}
+          searchParams={searchParams}
         />
         <div id="input-error" aria-live="polite" aria-atomic="true">
           {!!state?.message && (

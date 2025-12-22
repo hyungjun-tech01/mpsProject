@@ -6,7 +6,7 @@ import type { GroupState } from '@/app/lib/actionsGroup';
 import { ChangeEvent, useActionState, useState, useEffect } from 'react';
 import { EditItem } from '../edit-items';
 import Grouping from '../grouping';
-import { Group, UserGroup } from '@/app/lib/definitions';
+import { Group, IGroupSearch, UserGroup } from '@/app/lib/definitions';
 
 
 export function EditUserGroupForm({
@@ -19,6 +19,7 @@ export function EditUserGroupForm({
     outGroup,
     inGroup,
     sessionUserName,
+    searchParams,
     action,
 }: {
     id: string;
@@ -30,6 +31,7 @@ export function EditUserGroupForm({
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
     sessionUserName: string;
+    searchParams?: IGroupSearch;
     action: (
         id: string,
         prevState: void | GroupState,
@@ -139,23 +141,23 @@ export function EditUserGroupForm({
     const [ipAddress, setIpAddress] = useState('');
 
     useEffect(() => {
-      const fetchIp = async () => {
-      try {
-          const res = await fetch('/api/get-ip');
-          const data = await res.json();
-          setIpAddress(data.ip);
-      } catch (error) {
-          console.error('IP 가져오기 실패:', error);
-      }
-      };
-  
-      fetchIp();
-  }, []);
+        const fetchIp = async () => {
+            try {
+                const res = await fetch('/api/get-ip');
+                const data = await res.json();
+                setIpAddress(data.ip);
+            } catch (error) {
+                console.error('IP 가져오기 실패:', error);
+            }
+        };
+
+        fetchIp();
+    }, []);
 
     return (
         <form action={formAction}>
-            <input type="hidden" name="ipAddress" value={ipAddress}/>
-            <input type="hidden" name="updatedBy" value={sessionUserName}/>
+            <input type="hidden" name="ipAddress" value={ipAddress} />
+            <input type="hidden" name="updatedBy" value={sessionUserName} />
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 <div className={'w-full p-2 flex flex-col md:flex-row border-b'}>
                     <div className='w-full md:w-1/3 pb-4 md:pr-6'>
@@ -349,6 +351,7 @@ export function EditUserGroupForm({
                     currentPage={currentPage}
                     outGroup={outGroup}
                     inGroup={inGroup}
+                    searchParams={searchParams}
                 />
                 <div id="input-error" aria-live="polite" aria-atomic="true">
                     {!!state?.message &&

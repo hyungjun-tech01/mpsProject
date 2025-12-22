@@ -35,8 +35,8 @@ export default async function Page(props: {
   }
 
   const session = await auth();
-  if(!session?.user.id || !session?.user.name) {
-      redirect('/login'); // '/login'으로 리다이렉트
+  if (!session?.user.id || !session?.user.name) {
+    redirect('/login'); // '/login'으로 리다이렉트
   };
   const userName = session.user.name;
 
@@ -79,9 +79,9 @@ export default async function Page(props: {
   const userOptions: { value: string, title: string }[] = [
     { value: "", title: t("group.select_group_manager") },
     ...users
-    .filter(user => user.user_id !== null && user.user_name !== null)
-    .map((item) => (
-      { value: String(item.user_id), title: item.user_name }))
+      .filter(user => user.user_id !== null && user.user_name !== null)
+      .map((item) => (
+        { value: String(item.user_id), title: item.user_name }))
   ];
 
   const outGroup = {
@@ -248,6 +248,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.modifyDeviceGroup}
         />
       )}
@@ -262,6 +263,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.modifyUserGroup}
         />
       )}
@@ -275,6 +277,7 @@ export default async function Page(props: {
           outGroup={outGroup}
           inGroup={inGroup}
           sessionUserName={userName}
+          searchParams={searchParams}
           action={adapter.modifySecurityGroup}
         />
       )}
