@@ -32,14 +32,14 @@ export default function Grouping({
     const handleMenuOpenOutGroup = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
         const foundIdx = nonGroup.findIndex(member => member.id === event.currentTarget.id);
-        if(foundIdx !== -1) {
+        if (foundIdx !== -1) {
             setShownMember(nonGroup[foundIdx]);
         }
     };
     const handleMenuOpenInGroup = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
         const foundIdx = group.findIndex(member => member.id === event.currentTarget.id);
-        if(foundIdx !== -1) {
+        if (foundIdx !== -1) {
             setShownMember(nonGroup[foundIdx]);
         }
     };
@@ -49,10 +49,10 @@ export default function Grouping({
     };
     const menuId = 'member-detail-menu';
     const [shownMember, setShownMember] = useState<null | DeviceGroup | SecurityGroup | UserGroup>(null);
-    
+
     const renderMenu = () => {
-        if(!shownMember) return null;
-        if('device_type' in shownMember) {
+        if (!shownMember) return null;
+        if ('device_type' in shownMember) {
             return (
                 <Menu
                     anchorEl={anchorEl}
@@ -119,7 +119,7 @@ export default function Grouping({
                     </MenuItem>
                 </Menu>
             )
-        } else if('full_name' in shownMember) {
+        } else if ('full_name' in shownMember) {
             return (
                 <Menu
                     anchorEl={anchorEl}
@@ -174,7 +174,7 @@ export default function Grouping({
                     </MenuItem>
                 </Menu>
             )
-        } else if('dept_name' in shownMember) {
+        } else if ('dept_name' in shownMember) {
             return (
                 <Menu
                     anchorEl={anchorEl}
@@ -210,13 +210,13 @@ export default function Grouping({
     const [changedNonGroup, setChangedNonGroup] = useState<Record<string, (DeviceGroup | UserGroup | SecurityGroup)[]>>({});
     const [changedGroup, setChangedGroup] = useState<(DeviceGroup | UserGroup | SecurityGroup)[]>([]);
 
-    const handleMemberInGroup = () => {
+    const handleMemberTowardInGroup = () => {
         if (!selectedInNoneGroup) return;
 
         const selected = selectedInNoneGroup;
-        
+
         const foundIdxInChangedNonGroup = changedNonGroup[currentPage]?.findIndex(member => member.id === selected.id);
-        if(!!foundIdxInChangedNonGroup && foundIdxInChangedNonGroup !== -1) {
+        if (foundIdxInChangedNonGroup !== undefined && foundIdxInChangedNonGroup !== -1) {
             const updated = [
                 ...changedNonGroup[currentPage].slice(0, foundIdxInChangedNonGroup),
                 ...changedNonGroup[currentPage].slice(foundIdxInChangedNonGroup + 1,)
@@ -227,8 +227,7 @@ export default function Grouping({
             };
             setChangedNonGroup(updatedChangedNonGroup);
         }
-        else
-        {
+        else {
             const updated = [
                 ...(changedNonGroup[currentPage] || []),
                 selected
@@ -239,17 +238,16 @@ export default function Grouping({
             };
             setChangedNonGroup(updatedChangedNonGroup);
         }
-       
+
         const foundIdxInChangedGroup = changedGroup.findIndex(member => member.id === selected.id);
-        if(foundIdxInChangedGroup !== -1) {
+        if (foundIdxInChangedGroup !== undefined && foundIdxInChangedGroup !== -1) {
             const updatedChangedGroup = [
                 ...changedGroup.slice(0, foundIdxInChangedGroup),
                 ...changedGroup.slice(foundIdxInChangedGroup + 1,)
             ];
             setChangedGroup(updatedChangedGroup);
         }
-        else
-        {
+        else {
             const updatedChangedGroup = [
                 ...changedGroup,
                 selected
@@ -261,21 +259,20 @@ export default function Grouping({
         setSelectedInNoneGroup(null);
     };
 
-    const handleMemberOutGroup = () => {
+    const handleMemberTowardOutGroup = () => {
         if (!selectedInGroup) return;
 
         const selected = selectedInGroup;
 
         const foundIdxInChangedGroup = changedGroup.findIndex(member => member.id === selected.id);
-        if(foundIdxInChangedGroup !== -1) {
+        if (foundIdxInChangedGroup !== -1) {
             const updatedChangedGroup = [
                 ...changedGroup.slice(0, foundIdxInChangedGroup),
                 ...changedGroup.slice(foundIdxInChangedGroup + 1,)
             ];
             setChangedGroup(updatedChangedGroup);
         }
-        else
-        {
+        else {
             const updatedChangedGroup = [
                 ...changedGroup,
                 selected
@@ -290,7 +287,7 @@ export default function Grouping({
         // setNonGroup(updatedNonGroup);
 
         const foundIdxInChangedNonGroup = changedNonGroup[currentPage]?.findIndex(member => member.id === selected.id);
-        if(!!foundIdxInChangedNonGroup && foundIdxInChangedNonGroup !== -1) {
+        if (foundIdxInChangedNonGroup !== -1) {
             const updated = [
                 ...changedNonGroup[currentPage].slice(0, foundIdxInChangedNonGroup),
                 ...changedNonGroup[currentPage].slice(foundIdxInChangedNonGroup + 1,)
@@ -301,8 +298,7 @@ export default function Grouping({
             };
             setChangedNonGroup(updatedChangedNonGroup);
         }
-        else
-        {
+        else {
             const updated = [
                 ...(changedNonGroup[currentPage] || []),
                 selected
@@ -359,18 +355,18 @@ export default function Grouping({
 
         const adjustedNonGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
         outGroup.members.forEach(member => {
-            if(!changedNonGroup[currentPage]) {
+            if (!changedNonGroup[currentPage]) {
                 adjustedNonGroup.push(member);
             } else {
                 const foundIdx = changedNonGroup[currentPage].findIndex(changedMember => changedMember.id === member.id);
-                if(foundIdx === -1) {
+                if (foundIdx === -1) {
                     adjustedNonGroup.push(member);
                 }
             }
         });
         changedNonGroup[currentPage]?.forEach(member => {
             const foundIdx = outGroup.members.findIndex(group => group.id === member.id);
-            if(foundIdx === -1) {
+            if (foundIdx === -1) {
                 adjustedNonGroup.push(member);
             }
         });
@@ -382,20 +378,20 @@ export default function Grouping({
         // console.log("- changedGroup : ", changedGroup);
 
         const adjustedGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
-        if(!!inGroup) {
+        if (!!inGroup) {
             inGroup.members.forEach(member => {
-                if(!changedGroup) {
+                if (!changedGroup) {
                     adjustedGroup.push(member);
                 } else {
                     const foundIdx = changedGroup.findIndex(changedMember => changedMember.id === member.id);
-                    if(foundIdx === -1) {
+                    if (foundIdx === -1) {
                         adjustedGroup.push(member);
                     }
                 }
             });
             changedGroup?.forEach(member => {
                 const foundIdx = inGroup.members.findIndex(group => group.id === member.id);
-                if(foundIdx === -1) {
+                if (foundIdx === -1) {
                     adjustedGroup.push(member);
                 }
             });
@@ -420,20 +416,21 @@ export default function Grouping({
                         {nonGroup.map((member, idx) => {
                             if (!!selectedInNoneGroup && selectedInNoneGroup.id === member.id) {
                                 return (
-                                <div key={idx} className='flex justify-between'>
-                                    <div
-                                        id={`name@${member.id}`}
-                                        className='bg-lime-700 text-white font-normal pl-1 rounded-l w-full  cursor-default'
-                                        onClick={handleSelectInNoneGroup}
-                                    >
-                                        {member.name}
+                                    <div key={idx} className='flex justify-between'>
+                                        <div
+                                            id={`name@${member.id}`}
+                                            className='bg-lime-700 text-white font-normal pl-1 rounded-l w-full  cursor-default'
+                                            onClick={handleSelectInNoneGroup}
+                                        >
+                                            {member.name}
+                                        </div>
+                                        <div id={member.id} className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup}>
+                                            <SearchOutlined />
+                                        </div>
                                     </div>
-                                    <div id={member.id} className='bg-lime-700 rounded-r' onClick={handleMenuOpenOutGroup}>
-                                        <SearchOutlined />
-                                    </div>
-                                </div>
-                            )} else {
-                                return ( 
+                                )
+                            } else {
+                                return (
                                     <div key={idx} className='flex justify-between'>
                                         <div
                                             id={`name@${member.id}`}
@@ -446,30 +443,30 @@ export default function Grouping({
                                             <SearchOutlined />
                                         </div>
                                     </div>
-                            )}
+                                )
+                            }
                         })}
                     </div>
                 </div>
                 <div className='w-20 flex-0 flex flex-col justify-center'>
                     <Button
                         className='h-8 border rounded-lg mb-2 mx-2 hover:bg-lime-100'
-                        onClick={handleMemberInGroup}
+                        onClick={handleMemberTowardInGroup}
                     >
                         <ArrowForwardOutlined />
                     </Button>
                     <Button
                         className='h-8 border rounded-lg mx-2 hover:bg-lime-100'
-                        onClick={handleMemberOutGroup}
+                        onClick={handleMemberTowardOutGroup}
                     >
                         <ArrowBackOutlined />
                     </Button>
                 </div>
                 <div className='h-96 flex-1 p-2 flex flex-col gap-2'>
                     <div className='flex-none pl-2 font-semibold'>{groupMemberTitle}</div>
-                    {!!inGroup && <div className='flex-none'>
-                            <Search pageName='pageInGroup' queryName='queryInGroup' placeholder={groupSearchPlaceholder} />
-                        </div>
-                    }
+                    <div className='flex-none'>
+                        <Search pageName='pageInGroup' queryName='queryInGroup' placeholder={groupSearchPlaceholder} />
+                    </div>
                     <div className='grow p-2 border rounded-lg bg-white flex-col overflow-auto'>
                         {group.map((member, idx) => {
                             const memberName = "member_" + idx;
@@ -483,7 +480,7 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <div id={member.id}  className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup}>
+                                        <div id={member.id} className='bg-lime-700 rounded-r' onClick={handleMenuOpenInGroup}>
                                             <SearchOutlined />
                                         </div>
                                         <input key={member.id} type="hidden" name={memberName} value={member.id} />
@@ -499,7 +496,7 @@ export default function Grouping({
                                         >
                                             {member.name}
                                         </div>
-                                        <div id={member.id}  className='bg-white' onClick={handleMenuOpenInGroup}>
+                                        <div id={member.id} className='bg-white' onClick={handleMenuOpenInGroup}>
                                             <SearchOutlined />
                                         </div>
                                         <input type="hidden" name={memberName} value={member.id} />
@@ -520,7 +517,7 @@ export default function Grouping({
                 <div className='w-20 flex-0 flex flex-col justify-center'>{' '}</div>
                 <div className='flex-1 p-2 flex flex-col gap-2'>{' '}</div>
             </div>
-            { renderMenu() }
+            {renderMenu()}
         </div>
     )
 }
