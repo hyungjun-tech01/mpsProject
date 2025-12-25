@@ -30,7 +30,7 @@ export default async function Page(props: {
 
     const session = await auth();
 
-    if(!session?.user.id || !session?.user.name) {
+    if (!session?.user.id || !session?.user.name) {
         redirect('/login'); // '/login'으로 리다이렉트
     };
 
@@ -58,10 +58,10 @@ export default async function Page(props: {
 
     // Manipluate Process --------------------------------------------------------
     const balanceLink = <Link
-            href={`/user/${id}/charge`}
-            className='ml-4 text-sm text-lime-700'
-        >{t('user.change_balance')}
-        </Link>
+        href={`/user/${id}/charge`}
+        className='ml-4 text-sm text-lime-700'
+    >{t('user.change_balance')}
+    </Link>
 
     // Items -------------------------------------------------------------------
     const subTitles = [
@@ -81,8 +81,8 @@ export default async function Page(props: {
                     { name: 'userHomeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: user.home_directory, placeholder: t('user.placeholder_home_directory') },
                     {
                         name: 'userDisabledPrinting', title: t('user.enable_disable_printing'), type: 'select', defaultValue: user.disabled_printing, options: [
-                            { title: t('user.enable_printing'), value: 'N' },
-                            { title: t('user.disable_printing'), value: 'Y' }
+                            { label: t('user.enable_printing'), value: 'N' },
+                            { label: t('user.disable_printing'), value: 'Y' }
                         ]
                     },
                 ]
@@ -91,14 +91,15 @@ export default async function Page(props: {
                 title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'),
                 items: [
                     { name: 'userBalanceCurrent', title: t('account.balance_current'), type: 'label', defaultValue: formatCurrency(user.balance, locale), placeholder: t('user.placeholder_department'), other: balanceLink },
-                   // { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
+                    // { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: user.restricted },
                 ]
             },
             {
                 title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'),
                 items: [
-                    { name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: user.dept_id, placeholder: t('user.placeholder_department'), 
-                        options: [{title: t('user.select_dept'), value: ""}, ...allDept.map((x:{dept_id:string, dept_name:string}) => ( {title:x.dept_name, value:x.dept_id} ))]
+                    {
+                        name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: user.dept_id, placeholder: t('user.placeholder_department'),
+                        options: [{ label: t('user.select_dept'), value: "" }, ...allDept.map((x: { dept_id: string, dept_name: string }) => ({ label: x.dept_name, value: x.dept_id }))]
                     },
                     { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: user.card_number },
                     { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: user.card_number2 },
@@ -166,8 +167,8 @@ export default async function Page(props: {
                         )}>{item.title}</Link>;
                 })}
             </div>
-            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.modifyUser}/>}
-            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.changeBalance}/>}
+            {job === 'edit' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.modifyUser} />}
+            {job === 'charge' && <EditForm id={id} items={items[job]} buttons={buttonItems[job]} sessionUserName={userName} action={adapter.changeBalance} />}
             {job === 'jobLog' &&
                 <div className="rounded-md bg-gray-50 p-4 md:p-6">
                     <LogTable

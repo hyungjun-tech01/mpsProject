@@ -3,13 +3,13 @@ import getDictionary from '@/app/locales/dictionaries';
 import Form from '@/app/components/device/create-form';
 
 import { ISection, IButtonInfo } from '@/app/components/edit-items';
-import {createDevice} from '@/app/components/device/actions';
+import { createDevice } from '@/app/components/device/actions';
 import MyDBAdapter from '@/app/lib/adapter';
 import { auth } from "@/auth";
 import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 import
 
 export default async function CreateDevice(
-    props: { 
+    props: {
         params: Promise<{ locale: "ko" | "en" }>;
     }
 ) {
@@ -18,7 +18,7 @@ export default async function CreateDevice(
     const adapter = MyDBAdapter();
 
     const session = await auth();
-    if(!session?.user.id || !session?.user.name) {
+    if (!session?.user.id || !session?.user.name) {
         redirect('/login'); // '/login'으로 리다이렉트
     };
     const userName = session.user.name;
@@ -30,55 +30,55 @@ export default async function CreateDevice(
 
     const formItems: ISection[] = [
         {
-            title: t('device.create_device'), 
-            description: t('device.create_description'), 
-            items: [       
+            title: t('device.create_device'),
+            description: t('device.create_description'),
+            items: [
                 {
-                    name: 'app_type', title: t('device.app_type'), type: 'select', defaultValue: "OpenAPI", 
+                    name: 'app_type', title: t('device.app_type'), type: 'select', defaultValue: "OpenAPI",
                     options: [
-                        { title: t('device.open_api'), value: 'OpenAPI' },
-                        { title: t('device.workpath_sdk'), value: 'Workpath SDK' }
+                        { label: t('device.open_api'), value: 'OpenAPI' },
+                        { label: t('device.workpath_sdk'), value: 'Workpath SDK' }
                     ]
-                },      
+                },
                 { name: 'device_name', title: t('device.device_name'), type: 'input', defaultValue: "", placeholder: t('device.device_name') },
                 {
-                    name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: "OpenAPI", 
+                    name: 'device_type', title: t('device.device_type'), type: 'select', defaultValue: "OpenAPI",
                     options: [
-                        { title: t('device.color_mfd'), value: 'color_mfd' },
-                        { title: t('device.mono_mfd'), value: 'mono_mfd' },
-                        { title: t('device.color_printer'), value: 'color_printer' },
-                        { title: t('device.mono_printer'), value: 'mono_printer' },
+                        { label: t('device.color_mfd'), value: 'color_mfd' },
+                        { label: t('device.mono_mfd'), value: 'mono_mfd' },
+                        { label: t('device.color_printer'), value: 'color_printer' },
+                        { label: t('device.mono_printer'), value: 'mono_printer' },
                     ]
                 },
                 { name: 'device_administrator', title: t('device.device_administrator'), type: 'input', defaultValue: '', placeholder: t('device.device_administrator') },
-                { name: 'device_administrator_password', title: t('device.device_administrator_password'), type: 'password', defaultValue: '', placeholder: t('device.device_administrator_password') },                
+                { name: 'device_administrator_password', title: t('device.device_administrator_password'), type: 'password', defaultValue: '', placeholder: t('device.device_administrator_password') },
                 { name: 'location', title: t('device.location'), type: 'input', defaultValue: "", placeholder: t('device.location') },
                 { name: 'physical_device_id', title: t('device.physical_device_id'), type: 'input', defaultValue: '', placeholder: t('device.physical_device_id') },
                 { name: 'notes', title: t('device.notes'), type: 'input', defaultValue: "", placeholder: t('device.notes') },
                 { name: 'device_model', title: t('device.device_model'), type: 'input', defaultValue: "", placeholder: t('device.device_model') },
-                { name: 'serial_number', title: t('device.serial_number'), type: 'input', defaultValue: "", placeholder: t('device.serial_number') },   
+                { name: 'serial_number', title: t('device.serial_number'), type: 'input', defaultValue: "", placeholder: t('device.serial_number') },
             ]
         },
         {
-            title: t('device.device_function'), 
-            description: t('device.device_function'), 
-            items: [             
+            title: t('device.device_function'),
+            description: t('device.device_function'),
+            items: [
                 { name: 'ext_device_function_printer', title: t('device.ext_device_function_printer'), type: 'checked', defaultValue: "", placeholder: t('device.ext_device_function_printer') },
                 { name: 'ext_device_function_scan', title: t('device.ext_device_function_scan'), type: 'checked', defaultValue: "", placeholder: t('device.ext_device_function_scan') },
                 { name: 'ext_device_function_fax', title: t('device.ext_device_function_fax'), type: 'checked', defaultValue: "", placeholder: t('device.ext_device_function_fax') },
                 {
-                    name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: "", 
-                    options: [{title: '-- 그룹 선택 --', value: '' }, 
-                        ...printerGroup.map((x:{group_name:string, group_id:string}) =>
-                            ({title:x.group_name, value:x.group_id}))]
+                    name: 'device_group', title: t('device.printer_device_group'), type: 'select', defaultValue: "",
+                    options: [{ label: '-- 그룹 선택 --', value: '' },
+                    ...printerGroup.map((x: { group_name: string, group_id: string }) =>
+                        ({ label: x.group_name, value: x.group_id }))]
                 },
             ]
         },
     ];
 
     const buttonItems: IButtonInfo = {
-        cancel : { title: t('common.cancel'), link: '/device' },
-        go : { title: t('device.create_device') },
+        cancel: { title: t('common.cancel'), link: '/device' },
+        go: { title: t('device.create_device') },
     };
 
     return (
@@ -93,7 +93,7 @@ export default async function CreateDevice(
                     },
                 ]}
             />
-            <Form items={formItems}  buttons={buttonItems} sessionUserName={userName} action={createDevice}/>
+            <Form items={formItems} buttons={buttonItems} sessionUserName={userName} action={createDevice} />
         </main>
     );
 }

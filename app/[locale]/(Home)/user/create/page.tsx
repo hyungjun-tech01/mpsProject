@@ -9,18 +9,19 @@ import { redirect } from 'next/navigation'; // 적절한 리다이렉트 함수 
 
 
 export default async function Page(props: {
-    params: Promise<{ id: string, job: string, locale: "ko" | "en" }> }
+    params: Promise<{ id: string, job: string, locale: "ko" | "en" }>
+}
 ) {
     const params = await props.params;
     const locale = params.locale;
     const adapter = MyDBAdapter();
-    const [ t , allDept] = await Promise.all([
+    const [t, allDept] = await Promise.all([
         getDictionary(locale),
         adapter.getAllDepts()
     ]);
     const session = await auth();
 
-    if(!session?.user) return notFound();
+    if (!session?.user) return notFound();
 
     ///// application log ----------------------------------------------------------------------
     const userName = session?.user.name ?? "";
@@ -39,8 +40,8 @@ export default async function Page(props: {
                 { name: 'userHomeDirectory', title: t('user.home_directory'), type: 'input', defaultValue: "", placeholder: t('user.placeholder_home_directory') },
                 {
                     name: 'userDisabledPrinting', title: t('user.enable_disable_printing'), type: 'select', defaultValue: "N", options: [
-                        { title: t('user.enable_printing'), value: 'N' },
-                        { title: t('user.disable_printing'), value: 'Y' }
+                        { label: t('user.enable_printing'), value: 'N' },
+                        { label: t('user.disable_printing'), value: 'Y' }
                     ]
                 },
                 { name: 'userNotes', title: t('common.note'), type: 'input', defaultValue: "", placeholder: "" },
@@ -49,13 +50,14 @@ export default async function Page(props: {
         {
             title: t('user.secTitle_account_details'), description: t('comment.user_edit_account_description'), items: [
                 { name: 'userBalanceCurrent', title: t('account.balance_current'), type: 'currency', defaultValue: 0, placeholder: t('user.placeholder_balance_initial') },
-              //  { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: "N" },
+                //  { name: 'userRestricted', title: t('account.restricted'), type: 'checked', defaultValue: "N" },
             ]
         },
         {
             title: t('user.secTitle_etc'), description: t('comment.user_edit_account_description'), items: [
-                { name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: "", placeholder: t('user.placeholder_department'), 
-                    options: [{title: t('user.select_dept'), value: ""}, ...allDept.map((x:{dept_id:string, dept_name:string}) => ( {title:x.dept_name, value:x.dept_id} ))]
+                {
+                    name: 'userDepartment', title: t('user.department'), type: 'select', defaultValue: "", placeholder: t('user.placeholder_department'),
+                    options: [{ label: t('user.select_dept'), value: "" }, ...allDept.map((x: { dept_id: string, dept_name: string }) => ({ label: x.dept_name, value: x.dept_id }))]
                 },
                 { name: 'userCardNumber', title: t('user.card_number'), type: 'input', defaultValue: "" },
                 { name: 'userCardNumber2', title: t('user.card_number2'), type: 'input', defaultValue: "" },
@@ -63,8 +65,8 @@ export default async function Page(props: {
         },
     ];
     const buttonItems: IButtonInfo = {
-        cancel : { title: t('common.cancel'), link: '/user' },
-        go : { title: t('user.create_user') },
+        cancel: { title: t('common.cancel'), link: '/user' },
+        go: { title: t('user.create_user') },
     };
 
     return (
@@ -79,7 +81,7 @@ export default async function Page(props: {
                     },
                 ]}
             />
-            <CreateForm items={formItems} buttons={buttonItems}  sessionUserName={userName} action={adapter.createUser}/>
+            <CreateForm items={formItems} buttons={buttonItems} sessionUserName={userName} action={adapter.createUser} />
             {/* <CreateForm items={formItems} /> */}
         </main>
     );

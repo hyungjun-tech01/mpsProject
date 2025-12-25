@@ -38,10 +38,8 @@ export default async function Page(props: {
   if (!session?.user.id || !session?.user.name) {
     redirect('/login'); // '/login'으로 리다이렉트
   };
+
   const userName = session.user.name;
-
-
-
   const adapter = MyDBAdapter();
   const [
     t,
@@ -76,12 +74,11 @@ export default async function Page(props: {
   // console.log("[Group Edit] Group Data:", inGroupData);
   // console.log("[Group Edit] Group Pages:", inGroupTotalPages);
 
-  const userOptions: { value: string, title: string }[] = [
-    { value: "", title: t("group.select_group_manager") },
+  const userOptions: { value: string, label: string }[] = [
     ...users
       .filter(user => user.user_id !== null && user.user_name !== null)
       .map((item) => (
-        { value: String(item.user_id), title: item.user_name }))
+        { value: String(item.user_id), label: item.user_name ?? "" }))
   ];
 
   const outGroup = {
@@ -209,7 +206,7 @@ export default async function Page(props: {
           {
             name: "group_manager",
             title: t("group.group_manager"),
-            type: "select",
+            type: "search-select",
             defaultValue: data.manager_id,
             options: userOptions
           },

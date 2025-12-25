@@ -384,7 +384,7 @@ export default function Grouping({
     useEffect(() => {
         // console.log("- inGroup : ", inGroup);
         // console.log("- changedGroup : ", changedGroup);
-        console.log("- searchParams / InGroup : ", searchParams?.queryInGroup);
+        // console.log("- searchParams / InGroup : ", searchParams?.queryInGroup);
 
         const adjustedGroup: (DeviceGroup | UserGroup | SecurityGroup)[] = [];
         if (!!inGroup) {

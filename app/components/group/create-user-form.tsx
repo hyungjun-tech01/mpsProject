@@ -24,7 +24,7 @@ export function CreateUserGroupForm({
     userData: Group;
     locale: string;
     translated: Record<string, string>;
-    candidates: { value: string, title: string }[],
+    candidates: { value: string, label: string }[],
     currentPage: string;
     outGroup: { paramName: string, totalPages: number, members: UserGroup[] };
     inGroup: { paramName: string, totalPages: number, members: UserGroup[] } | null;
@@ -43,21 +43,21 @@ export function CreateUserGroupForm({
     const [optionsForYearDate, setOptionsForYearDate] = useState<{ title: string, value: number }[]>([]);
 
     const optionsForSchedulePeriod = [
-        { title: translated.none, value: "NONE" },
-        { title: translated.per_day, value: "PER_DAY" },
-        { title: translated.per_week, value: "PER_WEEK" },
-        { title: translated.per_month, value: "PER_MONTH" },
-        { title: translated.per_year, value: "PER_YEAR" },
+        { label: translated.none, value: "NONE" },
+        { label: translated.per_day, value: "PER_DAY" },
+        { label: translated.per_week, value: "PER_WEEK" },
+        { label: translated.per_month, value: "PER_MONTH" },
+        { label: translated.per_year, value: "PER_YEAR" },
     ];
 
     const optionsForWeek = [
-        { title: translated.sunday, value: 0 },
-        { title: translated.monday, value: 1 },
-        { title: translated.tuesday, value: 2 },
-        { title: translated.wednesday, value: 3 },
-        { title: translated.thursday, value: 4 },
-        { title: translated.friday, value: 5 },
-        { title: translated.saturday, value: 6 },
+        { label: translated.sunday, value: 0 },
+        { label: translated.monday, value: 1 },
+        { label: translated.tuesday, value: 2 },
+        { label: translated.wednesday, value: 3 },
+        { label: translated.thursday, value: 4 },
+        { label: translated.friday, value: 5 },
+        { label: translated.saturday, value: 6 },
     ];
 
     const optionsForMonth = [];
@@ -226,7 +226,7 @@ export function CreateUserGroupForm({
                                         >
                                             {optionsForWeek.map(day =>
                                                 <option key={day.value} value={day.value}>
-                                                    {day.title}
+                                                    {day.label}
                                                 </option>
                                             )}
                                         </select>
