@@ -47,11 +47,11 @@ export function EditUserGroupForm({
     const [optionsForYearDate, setOptionsForYearDate] = useState<{ title: string, value: number }[]>([]);
 
     const optionsForSchedulePeriod = [
-        { title: translated.none, value: "NONE" },
-        { title: translated.per_day, value: "PER_DAY" },
-        { title: translated.per_week, value: "PER_WEEK" },
-        { title: translated.per_month, value: "PER_MONTH" },
-        { title: translated.per_year, value: "PER_YEAR" },
+        { label: translated.none, value: "NONE" },
+        { label: translated.per_day, value: "PER_DAY" },
+        { label: translated.per_week, value: "PER_WEEK" },
+        { label: translated.per_month, value: "PER_MONTH" },
+        { label: translated.per_year, value: "PER_YEAR" },
     ];
 
     const optionsForWeek = [

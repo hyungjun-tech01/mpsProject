@@ -289,7 +289,7 @@ export default function Grouping({
         // setNonGroup(updatedNonGroup);
 
         const foundIdxInChangedNonGroup = changedNonGroup[currentPage]?.findIndex(member => member.id === selected.id);
-        if (foundIdxInChangedNonGroup !== -1) {
+        if (foundIdxInChangedNonGroup !== undefined && foundIdxInChangedNonGroup !== -1) {
             const updated = [
                 ...changedNonGroup[currentPage].slice(0, foundIdxInChangedNonGroup),
                 ...changedNonGroup[currentPage].slice(foundIdxInChangedNonGroup + 1,)
@@ -411,15 +411,26 @@ export default function Grouping({
                 }
             });
         } else {
-            if (!!searchParams?.queryInGroup) {
+            const queryInGroup = searchParams?.queryInGroup;
+            if (!!queryInGroup) {
                 changedGroup?.forEach(member => {
-                    if (!!member.name && member.name.includes(searchParams.queryInGroup)) {
+                    if (!!member.name && member.name.includes(queryInGroup)) {
                         adjustedGroup.push(member);
                     }
                 });
-            } else {
+            }else {
                 adjustedGroup.push(...changedGroup);
             }
+
+            // if (!!searchParams?.queryInGroup) {
+            //     changedGroup?.forEach(member => {
+            //         if (!!member.name && member.name.includes(searchParams.queryInGroup)) {
+            //             adjustedGroup.push(member);
+            //         }
+            //     });
+            // } else {
+            //    adjustedGroup.push(...changedGroup);
+            //}
         }
         setGroup(adjustedGroup);
     }, [inGroup, changedGroup, searchParams?.queryInGroup]);

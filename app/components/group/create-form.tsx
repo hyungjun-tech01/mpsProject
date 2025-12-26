@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@mui/material";
 import type { GroupState } from "@/app/lib/actionsGroup";
 import { useActionState, useEffect, useState } from "react";
-import { IButtonInfo, IEditItem, IGroupSearch, ISection, EditItem } from "../edit-items";
-import { DeviceGroup, SecurityGroup } from "@/app/lib/definitions";
+import { IButtonInfo, IEditItem, ISection, EditItem } from "../edit-items";
+import { DeviceGroup, SecurityGroup, IGroupSearch } from "@/app/lib/definitions";
 import Grouping from "../grouping";
 
 
